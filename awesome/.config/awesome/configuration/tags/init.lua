@@ -24,6 +24,13 @@ local tags = {
 		gap = beautiful.useless_gap
 	},
 	{
+		type = 'social',
+		icon = icons.social,
+		default_app = apps.default.graphics,
+		gap = beautiful.useless_gap,
+		layout = awful.layout.suit.tile
+	},
+	{
 		type = 'files',
 		icon = icons.file_manager,
 		default_app = apps.default.file_manager,
@@ -44,12 +51,6 @@ local tags = {
 		default_app = apps.default.game,
 		gap = beautiful.useless_gap,
 		layout = awful.layout.suit.floating
-	},
-	{
-		type = 'graphics',
-		icon = icons.graphics,
-		default_app = apps.default.graphics,
-		gap = beautiful.useless_gap
 	},
 	{
 		type = 'sandbox',

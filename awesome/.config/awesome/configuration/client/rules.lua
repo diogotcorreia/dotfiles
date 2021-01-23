@@ -134,7 +134,8 @@ ruled.client.connect_signal(
 					'XTerm',
 					'UXTerm',
 					'kitty',
-					'K3rmit'
+					'K3rmit',
+					'alacritty'
 				}
 			},
 			properties = {
@@ -159,7 +160,8 @@ ruled.client.connect_signal(
 				}
 			},
 			properties = {
-				tag = '2'
+				tag = '2',
+				switch_to_tags = true
 			}
 		}
 
@@ -179,7 +181,23 @@ ruled.client.connect_signal(
 				}
 			},
 			properties = {
-				tag = '3'
+				tag = '3',
+				switch_to_tags = true
+			}
+		}
+
+		-- Social Apps
+		ruled.client.append_rule {
+			id = 'internet',
+			rule_any = {
+				class = {
+					'discord',
+					'TelegramDesktop'
+				}
+			},
+			properties = {
+				tag = '4',
+				switch_to_tags = true
 			}
 		}
 
@@ -195,7 +213,7 @@ ruled.client.connect_signal(
 				}
 			},
 			properties = {
-				tag = '4',
+				tag = '5',
 				switch_to_tags = true
 			}
 		}
@@ -210,7 +228,7 @@ ruled.client.connect_signal(
 				}
 			},
 			properties = {
-				tag = '5',
+				tag = '6',
 				switch_to_tags = true,
 				placement = awful.placement.centered
 			}
@@ -230,14 +248,14 @@ ruled.client.connect_signal(
 				name = {'Steam'}
 			},
 			properties = {
-				tag = '6',
+				tag = '7',
 				skip_decoration = true,
 				switch_to_tags = true,
 				placement = awful.placement.centered
 			}
 		}
 
-		-- Multimedia Editing
+		--[[ -- Multimedia Editing
 		ruled.client.append_rule {
 			id = 'graphics',
 			rule_any = {
@@ -250,7 +268,7 @@ ruled.client.connect_signal(
 			properties = {
 				tag = '7'
 			}
-		}
+		} ]]
 
 		-- Sandboxes and VMs
 		ruled.client.append_rule {
@@ -318,7 +336,8 @@ ruled.client.connect_signal(
 				class = {
 					'scrcpy',
 					'Mugshot',
-					'Pulseeffects'
+					'Pulseeffects',
+					'Authy'
 				},
 				role    = {
 					'AlarmWindow',

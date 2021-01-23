@@ -10,21 +10,23 @@ return {
 		-- Default web browser
 		web_browser = 'google-chrome-stable --force-dark-mode',
 		-- Default text editor
-		text_editor = 'subl3',
+		text_editor = 'code',
 		-- Default file manager
 		file_manager = 'dolphin',
 		-- Default media player
-		multimedia = 'vlc',
+		multimedia = 'spotify',
 		-- Default game, can be a launcher like steam
 		game = 'supertuxkart',
 		-- Default graphics editor
 		graphics = 'gimp-2.10',
+		-- Default social app
+		social = 'discord',
 		-- Default sandbox
 		sandbox = 'virtualbox',
 		-- Default IDE
 		development = 'code',
 		-- Default network manager
-		network_manager = 'alacritty nmtui',
+		network_manager = 'alacritty -e nmtui',
 		-- Default bluetooth manager
 		bluetooth_manager = 'blueman-manager',
 		-- Default power manager
