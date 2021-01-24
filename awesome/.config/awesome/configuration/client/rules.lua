@@ -153,10 +153,8 @@ ruled.client.connect_signal(
 				class = {
 					'firefox',
 					'Tor Browser',
-					'discord',
 					'Chromium',
 					'Google-chrome',
-					'TelegramDesktop'
 				}
 			},
 			properties = {
@@ -188,11 +186,12 @@ ruled.client.connect_signal(
 
 		-- Social Apps
 		ruled.client.append_rule {
-			id = 'internet',
+			id = 'social',
 			rule_any = {
 				class = {
 					'discord',
-					'TelegramDesktop'
+					'TelegramDesktop',
+					'Slack'
 				}
 			},
 			properties = {
