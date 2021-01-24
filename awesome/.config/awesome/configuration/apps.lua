@@ -71,7 +71,9 @@ return {
 		[[
 		xidlehook --not-when-fullscreen --not-when-audio --timer 600 \
 		"awesome-client 'awesome.emit_signal(\"module::lockscreen_show\")'" ""
-		]]
+		]],
+		-- Screenshot app
+		'flameshot'
 
 		-- You can add more start-up applications here
 	},
