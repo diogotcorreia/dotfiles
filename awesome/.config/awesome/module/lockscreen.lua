@@ -439,12 +439,6 @@ local locker = function(s)
 			end
 		)
 	end
-	-- A backdoor.
-	-- Sometimes I'm too lazy to type so I decided to create this.
-	-- Sometimes my genius is... it's almost frightening.
-	local back_door = function()
-		generalkenobi_ohhellothere()
-	end
 
 	-- Check module if valid
 	local module_check = function(name)
@@ -475,19 +469,6 @@ local locker = function(s)
 					input_password = nil
 				end
 			},
-			awful.key {
-				modifiers = {'Mod1', 'Mod4', 'Shift', 'Control'},
-				key       = 'Return',
-				on_press  = function(self)
-					if not type_again then
-						return
-					end
-					self:stop()
-
-					-- Call backdoor
-					back_door() 
-				end
-			}
 		},
 		keypressed_callback = function(self, mod, key, command) 
 			if not type_again then

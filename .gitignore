@@ -1,2 +1,5 @@
 awesome/.config/awesome/configuration/config.lua
 awesome/.config/awesome/configuration/user-profile/*.png
+
+# Generated files
+awesome/.config/awesome/configuration/rofi/global/history.txt
