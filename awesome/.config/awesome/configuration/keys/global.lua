@@ -323,16 +323,16 @@ local global_keys = awful.util.table.join(
 		function ()
 			awful.spawn.easy_async_with_shell(apps.utils.full_screenshot,function() end)
 		end,
-		{description = 'fullscreen screenshot', group = 'Utility'}
+		{description = 'area/selected screenshot', group = 'Utility'}
 	),
-	awful.key(
+	--[[ awful.key(
 		{modkey, 'Shift'}, 
 		's',
 		function ()
 			awful.spawn.easy_async_with_shell(apps.utils.area_screenshot,function() end)
 		end,
 		{description = 'area/selected screenshot', group = 'Utility'}
-	),
+	), ]]
 	awful.key(
 		{modkey},
 		'x',
