@@ -784,7 +784,7 @@ local filter_bg_image = function(wall_name, index, ap, width, height)
 	then
 		mkdir -p ]] .. locker_config.tmp_wall_dir .. [[;
 	fi
-	convert -quality 100 -brightness-contrast -20x0 ]] .. ' '  .. blur_filter_param .. ' '.. locker_config.bg_dir .. wall_name .. 
+	convert -quality 100 ]] .. ' '  .. blur_filter_param .. ' '.. locker_config.bg_dir .. wall_name .. 
 	[[ -gravity center -crop ]] .. ap .. [[:1 +repage -resize ]] .. width .. 'x' .. height .. 
 	[[! ]] .. locker_config.tmp_wall_dir .. index .. wall_name .. [[
 	"]]
