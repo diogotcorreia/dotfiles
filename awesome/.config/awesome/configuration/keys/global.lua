@@ -334,6 +334,14 @@ local global_keys = awful.util.table.join(
 		{description = 'area/selected screenshot', group = 'Utility'}
 	), ]]
 	awful.key(
+		{modkey}, 
+		'v',
+		function ()
+			awful.spawn.easy_async_with_shell(apps.default.clipboard_manager,function() end)
+		end,
+		{description = 'open clipboard manager', group = 'Utility'}
+	),
+	awful.key(
 		{modkey},
 		'x',
 		function()

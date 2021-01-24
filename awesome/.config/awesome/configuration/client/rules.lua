@@ -125,6 +125,24 @@ ruled.client.connect_signal(
 			}
 		}
 
+		-- Clipboard Manager
+		ruled.client.append_rule {
+			id = 'clipboard_manager',
+			rule_any = {
+				class = {'copyq'}
+			},
+			properties = {
+				titlebars_enabled = false,
+				round_corners = false,
+				floating = true,
+				above = true,
+				skip_decoration = true,
+				placement = awful.placement.next_to_mouse,
+				width = 640,
+        height = 480
+			}
+		}
+
 		-- Terminal emulators
 		ruled.client.append_rule {
 			id = 'terminals',

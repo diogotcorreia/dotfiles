@@ -35,6 +35,8 @@ return {
 		package_manager = 'pamac-manager',
 		-- Default locker
 		lock = 'awesome-client "awesome.emit_signal(\'module::lockscreen_show\')"',
+		-- Default clipboard manager
+		clipboard_manager = 'copyq toggle',
 		-- Default quake terminal
 		quake = 'kitty --name QuakeTerminal',
 		-- Default rofi global menu
