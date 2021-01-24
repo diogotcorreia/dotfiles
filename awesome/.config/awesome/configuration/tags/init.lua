@@ -26,7 +26,7 @@ local tags = {
 	{
 		type = 'social',
 		icon = icons.social,
-		default_app = apps.default.graphics,
+		default_app = apps.default.social,
 		gap = beautiful.useless_gap,
 		layout = awful.layout.suit.tile
 	},
