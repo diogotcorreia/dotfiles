@@ -66,6 +66,17 @@ target_link_libraries(lua_pam lua5.3 pam)
 Make sure you have `lua53` installed (from `pacman`).
 Finally, copy the `build/liblua_pam.so` file to `/usr/lib/lua-pam/`.
 
+### Start AwesomeWM on startup
+
+Add this to `.bashrc` or `.zshrc`:
+
+```sh
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    startx &> /dev/null
+    exit
+fi
+```
+
 ## Credits
 
 - AwesomeWM Configuration from [`the-glorious-dotfiles`](https://github.com/manilarome/the-glorious-dotfiles). Modified by me.
