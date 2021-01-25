@@ -9,6 +9,7 @@ configuration {
 	disable-history: false;
 	fullscreen: true;
 	window-thumbnail: true;
+	kb-cancel: "Escape,Control+g,Control+bracketleft";
 }
 
 * {
@@ -77,7 +78,7 @@ inputbar {
 	text-color: @foreground;
 	expand: false;
 	border-radius: 6px;
-	margin: 0px calc((100% - 640px) / 2) 0px calc((100% - 640px) / 2);
+	margin: 0px 25% 0px 25%;
 	padding: 10px 10px 10px 10px;
 	position: north;
 	children: [ entry-wrapper ];
