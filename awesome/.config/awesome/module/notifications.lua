@@ -46,7 +46,7 @@ ruled.notification.connect_signal(
 			rule       = { urgency = 'critical' },
 			properties = { 
 				font        		= 'Inter Bold 10',
-				bg 					= '#ff0000', 
+				bg 					= '#b553583b', 
 				fg 					= '#ffffff',
 				margin 				= dpi(16),
 				position 			= 'top_right',
@@ -116,6 +116,11 @@ naughty.connect_signal(
 	'request::display',
 	function(n)
 
+		if n.run ~= nil then
+			-- Some apps expect you to click on the notification to execute something,
+			-- so add a "Open" button to emulate that click.
+			table.insert(n.actions, { name = 'Open', invoke = n.run })
+		end
 		-- Actions Blueprint
 		local actions_template = wibox.widget {
 			notification = n,
