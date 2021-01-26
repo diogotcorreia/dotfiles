@@ -75,7 +75,9 @@ return {
 		"awesome-client 'awesome.emit_signal(\"module::lockscreen_show\")'" ""
 		]],
 		-- Screenshot app
-		'flameshot'
+		'flameshot',
+		-- Clipboard manager
+		'copyq'
 
 		-- You can add more start-up applications here
 	},
