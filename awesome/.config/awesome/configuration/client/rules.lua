@@ -412,7 +412,7 @@ client.connect_signal(
 				end
 			else
 				-- Move the instance to specified tag on this screen
-				local t = awful.tag.find_by_name(awful.screen.focused(), '5')
+				local t = awful.tag.find_by_name(awful.screen.focused(), '6')
 				c:move_to_tag(t)
 				t:view_only()
 
