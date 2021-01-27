@@ -8,4 +8,3 @@ export QT_QPA_PLATFORMTHEME="qt5ct"
 
 setxkbmap -layout pt &
 exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr
-exec awesome

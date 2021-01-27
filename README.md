@@ -11,6 +11,8 @@ Clone the repo and use stow (or create symlinks) to link to the correct director
 Below is a list of the files that are in `.gitignore`
 (because they might contain sensitive information) and how to configure them.
 
+**YOU MUST CREATE A `config.lua`, OTHERWISE IT WILL CRASH ON LOAD**
+
 - `awesome/.config/awesome/configuration/config.lua`: sample in `config.sample.lua`
 - `awesome/.config/awesome/configuration/user-profile/*.png`: picture for theme; file name must match username
 
@@ -43,6 +45,7 @@ The following packages were used:
 | `ffmpeg`                                      | `pacman`        | Video recorder, converter, etc                    | Awesome screen recorder widget               |
 | `dolphin`                                     | `pacman`        | File explorer                                     | File explorer                                |
 | `gnome-keyring`                               | `pacman`        | Keyring                                           | Keyring                                      |
+| `alacritty`                                   | `pacman`        | Terminal                                          | Awesome Terminal Launcher                    |
 
 ### Lua PAM
 
