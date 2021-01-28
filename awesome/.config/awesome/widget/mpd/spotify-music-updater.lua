@@ -14,6 +14,9 @@ local song_info = ui_content.song_info
 local vol_slider = ui_content.volume_slider
 local media_buttons = ui_content.media_buttons
 
+-- Avoid redownloading the same cover every 10 seconds
+local last_album_cover_url = ''
+
 -- We can't set/get the data for these
 -- So let's hide them
 
@@ -35,6 +38,12 @@ local update_cover = function()
 	awful.spawn.easy_async_with_shell(
 		get_art_url,
 		function(link)
+			-- Avoid redownloading the same cover every update
+			if link == last_album_cover_url then
+				return
+			end
+
+			last_album_cover_url = link
 			
 			local download_art = [[
 			tmp_dir="/tmp/awesomewm/${USER}/"
@@ -157,6 +166,8 @@ if app in pactl:
     sink_id = sink_id[1: ]
     volume = volume[ : -1 ]
     print(volume)
+else:
+    print(0)
 END
 	]]
 
@@ -248,12 +259,13 @@ vol_slider.vol_slider:connect_signal(
 
 local update_all_content = function()
 	-- Add a delay
-	gears.timer.start_new(2, function() 
+	gears.timer.start_new(10, function() 
 		update_title()
 		update_artist()
 		update_cover()
 		check_if_playing()
 		update_volume_slider()
+		return true
 	end)
 end
 
