@@ -72,14 +72,14 @@ local client_keys = awful.util.table.join(
 		end,
 		{description = 'go back', group = 'client'}
 	),
-    awful.key(
-        {modkey},
-        'n',
-        function(c)
-            c.minimized = true
-        end,
-        {description = 'minimize client', group = 'client'}
-    ),
+	awful.key(
+		{modkey, 'Shift'},
+		'n',
+		function(c)
+			c.minimized = true
+		end,
+		{description = 'minimize client', group = 'client'}
+	),
 	awful.key(
 		{ modkey, 'Shift' }, 
 		'c', 

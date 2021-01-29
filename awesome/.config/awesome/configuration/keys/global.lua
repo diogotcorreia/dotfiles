@@ -374,6 +374,19 @@ local global_keys = awful.util.table.join(
 		{description = 'toggle redshift filter', group = 'Utility'}
 	),
 	awful.key(
+		{modkey},
+		'n',
+		function ()
+			awful.spawn(
+				awful.screen.focused().selected_tag.default_app,
+				{
+					tag = mouse.screen.selected_tag
+				}
+			)
+		end,
+		{description = 'open default app for current tag', group = 'launcher'}
+	),
+	awful.key(
 		{ 'Control' }, 
 		'Escape', 
 		function ()
