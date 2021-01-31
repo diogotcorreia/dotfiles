@@ -110,13 +110,13 @@ local dont_disturb_wrapped = wibox.widget {
 }
 
 -- Create a notification sound
-naughty.connect_signal(
+--[[ naughty.connect_signal(
 	'request::display', 
 	function(n)
 		if not dont_disturb then
 			awful.spawn.with_shell('canberra-gtk-play -i message')
 		end
 	end
-)
+) ]]
 
 return dont_disturb_wrapped
