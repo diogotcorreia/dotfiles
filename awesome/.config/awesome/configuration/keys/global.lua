@@ -238,7 +238,7 @@ local global_keys = awful.util.table.join(
 		{},
 		'XF86AudioNext',
 		function()
-			awful.spawn('mpc next', false)
+			awful.spawn('playerctl next', false)
 		end,
 		{description = 'next music', group = 'hotkeys'}
 	),
@@ -246,7 +246,7 @@ local global_keys = awful.util.table.join(
 		{},
 		'XF86AudioPrev',
 		function()
-			awful.spawn('mpc prev', false)
+			awful.spawn('playerctl previous', false)
 		end,
 		{description = 'previous music', group = 'hotkeys'}
 	),
@@ -254,7 +254,7 @@ local global_keys = awful.util.table.join(
 		{},
 		'XF86AudioPlay',
 		function()
-			awful.spawn('mpc toggle', false)
+			awful.spawn('playerctl play-pause', false)
 		end,
 		{description = 'play/pause music', group = 'hotkeys'}
 

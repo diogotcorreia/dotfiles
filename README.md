@@ -29,7 +29,6 @@ The following packages were used:
 | `light-git`                                   | `yay`           | Brightness control app                            | Awesome brightness widget                    |
 | `alsa-utils`, `pulseaudio`, `pulseaudio-alsa` | `pacman`        | Audio support                                     | Awesome volume widget                        |
 | `acpi`, `acpid`, `acpi_call`                  | `pacman`        | Show battery status. For laptops only             | Awesome power/battery widget                 |
-| `mpd`, `mpc`                                  | `pacman`        | Music player                                      | Awesome music widget                         |
 | `feh`                                         | `pacman`        | Image viewer and wallpaper setter                 | Awesome wallpapers                           |
 | `flameshot`                                   | `pacman`        | Screenshot tools                                  | Awesome screenshot                           |
 | `xorg-xprop`                                  | `pacman`        | Property displayer for X                          | Awesome custom titlebars for each client     |
@@ -46,6 +45,8 @@ The following packages were used:
 | `dolphin`                                     | `pacman`        | File explorer                                     | File explorer                                |
 | `gnome-keyring`                               | `pacman`        | Keyring                                           | Keyring                                      |
 | `alacritty`                                   | `pacman`        | Terminal                                          | Awesome Terminal Launcher                    |
+| `wget`                                        | `pacman`        | Download files                                    | Spotify widget                               |
+| `playerctl`                                   | `pacman`        | Media Player Controller                           | Keyboard media keys                          |
 
 ### Lua PAM
 
