@@ -76,7 +76,7 @@ local return_button = function()
 		widget
 	)
 
-	return widget_button
+	return awful.widget.only_on_screen(widget_button, 'primary')
 
 end
 

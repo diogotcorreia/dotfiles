@@ -99,7 +99,7 @@ local return_button = function()
 		end
 	)
 
-	return widget_button
+	return awful.widget.only_on_screen(widget_button, 'primary')
 end
 
 return return_button

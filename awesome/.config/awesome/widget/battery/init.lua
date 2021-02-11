@@ -203,7 +203,7 @@ local return_button = function()
 		end
 	)
 
-	return battery_button
+	return awful.widget.only_on_screen(battery_button, 'primary')
 end
 
 return return_button

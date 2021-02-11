@@ -7,10 +7,10 @@ local config_dir = gears.filesystem.get_configuration_dir()
 local widget_icon_dir = config_dir .. 'widget/spotify/icons/'
 local clickable_container = require('widget.clickable-container')
 
--- Avoid redownloading the same cover every 10 seconds
-local last_album_cover_url = ''
-
 local return_button = function()
+	-- Avoid redownloading the same cover every 10 seconds
+	local last_album_cover_url = ''
+
 	local widget = wibox.widget {
 		{
 			id = 'cover',
@@ -132,7 +132,7 @@ local return_button = function()
 
 	update_all_content()
 
-	return widget_button
+	return awful.widget.only_on_screen(widget_button, 'primary')
 
 end
 
