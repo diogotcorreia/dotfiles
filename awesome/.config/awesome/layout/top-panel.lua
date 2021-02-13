@@ -73,8 +73,8 @@ local top_panel = function(s, offset)
 			tag_list(s),
 			task_list(s),
 			add_button
-		}, 
-		clock,
+		},
+		nil,
 		{
 			layout = wibox.layout.fixed.horizontal,
 			spacing = dpi(5),
@@ -90,6 +90,7 @@ local top_panel = function(s, offset)
 			s.network,
 			s.bluetooth,
 			s.battery,
+			clock,
 			layout_box,
 			s.info_center_toggle
 		}

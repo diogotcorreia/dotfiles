@@ -11,9 +11,9 @@ local create_clock = function(s)
 
 	local clock_format = nil
 	if not military_mode then
-		clock_format = '<span font="Inter Bold 11">%I:%M %p, %b %d</span>'
+		clock_format = '<span font="Inter Bold 11">%I:%M %p %b %d</span>'
 	else
-		clock_format = '<span font="Inter Bold 11">%H:%M, %b %d</span>'
+		clock_format = '<span font="Inter Bold 11">%H:%M %b %d</span>'
 	end
 
 	s.clock_widget = wibox.widget.textclock(
@@ -145,7 +145,7 @@ local create_clock = function(s)
 
 	s.month_calendar:attach(
 		s.clock_widget, 
-		'tc', 
+		'tr', 
 		{ 
 			on_pressed = true,
 			on_hover = false 
