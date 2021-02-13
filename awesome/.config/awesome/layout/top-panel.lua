@@ -6,6 +6,7 @@ local icons = require('theme.icons')
 local dpi = beautiful.xresources.apply_dpi
 local clickable_container = require('widget.clickable-container')
 local task_list = require('widget.task-list')
+local tag_list = require('widget.tag-list')
 
 local top_panel = function(s, offset)
 
@@ -68,6 +69,8 @@ local top_panel = function(s, offset)
 		expand = 'none',
 		{
 			layout = wibox.layout.fixed.horizontal,
+			require('widget.search-apps')(),
+			tag_list(s),
 			task_list(s),
 			add_button
 		}, 

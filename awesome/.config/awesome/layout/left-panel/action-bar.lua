@@ -61,8 +61,8 @@ return function(s, panel, action_bar_width)
 		layout = wibox.layout.align.vertical,
 		forced_width = action_bar_width,
 		{
-			require('widget.search-apps')(),
-			tag_list(s),
+			--require('widget.search-apps')(),
+			--tag_list(s),
 			require("widget.xdg-folders")(),
 			layout = wibox.layout.fixed.vertical,
 		},
