@@ -64,6 +64,9 @@ local return_button = function()
 			function(stdout)
 
 				local title = stdout:gsub('%\n', '')
+				if (utf8.len(title) > 50) then
+					title = string.sub(title, 1, utf8.offset(title, 48) - 1) .. '...'
+				end
 
 				local title_text = widget:get_children_by_id('title')[1]
 
