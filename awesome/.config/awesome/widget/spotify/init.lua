@@ -39,6 +39,7 @@ local return_button = function()
 			margins = dpi(7),
 			widget = wibox.container.margin
 		},
+		visible = false,
 		widget = clickable_container
 	}
 
@@ -67,6 +68,8 @@ local return_button = function()
 				if (utf8.len(title) > 50) then
 					title = string.sub(title, 1, utf8.offset(title, 48) - 1) .. '...'
 				end
+
+				widget_button.visible = utf8.len(title) ~= 0
 
 				local title_text = widget:get_children_by_id('title')[1]
 
