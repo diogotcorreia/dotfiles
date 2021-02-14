@@ -8,7 +8,7 @@ screen.connect_signal(
 	'request::desktop_decoration',
 	function(s)
 		if s.index == 1 then
-			--s.left_panel = left_panel(s)
+			s.left_panel = left_panel(s)
 			s.top_panel = top_panel(s, false)
 		else
 			s.top_panel = top_panel(s, false)
@@ -26,9 +26,9 @@ function update_bars_visibility()
 			local fullscreen = s.selected_tag.fullscreen_mode
 			-- Order matter here for shadow
 			s.top_panel.visible = not fullscreen
-			if s.left_panel then
+			--[[ if s.left_panel then
 				s.left_panel.visible = not fullscreen
-			end
+			end ]]
 			if s.right_panel then
 				if fullscreen and s.right_panel.visible then
 					s.right_panel:toggle()
