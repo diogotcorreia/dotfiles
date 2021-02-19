@@ -8,7 +8,7 @@ return {
 		-- Default terminal emulator
 		terminal = 'alacritty',
 		-- Default web browser
-		web_browser = 'google-chrome-stable --force-dark-mode',
+		web_browser = 'google-chrome-stable --force-dark-mode --enable-features=WebUIDarkMode',
 		-- Default text editor
 		text_editor = 'code',
 		-- Default file manager
