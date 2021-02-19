@@ -196,6 +196,7 @@ local return_button = function()
 				battery_percentage_text.visible = false
 				battery_tooltip:set_text('No battery detected!')
 				battery_imagebox.icon:set_image(gears.surface.load_uncached(widget_icon_dir .. 'battery-unknown' .. '.svg'))
+				battery_button.visible = false
 				return
 			end
 
