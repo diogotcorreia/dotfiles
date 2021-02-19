@@ -43,7 +43,7 @@ local wall_config = {
 		['17:58:00'] = 'night-wallpaper.jpg'
 	},
 
-	-- Don't stretch wallpaper on multihead setups if true
+	-- Stretch wallpaper on multihead setups if true
 	stretch = config.module.dynamic_wallpaper.stretch or false
 }
 
@@ -249,13 +249,13 @@ end
 -- Set wallpaper
 local set_wallpaper = function(path)
 	if wall_config.stretch then
+		-- Update wallpaper based on the data in the array
+		gears.wallpaper.maximized (path)
+	else
 		for s in screen do
 			-- Update wallpaper based on the data in the array
 			gears.wallpaper.maximized (path, s)
 		end
-	else
-		-- Update wallpaper based on the data in the array
-		gears.wallpaper.maximized (path)
 	end
 end
 
