@@ -31,8 +31,8 @@ return {
 		bluetooth_manager = 'blueman-manager',
 		-- Default power manager
 		power_manager = 'xfce4-power-manager',
-		-- Default GUI package manager
-		package_manager = 'pamac-manager',
+		-- Default Pacman-based package manager
+		package_manager = 'yay',
 		-- Default locker
 		lock = 'awesome-client "awesome.emit_signal(\'module::lockscreen_show\')"',
 		-- Default clipboard manager

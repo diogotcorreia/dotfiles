@@ -47,11 +47,9 @@ local return_button = function()
 				function()
 					
 					if update_available then
-						awful.spawn(apps.default.package_manager .. ' --updates', false)
-					
+						awful.spawn.spawn(apps.default.terminal .. ' -e ' .. apps.default.package_manager .. ' -Syu', false)
 					else
-						awful.spawn(apps.default.package_manager, false)
-					
+						awful.spawn.spawn(apps.default.terminal .. ' -e ' .. apps.default.package_manager .. ' -Sy', false)
 					end
 				end
 			)
@@ -79,13 +77,12 @@ local return_button = function()
 	)
 
 	watch(
-		'pamac checkupdates',
+		'yay -Qu',
 		60,
 		function(_, stdout)
-			number_of_updates_available = tonumber(stdout:match('.-\n'):match('%d*'))
 			update_package = stdout
 			local icon_name = nil
-			if number_of_updates_available ~= nil then
+			if update_package ~= '' then
 				update_available = true
 				icon_name = 'package-up'
 			else
