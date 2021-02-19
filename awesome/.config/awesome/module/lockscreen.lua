@@ -21,6 +21,8 @@ local locker_config = {
 	fallback_password = function()
 		return config.module.lockscreen.fallback_password or 'toor'
 	end,
+	-- Force use fallback password
+	force_fallback_password = config.module.lockscreen.force_fallback_password or false,
 	-- Capture a picture using webcam
 	capture_intruder = config.module.lockscreen.capture_intruder or false,
 	-- Save location, auto creates
@@ -32,7 +34,7 @@ local locker_config = {
 	-- Default background
 	bg_image = config.module.lockscreen.bg_image or 'morning-wallpaper.jpg',
 	-- /tmp directory
-	tmp_wall_dir = config.module.lockscreen.tmp_wall_dir or '/tmp/awesomewm/' .. os.getenv('USER') .. '/'
+	tmp_wall_dir = config.module.lockscreen.tmp_wall_dir or ('/tmp/awesomewm/' .. os.getenv('USER') .. '/'),
 }
 
 -- Useful variables (DO NOT TOUCH THESE)
@@ -509,12 +511,12 @@ local locker = function(s)
 			end
 
 			-- Validation
-			if key == 'Return' then
+			if key == 'Return' or key == 'KP_Enter' then
 				-- Validate password
 				local authenticated = false
 				if input_password ~= nil then
 					-- If lua-pam library is 'okay'
-					if module_check('liblua_pam') then
+					if not locker_config.force_fallback_password and module_check('liblua_pam') then
 						local pam = require('liblua_pam')
 						authenticated = pam:auth_current_user(input_password)
 					else
@@ -522,35 +524,37 @@ local locker = function(s)
 						-- Use fallback password data
 						authenticated = input_password == locker_config.fallback_password()
 
-						local rtfm = naughty.action {
-							name = 'Read Wiki',
-						   	icon_only = false
-						}
+						if not locker_config.force_fallback_password then
+							local rtfm = naughty.action {
+								name = 'Read Wiki',
+									icon_only = false
+							}
 
-						local dismiss = naughty.action {
-							name = 'Dismiss',
-						   	icon_only = false
-						}
+							local dismiss = naughty.action {
+								name = 'Dismiss',
+									icon_only = false
+							}
 
-						rtfm:connect_signal(
-							'invoked',
-							function()
-								awful.spawn(
-									[[sh -c "
-									xdg-open 'https://github.com/manilarome/the-glorious-dotfiles/wiki'
-									"]],
-									false
-								)
-							end
-						)
+							rtfm:connect_signal(
+								'invoked',
+								function()
+									awful.spawn(
+										[[sh -c "
+										xdg-open 'https://github.com/manilarome/the-glorious-dotfiles/wiki'
+										"]],
+										false
+									)
+								end
+							)
 
-						naughty.notification({
-							app_name = 'Security',
-							title = 'WARNING',
-							message = 'You\'re using the fallback password! It\'s recommended to use the PAM Integration!',
-							urgency = 'critical',
-							actions = { rtfm, dismiss }
-						})
+							naughty.notification({
+								app_name = 'Security',
+								title = 'WARNING',
+								message = 'You\'re using the fallback password! It\'s recommended to use the PAM Integration!',
+								urgency = 'critical',
+								actions = { rtfm, dismiss }
+							})
+						end
 					end
 				end
 

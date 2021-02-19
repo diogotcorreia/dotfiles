@@ -86,6 +86,8 @@ return {
 			military_clock = true,
 			-- Default password if there's no PAM integration
 			fallback_password = 'toor',
+			-- Force use fallback password (useful if you want a pin for lockscreen)
+			force_fallback_password = false,
 			-- Capture intruder using webcam
 			capture_intruder = true,
 			-- Intruder image save location (Will create directory if it doesn't exist)
