@@ -147,7 +147,6 @@ local left_panel = function(screen)
 			}
 		},
 		nil
-		--require('layout.left-panel.action-bar')(screen, panel, action_bar_width)
 	}
 	return panel
 end
