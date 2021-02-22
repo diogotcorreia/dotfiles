@@ -113,7 +113,8 @@ ruled.client.connect_signal(
 			id = 'splash',
 			rule_any = {
 				type = {'splash'},
-				name = {'Discord Updater'}
+				name = {'Discord Updater'},
+				class = {'flameshot'},
 			},
 			properties = {
 				titlebars_enabled = false,
