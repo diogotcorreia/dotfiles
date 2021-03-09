@@ -46,17 +46,17 @@ local build_social_button = function(website)
 	}
 
 	local website_url = nil
-	if website == 'cdi' then
-		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/CDI925179577/2020-2021/1-semestre'
+	if website == 'cdi2' then
+		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/CDI1421011132646/2020-2021/2-semestre'
 
-	elseif website == 'fp' then
-		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/FP45179577/2020-2021/1-semestre'
+	elseif website == 'iaed' then
+		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/IAED764511132646/2020-2021/2-semestre'
 
-	elseif website == 'iac' then
-		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/IAC45179577/2020-2021/1-semestre'
+	elseif website == 'lp' then
+		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/LP564511132646/2020-2021/2-semestre'
 
-	elseif website == 'al' then
-		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/AL425179577/2020-2021/1-semestre'
+	elseif website == 'md' then
+		website_url = 'https://fenix.tecnico.ulisboa.pt/disciplinas/MD564511132646/2020-2021/2-semestre'
 
 	end
 
@@ -101,10 +101,10 @@ end
 local social_layout = wibox.widget {
 	layout = wibox.layout.fixed.horizontal,
 	spacing = dpi(5),
-	build_social_button('cdi'),
-	build_social_button('al'),
-	build_social_button('fp'),
-	build_social_button('iac'),
+	build_social_button('cdi2'),
+	build_social_button('md'),
+	build_social_button('iaed'),
+	build_social_button('lp'),
 }
 
 local social = wibox.widget {
