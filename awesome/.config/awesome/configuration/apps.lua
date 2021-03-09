@@ -16,11 +16,11 @@ return {
 		-- Default media player
 		multimedia = 'spotify',
 		-- Default game, can be a launcher like steam
-		game = 'supertuxkart',
+		game = 'lutris',
 		-- Default graphics editor
 		graphics = 'gimp-2.10',
 		-- Default social app
-		social = 'discord',
+		social = 'ferdi',
 		-- Default sandbox
 		sandbox = 'virtualbox',
 		-- Default IDE
