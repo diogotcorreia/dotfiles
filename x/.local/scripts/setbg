@@ -1,0 +1,3 @@
+#!/bin/sh
+
+feh --bg-fill ~/.local/scripts/wallpapers/morning-wallpaper.png
