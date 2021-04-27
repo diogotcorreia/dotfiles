@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -61,6 +62,13 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
 static const char *clipmenucmd[] = { "clipmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *raisevolumecmd[] = { "amixer", "-D", "pulse", "sset", "Master", "5%+", NULL };
+static const char *lowervolumecmd[] = { "amixer", "-D", "pulse", "sset", "Master", "5%-", NULL };
+static const char *muteoutputcmd[] = { "amixer", "-D", "pulse", "set", "Master", "1+", "toggle", NULL };
+static const char *nextsongcmd[] = { "playerctl", "next", NULL };
+static const char *prevsongcmd[] = { "playerctl", "previous", NULL };
+static const char *playpausesongcmd[] = { "playerctl", "play-pause", NULL };
+static const char *mutemiccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -99,6 +107,14 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ControlMask,           XK_q,      quit,           {0} },
+	/* MEDIA KEYS */
+	{ 0,                            XF86XK_AudioLowerVolume,     spawn, {.v = lowervolumecmd } },
+	{ 0,                            XF86XK_AudioMute,            spawn, {.v = muteoutputcmd } },
+	{ 0,                            XF86XK_AudioRaiseVolume,     spawn, {.v = raisevolumecmd } },
+	{ 0,                            XF86XK_AudioNext,            spawn, {.v = nextsongcmd } },
+	{ 0,                            XF86XK_AudioPrev,            spawn, {.v = prevsongcmd } },
+	{ 0,                            XF86XK_AudioPlay,            spawn, {.v = playpausesongcmd } },
+	{ 0,                            XK_Pause,                    spawn, {.v = mutemiccmd } },
 };
 
 /* button definitions */
