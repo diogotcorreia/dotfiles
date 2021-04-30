@@ -7,6 +7,6 @@ xlayoutdisplay                                # Configure multiple monitor setup
 ~/.local/scripts/setbg &                      # Set background wallpaper
 dunst &                                       # Setup notification deamon
 picom &                                       # Start compositor
-clipmenud &                                   # start clipboard manager
-slstatus &                                    # start slstatus
+clipmenud &                                   # Start clipboard manager
+dwmblocks &                                   # Start dwmblocks
 redshift &                                    # Start bluelight filter (redshift)

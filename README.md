@@ -47,6 +47,10 @@ The following packages were used:
 | `alacritty`                                   | `pacman`        | Terminal                                          | Awesome Terminal Launcher                    |
 | `wget`                                        | `pacman`        | Download files                                    | Spotify widget                               |
 | `playerctl`                                   | `pacman`        | Media Player Controller                           | Keyboard media keys                          |
+| `libxft-bgra`                                 | `yay`           | Patched libxft-bgra for colored emoji             | DWM Statusbar                                |
+| `pamixer`                                     | `pacman`        | Pulseaudio CLI mixer                              | DWM sb-audio                                 |
+| `ttf-font-awesome`                            | `pacman`        | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons                     |
+| `cronie`                                      | `pacman`        | Crontab                                           | DWM Statusbar Pacman Updates                 |
 
 ### Lua PAM
 
@@ -81,7 +85,15 @@ if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 fi
 ```
 
+### Statusbar configuration
+
+Below is a list of statusbar modules that need extra configuration.  
+Instructions are in the respective bash files, under `x/.local/bin/statusbar`.
+
+- `sb-pacpackages`
+
 ## Credits
 
 - AwesomeWM Configuration from [`the-glorious-dotfiles`](https://github.com/manilarome/the-glorious-dotfiles). Modified by me.
 - Background Images from Unsplash and Reddit
+- [dwmblocks](https://github.com/LukeSmithxyz/dwmblocks) by LukeSmithxyz along with his [statusbar scripts](https://github.com/LukeSmithxyz/voidrice/tree/master/.local/bin/statusbar)
