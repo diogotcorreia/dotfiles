@@ -51,39 +51,7 @@ The following packages were used:
 | `pamixer`                                     | `pacman`        | Pulseaudio CLI mixer                              | DWM sb-audio                                 |
 | `ttf-font-awesome`                            | `pacman`        | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons                     |
 | `cronie`                                      | `pacman`        | Crontab                                           | DWM Statusbar Pacman Updates                 |
-
-### Lua PAM
-
-For the AwesomeWM lockscreen, you need to install `lua-pam`.
-However, since you must change the lua version it is compiled against, you must clone the [`lua-pam` GitHub repository](https://github.com/rmtt/lua-pam).
-Then, change the `CMakeLists.txt` file:
-
-```
-cmake_minimum_required(VERSION 3.15)
-project(lua_pam)
-
-set(CMAKE_CXX_STANDARD 14)
-set(SOURCE_DIR src)
-
-include_directories(/usr/include/lua5.3)
-
-add_library(lua_pam SHARED ${SOURCE_DIR}/main.cpp)
-target_link_libraries(lua_pam lua5.3 pam)
-```
-
-Make sure you have `lua53` installed (from `pacman`).
-Finally, copy the `build/liblua_pam.so` file to `/usr/lib/lua-pam/`.
-
-### Start AwesomeWM on startup
-
-Add this to `.bashrc` or `.zshrc`:
-
-```sh
-if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-    startx &> /dev/null
-    exit
-fi
-```
+| `clipmenu`                                    | `pacman`        | Clipboard Manager                                 | -                                            |
 
 ### Statusbar configuration
 
@@ -91,6 +59,43 @@ Below is a list of statusbar modules that need extra configuration.
 Instructions are in the respective bash files, under `x/.local/bin/statusbar`.
 
 - `sb-pacpackages`
+
+### Lockscreen Configuration
+
+My setup uses [`slock`](https://tools.suckless.org/slock/), which drops privileges to
+a certain user and group when locked.
+
+By default, that is `nobody` and `nogroup`.
+For that reason, you must create the `nogroup` group:
+
+```bash
+sudo groupadd nogroup
+```
+
+### Redshift
+
+Redshift is started along with X. However, it might need to be configured to work
+for your location. Configuration files are not included in this repo to avoid sharing
+location coordinates.
+
+Put the following in your `~/.config/redshift/redshift.conf` (from ArchWiki):
+
+```conf
+[redshift]
+...
+; Set the location-provider: 'geoclue2', 'manual'
+; type 'redshift -l list' to see possible values.
+; The location provider settings are in a different section.
+location-provider=manual
+
+...
+
+; Keep in mind that longitudes west of Greenwich (e.g. the Americas)
+; are negative numbers.
+[manual]
+lat=48.864716
+lon=2.349014
+```
 
 ## Credits
 
