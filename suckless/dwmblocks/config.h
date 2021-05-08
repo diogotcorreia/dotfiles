@@ -7,8 +7,8 @@ static const Block blocks[] = {
 		{"", "sb-cpubars", 10, 18},
 		{"", "sb-nettraf", 1, 16},
 		{"", "sb-volume", 0, 10},
-		/*{"",	"sb-battery",	5,	3},*/
 		{"", "sb-clock", 1, 1},
+		{"", "sb-battery", 5, 3},
 		{"", "sb-internet", 5, 4},
 };
 
