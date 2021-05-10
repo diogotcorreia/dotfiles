@@ -18,7 +18,7 @@ Below is a list of the files that are in `.gitignore`
 
 ## Packages
 
-The following packages were used:
+I use the following packages in my system. Not all of them are required to use my DWM setup.
 
 | Name                                          | Package Manager | Description                                       | Used by                                      |
 | :-------------------------------------------- | :-------------- | :------------------------------------------------ | -------------------------------------------- |
@@ -52,6 +52,7 @@ The following packages were used:
 | `ttf-font-awesome`                            | `pacman`        | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons                     |
 | `cronie`                                      | `pacman`        | Crontab                                           | DWM Statusbar Pacman Updates                 |
 | `clipmenu`                                    | `pacman`        | Clipboard Manager                                 | -                                            |
+| `lf` (or `lf-bin`)                            | `yay`           | Terminal File Manager                             | -                                            |
 
 ### Statusbar configuration
 
