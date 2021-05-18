@@ -24,6 +24,7 @@ export R2D2_USERNAME=diogotcorreia # Internal Application
 export JAVA_HOME="/usr/lib/jvm/java-8-jdk" # Using Oracle's Java 8 for development purposes
 export JAVA_OPTS="-server -Xms256m -Xmx1024m -XX:PermSize=384m"
 export MAVEN_OPTS="$JAVA_OPTS -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"
+export GPG_TTY=$(tty)
 
 # Other program settings:
 export _JAVA_AWT_WM_NONREPARENTING=1 # Fix for Java applications in dwm
