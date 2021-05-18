@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# You must place the following on crontab for the wallpaper to update automatically:
+# 0 0 * * * setbg
+# 30 6 * * * setbg
+# 0 14 * * * setbg
+# 30 19 * * * setbg
+
+cd "$(dirname "$0")"
+
+seconds="$(date -d "1970-01-01 UTC $(date +%T)" +%s)"
+
+wallpaper_path="midnight-wallpaper.png"
+
+[[ "$seconds" -gt "23400" ]] && wallpaper_path="morning-wallpaper.png" # 06:30 AM
+[[ "$seconds" -gt "50400" ]] && wallpaper_path="noon-wallpaper.jpg" # 14:00 AM
+[[ "$seconds" -gt "70200" ]] && wallpaper_path="night-wallpaper.png" # 19:30 AM
+
+feh --bg-fill ./wallpapers/$wallpaper_path
