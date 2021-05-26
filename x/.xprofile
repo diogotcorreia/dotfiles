@@ -4,7 +4,7 @@
 
 xlayoutdisplay                                # Configure multiple monitor setup
 
-~/.local/scripts/setbg &                      # Set background wallpaper
+setbg &                                       # Set background wallpaper
 dunst &                                       # Setup notification deamon
 picom --experimental-backend &                # Start compositor
 clipmenud &                                   # Start clipboard manager
