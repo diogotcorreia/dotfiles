@@ -1,0 +1,8 @@
+# Make Wacom only active on main screen
+xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HEAD-0
+
+# Useful binds for Xournal++
+xsetwacom set "Wacom Intuos BT S Pad pad" Button 1 "key +ctrl z -ctrl"
+xsetwacom set "Wacom Intuos BT S Pad pad" Button 2 "key +ctrl +shift p -shift -ctrl"
+xsetwacom set "Wacom Intuos BT S Pad pad" Button 3 "key +ctrl +shift g -shift -ctrl"
+xsetwacom set "Wacom Intuos BT S Pad pad" Button 8 "key del"
