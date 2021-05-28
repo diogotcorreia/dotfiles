@@ -1,5 +1,8 @@
 # Make Wacom only active on main screen
-xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HEAD-0
+case $HOSTNAME in
+  (apollo) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HEAD-0;;
+  (ceres) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HDMI-2;;
+esac
 
 # Useful binds for Xournal++
 xsetwacom set "Wacom Intuos BT S Pad pad" Button 1 "key +ctrl z -ctrl"
