@@ -1,6 +1,7 @@
 # Make Wacom only active on main screen
 case $HOSTNAME in
   (apollo) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HEAD-0;;
+  (bacchus) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput eDP-1;;
   (ceres) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HDMI-2;;
 esac
 
