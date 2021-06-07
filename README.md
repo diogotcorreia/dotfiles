@@ -6,53 +6,45 @@ These are my dotfiles for my Arch Linux setup.
 
 Clone the repo and use stow (or create symlinks) to link to the correct directories.
 
-### Ignored files
-
-Below is a list of the files that are in `.gitignore`
-(because they might contain sensitive information) and how to configure them.
-
-**YOU MUST CREATE A `config.lua`, OTHERWISE IT WILL CRASH ON LOAD**
-
-- `awesome/.config/awesome/configuration/config.lua`: sample in `config.sample.lua`
-- `awesome/.config/awesome/configuration/user-profile/*.png`: picture for theme; file name must match username
-
 ## Packages
 
 I use the following packages in my system. Not all of them are required to use my DWM setup.
 
-| Name                                          | Package Manager | Description                                       | Used by                                      |
-| :-------------------------------------------- | :-------------- | :------------------------------------------------ | -------------------------------------------- |
-| `awesome-git`                                 | `yay`           | Window Manager                                    | Awesome config                               |
-| `rofi`                                        | `pacman`        | App Launcher                                      | Awesome                                      |
-| `picom-git`                                   | `yay`           | Compositor for X11                                | Awesome blur                                 |
-| `inter-font`                                  | `pacman`        | Font                                              | Awesome                                      |
-| `light-git`                                   | `yay`           | Brightness control app                            | Awesome brightness widget                    |
-| `alsa-utils`, `pulseaudio`, `pulseaudio-alsa` | `pacman`        | Audio support                                     | Awesome volume widget                        |
-| `acpi`, `acpid`, `acpi_call`                  | `pacman`        | Show battery status. For laptops only             | Awesome power/battery widget                 |
-| `feh`                                         | `pacman`        | Image viewer and wallpaper setter                 | Awesome wallpapers                           |
-| `flameshot`                                   | `pacman`        | Screenshot tools                                  | Awesome screenshot                           |
-| `xorg-xprop`                                  | `pacman`        | Property displayer for X                          | Awesome custom titlebars for each client     |
-| `imagemagick`                                 | `pacman`        | Image viewing/manipulation                        | Awesome music widget album covers            |
-| `blueman`                                     | `pacman`        | Bluetooth management                              | Awesome bluetooth widget                     |
-| `redshift`                                    | `pacman`        | Color temperature of display                      | Awesome blue light widget                    |
-| `xfce4-power-manager`                         | `pacman`        | Manages Power                                     | Awesome default launch app for batter widget |
-| `upower`                                      | `pacman`        | Battery CLI tool                                  | Awesome battery widget                       |
-| `noto-fonts-emoji`                            | `pacman`        | Google Noto emoji fonts                           | Awesome emoji support for notifications      |
-| `nerd-fonts-fantasque-sans-mono`              | `yay`           | Another font                                      | Rofi unicode font                            |
-| `xdg-user-dirs`                               | `pacman`        | Manages home folders for Pictures, Downloads, etc | Awesome various features                     |
-| `iproute2`, `iw`                              | `pacman`        | Manage network connection                         | Awesome network widget                       |
-| `ffmpeg`                                      | `pacman`        | Video recorder, converter, etc                    | Awesome screen recorder widget               |
-| `dolphin`                                     | `pacman`        | File explorer                                     | File explorer                                |
-| `gnome-keyring`                               | `pacman`        | Keyring                                           | Keyring                                      |
-| `alacritty`                                   | `pacman`        | Terminal                                          | Awesome Terminal Launcher                    |
-| `wget`                                        | `pacman`        | Download files                                    | Spotify widget                               |
-| `playerctl`                                   | `pacman`        | Media Player Controller                           | Keyboard media keys                          |
-| `libxft-bgra`                                 | `yay`           | Patched libxft-bgra for colored emoji             | DWM Statusbar                                |
-| `pamixer`                                     | `pacman`        | Pulseaudio CLI mixer                              | DWM sb-audio                                 |
-| `ttf-font-awesome`                            | `pacman`        | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons                     |
-| `cronie`                                      | `pacman`        | Crontab                                           | DWM Statusbar Pacman Updates                 |
-| `clipmenu`                                    | `pacman`        | Clipboard Manager                                 | -                                            |
-| `lf` (or `lf-bin`)                            | `yay`           | Terminal File Manager                             | -                                            |
+- AUR: Arch User Repository
+- APKG: Arch Official Packages
+
+| Name                                                 | Package Source | Description                                       | Used by                              |
+| :--------------------------------------------------- | :------------- | :------------------------------------------------ | ------------------------------------ |
+| `stow`                                               | APKG           | Create symlinks for dotfiles                      | -                                    |
+| `xorg-server`, `xorg-xinit`                          | APKG           | X11 server                                        | -                                    |
+| `picom-git`                                          | AUR            | Compositor for X11                                | Awesome blur                         |
+| `alsa-utils`, `pulseaudio`, `pulseaudio-alsa`        | APKG           | Audio support                                     | DWM volume keys                      |
+| `pamixer`                                            | APKG           | Pulseaudio CLI mixer                              | DWM sb-audio widget                  |
+| `feh`                                                | APKG           | Image viewer and wallpaper setter                 | Wallpaper script (`setbg`)           |
+| `flameshot`                                          | APKG           | Screenshot tools                                  | Screenshot keybind <kbd>prt sc</kbd> |
+| `redshift`                                           | APKG           | Color temperature of display                      | -                                    |
+| `xdg-user-dirs`                                      | APKG           | Manages home folders for Pictures, Downloads, etc | -                                    |
+| `gnome-keyring`                                      | APKG           | Keyring                                           | -                                    |
+| `alacritty`                                          | APKG           | Terminal                                          | DWM default terminal                 |
+| `playerctl`                                          | APKG           | Media Player Controller                           | DWM Keyboard media keys              |
+| `libxft-bgra`                                        | AUR            | Patched libxft-bgra for colored emoji             | DWM Statusbar                        |
+| `cronie`                                             | APKG           | Crontab                                           | DWM Statusbar Pacman Updates         |
+| `clipmenu`                                           | APKG           | Clipboard Manager                                 | -                                    |
+| `lf` (or `lf-bin`)                                   | AUR            | Terminal File Manager                             | -                                    |
+| `zsh`                                                | APKG           | Shell                                             | -                                    |
+| `oh-my-zsh`                                          | Custom Script  | Framework for zsh                                 | -                                    |
+| `autojump`                                           | AUR            | cd into directories by fuzzy search               | autojump zsh plugin                  |
+| `zathura`, `zathura-pdf-mupdf`                       | APKG           | PDF Reader                                        | -                                    |
+| `xlayoutdisplay`                                     | AUR            | Wrapper for xrandr to auto setup multihead        | -                                    |
+| `numlockx`                                           | APKG           | Change <kdb>numlock</kdb> status                  | Turn on numlock on login             |
+| `blueman`                                            | APKG           | Bluetooth management                              | -                                    |
+| `noto-fonts`, `noto-fonts-emoji`, `noto-fonts-extra` | APKG           | Google Noto Fonts                                 | -                                    |
+| `ttf-meslo-nerd-font-powerlevel10k`                  | AUR            | Font for oh-my-zsh theme                          | Powerlevel10k theme                  |
+| `ttf-firacode`                                       | AUR            | Fira Code Mono Font                               | DWM font                             |
+| `ttf-joypixels`                                      | APKG           | JoyPixels font                                    | -                                    |
+| `ttf-font-awesome`                                   | APKG           | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons             |
+
+Inside the `suckless` folder are some programs that need to be compiled (`dwm`, `dmenu`, `dwmblocks` and `slock`).
 
 ### Statusbar configuration
 
