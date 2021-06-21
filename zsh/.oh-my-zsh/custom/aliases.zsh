@@ -11,3 +11,11 @@ alias xopen="xdg-open"
 alias weather="curl https://wttr.in"
 # hacky fix to have maven 3.6.3
 alias mvn-dsi="/opt/intellij-idea-ultimate-edition/plugins/maven/lib/maven3/bin/mvn"
+
+if (( $+commands[paru] )) {
+  alias paupg='paru -Syu'
+  alias paupd='paru -Sy'
+  alias pain='paru -S'
+  alias parem='paru -Rns'
+}
+
