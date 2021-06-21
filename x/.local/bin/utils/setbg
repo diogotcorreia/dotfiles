@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # You must place the following on crontab for the wallpaper to update automatically:
-# 0 0 * * * setbg
-# 30 6 * * * setbg
-# 0 14 * * * setbg
-# 30 19 * * * setbg
+# 0 0 * * * DISPLAY=:0 $HOME/.local/bin/utils/setbg
+# 30 6 * * * DISPLAY=:0 $HOME/.local/bin/utils/setbg
+# 0 14 * * * DISPLAY=:0 $HOME/.local/bin/utils/setbg
+# 30 19 * * * DISPLAY=:0 $HOME/.local/bin/utils/setbg
 
 cd "$(dirname "$0")"
 
