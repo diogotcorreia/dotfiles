@@ -58,13 +58,6 @@ Instructions are in the respective bash files, under `x/.local/bin/statusbar`.
 My setup uses [`slock`](https://tools.suckless.org/slock/), which drops privileges to
 a certain user and group when locked.
 
-By default, that is `nobody` and `nogroup`.
-For that reason, you must create the `nogroup` group:
-
-```bash
-sudo groupadd nogroup
-```
-
 ### Redshift
 
 Redshift is started along with X. However, it might need to be configured to work
