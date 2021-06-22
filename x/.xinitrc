@@ -10,9 +10,7 @@ export SSH_AUTH_SOCK
 
 dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
 
-# Enable transparency theme in Qt5 apps
 export XDG_SESSION_TYPE=x11
-export QT_QPA_PLATFORMTHEME="qt5ct"
 
 setxkbmap -layout pt                                    # Set keyboard layout to PT
 numlockx &                                              # Turn on numlock
