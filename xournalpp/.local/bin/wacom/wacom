@@ -2,7 +2,7 @@
 case $HOSTNAME in
   (apollo) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HEAD-0;;
   (bacchus) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput eDP-1;;
-  (ceres) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput HDMI-2;;
+  (ceres) xsetwacom set "Wacom Intuos BT S Pen stylus" MapToOutput DP-2;;
 esac
 
 # Useful binds for Xournal++
