@@ -9,6 +9,8 @@ alias gccist="gcc -ansi -pedantic -Wall -Wextra -Werror"
 alias xopen="xdg-open"
 # cool terminal weather website
 alias weather="curl https://wttr.in"
+# shutdown alias
+alias sdnow="shutdown now"
 # hacky fix to have maven 3.6.3
 alias mvn-dsi="/opt/intellij-idea-ultimate-edition/plugins/maven/lib/maven3/bin/mvn"
 
