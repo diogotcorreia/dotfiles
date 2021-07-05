@@ -40,7 +40,7 @@ I use the following packages in my system. Not all of them are required to use m
 | `blueman`                                            | APKG           | Bluetooth management                              | -                                    |
 | `noto-fonts`, `noto-fonts-emoji`, `noto-fonts-extra` | APKG           | Google Noto Fonts                                 | -                                    |
 | `ttf-meslo-nerd-font-powerlevel10k`                  | AUR            | Font for oh-my-zsh theme                          | Powerlevel10k theme                  |
-| `ttf-firacode`                                       | AUR            | Fira Code Mono Font                               | DWM font                             |
+| `ttf-fira-code`                                      | APKG           | Fira Code Mono Font                               | DWM font                             |
 | `ttf-joypixels`                                      | APKG           | JoyPixels font                                    | -                                    |
 | `ttf-font-awesome`                                   | APKG           | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons             |
 
