@@ -69,6 +69,9 @@ plugins=(autojump git archlinux nvm zsh-syntax-highlighting zsh-autosuggestions 
 
 source $ZSH/oh-my-zsh.sh
 
+# Load system ZSH completions
+autoload -U compinit && compinit
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
