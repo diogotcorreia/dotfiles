@@ -5,6 +5,7 @@ export PATH="$PATH:${$(find -L ~/.local/bin -type d -printf %p:)%%:}"
 
 export PATH="$PATH:$HOME/.dotfiles/suckless/dmenu/shortcuts"
 export PATH="$PATH:$HOME/perl5/bin"
+export PATH="$PATH:$HOME/.cargo/bin"
 
 # Default programs:
 export EDITOR="nvim"
