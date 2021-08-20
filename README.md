@@ -44,6 +44,7 @@ I use the following packages in my system. Not all of them are required to use m
 | `ttf-joypixels`                                      | APKG           | JoyPixels font                                    | -                                    |
 | `ttf-font-awesome`                                   | APKG           | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons             |
 | `xf86-input-wacom`                                   | APKG           | Wacom Xorg Drivers                                | Wacom buttons script                 |
+| `nvim-packer-git`                                    | AUR            | Neovim package manager                            | -                                    |
 
 Inside the `suckless` folder are some programs that need to be compiled (`dwm`, `dmenu`, `dwmblocks` and `slock`).
 
@@ -132,4 +133,5 @@ Then, restart Xorg.
 
 - Background Images from Unsplash and Reddit
 - [dwmblocks](https://github.com/LukeSmithxyz/dwmblocks) by LukeSmithxyz along with his [statusbar scripts](https://github.com/LukeSmithxyz/voidrice/tree/master/.local/bin/statusbar)
+- [jdhao's nvim config](https://github.com/jdhao/nvim-config)
 - The [ArchWiki](https://wiki.archlinux.org)
