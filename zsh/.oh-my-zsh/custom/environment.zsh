@@ -22,7 +22,7 @@ export PERL_MM_OPT="INSTALL_BASE=/home/dtc/perl5"
 export HASTEBIN_SERVER_URL="https://bin.diogotc.com" # Self-hosted hastebin server; don't abuse it
 export HASTEBIN_CLIPPER="copyq copy -" # TODO change this to new clipboard manager
 export R2D2_USERNAME=diogotcorreia # Internal Application
-export JAVA_HOME="/usr/lib/jvm/java-8-jdk" # Using Oracle's Java 8 for development purposes
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk" # Using OpenJDK Java 8 for development purposes
 export JAVA_OPTS="-server -Xms256m -Xmx1024m -XX:PermSize=384m"
 export MAVEN_OPTS="$JAVA_OPTS -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"
 export GPG_TTY=$(tty)
