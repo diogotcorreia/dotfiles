@@ -5,6 +5,9 @@
 # cronjob every so often as root. This script will then read those packages.
 # When clicked, it will run an upgrade via pacman.
 #
+# Example cron usage:
+# */5 * * * * paru -Sy && /usr/bin/pkill -RTMIN+8 dwmblocks
+#
 # Add the following text as a file in /usr/share/libalpm/hooks/statusbar.hook:
 #
 # [Trigger]
@@ -26,4 +29,5 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-pacman -Qu | grep -Fcv "[ignored]" | sed "s/^//;s/^0$//g"
+# Change to 'pacman' or another AUR helper if needed
+paru -Qu | grep -Fcv "[ignored]" | sed "s/^//;s/^0$//g"

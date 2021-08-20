@@ -43,6 +43,7 @@ I use the following packages in my system. Not all of them are required to use m
 | `ttf-fira-code`                                      | APKG           | Fira Code Mono Font                               | DWM font                             |
 | `ttf-joypixels`                                      | APKG           | JoyPixels font                                    | -                                    |
 | `ttf-font-awesome`                                   | APKG           | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons             |
+| `xf86-input-wacom`                                   | APKG           | Wacom Xorg Drivers                                | Wacom buttons script                 |
 
 Inside the `suckless` folder are some programs that need to be compiled (`dwm`, `dmenu`, `dwmblocks` and `slock`).
 
@@ -52,6 +53,9 @@ Below is a list of statusbar modules that need extra configuration.
 Instructions are in the respective bash files, under `x/.local/bin/statusbar`.
 
 - `sb-pacpackages`
+
+Additionally, check `x/.local/bin/utils/setbg` for instructions on how to setup
+the time-based wallpapers.
 
 ### Lockscreen Configuration
 
@@ -83,8 +87,49 @@ lat=48.864716
 lon=2.349014
 ```
 
+### Automatically assume the username on tty1
+
+To force **tty1** to [always ask the password for a certain user](https://wiki.archlinux.org/title/Getty#Prompt_only_the_password_for_a_default_user_in_virtual_console_login),
+create `/etc/systemd/system/getty@tty1.service.d/override.conf`,
+replacing `*username*` with your username:
+
+```conf
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty -n -o *username* %I
+```
+
+Then, run `sudo systemctl enable getty@tty1`.
+
+### Unlocking the Gnome Keyring on login
+
+**Be careful when using this on a non-encrypted machine as it poses a security risk.**
+
+Follow in [intructions on the Arch Wiki](https://wiki.archlinux.org/title/GNOME/Keyring#PAM_step) for unlocking with PAM.
+
+### Fix screen tearing with NVIDIA proprietary drivers
+
+First of all, f\*ck NVIDIA. Then, add the following to `/etc/X11/xorg.conf.d/20-nvidia.conf`:
+
+```conf
+Section "Screen"
+    Identifier     "Screen0"
+    Device         "Device0"
+    Monitor        "Monitor0"
+    DefaultDepth    24
+    SubSection     "Display"
+        Depth       24
+    EndSubSection
+    Option         "MetaModes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+    Option         "AllowIndirectGLXProtocol" "off"
+    Option         "TripleBuffer" "on"
+EndSection
+```
+
+Then, restart Xorg.
+
 ## Credits
 
-- AwesomeWM Configuration from [`the-glorious-dotfiles`](https://github.com/manilarome/the-glorious-dotfiles). Modified by me.
 - Background Images from Unsplash and Reddit
 - [dwmblocks](https://github.com/LukeSmithxyz/dwmblocks) by LukeSmithxyz along with his [statusbar scripts](https://github.com/LukeSmithxyz/voidrice/tree/master/.local/bin/statusbar)
+- The [ArchWiki](https://wiki.archlinux.org)
