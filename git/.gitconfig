@@ -1,0 +1,22 @@
+[include]
+        # use this to store name, email and gpg signing key
+        path = ~/.gitconfig.local
+[color]
+	ui = auto
+[core]
+	autocrlf = false
+	eol = lf
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = master
+
+[includeIf "gitdir:~/documents/dsi/"]
+	path = ~/documents/dsi/.gitconfig_include
+[commit]
+	gpgsign = true
