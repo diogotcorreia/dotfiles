@@ -15,8 +15,5 @@
 	rebase = false
 [init]
 	defaultBranch = master
-
-[includeIf "gitdir:~/documents/dsi/"]
-	path = ~/documents/dsi/.gitconfig_include
 [commit]
 	gpgsign = true
