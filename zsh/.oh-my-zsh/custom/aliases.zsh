@@ -13,6 +13,8 @@ alias weather="curl https://wttr.in"
 alias sdnow="shutdown now"
 # hacky fix to have maven 3.6.3
 alias mvn-dsi="/opt/intellij-idea-ultimate-edition/plugins/maven/lib/maven3/bin/mvn"
+# copy to clipboard using xorg
+alias clip="xclip -sel clip"
 
 if (( $+commands[paru] )) {
   alias paupg='paru -Syu'
