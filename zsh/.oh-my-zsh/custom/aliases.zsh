@@ -11,10 +11,10 @@ alias xopen="xdg-open"
 alias weather="curl https://wttr.in"
 # shutdown alias
 alias sdnow="shutdown now"
-# hacky fix to have maven 3.6.3
-alias mvn-dsi="/opt/intellij-idea-ultimate-edition/plugins/maven/lib/maven3/bin/mvn"
 # copy to clipboard using xorg
 alias clip="xclip -sel clip"
+# set my work's development environment
+alias setenv-dsi='export JAVA_HOME="/usr/lib/jvm/java-8-openjdk" && export JAVA_OPTS="-server -Xms256m -Xmx1024m -XX:PermSize=384m" && export MAVEN_OPTS="$JAVA_OPTS -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"'
 
 if (( $+commands[paru] )) {
   alias paupg='paru -Syu'
