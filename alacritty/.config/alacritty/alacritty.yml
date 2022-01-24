@@ -2,7 +2,8 @@ font:
   normal:
     family: "MesloLGS NF"
 # Colors (Nord Theme)
-background_opacity: 0.75
+window:
+  opacity: 0.75
 colors:
   primary:
     background: '#2e3440'
