@@ -10,7 +10,7 @@ export PATH="$PATH:$HOME/.cargo/bin"
 # Default programs:
 export EDITOR="nvim"
 export TERMINAL="alacritty"
-export BROWSER="google-chrome-stable"
+export BROWSER="brave"
 
 # ~/ Clean-up:
 export PERL5LIB="/home/dtc/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
