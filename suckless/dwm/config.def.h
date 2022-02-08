@@ -7,7 +7,7 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Fira Code:size=10",
-                                        "Font Awesome 5 Free Solid:size=10",
+                                        "Font Awesome 6 Free Solid:size=10",
                                         "JoyPixels:size=10:antialias=true:autohint=true",
                                         "Noto Fonts Emoji:size=10:antialias=true:autohint=true",
                                         "monospace:size=10"
