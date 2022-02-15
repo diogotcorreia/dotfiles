@@ -1,0 +1,24 @@
+From a56d910262f04c576760e4cdc7010f526cd0f56f Mon Sep 17 00:00:00 2001
+From: Filip Seman <seman.filip@gmail.com>
+Date: Sat, 28 Aug 2021 16:15:42 +0200
+Subject: [PATCH] Move mouse to selected monitor on focusmon
+
+---
+ dwm.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/dwm.c b/dwm.c
+index 4465af1..254c933 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -825,6 +825,7 @@ focusmon(const Arg *arg)
+ 	if ((m = dirtomon(arg->i)) == selmon)
+ 		return;
+ 	unfocus(selmon->sel, 0);
++	XWarpPointer(dpy, None, m->barwin, 0, 0, 0, 0, m->mw / 2, m->mh / 2);
+ 	selmon = m;
+ 	focus(NULL);
+ }
+-- 
+2.30.2
+
