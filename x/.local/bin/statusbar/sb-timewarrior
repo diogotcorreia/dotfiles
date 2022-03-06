@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Prints whether or not there is current timetracking with timewarrior.
+
+current_tracking="$(timew)"
+
+if [ "$current_tracking" = "There is no active time tracking." ]; then
+	icon=""
+else
+	icon=""
+fi
+
+echo "$icon"

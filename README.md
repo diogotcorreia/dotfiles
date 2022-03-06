@@ -42,9 +42,10 @@ I use the following packages in my system. Not all of them are required to use m
 | `ttf-meslo-nerd-font-powerlevel10k`                  | AUR            | Font for oh-my-zsh theme                          | Powerlevel10k theme                  |
 | `ttf-fira-code`                                      | APKG           | Fira Code Mono Font                               | DWM font                             |
 | `ttf-joypixels`                                      | APKG           | JoyPixels font                                    | -                                    |
-| `ttf-font-awesome`                                   | APKG           | Font Awesome 5 (Solid)                            | DWM Statusbar Font Icons             |
+| `ttf-font-awesome`                                   | APKG           | Font Awesome 6 (Solid)                            | DWM Statusbar Font Icons             |
 | `xf86-input-wacom`                                   | APKG           | Wacom Xorg Drivers                                | Wacom buttons script                 |
 | `nvim-packer-git`                                    | AUR            | Neovim package manager                            | -                                    |
+| `timew`                                              | APKG           | TimeWarrior time tracker                          | DWM Statusbar                        |
 
 Inside the `suckless` folder are some programs that need to be compiled (`dwm`, `dmenu`, `dwmblocks` and `slock`).
 
