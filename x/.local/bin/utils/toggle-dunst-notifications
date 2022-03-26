@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Wrapper to toggle dunst 'set-pause' and send signal to dwmblocks to reload widget
+
+dunstctl set-paused toggle && /usr/bin/pkill -RTMIN+19 dwmblocks

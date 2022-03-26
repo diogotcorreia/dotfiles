@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Module showing if dunst is paused and if so, how many notifications are pending
+# Icon is ommited if not paused
+
+OUT=""
+
+if [ "$(dunstctl is-paused)" = "true" ]; then
+	OUT=""
+	WAITING="$(dunstctl count waiting)"
+	if [ $WAITING != 0 ]; then
+		OUT="$OUT ($WAITING)"
+	fi
+fi
+
+echo "$OUT"

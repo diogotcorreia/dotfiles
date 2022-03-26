@@ -84,6 +84,7 @@ static const char *prevsongcmd[] = { "playerctl", "previous", NULL };
 static const char *playpausesongcmd[] = { "playerctl", "play-pause", NULL };
 static const char *mutemiccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
 static const char *lockcmd[] = { "slock", NULL };
+static const char *tgspdunstcmd[] = { "toggle-dunst-notifications", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -131,6 +132,8 @@ static Key keys[] = {
 	{ 0,                            XF86XK_AudioPrev,            spawn, {.v = prevsongcmd } },
 	{ 0,                            XF86XK_AudioPlay,            spawn, {.v = playpausesongcmd } },
 	{ 0,                            XK_Pause,                    spawn, {.v = mutemiccmd } },
+	/* OTHER ACTIONS */
+	{ MODKEY,                       XK_n,      spawn,          {.v = tgspdunstcmd } },
 };
 
 /* button definitions */
