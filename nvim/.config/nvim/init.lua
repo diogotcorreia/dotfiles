@@ -30,8 +30,11 @@ o.scrolloff = 12
 -- use spaces instead of tab
 bo.expandtab = true
 
--- use system clipboard
-o.clipboard = 'unnamedplus'
+-- use sane clipboard shortcuts
+vim.api.nvim_set_keymap('', '<Leader>p', '"+p', { noremap = true})
+vim.api.nvim_set_keymap('', '<Leader>P', '"+P', { noremap = true})
+vim.api.nvim_set_keymap('', '<Leader>y', '"+y', { noremap = true})
+vim.api.nvim_set_keymap('n', '<Leader>Y', '"+y$', { noremap = true})
 
 require('plugins')
 require('statusbar')
