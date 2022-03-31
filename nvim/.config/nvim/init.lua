@@ -34,3 +34,4 @@ bo.expandtab = true
 o.clipboard = 'unnamedplus'
 
 require('plugins')
+require('statusbar')
