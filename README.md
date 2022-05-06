@@ -33,7 +33,7 @@ I use the following packages in my system. Not all of them are required to use m
 | `lf` (or `lf-bin`)                                   | AUR            | Terminal File Manager                             | -                                    |
 | `zsh`                                                | APKG           | Shell                                             | -                                    |
 | `oh-my-zsh`                                          | Custom Script  | Framework for zsh                                 | -                                    |
-| `autojump`                                           | AUR            | cd into directories by fuzzy search               | autojump zsh plugin                  |
+| `zoxide`, `fzf`                                      | APKG           | cd into directories by fuzzy search               | zoxide zsh plugin                    |
 | `zathura`, `zathura-pdf-mupdf`                       | APKG           | PDF Reader                                        | -                                    |
 | `xlayoutdisplay`                                     | AUR            | Wrapper for xrandr to auto setup multihead        | -                                    |
 | `numlockx`                                           | APKG           | Change <kdb>numlock</kdb> status                  | Turn on numlock on login             |
