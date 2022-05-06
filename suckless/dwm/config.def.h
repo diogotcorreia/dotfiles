@@ -83,7 +83,7 @@ static const char *nextsongcmd[] = { "playerctl", "next", NULL };
 static const char *prevsongcmd[] = { "playerctl", "previous", NULL };
 static const char *playpausesongcmd[] = { "playerctl", "play-pause", NULL };
 static const char *mutemiccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
-static const char *lockcmd[] = { "slock", NULL };
+static const char *lockcmd[] = { "slock", "-i", NULL };
 static const char *tgspdunstcmd[] = { "toggle-dunst-notifications", NULL };
 
 static Key keys[] = {
