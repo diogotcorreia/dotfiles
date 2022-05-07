@@ -72,7 +72,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-i", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
 static const char *clipmenucmd[] = { "clipmenu", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
@@ -83,7 +83,7 @@ static const char *nextsongcmd[] = { "playerctl", "next", NULL };
 static const char *prevsongcmd[] = { "playerctl", "previous", NULL };
 static const char *playpausesongcmd[] = { "playerctl", "play-pause", NULL };
 static const char *mutemiccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
-static const char *lockcmd[] = { "slock", "-i", NULL };
+static const char *lockcmd[] = { "slock", NULL };
 static const char *tgspdunstcmd[] = { "toggle-dunst-notifications", NULL };
 
 static Key keys[] = {
