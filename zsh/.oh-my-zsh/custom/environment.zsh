@@ -25,5 +25,10 @@ export R2D2_USERNAME=diogotcorreia # Internal Application
 export JAVA_HOME="/usr/lib/jvm/java-18-openjdk"
 export GPG_TTY=$(tty)
 
+# Android
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+
 # Other program settings:
 export _JAVA_AWT_WM_NONREPARENTING=1 # Fix for Java applications in dwm
