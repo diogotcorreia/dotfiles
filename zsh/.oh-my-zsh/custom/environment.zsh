@@ -26,7 +26,7 @@ export JAVA_HOME="/usr/lib/jvm/java-18-openjdk"
 export GPG_TTY=$(tty)
 
 # Android
-export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 
