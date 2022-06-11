@@ -12,7 +12,7 @@ dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XA
 
 export XDG_SESSION_TYPE=x11
 
-setxkbmap -layout pt                                    # Set keyboard layout to PT
+setxkbmap -layout 'us(altgr-intl)'                      # Set keyboard layout to PT
 numlockx &                                              # Turn on numlock
 [[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap               # Load custom key mapping
 
