@@ -4,6 +4,8 @@
 alias ssh="TERM=xterm-256color ssh"
 # don't use vim, use nvim instead
 alias vim="nvim"
+# use exa instead of ls
+alias ls="exa --git"
 # to use when i'm too lazy to write a makefile
 alias gccist="gcc -ansi -pedantic -Wall -Wextra -Werror"
 alias xopen="xdg-open"
