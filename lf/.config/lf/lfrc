@@ -25,3 +25,15 @@ cmd fzf_search ${{
     [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
 }}
 map gs :fzf_search
+
+cmd open ${{
+    test -L "$f" && f=$(readlink -f "$f")
+    if [[ "$f" == *.xopp ]]; then
+        xournalpp "$fx" > /dev/null 2> /dev/null
+    else
+        case $(file --mime-type $f -b) in
+            text/*) nvim "$fx";;
+            *) for f in "$fx"; do xdg-open "$f" > /dev/null 2> /dev/null & done;;
+        esac
+    fi
+}}
