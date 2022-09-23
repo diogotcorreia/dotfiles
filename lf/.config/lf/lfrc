@@ -29,7 +29,7 @@ map gs :fzf_search
 cmd open ${{
     test -L "$f" && f=$(readlink -f "$f")
     if [[ "$f" == *.xopp ]]; then
-        xournalpp "$fx" > /dev/null 2> /dev/null
+        xournalpp "$fx" > /dev/null 2> /dev/null & disown
     else
         case $(file --mime-type $f -b) in
             text/*) nvim "$fx";;
