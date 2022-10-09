@@ -17,6 +17,8 @@ alias sdnow="shutdown now"
 alias clip="xclip -sel clip"
 # set my work's development environment
 alias setenv-dsi='export JAVA_HOME="/usr/lib/jvm/java-8-openjdk" && export JAVA_OPTS="-server -Xms256m -Xmx1024m -XX:PermSize=384m" && export MAVEN_OPTS="$JAVA_OPTS -Dorg.apache.jasper.compiler.Parser.STRICT_QUOTE_ESCAPING=false"'
+# use lfcd (a wrapper that sets the pwd to the one where you exit) instead of lf
+alias lf="lfcd"
 
 if (( $+commands[paru] )) {
   alias paupg='paru -Syu'
