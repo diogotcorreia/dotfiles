@@ -37,3 +37,7 @@ cmd open ${{
         esac
     fi
 }}
+
+cmd ext ${{
+    atool -x "$f"
+}}
