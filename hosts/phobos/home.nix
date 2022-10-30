@@ -5,8 +5,7 @@
 #
 # Home configuration for phobos (server).
 
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   modules = {
     zsh.enable = true;
     neovim.enable = true;

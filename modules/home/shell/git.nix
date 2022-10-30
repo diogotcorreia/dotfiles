@@ -22,18 +22,16 @@ in {
         init.defaultBranch = "main";
         pull.rebase = true;
         url."git@github.com:".pushinsteadOf = "https://github.com/";
-        commit.template = "${configDir}/gitmessage.txt" ;
+        commit.template = "${configDir}/gitmessage.txt";
         commit.verbose = true;
       };
-      includes = [
-        {
-          condition = "gitdir:~/documents/dsi/";
-          contents.user = {
-            name = "Diogo Correia";
-            email = "diogo.t.correia@tecnico.ulisboa.pt";
-          };
-        }
-      ];
+      includes = [{
+        condition = "gitdir:~/documents/dsi/";
+        contents.user = {
+          name = "Diogo Correia";
+          email = "diogo.t.correia@tecnico.ulisboa.pt";
+        };
+      }];
     };
   };
 }

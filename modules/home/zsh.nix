@@ -9,8 +9,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.zsh;
-in
-{
+in {
   options.modules.zsh.enable = mkEnableOption "zsh";
 
   config = mkIf cfg.enable {

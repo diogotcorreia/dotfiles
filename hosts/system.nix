@@ -9,8 +9,7 @@
 let
   inherit (builtins) toString;
   inherit (lib.my) mapModules;
-in
-{
+in {
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
@@ -19,14 +18,14 @@ in
   };
   nix.trustedUsers = [ "root" "@wheel" ];
   security.sudo.extraConfig = ''
-  Defaults lecture=never
+    Defaults lecture=never
   '';
 
   # Every host shares the same time zone.
   time.timeZone = "Europe/Lisbon";
 
   services.journald.extraConfig = ''
-  SystemMaxUse=500M
+    SystemMaxUse=500M
   '';
 
   users = {
@@ -53,6 +52,7 @@ in
     fzf
     ripgrep
     procps
+    nixfmt
 
     agenixPackage
   ];
