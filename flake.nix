@@ -21,6 +21,7 @@
       url = "github:nix-community/home-manager/release-22.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    agenix.url = "github:ryantm/agenix/main";
   };
 
   outputs = inputs @ { self, ... }:
@@ -107,6 +108,8 @@
         config.allowUnfree = true;
       };
 
+      agenixPackage = inputs.agenix.defaultPackage.${system};
+
       systemModules = mkModules ./modules/system;
       homeModules = mkModules ./modules/home;
 
@@ -126,7 +129,7 @@
           inherit name;
           value = inputs.nixpkgs.lib.nixosSystem {
             inherit system pkgs;
-            specialArgs = { inherit user colors sshKeys; configDir = ./config; };
+            specialArgs = { inherit user colors sshKeys agenixPackage; configDir = ./config; };
             modules = [
               { networking.hostName = name; }
               (dir + "/system.nix")
@@ -145,6 +148,7 @@
                   users.${user} = import (dir + "/${name}/home.nix");
                 };
               }
+              inputs.agenix.nixosModules.age
             ] ++ systemModules;
           };
        })

@@ -5,7 +5,8 @@
 #
 # System configuration for phobos (server).
 
-{ pkgs, lib, sshKeys, ... }: {
+{ pkgs, lib, sshKeys, config, ... }:
+{
 
   boot.cleanTmpDir = true;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
@@ -26,6 +27,20 @@
 
   virtualisation.docker = {
     enable = true;
+  };
+  
+  # Secret manager
+  age = {
+    secrets = {
+      phobosHealthchecksUrl.file = ../../secrets/phobosHealthchecksUrl.age;
+    };
+
+    identityPaths = [ "/root/.ssh/id_ed25519" ];
+  };
+  
+  modules.healthchecks = {
+    enable = true;
+    checkUrlFile = config.age.secrets.phobosHealthchecksUrl.path;
   };
 
 }
