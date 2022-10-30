@@ -29,7 +29,9 @@
       inherit (inputs.nixpkgs) lib;
       inherit (lib) mapAttrs mapAttrsToList hasSuffix;
       sshKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIADPTInG2ZJ0LxO+IBJd1aORzmJlFPuJrcp4YRIJEE1s dtc@apollo"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL8ryXChOvGa25Wl/YAyZG+g1EpHpcMOUBq5dxJi3Vj3 dtc@bacchus"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYrpjewh+Z0IQkVLipcYJ0g0v1UJu49QmB9GTVUci11 dtc@ceres"
       ];
       # TODO change
       colors = {
