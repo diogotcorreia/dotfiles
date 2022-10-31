@@ -17,7 +17,7 @@ in {
       enable = true;
       oh-my-zsh = {
         enable = true;
-        plugins = [ "git" "docker" ];
+        plugins = [ "git" "docker-compose" "zoxide" ];
       };
       plugins = [
         {

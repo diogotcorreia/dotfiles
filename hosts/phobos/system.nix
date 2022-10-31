@@ -44,4 +44,21 @@
     checkUrlFile = config.age.secrets.phobosHealthchecksUrl.path;
   };
 
+  services.caddy = {
+    enable = true;
+    email = "phobos-lets-encrypt@diogotc.com";
+    virtualHosts = {
+      "healthchecks.diogotc.com" = {
+        extraConfig = ''
+          reverse_proxy localhost:8000
+        '';
+      };
+      "uptime.diogotc.com" = {
+        extraConfig = ''
+          reverse_proxy localhost:8002
+        '';
+      };
+    };
+  };
+
 }
