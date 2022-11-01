@@ -22,7 +22,7 @@ export PERL_MM_OPT="INSTALL_BASE=/home/dtc/perl5"
 export HASTEBIN_SERVER_URL="https://bin.diogotc.com" # Self-hosted hastebin server; don't abuse it
 export HASTEBIN_CLIPPER="copyq copy -" # TODO change this to new clipboard manager
 export R2D2_USERNAME=diogotcorreia # Internal Application
-export JAVA_HOME="/usr/lib/jvm/java-18-openjdk"
+export JAVA_HOME="/usr/lib/jvm/java-19-openjdk"
 export GPG_TTY=$(tty)
 
 # Android
