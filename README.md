@@ -47,6 +47,7 @@ I use the following packages in my system. Not all of them are required to use m
 | `nvim-packer-git`                                    | AUR            | Neovim package manager                            | -                                    |
 | `timew`                                              | APKG           | TimeWarrior time tracker                          | DWM Statusbar                        |
 | `exa`                                                | APKG           | Modern `ls` replacement                           | -                                    |
+| `qt-adwaita`                                         | APKG           | Adwaita Theme for QT apps                         | -                                    |
 
 Inside the `suckless` folder are some programs that need to be compiled (`dwm`, `dmenu`, `dwmblocks` and `slock`).
 
