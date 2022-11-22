@@ -94,6 +94,8 @@
           latest = import inputs.nixpkgs-latest args;
         };
 
+      secretsDir = ./secrets;
+
       overlaysDir = ./overlays;
 
       overlays = [ pkg-sets ] ++ mapAttrsToList
@@ -127,8 +129,10 @@
           value = inputs.nixpkgs.lib.nixosSystem {
             inherit system pkgs;
             specialArgs = {
-              inherit user colors sshKeys agenixPackage;
+              inherit user colors sshKeys agenixPackage secretsDir;
               configDir = ./config;
+              hostSecretsDir = "${secretsDir}/${name}";
+              hostName = name;
             };
             modules = [
               { networking.hostName = name; }

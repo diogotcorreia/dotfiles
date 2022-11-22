@@ -5,7 +5,7 @@
 #
 # System configuration for phobos (server).
 
-{ pkgs, lib, sshKeys, config, ... }: {
+{ pkgs, lib, sshKeys, config, hostSecretsDir, user, ... }: {
   boot.cleanTmpDir = true;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.openssh = {
@@ -19,7 +19,7 @@
     mutableUsers = true;
     users = {
       # TODO derive user from flake.nix
-      dtc.openssh.authorizedKeys.keys = sshKeys;
+      ${user}.openssh.authorizedKeys.keys = sshKeys;
     };
   };
 
@@ -28,7 +28,9 @@
   # Secret manager
   age = {
     secrets = {
-      phobosHealthchecksUrl.file = ../../secrets/phobosHealthchecksUrl.age;
+      phobosHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      phobosNebulaCert.file = "${hostSecretsDir}/nebulaCert.age";
+      phobosNebulaKey.file = "${hostSecretsDir}/nebulaKey.age";
     };
 
     identityPaths = [ "/root/.ssh/id_ed25519" ];
@@ -59,6 +61,12 @@
         '';
       };
     };
+  };
+
+  modules.nebula = {
+    enable = true;
+    cert = config.age.secrets.phobosNebulaCert.path;
+    key = config.age.secrets.phobosNebulaKey.path;
   };
 
 }
