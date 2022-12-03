@@ -5,7 +5,7 @@
 #
 # System configuration for phobos (server).
 
-{ pkgs, lib, sshKeys, config, hostSecretsDir, user, ... }: {
+{ pkgs, lib, sshKeys, config, hostSecretsDir, user, agenixPackage, ... }: {
   boot.cleanTmpDir = true;
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.openssh = {
@@ -40,6 +40,9 @@
     # See https://github.com/ryantm/agenix/pull/81
     ageBin = "${pkgs.age}/bin/age";
   };
+
+  environment.systemPackages =
+    [ (agenixPackage.override { ageBin = "${pkgs.age}/bin/age"; }) ];
 
   modules.healthchecks = {
     enable = true;
