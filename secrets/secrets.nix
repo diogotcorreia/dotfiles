@@ -7,4 +7,8 @@ in {
   "phobos/healthchecksUrl.age".publicKeys = [ phobosSystem ];
   "phobos/nebulaCert.age".publicKeys = [ phobosSystem ];
   "phobos/nebulaKey.age".publicKeys = [ phobosSystem ];
+  "phobos/resticHealthchecksUrl.age".publicKeys = [ phobosSystem ];
+  "phobos/resticRcloneConfig.age".publicKeys = [ phobosSystem ];
+  "phobos/resticPassword.age".publicKeys = [ phobosSystem ];
+  "phobos/resticSshKey.age".publicKeys = [ phobosSystem ];
 }

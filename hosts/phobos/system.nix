@@ -17,10 +17,7 @@
 
   users = {
     mutableUsers = true;
-    users = {
-      # TODO derive user from flake.nix
-      ${user}.openssh.authorizedKeys.keys = sshKeys;
-    };
+    users = { ${user}.openssh.authorizedKeys.keys = sshKeys; };
   };
 
   virtualisation.docker.enable = true;
@@ -31,6 +28,12 @@
       phobosHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       phobosNebulaCert.file = "${hostSecretsDir}/nebulaCert.age";
       phobosNebulaKey.file = "${hostSecretsDir}/nebulaKey.age";
+      phobosResticHealthchecksUrl.file =
+        "${hostSecretsDir}/resticHealthchecksUrl.age";
+      phobosResticRcloneConfig.file =
+        "${hostSecretsDir}/resticRcloneConfig.age";
+      phobosResticPassword.file = "${hostSecretsDir}/resticPassword.age";
+      phobosResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
     identityPaths = [ "/root/.ssh/id_ed25519" ];
@@ -70,6 +73,29 @@
     enable = true;
     cert = config.age.secrets.phobosNebulaCert.path;
     key = config.age.secrets.phobosNebulaKey.path;
+  };
+
+  modules.restic = {
+    enable = true;
+    checkUrlFile = config.age.secrets.phobosResticHealthchecksUrl.path;
+    rcloneConfigFile = config.age.secrets.phobosResticRcloneConfig.path;
+    passwordFile = config.age.secrets.phobosResticPassword.path;
+    sshKeyFile = config.age.secrets.phobosResticSshKey.path;
+
+    paths = [
+      "/home/${user}/uptime-kuma"
+      "/home/${user}/healthchecks/docker/.env"
+      "/tmp/healthchecks_db.sql"
+    ];
+    backupPrepareCommand = ''
+      ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/healthchecks_db.sql
+      ${pkgs.docker}/bin/docker compose -f /home/${user}/healthchecks/docker/docker-compose.yml exec -T db sh -c 'PGPASSWORD=$POSTGRES_PASSWORD exec pg_dump --format=custom --username postgres $POSTGRES_DB' > /tmp/healthchecks_db.sql
+    '';
+    backupCleanupCommand = ''
+      ${pkgs.coreutils}/bin/rm /tmp/healthchecks_db.sql
+    '';
+
+    timerConfig = { OnCalendar = "03:10"; };
   };
 
 }
