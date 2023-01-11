@@ -76,7 +76,10 @@
       };
       hostNameToColor = hostName:
         let
-          mapping = { phobos = "base08"; };
+          mapping = {
+            phobos = "base08";
+            bacchus = "base09";
+          };
           base = mapping."${hostName}";
         in colors.light."${base}";
 
