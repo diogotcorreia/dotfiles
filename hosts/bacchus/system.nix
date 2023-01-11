@@ -22,6 +22,8 @@
     kbdInteractiveAuthentication = false;
   };
 
+  modules.dwm.enable = true;
+
   users = {
     mutableUsers = true;
     users = { ${user}.openssh.authorizedKeys.keys = sshKeys; };
