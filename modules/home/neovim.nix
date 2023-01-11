@@ -231,7 +231,7 @@ let
   # 
   #     luasnip
   #     {
-  #       plugin = pkgs.unstable.luajitPackages.nvim-cmp;
+  #       plugin = nvim-cmp;
   #       type = "lua";
   #       config = ''
   # -- Setup nvim-cmp.
@@ -425,7 +425,7 @@ in {
         with pkgs.unstable.vimPlugins; [
           vim-fugitive
           {
-            plugin = pkgs.unstable.luajitPackages.gitsigns-nvim;
+            plugin = gitsigns-nvim;
             config = "lua require('gitsigns').setup()";
           }
         ]

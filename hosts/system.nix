@@ -16,7 +16,7 @@ in {
       experimental-features = nix-command flakes
     '';
   };
-  nix.trustedUsers = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.extraConfig = ''
     Defaults lecture=never
   '';
