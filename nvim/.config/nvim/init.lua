@@ -12,6 +12,10 @@ wo.relativenumber = true
 -- enable hidden buffers
 o.hidden = true
 
+-- show invisible whitespace characters
+o.list = true
+o.listchars = "tab:>-,trail:~,extends:>,precedes:<"
+
 -- use smart case on searches: if it's all lowercase, search is case insensitive;
 -- if there's a upper case character, search is case sensitive
 o.ignorecase = true
