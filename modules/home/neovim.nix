@@ -16,12 +16,12 @@ let
     tree-sitter-comment
     tree-sitter-html
     tree-sitter-markdown
+    tree-sitter-nix
     tree-sitter-python
   ];
   # TODO
   personalGrammars = [ ];
   # personalGrammars = if personal then with pkgs.unstable.tree-sitter-grammars; [
-  #   tree-sitter-nix
   #   tree-sitter-c
   #   tree-sitter-cpp
   #   tree-sitter-java
@@ -195,7 +195,7 @@ let
   #       type = "lua";
   #       config = ''
   # local lsp = require'lspconfig'
-  # 
+  #
   # local capabilities = require('cmp_nvim_lsp').default_capabilities()
   # capabilities.textDocument.completion.completionItem.snippetSupport = true
   # capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -205,7 +205,7 @@ let
   # 		'additionalTextEdits',
   # 	}
   # }
-  # 
+  #
   # lsp.rust_analyzer.setup{
   # 	capabilities = capabilities,
   # 	on_attach = require'generic_lsp'
@@ -217,7 +217,7 @@ let
   #       '';
   #     }
   #     lsp_extensions-nvim
-  # 
+  #
   #     {
   #       plugin = presence-nvim;
   #       config = ''
@@ -228,7 +228,7 @@ let
   #       let g:presence_main_image        = "neovim"
   #       '';
   #     }
-  # 
+  #
   #     luasnip
   #     {
   #       plugin = nvim-cmp;
@@ -236,7 +236,7 @@ let
   #       config = ''
   # -- Setup nvim-cmp.
   # local cmp = require'cmp'
-  # 
+  #
   # cmp.setup({
   #   snippet = {
   #     -- REQUIRED - you must specify a snippet engine
@@ -262,7 +262,7 @@ let
   #     { name = 'buffer' },
   #   })
   # })
-  # 
+  #
   # -- Set configuration for specific filetype.
   # cmp.setup.filetype('gitcommit', {
   #   sources = cmp.config.sources({
@@ -271,7 +271,7 @@ let
   #     { name = 'buffer' },
   #   })
   # })
-  # 
+  #
   # -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   # cmp.setup.cmdline('/', {
   #   mapping = cmp.mapping.preset.cmdline(),
@@ -279,7 +279,7 @@ let
   #     { name = 'buffer' }
   #   }
   # })
-  # 
+  #
   # -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   # cmp.setup.cmdline(':', {
   #   mapping = cmp.mapping.preset.cmdline(),
