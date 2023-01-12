@@ -328,6 +328,10 @@ in {
         set tabstop=4
         set expandtab
 
+        " show invisible whitespace characters
+        set list
+        set listchars=tab:>-,trail:~,extends:>,precedes:<
+
         " delete trailing whitespace
         autocmd FileType c,cpp,java,lua,nix,ocaml,vim,wast autocmd BufWritePre <buffer> %s/\s\+$//e
 
