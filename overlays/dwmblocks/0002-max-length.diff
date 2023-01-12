@@ -1,0 +1,14 @@
+diff --git a/dwmblocks.c b/dwmblocks.c
+index 0969ed7..dc69b60 100644
+--- a/dwmblocks.c
++++ b/dwmblocks.c
+@@ -7,7 +7,7 @@
+ #include <errno.h>
+ #include <X11/Xlib.h>
+ #define LENGTH(X) (sizeof(X) / sizeof (X[0]))
+-#define CMDLENGTH		50
++#define CMDLENGTH		100
+ 
+ typedef struct {
+ 	char* icon;
+

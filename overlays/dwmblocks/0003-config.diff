@@ -1,0 +1,21 @@
+diff --git a/config.h b/config.h
+index 37c14a1..5c17eba 100644
+--- a/config.h
++++ b/config.h
+@@ -1,6 +1,15 @@
+ // Modify this file to change what commands output to your statusbar, and recompile using the make command.
+ static const Block blocks[] = {
+ 	/*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
++//        {"",            "sb-dunst-pause",       10,                     19},
++//        {"",            "sb-timewarrior",       10,                     17},
++//        {"",            "sb-memory",            10,                     14},
++//        {"",            "sb-cpubars",           10,                     18},
++//        {"",            "sb-nettraf",           1,                      16},
++//        {"",            "sb-volume",            0,                      10},
++        {"",            "sb-clock",             1,                      1},
++//        {"",            "sb-battery",           5,                      3},
++//        {"",            "sb-internet",          5,                      4},
+ };
+ 
+ // Sets delimiter between status commands. NULL character ('\0') means no delimiter.
+

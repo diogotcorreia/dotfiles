@@ -7,6 +7,7 @@
 
 { pkgs, ... }: {
   modules = {
+    dwm.enable = true;
     zsh.enable = true;
     neovim.enable = true;
     shell = {

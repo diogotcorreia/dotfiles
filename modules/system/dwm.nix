@@ -17,17 +17,27 @@ in {
   config = mkIf cfg.enable {
 
     programs.slock.enable = true;
-    environment.systemPackages = with pkgs; [ alacritty dmenu flameshot ];
+    environment.systemPackages = with pkgs; [
+      alacritty
+      dmenu
+      (dwmblocks.overrideAttrs (old: rec {
+        src = fetchFromGitHub {
+          owner = "LukeSmithxyz";
+          repo = "dwmblocks";
+          rev = "5a6fa8d550c11552480f10e660073ca294d446b1";
+          sha256 = "1fkc094vhb3x58zy2k8n66xsjrlmzdi70fc4d2l0y5hq1jwsvnyx";
+        };
+      }))
+      fira-code
+      flameshot
+    ];
 
     services.xserver = {
       enable = true;
       layout = "us";
       xkbVariant = "altgr-intl";
       autorun = true;
-      displayManager = {
-        defaultSession = "none+dwm";
-        lightdm.enable = true; # TODO use startx instead
-      };
+      displayManager.startx.enable = true;
       windowManager = { dwm.enable = true; };
       libinput = {
         enable = true;
