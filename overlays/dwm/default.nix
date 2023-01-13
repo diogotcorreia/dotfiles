@@ -25,6 +25,11 @@ final: prev: rec {
       # This Reddit thread provides guidance on how to create it a custom patch for it:
       # https://www.reddit.com/r/suckless/comments/v3ktt6/comment/ib4kz2s/
       ./0003-dwm-statuspadding.diff
+      # Remove background color from the middle section, where the window
+      # title is, when there is a focused window in that monitor.
+      ./0004-remove-bgcolor-window-title.diff
+
+      ./0100-theme-colors.diff
     ];
   });
 }
