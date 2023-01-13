@@ -26,7 +26,7 @@ in {
       darkblue=#7292b2
 
       printf "^c$black^ ^b$darkblue^ 󱑆 "
-      printf "^c$black^^b$blue^ $(date '+%Y %b %d (%a) %H:%M:%S')  "
+      printf "^c$black^^b$blue^ $(date '+%Y %b %d (%a) %H:%M:%S') "
     '';
   in {
     home.file.".xinitrc".text = ''

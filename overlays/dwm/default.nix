@@ -20,6 +20,11 @@ final: prev: rec {
       })
       ./0001-keybinds.diff
       ./0002-fonts.diff
+      # dwm-statuspadding patch was not compatible with status2d
+      # https://dwm.suckless.org/patches/statuspadding/
+      # This Reddit thread provides guidance on how to create it a custom patch for it:
+      # https://www.reddit.com/r/suckless/comments/v3ktt6/comment/ib4kz2s/
+      ./0003-dwm-statuspadding.diff
     ];
   });
 }
