@@ -8,6 +8,7 @@
 { pkgs, ... }: {
   modules = {
     dwm.enable = true;
+    lf.enable = true;
     zsh.enable = true;
     neovim.enable = true;
     shell = {

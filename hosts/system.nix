@@ -41,6 +41,7 @@ in {
 
   # Essential packages.
   environment.systemPackages = with pkgs; [
+    atool
     cached-nix-shell
     neovim
     tmux
