@@ -14,11 +14,11 @@ in {
 
   config = mkIf cfg.enable {
     programs.zathura = {
-        enable = true;
-        options = {
-          selection-clipboard = "clipboard";
-          recolor = "true"; # open documents with inverted colors by default
-          sandbox = "none"; # fix links not opening on browser
+      enable = true;
+      options = {
+        selection-clipboard = "clipboard";
+        recolor = "true"; # open documents with inverted colors by default
+        sandbox = "none"; # fix links not opening on browser
       };
     };
 

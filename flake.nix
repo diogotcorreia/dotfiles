@@ -22,6 +22,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix.url = "github:ryantm/agenix/main";
+    spicetify-nix.url = "github:the-argus/spicetify-nix";
   };
 
   outputs = inputs@{ self, ... }:
@@ -111,6 +112,7 @@
       };
 
       agenixPackage = inputs.agenix.defaultPackage.${system};
+      spicetifyPkgs = inputs.spicetify-nix.packages.${system}.default;
 
       systemModules = mkModules ./modules/system;
       homeModules = mkModules ./modules/home;
@@ -148,11 +150,12 @@
                   useGlobalPkgs = true;
                   useUserPackages = true;
                   extraSpecialArgs = {
-                    inherit colors;
+                    inherit colors spicetifyPkgs;
                     hostColor = hostNameToColor name;
                     configDir = ./config;
                   };
-                  sharedModules = homeModules;
+                  sharedModules = homeModules
+                    ++ [ inputs.spicetify-nix.homeManagerModule ];
                   users.${user} = import (dir + "/${name}/home.nix");
                 };
               }

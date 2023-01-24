@@ -13,10 +13,11 @@ in {
   options.modules.graphical.programs.enable = mkEnableOption "programs";
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      # Discord
-      discord-openasar
-    ];
+    home.packages = with pkgs;
+      [
+        # Discord
+        discord-openasar
+      ];
 
     # Video player
     programs.mpv.enable = true;
