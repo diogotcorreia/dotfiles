@@ -22,6 +22,7 @@
     kbdInteractiveAuthentication = false;
   };
 
+  modules.dnsovertls.enable = true;
   modules.dwm.enable = true;
   modules.ist.enable = true;
   modules.syncthing.enable = true;

@@ -14,6 +14,8 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
+      # dog DNS CLI client (dig alternative)
+      dogdns
       # qalc (CLI calculator)
       libqalculate
       # timewarrior (time tracker)
@@ -22,5 +24,7 @@ in {
       rustup
       pkgs.unstable.rust-analyzer
     ];
+
+    programs.zsh.shellAliases."dig" = "dog";
   };
 }
