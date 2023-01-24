@@ -23,6 +23,7 @@
   };
 
   modules.dwm.enable = true;
+  modules.syncthing.enable = true;
 
   users = {
     mutableUsers = true;
