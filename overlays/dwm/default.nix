@@ -11,12 +11,12 @@ final: prev: rec {
     patches = [
       (prev.fetchpatch {
         url = "https://dwm.suckless.org/patches/status2d/dwm-status2d-6.3.diff";
-        sha256 = "1m88qcbbp7q66yz2v98aal4fc6vs91mrpvp4psdlnxw074hjcidg";
+        sha256 = "sha256-thwe2p2uw09a7Se3Petik1ILkUSsblkZDb5BbfEQKSw=";
       })
       (prev.fetchpatch {
         url =
           "https://dwm.suckless.org/patches/statuscmd/dwm-statuscmd-status2d-20210405-60bb3df.diff";
-        sha256 = "1sshhm0y1y4h6j3fnnkrkz6g3j6z0iljwgahdq4lhxsp5f9mf858";
+        sha256 = "sha256-d7kkM6o+K9KbpEyTkdyJZRBHhN4Lb7cLX3JFb4q+zs4=";
       })
       ./0001-keybinds.diff
       ./0002-fonts.diff
