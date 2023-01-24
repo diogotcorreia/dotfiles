@@ -9,6 +9,7 @@
   modules = {
     cybersec.enable = true;
     graphical.brave.enable = true;
+    graphical.development.enable = true;
     graphical.dwm.enable = true;
     graphical.programs.enable = true;
     graphical.spotify.enable = true;
