@@ -54,6 +54,8 @@ in {
     ripgrep
     procps
     nixfmt
+    gdu
+    duf
 
     agenixPackage
   ];

@@ -16,6 +16,8 @@ in {
     home.packages = with pkgs; [
       # qalc (CLI calculator)
       libqalculate
+      # timewarrior (time tracker)
+      timewarrior
       # Rust
       rustup
       pkgs.unstable.rust-analyzer
