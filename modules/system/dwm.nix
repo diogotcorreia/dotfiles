@@ -28,7 +28,6 @@ in {
           sha256 = "1fkc094vhb3x58zy2k8n66xsjrlmzdi70fc4d2l0y5hq1jwsvnyx";
         };
       }))
-      flameshot
     ];
 
     fonts.fonts = with pkgs; [ fira-code material-design-icons ];
