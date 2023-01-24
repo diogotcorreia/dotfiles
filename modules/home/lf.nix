@@ -13,6 +13,10 @@ in {
   options.modules.lf.enable = mkEnableOption "lf";
 
   config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      file
+    ];
+
     programs.lf = {
       enable = true;
       settings = { icons = true; };

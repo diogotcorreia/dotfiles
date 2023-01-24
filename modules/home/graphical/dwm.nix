@@ -1,4 +1,4 @@
-# modules/home/dwm.nix
+# modules/home/graphical/dwm.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,9 +8,9 @@
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.dwm;
+  cfg = config.modules.graphical.dwm;
 in {
-  options.modules.dwm.enable = mkEnableOption "dwm";
+  options.modules.graphical.dwm.enable = mkEnableOption "dwm";
 
   config = mkIf cfg.enable (let
     # colors

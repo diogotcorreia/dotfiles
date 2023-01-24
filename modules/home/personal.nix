@@ -3,7 +3,7 @@
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
-# configuration for personal computers.
+# non-graphical configuration for personal computers.
 
 { pkgs, config, lib, ... }:
 let
@@ -14,8 +14,6 @@ in {
 
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      # Discord
-      discord-openasar
       # qalc (CLI calculator)
       libqalculate
       # Rust

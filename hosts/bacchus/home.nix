@@ -7,7 +7,10 @@
 
 { pkgs, ... }: {
   modules = {
-    dwm.enable = true;
+    graphical.brave.enable = true;
+    graphical.dwm.enable = true;
+    graphical.programs.enable = true;
+    graphical.zathura.enable = true;
     lf.enable = true;
     neovim.enable = true;
     personal.enable = true;
