@@ -22,5 +22,11 @@
     zsh.enable = true;
   };
 
+  home.packages = with pkgs;
+    [
+      # Karaoke Game
+      ultrastardx
+    ];
+
   home.stateVersion = "22.11";
 }

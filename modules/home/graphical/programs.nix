@@ -13,13 +13,21 @@ in {
   options.modules.graphical.programs.enable = mkEnableOption "programs";
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs;
-      [
-        # Discord
-        discord-openasar
-      ];
+    home.packages = with pkgs; [
+      # Discord
+      discord-openasar
+      # Insomnia REST Client
+      insomnia
+      # Telegram
+      tdesktop
+    ];
 
     # Video player
     programs.mpv.enable = true;
+
+    # Configure MIME types for Telegram
+    xdg.mimeApps.associations.added = {
+      "x-scheme-handler/tg" = "userapp-Telegram Desktop-3BVMZ1.desktop";
+    };
   };
 }
