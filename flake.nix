@@ -12,7 +12,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-latest.url = "github:nixos/nixpkgs/master";
-    #impermanence.url = "github:nix-community/impermanence/master";
+    impermanence.url = "github:nix-community/impermanence/master";
     riff = {
       url = "github:DeterminateSystems/riff/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -159,6 +159,7 @@
                   users.${user} = import (dir + "/${name}/home.nix");
                 };
               }
+              inputs.impermanence.nixosModules.impermanence
               inputs.agenix.nixosModules.age
             ] ++ systemModules;
           };

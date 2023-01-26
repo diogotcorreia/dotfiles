@@ -4,34 +4,56 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules =
-    [ "ata_piix" "uhci_hcd" "ehci_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
+    [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/91d64627-affd-434f-ad82-7ff1441ee87f";
-    fsType = "ext4";
+    device = "none";
+    fsType = "tmpfs";
+    options = [ "defaults" "size=2G" "mode=755" ];
   };
 
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/A18C-6B43";
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/9B79-E291";
     fsType = "vfat";
   };
 
-  swapDevices = [ ];
+  fileSystems."/nix" = {
+    device = "rpool/local/nix";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
+
+  fileSystems."/home" = {
+    device = "rpool/safe/home";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+    neededForBoot = true;
+  };
+
+  fileSystems."/persist" = {
+    device = "rpool/safe/persist";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+    neededForBoot = true;
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.ens3.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp0s20f0u3.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode =
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
+
