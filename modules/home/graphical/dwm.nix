@@ -193,6 +193,20 @@ in {
     home.file.".xinitrc".text = ''
       #! /usr/bin/env sh
 
+      # https://nixos.wiki/wiki/Using_X_without_a_Display_Manager
+      if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+        eval $(dbus-launch --exit-with-session --sh-syntax)
+      fi
+      systemctl --user import-environment DISPLAY XAUTHORITY
+
+      if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+        dbus-update-activation-environment DISPLAY XAUTHORITY
+      fi
+
+      # Start GNOME Keyring to unlock on login
+      eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh);
+      export SSH_AUTH_SOCK
+
       PATH="$PATH:${sbPath}"
 
       # Notifcation daemon

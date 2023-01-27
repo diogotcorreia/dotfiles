@@ -17,6 +17,7 @@ in {
   config = mkIf cfg.enable {
 
     programs.slock.enable = true;
+    programs.seahorse.enable = true;
     environment.systemPackages = with pkgs; [
       alacritty
       dmenu
@@ -39,6 +40,11 @@ in {
       noto-fonts-emoji
       noto-fonts-cjk-sans
     ];
+
+    # https://unix.stackexchange.com/questions/344402/how-to-unlock-gnome-keyring-automatically-in-nixos
+    services.gnome.gnome-keyring.enable = true;
+    # Service is "login" because login is done through the TTY
+    security.pam.services.login.enableGnomeKeyring = true;
 
     services.xserver = {
       enable = true;
