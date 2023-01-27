@@ -30,7 +30,15 @@ in {
       }))
     ];
 
-    fonts.fonts = with pkgs; [ fira-code material-design-icons ];
+    fonts.fonts = with pkgs; [
+      fira-code
+      material-design-icons
+      nerdfonts
+      noto-fonts
+      noto-fonts-extra
+      noto-fonts-emoji
+      noto-fonts-cjk-sans
+    ];
 
     services.xserver = {
       enable = true;
