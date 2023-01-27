@@ -18,6 +18,9 @@ in {
       dogdns
       # qalc (CLI calculator)
       libqalculate
+      # LaTeX
+      texlive.combined.scheme-full
+      texlab
       # timewarrior (time tracker)
       timewarrior
       # Rust
