@@ -57,7 +57,7 @@
     mutableUsers = false;
     users = {
       ${user} = {
-        initialPassword = "test";
+        hashedPassword = "$y$j9T$U.2Gk7rztC3F8cSSBzElT/$6IJUtc3etUKuO8tWY4mCmQZ6LaRsTuteKPcXxJKnsZC";
         openssh.authorizedKeys.keys = sshKeys;
       };
     };
