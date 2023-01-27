@@ -1,8 +1,13 @@
 let
+  bacchusSystem =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
   phobosSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 in {
-  "nebulaCA.age".publicKeys = [ phobosSystem ];
+  "nebulaCA.age".publicKeys = [ bacchusSystem phobosSystem ];
+
+  "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
+  "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];
 
   "phobos/healthchecksUrl.age".publicKeys = [ phobosSystem ];
   "phobos/nebulaCert.age".publicKeys = [ phobosSystem ];

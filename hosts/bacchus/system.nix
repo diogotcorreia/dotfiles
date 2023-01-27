@@ -26,7 +26,11 @@
       "/var/lib/libvirt"
       "/var/log"
     ];
-    files = [ "/etc/machine-id" ];
+    files = [
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+    ];
   };
 
   boot.cleanTmpDir = true;
@@ -64,4 +68,20 @@
   };
 
   virtualisation.docker.enable = true;
+
+  # Secret manager
+  age = {
+    secrets = {
+      bacchusNebulaCert.file = "${hostSecretsDir}/nebulaCert.age";
+      bacchusNebulaKey.file = "${hostSecretsDir}/nebulaKey.age";
+    };
+
+    identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+  };
+
+  modules.nebula = {
+    enable = true;
+    cert = config.age.secrets.bacchusNebulaCert.path;
+    key = config.age.secrets.bacchusNebulaKey.path;
+  };
 }
