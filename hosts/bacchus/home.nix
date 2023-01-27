@@ -21,6 +21,7 @@
       git.enable = true;
       tmux.enable = true;
     };
+    xdg.enable = true;
     zsh.enable = true;
   };
 
