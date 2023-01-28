@@ -218,17 +218,6 @@ let
       }
       lsp_extensions-nvim
 
-      {
-        plugin = presence-nvim;
-        config = ''
-          let g:presence_auto_update       = 1
-          let g:presence_editing_text      = "Editing %s"
-          let g:presence_workspace_text    = "Working on %s"
-          let g:presence_neovim_image_text = "vim but better"
-          let g:presence_main_image        = "neovim"
-        '';
-      }
-
       luasnip
       {
         plugin = nvim-cmp;
