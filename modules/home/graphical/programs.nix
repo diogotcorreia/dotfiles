@@ -24,10 +24,5 @@ in {
 
     # Video player
     programs.mpv.enable = true;
-
-    # Configure MIME types for Telegram
-    xdg.mimeApps.associations.added = {
-      "x-scheme-handler/tg" = "userapp-Telegram Desktop-3BVMZ1.desktop";
-    };
   };
 }

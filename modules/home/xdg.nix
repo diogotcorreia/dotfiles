@@ -25,6 +25,7 @@ in {
         templates = "$HOME/.templates";
         videos = "$HOME/videos";
       };
+      configFile."mimeapps.list".force = true;
     };
   };
 }
