@@ -41,6 +41,18 @@ let
       plugin = lualine-nvim;
       type = "lua";
       config = ''
+        local function getWordCount()
+          local word_count = vim.fn.wordcount().visual_words
+          if word_count == nul then
+            word_count = vim.fn.wordcount().words
+          end
+
+          if word_count == 1 then
+            return tostring(word_count) .. " word"
+          end
+          return tostring(word_count) .. " words"
+        end
+
         vim.o.laststatus=2
         vim.o.showtabline=2
         vim.o.showmode=false
@@ -59,13 +71,13 @@ let
                 symbols = {error = ':', warn =':', info = ':', hint = ':'}}},
               {'filename', file_status = true, path = 1}
             },
-            lualine_x = { 'encoding', {'filetype', colored = false} },
+            lualine_x = { getWordCount, 'encoding', {'filetype', colored = false} },
           },
           inactive_sections = {
             lualine_c = {
               {'filename', file_status = true, path = 1}
             },
-            lualine_x = { 'encoding', {'filetype', colored = false} },
+            lualine_x = { getWordCount, 'encoding', {'filetype', colored = false} },
           },
           tabline = {
             lualine_a = { 'hostname' },
