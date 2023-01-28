@@ -5,7 +5,7 @@
 #
 # System config common across all hosts
 
-{ inputs, pkgs, lib, configDir, agenixPackage, ... }:
+{ inputs, pkgs, lib, config, configDir, agenixPackage, ... }:
 let
   inherit (builtins) toString;
   inherit (lib.my) mapModules;
@@ -59,6 +59,8 @@ in {
 
     agenixPackage
   ];
+
+  services.blueman.enable = config.hardware.bluetooth.enable;
 
   # dedup equal pages
   hardware.ksm = {

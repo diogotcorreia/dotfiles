@@ -65,6 +65,8 @@
     Option         "TripleBuffer" "on"
   '';
 
+  hardware.bluetooth.enable = true;
+
   modules.dnsovertls.enable = true;
   modules.dwm.enable = true;
   modules.ist.enable = true;
