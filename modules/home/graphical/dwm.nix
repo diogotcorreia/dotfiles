@@ -251,5 +251,13 @@ in {
     };
 
     xdg.configFile."dunst/dunstrc".source = "${configDir}/dunstrc";
+
+    # Enable redshift when X starts
+    services.redshift = {
+      enable = true;
+      provider = "manual";
+      latitude = 38.7436214;
+      longitude = -9.1952226;
+    };
   });
 }
