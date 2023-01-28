@@ -3,7 +3,7 @@
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
-# dwm window manager configuration
+# dwm window manager and graphical configuration
 
 { pkgs, config, lib, utils, ... }:
 let

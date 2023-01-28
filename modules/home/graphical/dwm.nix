@@ -191,31 +191,44 @@ in {
       lib.strings.concatMapStringsSep ":" (x: "${x}/bin") statusbarModules;
   in {
     home.file.".xinitrc".text = ''
-      #! /usr/bin/env sh
+      $HOME/.xsession
+    '';
 
-      # https://nixos.wiki/wiki/Using_X_without_a_Display_Manager
-      if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-        eval $(dbus-launch --exit-with-session --sh-syntax)
-      fi
-      systemctl --user import-environment DISPLAY XAUTHORITY
+    xsession = {
+      enable = true;
+      windowManager.command =
+        "while type dwm >/dev/null; do dwm && continue || break; done";
 
-      if command -v dbus-update-activation-environment >/dev/null 2>&1; then
-        dbus-update-activation-environment DISPLAY XAUTHORITY
-      fi
+      profileExtra = ''
+        # https://nixos.wiki/wiki/Using_X_without_a_Display_Manager
+        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+          eval $(dbus-launch --exit-with-session --sh-syntax)
+        fi
+        systemctl --user import-environment DISPLAY XAUTHORITY
 
-      # Start GNOME Keyring to unlock on login
-      eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh);
-      export SSH_AUTH_SOCK
+        if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+          dbus-update-activation-environment DISPLAY XAUTHORITY
+        fi
 
-      PATH="$PATH:${sbPath}"
+        # Start GNOME Keyring to unlock on login
+        eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh);
+        export SSH_AUTH_SOCK
+      '';
 
-      # Notifcation daemon
-      dunst &
+      initExtra = ''
+        PATH="$PATH:${sbPath}"
 
-      # Statusbar
-      dwmblocks &
+        # Notifcation daemon
+        dunst &
 
-      while type dwm >/dev/null; do dwm && continue || break; done
+        # Statusbar
+        dwmblocks &
+      '';
+    };
+
+    programs.zsh.initExtra = ''
+      # Start graphical server on user's current tty if not already running.
+      [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC" &> /dev/null
     '';
 
     home.packages = with pkgs; [ dunst ];
