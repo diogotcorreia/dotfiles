@@ -233,6 +233,13 @@ in {
 
     home.packages = with pkgs; [ dunst ];
 
+    services.picom = {
+      enable = true;
+      backend = "glx";
+      vSync = true;
+      settings = { unredir-if-possible = false; };
+    };
+
     services.flameshot = {
       enable = true;
       settings = {
