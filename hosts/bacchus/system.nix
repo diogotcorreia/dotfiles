@@ -82,6 +82,9 @@
     '';
   in ([ nvidia-offload ]);
 
+  # Battery saver
+  services.tlp.enable = true;
+
   users = {
     mutableUsers = false;
     users = {
