@@ -13,6 +13,7 @@
     graphical.dwm.enable = true;
     graphical.programs.enable = true;
     graphical.spotify.enable = true;
+    graphical.wallpaper.enable = true;
     graphical.zathura.enable = true;
     lf.enable = true;
     neovim.enable = true;
