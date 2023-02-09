@@ -134,7 +134,7 @@
           value = inputs.nixpkgs.lib.nixosSystem {
             inherit system pkgs;
             specialArgs = {
-              inherit user colors sshKeys agenixPackage secretsDir;
+              inherit inputs user colors sshKeys agenixPackage secretsDir;
               configDir = ./config;
               hostSecretsDir = "${secretsDir}/${name}";
               hostName = name;

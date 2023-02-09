@@ -11,10 +11,13 @@ let
   inherit (lib.my) mapModules;
 in {
   nix = {
-    package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    registry = {
+      nixpkgs.flake = inputs.nixpkgs;
+      unstable.flake = inputs.nixpkgs-unstable;
+    };
   };
   nix.settings.trusted-users = [ "root" "@wheel" ];
   security.sudo.extraConfig = ''
