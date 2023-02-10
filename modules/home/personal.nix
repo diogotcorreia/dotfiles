@@ -29,5 +29,10 @@ in {
     ];
 
     programs.zsh.shellAliases."dig" = "dog";
+
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
   };
 }
