@@ -12,9 +12,8 @@ let
 in {
   options.modules.personal.enable = mkEnableOption "personal";
 
-  # Home manager module
-  config.hm = mkIf cfg.enable {
-    home.packages = with pkgs; [
+  config = mkIf cfg.enable {
+    hm.home.packages = with pkgs; [
       # dog DNS CLI client (dig alternative)
       dogdns
       # qalc (CLI calculator)
@@ -29,11 +28,15 @@ in {
       pkgs.unstable.rust-analyzer
     ];
 
-    programs.zsh.shellAliases."dig" = "dog";
+    hm.programs.zsh.shellAliases."dig" = "dog";
 
-    programs.direnv = {
+    hm.programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
     };
+
+    # Android Debug Bridge
+    usr.extraGroups = [ "adbusers" ];
+    programs.adb.enable = true;
   };
 }
