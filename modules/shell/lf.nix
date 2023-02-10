@@ -1,4 +1,4 @@
-# modules/home/lf.nix
+# modules/shell/lf.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,11 +8,12 @@
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.lf;
+  cfg = config.modules.shell.lf;
 in {
-  options.modules.lf.enable = mkEnableOption "lf";
+  options.modules.shell.lf.enable = mkEnableOption "lf";
 
-  config = mkIf cfg.enable {
+  # Home manager modules
+  config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [ file ];
 
     programs.lf = {

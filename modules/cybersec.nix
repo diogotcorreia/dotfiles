@@ -1,4 +1,4 @@
-# modules/home/cybersec.nix
+# modules/cybersec.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -12,7 +12,8 @@ let
 in {
   options.modules.cybersec.enable = mkEnableOption "cybersec";
 
-  config = mkIf cfg.enable {
+  # Home manager module
+  config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
       # Enhanced GDB
       gef

@@ -1,4 +1,4 @@
-# modules/home/neovim.nix
+# modules/editors/neovim.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,7 +8,7 @@
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.neovim;
+  cfg = config.modules.editors.neovim;
   personal = config.modules.personal.enable;
   git = config.modules.shell.git.enable;
   commonGrammars = with pkgs.unstable.tree-sitter-grammars; [
@@ -332,9 +332,10 @@ let
     };
   };
 in {
-  options.modules.neovim.enable = mkEnableOption "neovim";
+  options.modules.editors.neovim.enable = mkEnableOption "neovim";
 
-  config = mkIf cfg.enable {
+  # Home manager module
+  config.hm = mkIf cfg.enable {
     programs.neovim = {
       package = pkgs.unstable.neovim-unwrapped;
       enable = true;
@@ -458,27 +459,27 @@ in {
     };
 
     # languages that should use 2 space indent
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/markdown.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/markdown.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/nix.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/nix.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/ocaml.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/ocaml.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/wast.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/wast.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/yaml.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/yaml.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/yacc.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/yacc.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/lex.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/lex.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/cpp.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/cpp.vim".text =
       twoSpaceIndentConfig;
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/tex.vim".text =
+    home.file."${config.my.configHome}/nvim/after/ftplugin/tex.vim".text =
       twoSpaceIndentConfig;
 
     # Rust config
-    home.file."${config.xdg.configHome}/nvim/after/ftplugin/rust.vim".text = ''
+    home.file."${config.my.configHome}/nvim/after/ftplugin/rust.vim".text = ''
       " Use LSP omni-completion in Rust files.
       setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
@@ -501,7 +502,7 @@ in {
 
       nnoremap <silent> <leader>h <cmd>lua ShowHintsFile()<CR>
     '';
-    home.file."${config.xdg.configHome}/nvim/lua/generic_lsp.lua".text = ''
+    home.file."${config.my.configHome}/nvim/lua/generic_lsp.lua".text = ''
       return function(client)
         -- [[ other on_attach code ]]
         vim.api.nvim_buf_set_keymap(0, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})

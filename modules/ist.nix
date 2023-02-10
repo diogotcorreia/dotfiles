@@ -1,4 +1,4 @@
-# modules/system/ist.nix
+# modules/ist.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -14,6 +14,7 @@ in {
   options.modules.ist.enable = mkEnableOption "ist";
 
   config = mkIf cfg.enable {
+    # Kerberos authentication
     krb5 = {
       enable = true;
       libdefaults = {

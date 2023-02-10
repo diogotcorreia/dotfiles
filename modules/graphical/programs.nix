@@ -1,4 +1,4 @@
-# modules/home/graphical/programs.nix
+# modules/graphical/programs.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -13,16 +13,17 @@ in {
   options.modules.graphical.programs.enable = mkEnableOption "programs";
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
+    hm.home.packages = with pkgs; [
       # Discord
       discord-openasar
-      # Insomnia REST Client
-      insomnia
       # Telegram
       tdesktop
     ];
 
     # Video player
-    programs.mpv.enable = true;
+    hm.programs.mpv.enable = true;
+
+    # Bluetooth device manager
+    services.blueman.enable = config.hardware.bluetooth.enable;
   };
 }

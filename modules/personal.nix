@@ -1,4 +1,4 @@
-# modules/home/personal.nix
+# modules/personal.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -12,7 +12,8 @@ let
 in {
   options.modules.personal.enable = mkEnableOption "personal";
 
-  config = mkIf cfg.enable {
+  # Home manager module
+  config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
       # dog DNS CLI client (dig alternative)
       dogdns

@@ -1,16 +1,16 @@
-# modules/system/nebula.nix
+# modules/services/nebula.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
-# nebula configuration.
+# nebula (VPN) configuration.
 
 { pkgs, config, lib, secretsDir, ... }:
 let
   inherit (lib) mkEnableOption mkOption types mkIf;
-  cfg = config.modules.nebula;
+  cfg = config.modules.services.nebula;
 in {
-  options.modules.nebula = {
+  options.modules.services.nebula = {
     enable = mkEnableOption "nebula";
     cert = mkOption { # Required
       type = types.path;
@@ -39,7 +39,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # Automatically get nebulaCA from agenix
     age.secrets.nebulaCA.file = "${secretsDir}/nebulaCA.age";
+
     services.nebula.networks.nebula0 = {
       enable = true;
       ca = config.age.secrets.nebulaCA.path;
@@ -47,6 +49,7 @@ in {
       key = cfg.key;
       isLighthouse = cfg.isLighthouse;
       lighthouses = cfg.lighthouses;
+      # TODO support more firewall rules
       firewall.outbound = [{
         port = "any";
         proto = "any";

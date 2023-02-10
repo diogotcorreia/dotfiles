@@ -1,24 +1,28 @@
-# hosts/bacchus/system.nix
+# hosts/bacchus/configuration.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
-# System configuration for bacchus (PC).
+# Configuration for bacchus (PC).
 
 { pkgs, lib, sshKeys, config, hostSecretsDir, user, agenixPackage, ... }: {
-
+  # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # ZFS
   boot.supportedFilesystems = [ "zfs" ];
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   boot.kernelParams = [ "nohibernate" ];
   networking.hostId = "239be557";
   zramSwap.enable = true;
 
+  # /tmp configuration
   boot.tmpOnTmpfs = true;
   boot.tmpOnTmpfsSize = "80%";
+  boot.cleanTmpDir = true;
 
+  # Impermanence (root on tmpfs)
   environment.persistence."/persist" = {
     directories = [
       "/etc/NetworkManager/system-connections"
@@ -33,17 +37,23 @@
     ];
   };
 
-  boot.cleanTmpDir = true;
-
+  # Network Manager
+  # TODO move to module
   networking.networkmanager.enable = true;
+  usr.extraGroups = [ "networkmanager" ];
 
+  # SSH server
+  # TODO move to module
   services.openssh = {
     enable = true;
     passwordAuthentication = false;
     authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
     kbdInteractiveAuthentication = false;
   };
+  usr.openssh.authorizedKeys.keys = sshKeys;
 
+  # Audio
+  # TODO move to module
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -52,6 +62,8 @@
     pulse.enable = true;
   };
 
+  # Nvidia
+  # TODO move to module
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
     offload.enable = true;
@@ -64,14 +76,6 @@
     Option         "AllowIndirectGLXProtocol" "off"
     Option         "TripleBuffer" "on"
   '';
-
-  hardware.bluetooth.enable = true;
-
-  modules.dnsovertls.enable = true;
-  modules.dwm.enable = true;
-  modules.ist.enable = true;
-  modules.syncthing.enable = true;
-
   environment.systemPackages = let
     nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
       export __NV_PRIME_RENDER_OFFLOAD=1
@@ -82,29 +86,21 @@
     '';
   in ([ nvidia-offload ]);
 
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+
   # Battery saver
   services.tlp.enable = true;
 
-  # don't shutdown when power button is short-pressed
+  # Don't shutdown when power button is short-pressed
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
   '';
 
-  users = {
-    mutableUsers = false;
-    users = {
-      ${user} = {
-        hashedPassword =
-          "$y$j9T$U.2Gk7rztC3F8cSSBzElT/$6IJUtc3etUKuO8tWY4mCmQZ6LaRsTuteKPcXxJKnsZC";
-        openssh.authorizedKeys.keys = sshKeys;
-        extraGroups = [ "networkmanager" ];
-      };
-    };
-  };
-
+  # Docker (containers)
   virtualisation.docker.enable = true;
 
-  # Secret manager
+  # Secret manager (agenix)
   age = {
     secrets = {
       bacchusNebulaCert.file = "${hostSecretsDir}/nebulaCert.age";
@@ -114,9 +110,43 @@
     identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
   };
 
-  modules.nebula = {
-    enable = true;
-    cert = config.age.secrets.bacchusNebulaCert.path;
-    key = config.age.secrets.bacchusNebulaKey.path;
+  # Specific packages for this host
+  hm.home.packages = with pkgs;
+    [
+      # Karaoke Game
+      ultrastardx
+    ];
+
+  # Modules
+  modules = {
+    editors.neovim.enable = true;
+    graphical = {
+      enable = true;
+      development.enable = true;
+      programs.enable = true;
+    };
+    services = {
+      dnsovertls.enable = true;
+      # Nebula (VPN)
+      nebula = {
+        enable = true;
+        cert = config.age.secrets.bacchusNebulaCert.path;
+        key = config.age.secrets.bacchusNebulaKey.path;
+      };
+      syncthing.enable = true;
+    };
+    shell = {
+      git.enable = true;
+      lf.enable = true;
+      tmux.enable = true;
+      zsh.enable = true;
+    };
+    cybersec.enable = true;
+    ist.enable = true;
+    personal.enable = true;
+    xdg.enable = true;
   };
+
+  # Statem state version
+  system.stateVersion = "22.11";
 }

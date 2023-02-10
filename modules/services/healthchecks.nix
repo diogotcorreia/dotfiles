@@ -1,4 +1,4 @@
-# modules/system/healthchecks.nix
+# modules/services/healthchecks.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,16 +8,16 @@
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkOption types mkIf;
-  cfg = config.modules.healthchecks;
+  cfg = config.modules.services.healthchecks;
 in {
-  options.modules.healthchecks = {
+  options.modules.services.healthchecks = {
     enable = mkEnableOption "healthchecks";
     checkUrlFile = mkOption {
       type = types.path;
       default = "/dev/null";
       example = "config.age.secrets.healthchecksUrl.path";
       description =
-        "A file containing the URL to ping. It's recommended this is kept secret to avoid others pinging the URL.";
+        "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
     };
     timerExpression = mkOption {
       type = types.str;

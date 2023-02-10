@@ -1,4 +1,4 @@
-# modules/home/graphical/zathura.nix
+# modules/graphical/zathura.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,11 +8,11 @@
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.graphical.zathura;
+  cfg = config.modules.graphical.programs;
 in {
-  options.modules.graphical.zathura.enable = mkEnableOption "zathura";
 
-  config = mkIf cfg.enable {
+  # Follow graphical.programs.enable
+  config.hm = mkIf cfg.enable {
     programs.zathura = {
       enable = true;
       options = {

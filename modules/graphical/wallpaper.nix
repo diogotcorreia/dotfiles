@@ -1,4 +1,4 @@
-# modules/home/graphical/wallpaper.nix
+# modules/graphical/wallpaper.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -9,7 +9,7 @@
 let
   inherit (builtins) catAttrs;
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.graphical.brave;
+  cfg = config.modules.graphical;
   wallpapers = [
     {
       startTime = "00:00";
@@ -44,7 +44,8 @@ in {
   options.modules.graphical.wallpaper.enable =
     mkEnableOption "wallpaper service";
 
-  config = mkIf cfg.enable {
+  # Follow modules.graphical.enable
+  config.hm = mkIf cfg.enable {
     systemd.user.services.set-wallpaper = {
       Unit = {
         Description = "Set desktop background using feh";

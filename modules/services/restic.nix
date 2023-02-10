@@ -1,4 +1,4 @@
-# modules/system/restic.nix
+# modules/services/restic.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -10,9 +10,9 @@ let
   inherit (lib) mkEnableOption mkOption types mkIf;
   inherit (lib.strings) optionalString;
   inherit (utils.systemdUtils.unitOptions) unitOption;
-  cfg = config.modules.restic;
+  cfg = config.modules.services.restic;
 in {
-  options.modules.restic = {
+  options.modules.services.restic = {
     enable = mkEnableOption "restic";
 
     checkUrlFile = mkOption {

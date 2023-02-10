@@ -1,4 +1,4 @@
-# modules/home/zsh.nix
+# modules/zsh.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,11 +8,12 @@
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.zsh;
+  cfg = config.modules.shell.zsh;
 in {
-  options.modules.zsh.enable = mkEnableOption "zsh";
+  options.modules.shell.zsh.enable = mkEnableOption "zsh";
 
-  config = mkIf cfg.enable {
+  # Home manager module
+  config.hm = mkIf cfg.enable {
     programs.zsh = {
       enable = true;
       oh-my-zsh = {

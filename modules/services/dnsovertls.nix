@@ -1,4 +1,4 @@
-# modules/system/dnsovertls.nix
+# modules/services/dnsovertls.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -9,9 +9,9 @@
 { pkgs, config, lib, utils, user, ... }:
 let
   inherit (lib) mkEnableOption mkOption types mkIf optionalString;
-  cfg = config.modules.dnsovertls;
+  cfg = config.modules.services.dnsovertls;
 in {
-  options.modules.dnsovertls = {
+  options.modules.services.dnsovertls = {
     enable = mkEnableOption "DNS over TLS proxy";
     name = mkOption {
       type = types.str;

@@ -1,4 +1,4 @@
-# modules/home/graphical/spotify.nix
+# modules/graphical/spotify.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
@@ -8,11 +8,11 @@
 { pkgs, config, lib, spicetifyPkgs, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.graphical.spotify;
+  cfg = config.modules.graphical.programs;
 in {
-  options.modules.graphical.spotify.enable = mkEnableOption "spotify";
 
-  config = mkIf cfg.enable {
+  # Follow graphical.programs.enabled
+  config.hm = mkIf cfg.enable {
     programs.spicetify = {
       enable = true;
       theme = spicetifyPkgs.themes.Comfy;

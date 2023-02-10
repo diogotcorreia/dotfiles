@@ -1,18 +1,17 @@
-# modules/home/graphical/brave.nix
+# modules/graphical/brave.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
-# configuration for personal computers.
+# Brave web browser configuration
 
 { pkgs, config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.graphical.brave;
+  cfg = config.modules.graphical.programs;
 in {
-  options.modules.graphical.brave.enable = mkEnableOption "brave";
-
-  config = mkIf cfg.enable {
+  # Follow graphical.programs.enabled
+  config.hm = mkIf cfg.enable {
 
     programs.brave.enable = true;
 

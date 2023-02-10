@@ -12,7 +12,8 @@ let
 in {
   options.modules.shell.tmux.enable = mkEnableOption "tmux";
 
-  config = mkIf cfg.enable {
+  # Home manager module
+  config.hm = mkIf cfg.enable {
     programs.tmux = {
       enable = true;
       clock24 = true;

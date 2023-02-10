@@ -1,16 +1,17 @@
-# modules/home/graphical/dwm.nix
+# modules/graphical/dwm.nix
 #
 # Author: Diogo Correia <me@diogotc.com>
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
-# DWM window manager user configuration
+# DWM window manager and graphical environment configuration
 
 { pkgs, config, lib, configDir, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.modules.graphical.dwm;
+  cfg = config.modules.graphical;
 in {
-  options.modules.graphical.dwm.enable = mkEnableOption "dwm";
+  options.modules.graphical.enable =
+    mkEnableOption "DWM and graphical environment";
 
   config = mkIf cfg.enable (let
     # colors
@@ -190,11 +191,57 @@ in {
     sbPath =
       lib.strings.concatMapStringsSep ":" (x: "${x}/bin") statusbarModules;
   in {
-    home.file.".xinitrc".text = ''
+    programs.slock.enable = true;
+    programs.seahorse.enable = true;
+    environment.systemPackages = with pkgs; [
+      alacritty
+      dmenu
+      (dwmblocks.overrideAttrs (old: rec {
+        src = fetchFromGitHub {
+          owner = "LukeSmithxyz";
+          repo = "dwmblocks";
+          rev = "5a6fa8d550c11552480f10e660073ca294d446b1";
+          sha256 = "1fkc094vhb3x58zy2k8n66xsjrlmzdi70fc4d2l0y5hq1jwsvnyx";
+        };
+      }))
+    ];
+
+    fonts.fonts = with pkgs; [
+      fira-code
+      material-design-icons
+      nerdfonts
+      noto-fonts
+      noto-fonts-extra
+      noto-fonts-emoji
+      noto-fonts-cjk-sans
+    ];
+
+    # https://unix.stackexchange.com/questions/344402/how-to-unlock-gnome-keyring-automatically-in-nixos
+    services.gnome.gnome-keyring.enable = true;
+    # Service is "login" because login is done through the TTY
+    security.pam.services.login.enableGnomeKeyring = true;
+
+    services.xserver = {
+      enable = true;
+      layout = "us";
+      xkbVariant = "altgr-intl";
+      autorun = true;
+      displayManager.startx.enable = true;
+      windowManager = { dwm.enable = true; };
+      libinput = {
+        enable = true;
+        touchpad = {
+          tapping = true;
+          naturalScrolling = true;
+        };
+      };
+    };
+
+    hm.home.file.".xinitrc".text = ''
       $HOME/.xsession
     '';
 
-    xsession = {
+    hm.xsession = {
       enable = true;
       windowManager.command =
         "while type dwm >/dev/null; do dwm && continue || break; done";
@@ -226,21 +273,21 @@ in {
       '';
     };
 
-    programs.zsh.initExtra = ''
+    hm.programs.zsh.initExtra = ''
       # Start graphical server on user's current tty if not already running.
       [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC" &> /dev/null
     '';
 
-    home.packages = with pkgs; [ dunst ];
+    hm.home.packages = with pkgs; [ dunst ];
 
-    services.picom = {
+    hm.services.picom = {
       enable = true;
       backend = "glx";
       vSync = true;
       settings = { unredir-if-possible = false; };
     };
 
-    services.flameshot = {
+    hm.services.flameshot = {
       enable = true;
       settings = {
         General = {
@@ -257,10 +304,10 @@ in {
       };
     };
 
-    xdg.configFile."dunst/dunstrc".source = "${configDir}/dunstrc";
+    hm.xdg.configFile."dunst/dunstrc".source = "${configDir}/dunstrc";
 
     # Enable redshift when X starts
-    services.redshift = {
+    hm.services.redshift = {
       enable = true;
       provider = "manual";
       latitude = 38.7436214;

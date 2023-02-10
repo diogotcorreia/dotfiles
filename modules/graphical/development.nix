@@ -10,16 +10,20 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.development;
 in {
-  options.modules.graphical.development.enable = mkEnableOption "development";
+  options.modules.graphical.development.enable =
+    mkEnableOption "development tools and IDEs";
 
-  config = mkIf cfg.enable {
-    home.packages = [
+  # Home manager module
+  config.hm = mkIf cfg.enable {
+    home.packages = with pkgs; [
       # Jetbrains Gateway (remote development)
-      pkgs.unstable.jetbrains.gateway
+      unstable.jetbrains.gateway
       # IntelliJ IDEA (Ultimate)
-      pkgs.unstable.jetbrains.idea-ultimate
+      unstable.jetbrains.idea-ultimate
       # Visual Studio Code
-      pkgs.unstable.vscode
+      unstable.vscode
+      # Insomnia REST Client
+      insomnia
     ];
   };
 }
