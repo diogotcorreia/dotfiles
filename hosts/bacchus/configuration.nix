@@ -123,7 +123,9 @@
     graphical = {
       enable = true;
       development.enable = true;
+      gtk.enable = true;
       programs.enable = true;
+      qt.enable = true;
     };
     services = {
       dnsovertls.enable = true;
