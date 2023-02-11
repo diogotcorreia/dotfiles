@@ -335,6 +335,9 @@ in {
       };
     };
 
+    # Clipboard manager
+    hm.services.clipmenu.enable = true;
+
     # Notification daemon
     hm.services.dunst = {
       enable = true;
