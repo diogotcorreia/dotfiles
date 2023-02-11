@@ -19,7 +19,7 @@ in {
       # qalc (CLI calculator)
       libqalculate
       # LaTeX
-      texlive.combined.scheme-full
+      texlive.combined.scheme-small
       texlab
       # timewarrior (time tracker)
       timewarrior
