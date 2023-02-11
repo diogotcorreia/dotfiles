@@ -8,13 +8,25 @@
 
 { pkgs, config, lib, utils, user, secretsDir, ... }:
 let
-  inherit (lib) mkEnableOption mkOption types mkIf;
+  inherit (lib)
+    mkEnableOption mkOption types mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.ist;
 
   istVpnConfiguration = pkgs.fetchurl {
     url =
       "https://suporte.dsi.tecnico.ulisboa.pt/sites/default/files/files/tecnico.ovpn";
     sha256 = "sha256-3vQ5eyrB2IEKHJXXDJk3kPXRbNwGsRpcN8hmPl7ihBQ=";
+  };
+
+  courseUrls = {
+    cg =
+      "https://fenix.tecnico.ulisboa.pt/disciplinas/CGra2/2022-2023/2-semestre";
+    comp =
+      "https://fenix.tecnico.ulisboa.pt/disciplinas/Com/2022-2023/2-semestre";
+    es =
+      "https://fenix.tecnico.ulisboa.pt/disciplinas/ESof2/2022-2023/2-semestre";
+    sd =
+      "https://fenix.tecnico.ulisboa.pt/disciplinas/SDis2/2022-2023/2-semestre";
   };
 in {
   options.modules.ist.enable = mkEnableOption "ist";
@@ -49,5 +61,14 @@ in {
         auth-user-pass ${config.age.secrets.openvpnIstAuthUserPass.path}
       '';
     };
+
+    # Course shortcuts
+    hm.home.packages = map (courseName:
+      pkgs.writeScriptBin courseName ''
+        ${pkgs.xdg-utils}/bin/xdg-open ${
+          escapeShellArg (getAttr courseName courseUrls)
+        }
+      '') (attrNames courseUrls);
+
   };
 }
