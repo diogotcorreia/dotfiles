@@ -11,7 +11,10 @@ let
   inherit (lib.my) mapModules;
 in {
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
+    };
 
     # Lock flake registry to keep it synced with the inputs
     # i.e. used by `nix run nixpkgs#<package>`
