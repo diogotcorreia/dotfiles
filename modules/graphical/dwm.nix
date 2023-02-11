@@ -5,7 +5,7 @@
 #
 # DWM window manager and graphical environment configuration
 
-{ pkgs, config, lib, configDir, ... }:
+{ pkgs, config, lib, configDir, user, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical;
@@ -215,6 +215,11 @@ in {
       noto-fonts-emoji
       noto-fonts-cjk-sans
     ];
+
+    # Avoid typing the username on TTY and only prompt for the password
+    # https://wiki.archlinux.org/title/Getty#Prompt_only_the_password_for_a_default_user_in_virtual_console_login
+    services.getty.loginOptions = "-p -- ${user}";
+    services.getty.extraArgs = [ "--noclear" "--skip-login" ];
 
     # https://unix.stackexchange.com/questions/344402/how-to-unlock-gnome-keyring-automatically-in-nixos
     services.gnome.gnome-keyring.enable = true;
