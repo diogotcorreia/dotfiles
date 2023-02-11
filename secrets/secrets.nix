@@ -5,6 +5,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 in {
   "nebulaCA.age".publicKeys = [ bacchusSystem phobosSystem ];
+  "openvpnIstAuthUserPass.age".publicKeys = [ bacchusSystem ];
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
   "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];

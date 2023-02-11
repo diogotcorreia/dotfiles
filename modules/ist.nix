@@ -6,10 +6,16 @@
 # Configuration for services and programs needed while studying
 # at Técnico Lisboa (IST).
 
-{ pkgs, config, lib, utils, user, ... }:
+{ pkgs, config, lib, utils, user, secretsDir, ... }:
 let
   inherit (lib) mkEnableOption mkOption types mkIf;
   cfg = config.modules.ist;
+
+  istVpnConfiguration = pkgs.fetchurl {
+    url =
+      "https://suporte.dsi.tecnico.ulisboa.pt/sites/default/files/files/tecnico.ovpn";
+    sha256 = "sha256-3vQ5eyrB2IEKHJXXDJk3kPXRbNwGsRpcN8hmPl7ihBQ=";
+  };
 in {
   options.modules.ist.enable = mkEnableOption "ist";
 
@@ -31,6 +37,17 @@ in {
       realms = {
         "IST.UTL.PT" = { admin_server = "kerberosmaster.ist.utl.pt"; };
       };
+    };
+
+    # OpenVPN
+    age.secrets.openvpnIstAuthUserPass.file =
+      "${secretsDir}/openvpnIstAuthUserPass.age";
+    services.openvpn.servers.ist = {
+      autoStart = false;
+      config = ''
+        config ${istVpnConfiguration}
+        auth-user-pass ${config.age.secrets.openvpnIstAuthUserPass.path}
+      '';
     };
   };
 }
