@@ -28,7 +28,7 @@ in {
       pkgs.unstable.rust-analyzer
     ];
 
-    hm.programs.zsh.shellAliases."dig" = "dog";
+    hm.programs.zsh.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
 
     hm.programs.direnv = {
       enable = true;

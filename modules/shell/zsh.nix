@@ -57,6 +57,7 @@ in {
 
     # exa (modern ls replacement)
     programs.exa.enable = true;
+    programs.exa.enableAliases = true;
     # starship (shell theme)
     programs.starship.package = pkgs.unstable.starship;
     programs.starship.enable = true;
