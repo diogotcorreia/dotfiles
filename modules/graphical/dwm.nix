@@ -294,9 +294,6 @@ in {
       initExtra = ''
         PATH="$PATH:${sbPath}"
 
-        # Notifcation daemon
-        dunst &
-
         # Statusbar
         dwmblocks &
 
@@ -313,8 +310,6 @@ in {
       # Start graphical server on user's current tty if not already running.
       [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC" &> /dev/null
     '';
-
-    hm.home.packages = with pkgs; [ dunst ];
 
     hm.services.picom = {
       enable = true;
@@ -340,7 +335,11 @@ in {
       };
     };
 
-    hm.xdg.configFile."dunst/dunstrc".source = "${configDir}/dunstrc";
+    # Notification daemon
+    hm.services.dunst = {
+      enable = true;
+      configFile = configDir + "/dunstrc";
+    };
 
     # Enable redshift when X starts
     hm.services.redshift = {
