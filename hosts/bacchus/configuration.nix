@@ -110,6 +110,14 @@
     identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
   };
 
+  # GnuPG (GPG)
+  hm.programs.gpg.enable = true;
+  hm.services.gpg-agent.enable = true;
+  hm.programs.git.signing = {
+    key = "7B5273B10C4495CF";
+    signByDefault = true;
+  };
+
   # Specific packages for this host
   hm.home.packages = with pkgs;
     [
