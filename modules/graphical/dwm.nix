@@ -7,8 +7,20 @@
 
 { pkgs, config, lib, configDir, user, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf escapeShellArg;
   cfg = config.modules.graphical;
+
+  # Cursor configuration
+  cursor = rec {
+    package = pkgs.gnome.adwaita-icon-theme;
+    name = "Adwaita";
+    size = 16;
+    defaultCursor = "left_ptr";
+
+    cursorPath = "${package}/share/icons/${escapeShellArg name}/cursors/${
+        escapeShellArg defaultCursor
+      }";
+  };
 in {
   options.modules.graphical.enable =
     mkEnableOption "DWM and graphical environment";
@@ -242,7 +254,19 @@ in {
       };
     };
 
+    hm.home.pointerCursor = {
+      inherit (cursor) package name size;
+      x11 = {
+        # WARNING: DWM overrides this for some reason I cannot figure out
+        # A hacky workaround is provided in hm.xsession.initExtra
+        inherit (cursor) defaultCursor;
+        enable = true;
+      };
+      gtk.enable = config.modules.graphical.gtk.enable;
+    };
+
     hm.home.file.".xinitrc".text = ''
+      #! ${pkgs.bash}
       $HOME/.xsession
     '';
 
@@ -275,6 +299,13 @@ in {
 
         # Statusbar
         dwmblocks &
+
+        # Hack to fix DWM overriding the cursor theme.
+        # Does the same as hm.home.pointerCursor.x11.defaultCursor, but
+        # after a sleep, in order to execute after DWM starting.
+        (${pkgs.coreutils}/bin/sleep 0.2 && ${pkgs.xorg.xsetroot}/bin/xsetroot -xcf ${cursor.cursorPath} ${
+          toString cursor.size
+        }) &
       '';
     };
 
