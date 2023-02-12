@@ -93,7 +93,7 @@ let
             _G.Tabline_timer:stop()
           end
           _G.Tabline_timer:start(0,             -- never timeout
-                                 100,          -- repeat every 1000 ms
+                                 1000,          -- repeat every 1000 ms
                                  vim.schedule_wrap(function() -- updater function
                                                       vim.api.nvim_command('redrawtabline')
                                                    end))
@@ -143,12 +143,38 @@ let
     vim-signature
 
     {
-      plugin = fzf-vim;
+      plugin = fzf-lua;
+      type = "lua";
       config = ''
-        let $FZF_DEFAULT_OPTS='--layout=reverse'
-
-        " Using the custom window creation function
-        let g:fzf_layout = { 'window': { 'height': 0.75, 'width': 0.75 } }
+        local fzf_lua = require('fzf-lua')
+        fzf_lua.setup{
+          fzf_opts = {
+            ['--layout'] = 'reverse',
+          },
+          winopts = {
+            height = 0.75,
+            width = 0.75,
+          },
+        }
+        local set = vim.keymap.set
+        local files = function()
+          vim.fn.system('git rev-parse --is-inside-work-tree')
+          if vim.v.shell_error == 0 then
+            fzf_lua.git_files()
+          else
+            fzf_lua.files()
+          end
+        end
+        -- fuzzy find files in the working directory (where you launched Vim from)
+        set('n', '<leader>f', files)
+        -- fuzzy find lines in the current file
+        set('n', '<leader>/', fzf_lua.blines)
+        -- fuzzy find an open buffer
+        set('n', '<leader>b', fzf_lua.buffers)
+        -- fuzzy find text in the working directory
+        set('n', '<leader>rg', fzf_lua.grep_project)
+        -- fuzzy find Vim commands (like Ctrl-Shift-P in Sublime/Atom/VSC)
+        set('n', '<leader>c', fzf_lua.commands)
       '';
     }
 
@@ -166,8 +192,7 @@ let
     plenary-nvim
 
     {
-      # FIXME I think this isn't working
-      plugin = nvim-osc52;
+      plugin = pkgs.nvim-osc52;
       type = "lua";
       config = ''
         local function copy(lines, _)
@@ -185,10 +210,10 @@ let
         }
 
         -- Now the '+' register will copy to system clipboard using OSC52
-        vim.api.nvim_set_keymap(''', '<Leader>p', '"+p', { noremap = true})
-        vim.api.nvim_set_keymap(''', '<Leader>P', '"+P', { noremap = true})
-        vim.api.nvim_set_keymap(''', '<Leader>y', '"+y', { noremap = true})
-        vim.api.nvim_set_keymap('n', '<Leader>Y', '"+y$', { noremap = true})
+        vim.api.nvim_set_keymap(''', '<Leader>p', '"+p', { noremap = true })
+        vim.api.nvim_set_keymap(''', '<Leader>P', '"+P', { noremap = true })
+        vim.api.nvim_set_keymap(''', '<Leader>y', '"+y', { noremap = true })
+        vim.api.nvim_set_keymap('n', '<Leader>Y', '"+y$', { noremap = true })
       '';
     }
 
@@ -206,29 +231,35 @@ let
         plugin = nvim-lspconfig;
         type = "lua";
         config = ''
-          local lsp = require'lspconfig'
-
-          local capabilities = require('cmp_nvim_lsp').default_capabilities()
-          capabilities.textDocument.completion.completionItem.snippetSupport = true
-          capabilities.textDocument.completion.completionItem.resolveSupport = {
-            properties = {
-              'documentation',
-              'detail',
-              'additionalTextEdits',
-            }
-          }
-
-          lsp.rust_analyzer.setup{
-            capabilities = capabilities,
-            on_attach = require'generic_lsp'
-          }
-          lsp.texlab.setup{
-            capabilities = capabilities,
-            on_attach = require'generic_lsp'
-          }
+          -- common lsp setup
+          local lsp_config = require'lspconfig'
+          local lsp_setup = require'generic_lsp'
+          -- Rust lsp setup
+          local rt = require("rust-tools")
+          local capabilities = lsp_setup.capabilities
+          local on_attach = lsp_setup.on_attach
+          rt.setup({
+            server = {
+              capabilities = capabilities,
+              on_attach = function(_, bufnr)
+                -- Hover actions
+                on_attach(_, bufnr)
+                vim.keymap.set('n', 'K', rt.hover_actions.hover_actions, {silent=true})
+              end,
+              settings = {
+                ["rust-analyzer"] = {
+                  checkOnSave = {
+                    command = "clippy",
+                  },
+                },
+              },
+            },
+          })
+          -- tex lsp setup
+          lsp_config.texlab.setup(lsp_setup)
         '';
       }
-      lsp_extensions-nvim
+      rust-tools-nvim
 
       luasnip
       {
@@ -237,7 +268,6 @@ let
         config = ''
           -- Setup nvim-cmp.
           local cmp = require'cmp'
-
           cmp.setup({
             snippet = {
               -- REQUIRED - you must specify a snippet engine
@@ -258,36 +288,34 @@ let
             }),
             sources = cmp.config.sources({
               { name = 'nvim_lsp' },
-              { name = 'luasnip' }, -- For luasnip users.
-            }, {
+              { name = 'luasnip' },
+              { name = 'treesitter' },
+              { name = 'spell' },
+              { name = 'path' },
               { name = 'buffer' },
             })
           })
-
-          -- Set configuration for specific filetype.
+          -- autocomplete commits, Issue/PR numbers, mentions
           cmp.setup.filetype('gitcommit', {
             sources = cmp.config.sources({
-              -- { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-            }, {
+              { name = 'git' },
+              { name = 'spell' },
               { name = 'buffer' },
             })
           })
-
           -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
           cmp.setup.cmdline('/', {
             mapping = cmp.mapping.preset.cmdline(),
             sources = {
-              { name = 'buffer' }
+              { name = 'buffer' },
             }
           })
-
           -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
           cmp.setup.cmdline(':', {
             mapping = cmp.mapping.preset.cmdline(),
             sources = cmp.config.sources({
-              { name = 'path' }
-            }, {
-              { name = 'cmdline' }
+              { name = 'path' },
+              { name = 'cmdline' },
             })
           })
         '';
@@ -295,6 +323,9 @@ let
       cmp_luasnip
       cmp-treesitter
       cmp-nvim-lsp
+      cmp-spell
+      cmp-path
+      cmp-git
 
       {
         plugin = vimtex;
@@ -321,16 +352,6 @@ let
     setlocal tabstop=2
     setlocal expandtab
   '';
-  # TODO: if nvim-osc52 is added to nixpkgs I can stop having it here
-  nvim-osc52 = pkgs.vimUtils.buildVimPlugin {
-    name = "nvim-osc52";
-    src = pkgs.fetchFromGitHub {
-      owner = "ojroques";
-      repo = "nvim-osc52";
-      rev = "87069dc586d835b70360d4771de53adb9b4aaff7";
-      sha256 = "sha256-JAWf0VDgsOF4K9BH3Ihc+JB8IAuaF7pmqPdAz8pytQ4=";
-    };
-  };
 in {
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
 
@@ -362,17 +383,6 @@ in {
 
         " Easy bind to leave terminal mode
         tnoremap <Esc> <C-\><C-n>
-
-        " fuzzy find files in the working directory (where you launched Vim from)
-        nmap <expr> <leader>f FugitiveHead() != "" ? ':GFiles --cached --others --exclude-standard<CR>' : ':Files<CR>'
-        " fuzzy find lines in the current file
-        nmap <leader>/ :BLines<cr>
-        " fuzzy find an open buffer
-        nmap <leader>b :Buffers<cr>
-        " fuzzy find text in the working directory
-        nmap <leader>rg :Rg<cr>
-        " fuzzy find Vim commands (like Ctrl-Shift-P in Sublime/Atom/VSC)
-        nmap <leader>c :Commands<cr>
 
         " Keeps undo history over different sessions
         set undofile
@@ -451,7 +461,23 @@ in {
           vim-fugitive
           {
             plugin = gitsigns-nvim;
-            config = "lua require('gitsigns').setup()";
+            type = "lua";
+            config = ''
+              require('gitsigns').setup{
+                signs = {
+                  add = {  text = '+' },
+                },
+                on_attach = function(bufnr)
+                  local gs = package.loaded.gitsigns
+                  local function map(mode, l, r, opts)
+                    opts = opts or {}
+                    opts.buffer = bufnr
+                    vim.keymap.set(mode, l, r, opts)
+                  end
+                  map('n', '<leader>gb', gs.toggle_current_line_blame)
+                end,
+              }
+            '';
           }
         ]
       else
@@ -478,49 +504,38 @@ in {
     home.file."${config.my.configHome}/nvim/after/ftplugin/tex.vim".text =
       twoSpaceIndentConfig;
 
-    # Rust config
-    home.file."${config.my.configHome}/nvim/after/ftplugin/rust.vim".text = ''
-      " Use LSP omni-completion in Rust files.
-      setlocal omnifunc=v:lua.vim.lsp.omnifunc
-
-      lua << EOF
-      local inlay_hints = require('lsp_extensions').inlay_hints
-
-      -- Global function, so you can just call it on the lua side
-      ShowHintsLine = function()
-        inlay_hints {
-          only_current_line = true
-        }
-      end
-
-      ShowHintsFile = function()
-        inlay_hints()
-      end
-      EOF
-      " not working for some reason
-      " autocmd CursorHold,CursorHoldI *.rs :lua ShowHintsLine()
-
-      nnoremap <silent> <leader>h <cmd>lua ShowHintsFile()<CR>
-    '';
     home.file."${config.my.configHome}/nvim/lua/generic_lsp.lua".text = ''
-      return function(client)
-        -- [[ other on_attach code ]]
-        vim.api.nvim_buf_set_keymap(0, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true})
-
-        -- illuminate stuff
-        vim.api.nvim_buf_set_keymap(0, 'n', '<leader>gn', '<cmd>lua require"illuminate".next_reference{}<cr>', {noremap = true})
-        vim.api.nvim_buf_set_keymap(0, 'n', '<leader>gp', '<cmd>lua require"illuminate".next_reference{reverse=true}<cr>', {noremap = true})
-        require 'illuminate'.on_attach(client)
-
+      local lsp = require'lspconfig'
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+      capabilities.textDocument.completion.completionItem.resolveSupport = {
+        properties = {
+          'documentation',
+          'detail',
+          'additionalTextEdits',
+        }
+      }
+      local on_attach = function(client, bufnr)
         local set = vim.keymap.set
+        -- [[ other on_attach code ]]
+        set('n', 'K', vim.lsp.buf.hover, {silent=true})
+        -- illuminate stuff
+        local illuminate = require"illuminate"
+        set('n', '<leader>gn', illuminate.next_reference, {silent=true})
+        set('n', '<leader>gp', function () illuminate.next_reference{reverse=true} end, {silent=true})
+        require 'illuminate'.on_attach(client)
         set('n', '<leader>n', function () vim.diagnostic.goto_next { wrap = false } end, {silent = true})
         set('n', '<leader>p', function () vim.diagnostic.goto_prev { wrap = false } end, {silent = true})
         set('n', '<leader>d', vim.lsp.buf.definition, {silent = true})
         set('n', '<leader>gr', vim.lsp.buf.references, {silent = true})
         set('n', '<leader>rn', vim.lsp.buf.rename, {silent = true})
         set('n', '<leader>a', vim.lsp.buf.code_action, {silent = true})
+        set('n', '<leader>tt', function () vim.lsp.buf.format({ async = false }) end, {})
         set('n', '<leader><cr>', vim.diagnostic.open_float, {silent = true})
+        -- Use LSP omni-completion in LSP enabled files.
+        vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
       end
+      return {capabilities = capabilities, on_attach = on_attach}
     '';
 
     home.sessionVariables = {

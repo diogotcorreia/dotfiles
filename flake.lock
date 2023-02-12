@@ -91,6 +91,23 @@
         "type": "github"
       }
     },
+    "nvim-osc52": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673353928,
+        "narHash": "sha256-bUGU5xKw4NYrzNS+Ja6dy03LA1E6zcb+Wb4JXwqA1PM=",
+        "owner": "ojroques",
+        "repo": "nvim-osc52",
+        "rev": "27da4724a887dabed3768b41fa51c785cb62ef26",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ojroques",
+        "ref": "main",
+        "repo": "nvim-osc52",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -98,6 +115,7 @@
         "impermanence": "impermanence",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nvim-osc52": "nvim-osc52",
         "spicetify-nix": "spicetify-nix"
       }
     },
