@@ -5,7 +5,8 @@
 #
 # Have access to nvim-osc52
 
-{ inputs, ... }: final: prev: rec {
+{ inputs, ... }:
+final: prev: rec {
   nvim-osc52 = final.vimUtils.buildVimPlugin {
     name = "nvim-osc52";
     src = inputs.nvim-osc52;

@@ -117,13 +117,12 @@
   };
 
   # Specific packages for this host
-  hm.home.packages = with pkgs;
-    [
-      # Arrange external displays
-      arandr
-      # Karaoke Game
-      ultrastardx
-    ];
+  hm.home.packages = with pkgs; [
+    # Arrange external displays
+    arandr
+    # Karaoke Game
+    ultrastardx
+  ];
 
   # Modules
   modules = {
