@@ -114,7 +114,7 @@
         config.allowUnfree = true;
       };
 
-      agenixPackage = inputs.agenix.defaultPackage.${system};
+      agenixPackage = inputs.agenix.packages.${system}.default;
       spicetifyPkgs = inputs.spicetify-nix.packages.${system}.default;
 
       allModules = mkModules ./modules;
@@ -156,7 +156,7 @@
                 };
               }
               inputs.impermanence.nixosModules.impermanence
-              inputs.agenix.nixosModules.age
+              inputs.agenix.nixosModules.default
             ] ++ allModules;
           };
         }) (attrNames (readDir dir)));
