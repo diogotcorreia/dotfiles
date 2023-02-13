@@ -11,27 +11,28 @@ let
   cfg = config.modules.editors.neovim;
   personal = config.modules.personal.enable;
   git = config.modules.shell.git.enable;
-  commonGrammars = with pkgs.unstable.tree-sitter-grammars; [
-    tree-sitter-bash
-    tree-sitter-comment
-    tree-sitter-html
-    tree-sitter-markdown
-    tree-sitter-nix
-    tree-sitter-python
-  ];
+  commonGrammars =
+    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars; [
+      bash
+      comment
+      html
+      markdown
+      nix
+      python
+    ];
   personalGrammars = if personal then
-    with pkgs.unstable.tree-sitter-grammars; [
-      tree-sitter-c
-      tree-sitter-cpp
-      tree-sitter-java
-      tree-sitter-javascript
-      tree-sitter-latex
-      tree-sitter-lua
-      tree-sitter-rust
-      tree-sitter-toml
-      tree-sitter-typescript
-      tree-sitter-vim
-      tree-sitter-yaml
+    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars; [
+      c
+      cpp
+      java
+      javascript
+      latex
+      lua
+      rust
+      toml
+      typescript
+      vim
+      yaml
     ]
   else
     [ ];
