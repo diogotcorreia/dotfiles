@@ -122,6 +122,9 @@
   hm.home.packages = with pkgs; [
     # Arrange external displays
     arandr
+    # Steam Run
+    # TODO Move to modules
+    steam-run
     # Karaoke Game
     ultrastardx
   ];
