@@ -250,6 +250,7 @@ in {
         touchpad = {
           tapping = true;
           naturalScrolling = true;
+          middleEmulation = false;
         };
       };
     };
