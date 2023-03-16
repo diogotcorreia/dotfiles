@@ -36,10 +36,7 @@ in {
       enable = true;
       nix-direnv.enable = true;
     };
-    hm.programs.git.ignores = [
-      ".envrc"
-      ".direnv"
-    ];
+    hm.programs.git.ignores = [ ".envrc" ".direnv" ];
 
     # Android Debug Bridge
     usr.extraGroups = [ "adbusers" ];
