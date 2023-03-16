@@ -312,6 +312,9 @@ in {
       [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC" &> /dev/null
     '';
 
+    programs.light.enable = true;
+    usr.extraGroups = [ "video" ];
+
     hm.services.picom = {
       enable = true;
       backend = "glx";
