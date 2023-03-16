@@ -21,6 +21,8 @@ in {
       # LaTeX
       texlive.combined.scheme-small
       texlab
+      # Nix Index (provides nix-locate to locate files in the Nix store)
+      nix-index
       # timewarrior (time tracker)
       timewarrior
       # Rust
