@@ -11,7 +11,7 @@ index 37c14a1..5c17eba 100644
 +        {"",            "sb-memory",            10,                     14},
 +        {"",            "sb-cpubars",           10,                     18},
 +        {"",            "sb-nettraf",           1,                      16},
-+//        {"",            "sb-volume",            0,                      10},
++        {"",            "sb-sound",             0,                      10},
 +        {"",            "sb-battery",           5,                      3},
 +        {"",            "sb-internet",          5,                      4},
 +        {"",            "sb-clock",             1,                      1},

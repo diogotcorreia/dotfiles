@@ -92,6 +92,47 @@ in {
           printf "^c%s^%s%s %d%%" "$color" "$status" "$warn" "$capacity"; unset warn
         done && exit 0
       '')
+      (pkgs.writeScriptBin "sb-sound" ''
+        #! /usr/bin/env sh
+
+        printf "^c${yellow}^"
+
+        # Check if microphone is muted
+        # https://stackoverflow.com/a/35165216
+        if [ $(${pkgs.pulsemixer}/bin/pulsemixer --list-sources | grep Default | grep "Mute: 1" | head -c1 | wc -c) -ne 0 ]; then
+          printf "󰍭 "
+        fi
+
+        # Check if sound output is muted
+        muted="$(${pkgs.pulsemixer}/bin/pulsemixer --get-mute)"
+        if [ $muted -eq '1' ]; then
+          printf "󰝟"
+        else
+          # Get current volume from pulsemixer
+          volume="$(${pkgs.pulsemixer}/bin/pulsemixer --get-volume)"
+          # Split into left and right channels
+          # https://stackoverflow.com/a/2440602
+          IFS=" "
+          set -- $volume
+          volumeleft=$1
+          volumeright=$2
+
+          if [ $volumeleft -lt 30 ]; then
+            printf "󰕿 "
+          elif [ $volumeleft -lt 60 ]; then
+            printf "󰖀 "
+          else
+            printf "󰕾 "
+          fi
+
+          # Only show one channel if they are the same, otherwise show both
+          if [ $volumeleft -eq $volumeright ]; then
+            printf "%d%%" "$volumeleft"
+          else
+            printf "L: %d%% R: %d%%" "$volumeleft" "$volumeright"
+          fi
+        fi
+      '')
       (pkgs.writeScriptBin "sb-nettraf" ''
         #! /usr/bin/env sh
 
@@ -216,6 +257,10 @@ in {
           sha256 = "1fkc094vhb3x58zy2k8n66xsjrlmzdi70fc4d2l0y5hq1jwsvnyx";
         };
       }))
+      (pkgs.writeShellScriptBin "pulsemixer" ''
+        ${pkgs.pulsemixer}/bin/pulsemixer "$@"
+        pkill -RTMIN+10 dwmblocks
+      '')
     ];
 
     fonts.fonts = with pkgs; [

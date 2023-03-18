@@ -25,13 +25,13 @@ index 061ad66..2356e90 100644
 +static const char *termcmd[]  = { "alacritty", NULL };
 +static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
 +static const char *clipmenucmd[] = { "clipmenu", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-+static const char *raisevolumecmd[] = { "amixer", "-D", "pulse", "sset", "Master", "5%+", NULL };
-+static const char *lowervolumecmd[] = { "amixer", "-D", "pulse", "sset", "Master", "5%-", NULL };
-+static const char *muteoutputcmd[] = { "amixer", "-D", "pulse", "set", "Master", "1+", "toggle", NULL };
++static const char *raisevolumecmd[] = { "pulsemixer", "--change-volume", "+5", NULL };
++static const char *lowervolumecmd[] = { "pulsemixer", "--change-volume", "-5", NULL };
++static const char *muteoutputcmd[] = { "pulsemixer", "--toggle-mute", NULL };
 +static const char *nextsongcmd[] = { "playerctl", "next", NULL };
 +static const char *prevsongcmd[] = { "playerctl", "previous", NULL };
 +static const char *playpausesongcmd[] = { "playerctl", "play-pause", NULL };
-+static const char *mutemiccmd[] = { "amixer", "set", "Capture", "toggle", NULL };
++static const char *mutemiccmd[] = { "sh", "-c", "pulsemixer --id $(pulsemixer --list-sources | grep Default | cut -d ' ' -f 3 | cut -d ',' -f 1) --toggle-mute", NULL };
 +static const char *lockcmd[] = { "slock", NULL };
 +static const char *tgspdunstcmd[] = { "toggle-dunst-notifications", NULL };
 +static const char *incbrightcmd[] = { "light", "-A", "5", NULL };
@@ -76,7 +76,7 @@ index 061ad66..2356e90 100644
  	TAGKEYS(                        XK_1,                      0)
  	TAGKEYS(                        XK_2,                      1)
  	TAGKEYS(                        XK_3,                      2)
-@@ -93,9 +110,22 @@ static const Key keys[] = {
+@@ -93,9 +110,23 @@ static const Key keys[] = {
  	TAGKEYS(                        XK_7,                      6)
  	TAGKEYS(                        XK_8,                      7)
  	TAGKEYS(                        XK_9,                      8)
@@ -90,6 +90,7 @@ index 061ad66..2356e90 100644
 +	{ 0,                            XF86XK_AudioPrev,            spawn, {.v = prevsongcmd } },
 +	{ 0,                            XF86XK_AudioPlay,            spawn, {.v = playpausesongcmd } },
 +	{ 0,                            XK_Pause,                    spawn, {.v = mutemiccmd } },
++	{ 0,                            XF86XK_PowerOff,             spawn, {.v = mutemiccmd } },
 +	{ 0,                            XF86XK_MonBrightnessUp,      spawn, {.v = incbrightcmd } },
 +	{ 0,                            XF86XK_MonBrightnessDown,    spawn, {.v = decbrightcmd } },
 +	/* OTHER ACTIONS */
