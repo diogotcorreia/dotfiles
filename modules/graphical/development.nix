@@ -23,7 +23,7 @@ in {
       # Visual Studio Code
       unstable.vscode
       # Insomnia REST Client
-      insomnia
+      unstable.insomnia
     ];
   };
 }
