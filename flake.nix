@@ -140,8 +140,6 @@
             };
             modules = [
               { networking.hostName = name; }
-              (dir + "/${name}/hardware.nix")
-              (dir + "/${name}/configuration.nix")
               inputs.home.nixosModules.home-manager
               {
                 home-manager = {
@@ -152,7 +150,7 @@
               }
               inputs.impermanence.nixosModules.impermanence
               inputs.agenix.nixosModules.default
-            ] ++ allModules;
+            ] ++ allModules ++ (mkModules "${dir}/${name}");
           };
         }) (attrNames (readDir dir)));
 
