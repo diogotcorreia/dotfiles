@@ -134,6 +134,7 @@
     editors.neovim.enable = true;
     graphical = {
       enable = true;
+      autorandr.laptop.enable = true;
       development.enable = true;
       gtk.enable = true;
       programs.enable = true;
