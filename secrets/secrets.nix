@@ -9,6 +9,7 @@ in {
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
   "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];
+  "bacchus/cscptWireguardPrivateKey.age".publicKeys = [ bacchusSystem ];
 
   "phobos/healthchecksUrl.age".publicKeys = [ phobosSystem ];
   "phobos/nebulaCert.age".publicKeys = [ phobosSystem ];
