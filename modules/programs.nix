@@ -38,6 +38,12 @@
     fzf
     ripgrep
 
+    # perl-rename (much better than the one from util-linux)
+    rename
+
+    # Other utilities
+    wget
+
     # Agenix
     agenixPackage
   ];
