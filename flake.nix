@@ -32,8 +32,10 @@
 
   outputs = inputs@{ self, ... }:
     let
-      inherit (builtins) listToAttrs concatLists attrValues attrNames readDir;
+      inherit (builtins)
+        listToAttrs concatLists attrValues attrNames readDir filter;
       inherit (inputs.nixpkgs) lib;
+      inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
       inherit (lib) mapAttrs mapAttrsToList hasSuffix;
       sshKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIADPTInG2ZJ0LxO+IBJd1aORzmJlFPuJrcp4YRIJEE1s dtc@apollo"
@@ -120,14 +122,7 @@
       allModules = mkModules ./modules;
 
       # Imports every nix module from a directory, recursively.
-      mkModules = dir:
-        concatLists (attrValues (mapAttrs (name: value:
-          if value == "directory" then
-            mkModules "${dir}/${name}"
-          else if value == "regular" && hasSuffix ".nix" name then
-            [ (import "${dir}/${name}") ]
-          else
-            [ ]) (readDir dir)));
+      mkModules = path: filter (hasSuffix ".nix") (listFilesRecursive path);
 
       # Imports every host defined in a directory.
       mkHosts = dir:
