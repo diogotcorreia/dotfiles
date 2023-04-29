@@ -65,6 +65,12 @@
     pulse.enable = true;
   };
 
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+  };
+
   # Bluetooth
   hardware.bluetooth.enable = true;
 
