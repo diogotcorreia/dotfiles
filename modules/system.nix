@@ -14,6 +14,7 @@ in {
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "@wheel" ];
     };
 
     # Lock flake registry to keep it synced with the inputs
@@ -23,8 +24,15 @@ in {
       nixpkgs.flake = inputs.nixpkgs;
       unstable.flake = inputs.nixpkgs-unstable;
     };
+
+    nixPath = [
+      "nixpkgs=/etc/channels/nixpkgs"
+      "nixos-config=/etc/nixos/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
   };
-  nix.settings.trusted-users = [ "root" "@wheel" ];
+  environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
+
   security.sudo.extraConfig = ''
     Defaults lecture=never
   '';
