@@ -17,13 +17,14 @@ index 061ad66..2356e90 100644
  #define TAGKEYS(KEY,TAG) \
  	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
  	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-@@ -57,12 +58,27 @@ static const Layout layouts[] = {
+@@ -57,12 +58,29 @@ static const Layout layouts[] = {
  
  /* commands */
  static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 -static const char *termcmd[]  = { "st", NULL };
 +static const char *termcmd[]  = { "alacritty", NULL };
 +static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
++static const char *screenshotsavecmd[] = { "sh", "-c", "flameshot full --path $XDG_PICTURES_DIR", NULL };
 +static const char *clipmenucmd[] = { "clipmenu", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 +static const char *raisevolumecmd[] = { "pulsemixer", "--change-volume", "+5", NULL };
 +static const char *lowervolumecmd[] = { "pulsemixer", "--change-volume", "-5", NULL };
@@ -44,6 +45,7 @@ index 061ad66..2356e90 100644
 +	{ MODKEY,                       XK_e,      spawn,          {.v = dmenucmd } },
 +	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 +	{ 0,                            XK_Print,  spawn,          {.v = screenshotcmd } },
++	{ ShiftMask,                    XK_Print,  spawn,          {.v = screenshotsavecmd } },
 +	{ MODKEY,                       XK_v,      spawn,          {.v = clipmenucmd } },
  	{ MODKEY,                       XK_b,      togglebar,      {0} },
  	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
