@@ -25,5 +25,8 @@ in {
       # Insomnia REST Client
       unstable.insomnia
     ];
+
+    # Firefox browser
+    programs.firefox.enable = true;
   };
 }
