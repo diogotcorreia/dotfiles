@@ -126,7 +126,7 @@
       qt.enable = true;
     };
     services = {
-      dnsovertls.enable = true;
+      dnsoverhttps.enable = true;
       # Nebula (VPN)
       nebula = {
         enable = true;

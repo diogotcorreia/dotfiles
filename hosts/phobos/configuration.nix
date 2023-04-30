@@ -78,7 +78,7 @@
   modules = {
     editors.neovim.enable = true;
     services = {
-      dnsovertls.enable = true;
+      dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
         checkUrlFile = config.age.secrets.phobosHealthchecksUrl.path;
