@@ -5,7 +5,7 @@
 #
 # Apply patches to DWM
 
-{ inputs, ... }:
+{ ... }:
 final: prev: rec {
   dwm = prev.dwm.overrideAttrs (oldAttrs: rec {
     patches = [

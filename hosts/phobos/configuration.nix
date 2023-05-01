@@ -5,7 +5,7 @@
 #
 # Configuration for phobos (server).
 
-{ pkgs, lib, sshKeys, config, hostSecretsDir, user, agenixPackage, ... }: {
+{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
   # Boot
 
   # /tmp configuration

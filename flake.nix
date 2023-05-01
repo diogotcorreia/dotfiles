@@ -30,13 +30,12 @@
     };
   };
 
-  outputs = inputs@{ self, ... }:
+  outputs = inputs@{ ... }:
     let
-      inherit (builtins)
-        listToAttrs concatLists attrValues attrNames readDir filter;
+      inherit (builtins) listToAttrs attrNames readDir filter;
       inherit (inputs.nixpkgs) lib;
       inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
-      inherit (lib) mapAttrs mapAttrsToList hasSuffix;
+      inherit (lib) mapAttrsToList hasSuffix;
       sshKeys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIADPTInG2ZJ0LxO+IBJd1aORzmJlFPuJrcp4YRIJEE1s dtc@apollo"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINlaWu32ANU+sWFcwKrPlqD/oW3lC3/hrA1Z3+ubuh5A dtc@bacchus"

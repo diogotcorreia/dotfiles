@@ -5,7 +5,7 @@
 #
 # Configuration for bacchus (PC).
 
-{ pkgs, lib, sshKeys, config, hostSecretsDir, user, agenixPackage, ... }: {
+{ pkgs, lib, sshKeys, config, hostSecretsDir, ... }: {
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

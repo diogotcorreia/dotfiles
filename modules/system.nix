@@ -5,11 +5,7 @@
 #
 # System config common across all hosts
 
-{ inputs, pkgs, lib, config, configDir, ... }:
-let
-  inherit (builtins) toString;
-  inherit (lib.my) mapModules;
-in {
+{ inputs, pkgs, lib, ... }: {
   nix = {
     settings = {
       auto-optimise-store = true;

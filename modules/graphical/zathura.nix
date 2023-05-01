@@ -5,9 +5,9 @@
 #
 # PDF viewer
 
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkIf;
   cfg = config.modules.graphical.programs;
 in {
 

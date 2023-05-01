@@ -5,9 +5,9 @@
 #
 # Spotify configuration and themeing with Spicetify
 
-{ pkgs, config, lib, spicetifyPkgs, ... }:
+{ config, lib, spicetifyPkgs, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkIf;
   cfg = config.modules.graphical.programs;
 in {
 

@@ -5,7 +5,7 @@
 #
 # nebula (VPN) configuration.
 
-{ pkgs, config, lib, secretsDir, ... }:
+{ config, lib, secretsDir, ... }:
 let
   inherit (lib) mkEnableOption mkOption types mkIf;
   cfg = config.modules.services.nebula;

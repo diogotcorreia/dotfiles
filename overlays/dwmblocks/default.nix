@@ -5,7 +5,7 @@
 #
 # Apply patches to DWMBlocks
 
-{ inputs, ... }:
+{ ... }:
 final: prev: rec {
   dwmblocks = prev.dwmblocks.overrideAttrs (oldAttrs: rec {
     src = prev.fetchFromGitHub {

@@ -6,10 +6,9 @@
 # Configuration for services and programs needed while studying
 # at Técnico Lisboa (IST).
 
-{ pkgs, config, lib, utils, user, secretsDir, ... }:
+{ pkgs, config, lib, secretsDir, ... }:
 let
-  inherit (lib)
-    mkEnableOption mkOption types mkIf escapeShellArg getAttr attrNames;
+  inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.ist;
 
   istVpnConfiguration = pkgs.fetchurl {

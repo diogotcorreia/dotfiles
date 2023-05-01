@@ -8,7 +8,7 @@
 
 { pkgs, options, config, lib, user, userFullName, ... }:
 let
-  inherit (lib) mkEnableOption mkAliasDefinitions mkOption mkIf types;
+  inherit (lib) mkAliasDefinitions mkOption types;
 
   mkOpt = type: default: mkOption { inherit type default; };
 in {

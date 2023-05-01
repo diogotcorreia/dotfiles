@@ -5,7 +5,7 @@
 #
 # global programs and packages
 
-{ pkgs, config, lib, agenixPackage, ... }: {
+{ pkgs, agenixPackage, ... }: {
   # Essential packages
   environment.systemPackages = with pkgs; [
     # Compressed archives

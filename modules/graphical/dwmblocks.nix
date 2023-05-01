@@ -5,15 +5,14 @@
 #
 # DWM window manager and graphical environment configuration
 
-{ pkgs, config, lib, configDir, user, colors, ... }:
+{ pkgs, config, lib, colors, ... }:
 let
-  inherit (lib) mkEnableOption mkIf escapeShellArg;
+  inherit (lib) mkIf;
   cfg = config.modules.graphical;
 in {
   config = mkIf cfg.enable (let
     # colors
-    inherit (colors)
-      black white grey blue darkblue red orange yellow green pink;
+    inherit (colors) black blue darkblue red orange yellow green pink;
 
     # To type UTF-8 codepoints into vim: in insert mode, Ctrl + V, U<codepoint><ESC>
     # Alternatively, copy glyph from MDI website

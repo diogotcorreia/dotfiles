@@ -5,7 +5,7 @@
 #
 # tmux configuration (Based on RageKnify's)
 
-{ config, lib, colors, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.tmux;
@@ -39,7 +39,10 @@ in {
       '';
       historyLimit = 50000;
       keyMode = "vi";
-      terminal = if config.modules.graphical.programs.enable then "alacritty" else "tmux-256color";
+      terminal = if config.modules.graphical.programs.enable then
+        "alacritty"
+      else
+        "tmux-256color";
     };
   };
 }

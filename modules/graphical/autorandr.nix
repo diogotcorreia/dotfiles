@@ -5,7 +5,7 @@
 #
 # Autorandr configuration for laptops
 
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.autorandr;
