@@ -247,7 +247,6 @@ in {
     programs.slock.enable = true;
     programs.seahorse.enable = true;
     environment.systemPackages = with pkgs; [
-      alacritty
       dmenu
       (dwmblocks.overrideAttrs (old: rec {
         src = fetchFromGitHub {
