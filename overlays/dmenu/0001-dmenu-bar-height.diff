@@ -1,0 +1,27 @@
+diff --git a/config.def.h b/config.def.h
+index 1edb647..5c79628 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -3,6 +3,8 @@
+
+ static int topbar = 1;                      /* -b  option; if 0, dmenu appears at bottom     */
+ /* -fn option overrides fonts[0]; default X11 font or font set */
++static const int user_bh = 16;              /* add a defined amount of pixels to the bar height */
++
+ static const char *fonts[] = {
+ 	"monospace:size=10"
+ };
+diff --git a/dmenu.c b/dmenu.c
+index 27b7a30..7be0dc3 100644
+--- a/dmenu.c
++++ b/dmenu.c
+@@ -629,7 +629,8 @@ setup(void)
+ 	utf8 = XInternAtom(dpy, "UTF8_STRING", False);
+
+ 	/* calculate menu geometry */
+-	bh = drw->fonts->h + 2;
++	bh = drw->fonts->h;
++	bh = user_bh ? bh + user_bh : bh + 2;
+ 	lines = MAX(lines, 0);
+ 	mh = (lines + 1) * bh;
+ #ifdef XINERAMA
