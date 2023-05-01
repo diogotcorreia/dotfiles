@@ -5,7 +5,7 @@
 #
 # DWM window manager and graphical environment configuration
 
-{ pkgs, config, lib, configDir, user, ... }:
+{ pkgs, config, lib, configDir, user, colors, ... }:
 let
   inherit (lib) mkEnableOption mkIf escapeShellArg;
   cfg = config.modules.graphical;
@@ -27,21 +27,10 @@ in {
 
   config = mkIf cfg.enable (let
     # colors
-    # TODO use colors from flake.nix
-    black = "#2E3440";
-    white = "#D8DEE9";
-    grey = "#373d49";
-    blue = "#81A1C1";
-    darkblue = "#7292b2";
-    red = "#BF616A";
-    orange = "#D08770";
-    yellow = "#EBCB8B";
-    green = "#A3BE8C";
-    pink = "#B48EAD";
+    inherit (colors) black white grey blue darkblue red orange yellow green pink;
 
-    # Mapping of MDI icon names to unicode codepoint:
-    # https://cdn.jsdelivr.net/npm/@mdi/svg@6.9.96/meta.json
     # To type UTF-8 codepoints into vim: in insert mode, Ctrl + V, U<codepoint><ESC>
+    # Alternatively, copy glyph from MDI website
     statusbarModules = [
       (pkgs.writeScriptBin "sb-clock" ''
         #! /usr/bin/env sh
