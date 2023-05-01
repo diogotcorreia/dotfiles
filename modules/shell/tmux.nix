@@ -5,7 +5,7 @@
 #
 # tmux configuration (Based on RageKnify's)
 
-{ config, lib, colors, hostColor, ... }:
+{ config, lib, colors, pkgs, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.tmux;
@@ -20,16 +20,8 @@ in {
       customPaneNavigationAndResize = true;
       escapeTime = 0;
       extraConfig = ''
+        # Tell tmux the terminal supports RGB colors
         set -g terminal-overrides ",gnome*:RGB"
-        # Set status bar color
-        set -g status-style fg='${colors.light.base07}',bg='${hostColor}'
-
-        # set status line
-        set -g status-left '#[bold][#S]  '
-        set -g status-left-length 10
-        set -g status-right '#[bold]#h  '
-        set -g status-right-length 10
-        set -g window-status-style bold
 
         # New panes/windows are always opened in the current working directory
         bind '"' split-window -c "#{pane_current_path}"
@@ -41,10 +33,13 @@ in {
 
         # Enable osc-52
         set -g set-clipboard on
+
+        # Use Nord theme
+        run-shell "${pkgs.unstable.tmuxPlugins.nord}/share/tmux-plugins/nord/nord.tmux"
       '';
       historyLimit = 50000;
       keyMode = "vi";
-      terminal = "tmux-256color";
+      terminal = if config.modules.graphical.programs.enable then "alacritty" else "tmux-256color";
     };
   };
 }
