@@ -46,6 +46,7 @@
         black = "#2E3440";
         white = "#D8DEE9";
         grey = "#373d49";
+        lightblue = "#88C0D0";
         blue = "#81A1C1";
         darkblue = "#7292b2";
         red = "#BF616A";

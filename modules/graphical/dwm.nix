@@ -363,7 +363,7 @@ in {
           savePath = "/tmp";
           savePathFixed = false;
           saveAsFileExtension = ".png";
-          uiColor = "${darkblue}";
+          uiColor = "${colors.lightblue}";
           startupLaunch = false;
           antialiasingPinZoom = true;
           uploadWithoutConfirmation = false;
