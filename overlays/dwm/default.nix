@@ -36,6 +36,9 @@ final: prev: rec {
       # Show status bar on all monitors
       # Based on https://dwm.suckless.org/patches/statusallmons/
       ./0005-dwm-statusallmons.diff
+      # Preserve window tags and monitor when restarting DWM (i.e. to apply new patches)
+      # Based on https://github.com/FT-Labs/pdwm/blob/5944027dd95ad5343e64a4f61a2209278e2880fb/patches/dwm-6.3-patches/dwm-preserveonrestart-6.3.diff
+      ./0006-preserveonrestart.diff
 
       ./0100-theme-colors.diff
     ];
