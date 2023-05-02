@@ -54,6 +54,7 @@ final: prev: rec {
       ./0007-colorful-tags.diff
 
       ./0100-theme-colors.diff
+      ./0101-tag-names.diff
     ];
   });
 }
