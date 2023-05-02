@@ -23,6 +23,11 @@ final: prev: rec {
           "https://dwm.suckless.org/patches/focusmonmouse/dwm-focusmonmouse-6.2.diff";
         sha256 = "sha256-BsbcljMjsQne4gLbLE1o1RbQD43DwPcGDF9N3eu7AF8=";
       })
+      (prev.fetchpatch {
+        url =
+          "https://dwm.suckless.org/patches/actualfullscreen/dwm-actualfullscreen-20191112-cb3f58a.diff";
+        sha256 = "sha256-SMqYYKM2dq+6aD2R3EDEuiGIn5yIhiYhnJKtrHacXBc=";
+      })
       ./0001-keybinds.diff
       ./0002-fonts.diff
       # dwm-statuspadding patch was not compatible with status2d
