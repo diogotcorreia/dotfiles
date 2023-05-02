@@ -49,6 +49,9 @@ final: prev: rec {
       # Preserve window tags and monitor when restarting DWM (i.e. to apply new patches)
       # Based on https://github.com/FT-Labs/pdwm/blob/5944027dd95ad5343e64a4f61a2209278e2880fb/patches/dwm-6.3-patches/dwm-preserveonrestart-6.3.diff
       ./0006-preserveonrestart.diff
+      # Colorize each tag individually on status bar
+      # Based on https://github.com/fitrh/dwm/issues/1
+      ./0007-colorful-tags.diff
 
       ./0100-theme-colors.diff
     ];

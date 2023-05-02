@@ -12,10 +12,10 @@ index 43ea6af..94c2a83 100644
 -static const char col_gray4[]       = "#eeeeee";
 -static const char col_cyan[]        = "#005577";
 +static const char col_gray1[]       = "#2E3440";
-+static const char col_gray2[]       = "#434C5E";
++static const char col_gray2[]       = "#4C566A";
 +static const char col_gray3[]       = "#D8DEE9";
 +static const char col_gray4[]       = "#ECEFF4";
 +static const char col_cyan[]        = "#5E81AC";
- static const char *colors[][3]      = {
- 	/*               fg         bg         border   */
- 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+ static const char col_red[]         = "#BF616A";
+ static const char col_orange[]      = "#D08770";
+ static const char col_yellow[]      = "#EBCB8B";
