@@ -33,6 +33,9 @@ final: prev: rec {
       # Remove background color from the middle section, where the window
       # title is, when there is a focused window in that monitor.
       ./0004-remove-bgcolor-window-title.diff
+      # Show status bar on all monitors
+      # Based on https://dwm.suckless.org/patches/statusallmons/
+      ./0005-dwm-statusallmons.diff
 
       ./0100-theme-colors.diff
     ];

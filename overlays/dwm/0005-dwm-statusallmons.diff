@@ -1,0 +1,26 @@
+diff --git a/dwm.c b/dwm.c
+index 1d5363f..d9f143f 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -853,7 +853,7 @@ drawbar(Monitor *m)
+ 		return;
+ 
+ 	/* draw status first so it can be overdrawn by tags later */
+-	if (m == selmon) { /* status is only drawn on selected monitor */
++	if (m == selmon || 1) { /* status is only drawn on selected monitor */
+ 		tw = statusw = m->ww - drawstatusbar(m, bh, stext);
+ 	}
+ 
+@@ -2168,9 +2168,11 @@ updatesizehints(Client *c)
+ void
+ updatestatus(void)
+ {
++    Monitor* m;
+ 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
+ 		strcpy(stext, "dwm-"VERSION);
+-	drawbar(selmon);
++	for (m = mons; m; m = m->next)
++		drawbar(m);
+ }
+ 
+ void
