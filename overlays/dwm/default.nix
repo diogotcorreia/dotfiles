@@ -28,6 +28,11 @@ final: prev: rec {
           "https://dwm.suckless.org/patches/actualfullscreen/dwm-actualfullscreen-20191112-cb3f58a.diff";
         sha256 = "sha256-SMqYYKM2dq+6aD2R3EDEuiGIn5yIhiYhnJKtrHacXBc=";
       })
+      (prev.fetchpatch {
+        url =
+          "https://dwm.suckless.org/patches/underlinetags/dwm-underlinetags-6.2.diff";
+        sha256 = "sha256-TSg2UtsRGhE+eE67qiOsfUQscTKFh2VYPb/1Sx8TOCw=";
+      })
       ./0001-keybinds.diff
       ./0002-fonts.diff
       # dwm-statuspadding patch was not compatible with status2d
