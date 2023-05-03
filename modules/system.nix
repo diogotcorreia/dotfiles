@@ -14,10 +14,9 @@
     };
 
     # Lock flake registry to keep it synced with the inputs
-    # i.e. used by `nix run nixpkgs#<package>`
+    # i.e. used by `nix run pkgs#<package>`
     registry = {
       pkgs.flake = inputs.nixpkgs; # alias to nixpkgs
-      nixpkgs.flake = inputs.nixpkgs;
       unstable.flake = inputs.nixpkgs-unstable;
     };
 
