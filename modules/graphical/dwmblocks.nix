@@ -32,10 +32,10 @@ in {
 
         case "$(cat /sys/class/net/w*/operstate 2>/dev/null)" in
           down) wifiicon="󰤭 " ;;
-          up) wifiicon="$(awk '/^\s*w/ { print "󰤨 ", int($3 * 100 / 70) "% " }' /proc/net/wireless)" ;;
+          up) wifiicon="$(${pkgs.gawk}/bin/awk '/^\s*w/ { print "󰤨 ", int($3 * 100 / 70) "% " }' /proc/net/wireless)" ;;
         esac
 
-        printf "^c${orange}^%s%s%s^d^" "$wifiicon" "$(sed "s/down/󰅛/;s/up/󰈀/" /sys/class/net/e*/operstate 2>/dev/null)" "$(sed "s/.*/ 󰌆/" /sys/class/net/tun*/operstate 2>/dev/null)"
+        printf "^c${orange}^%s%s%s^d^" "$wifiicon" "$(${pkgs.gnused}/bin/sed "s/down/󰅛/;s/up/󰈀/" /sys/class/net/e*/operstate 2>/dev/null)" "$(${pkgs.gnused}/bin/sed "s/.*/ 󰌆/" /sys/class/net/tun*/operstate 2>/dev/null)"
       '')
       (pkgs.writeScriptBin "sb-battery" ''
         #! /usr/bin/env sh
@@ -73,7 +73,7 @@ in {
 
         # Check if microphone is muted
         # https://stackoverflow.com/a/35165216
-        if [ $(${pkgs.pulsemixer}/bin/pulsemixer --list-sources | grep Default | grep "Mute: 1" | head -c1 | wc -c) -ne 0 ]; then
+        if [ $(${pkgs.pulsemixer}/bin/pulsemixer --list-sources | ${pkgs.gnugrep}/bin/grep Default | ${pkgs.gnugrep}/bin/grep "Mute: 1" | head -c1 | wc -c) -ne 0 ]; then
           printf "󰍭 "
         fi
 
@@ -142,7 +142,7 @@ in {
         cache=/tmp/cpubarscache
 
         # id total idle
-        stats=$(awk '/cpu[0-9]+/ {printf "%d %d %d\n", substr($1,4), ($2 + $3 + $4 + $5), $5 }' /proc/stat)
+        stats=$(${pkgs.gawk}/bin/awk '/cpu[0-9]+/ {printf "%d %d %d\n", substr($1,4), ($2 + $3 + $4 + $5), $5 }' /proc/stat)
         [ ! -f $cache ] && echo "$stats" > "$cache"
         old=$(cat "$cache")
         printf "^c${red}^󰍛 "
@@ -152,7 +152,7 @@ in {
           total=''${rest%% *}
           idle=''${rest##* }
 
-          case "$(echo "$old" | awk '{if ($1 == id)
+          case "$(echo "$old" | ${pkgs.gawk}/bin/awk '{if ($1 == id)
             printf "%d\n", (1 - (idle - $3)  / (total - $2))*100 /12.5}' \
             id="$id" total="$total" idle="$idle")" in
 
@@ -172,14 +172,14 @@ in {
       (pkgs.writeScriptBin "sb-memory" ''
         #! /usr/bin/env sh
 
-        free --mebi | sed -n '2{p;q}' | awk '{printf ("^c${green}^󰘚 %2.2fGiB/%2.2fGiB^d^", ( $3 / 1024), ($2 / 1024))}'
+        ${pkgs.procps}/bin/free --mebi | ${pkgs.gnused}/bin/sed -n '2{p;q}' | ${pkgs.gawk}/bin/awk '{printf ("^c${green}^󰘚 %2.2fGiB/%2.2fGiB^d^", ( $3 / 1024), ($2 / 1024))}'
       '')
       (pkgs.writeScriptBin "sb-timewarrior" ''
         #! /usr/bin/env sh
 
         # Prints whether or not there is current timetracking with timewarrior.
 
-        current_tracking="$(timew | head -n 1)"
+        current_tracking="$(${pkgs.timewarrior}/bin/timew | head -n 1)"
         if [ "$current_tracking" = "There is no active time tracking." ]; then
           icon="󰚭"
         else
@@ -194,11 +194,13 @@ in {
         # Module showing if dunst is paused and if so, how many notifications are pending
         # Icon is ommited if not paused
 
+        PATH=$PATH:${pkgs.dbus}/bin
+
         OUT=""
 
-        if [ "$(dunstctl is-paused)" = "true" ]; then
+        if [ "$(${pkgs.dunst}/bin/dunstctl is-paused)" = "true" ]; then
           OUT="󰂛"
-          WAITING="$(dunstctl count waiting)"
+          WAITING="$(${pkgs.dunst}/bin/dunstctl count waiting)"
           if [ $WAITING != 0 ]; then
             OUT="$OUT ($WAITING)"
           fi
@@ -206,39 +208,38 @@ in {
 
         echo "^c${yellow}^$OUT^d^"
       '')
-      (pkgs.writeScriptBin "toggle-dunst-notifications" ''
-        #! /usr/bin/env sh
-
-        # Wrapper to toggle dunst 'set-pause' and send signal to dwmblocks to reload widget
-
-        dunstctl set-paused toggle && pkill -RTMIN+19 dwmblocks
-      '')
     ];
 
     sbPath =
       lib.strings.concatMapStringsSep ":" (x: "${x}/bin") statusbarModules;
+
+    pkg = pkgs.dwmblocks.overrideAttrs (old: rec {
+      src = pkgs.fetchFromGitHub {
+        owner = "LukeSmithxyz";
+        repo = "dwmblocks";
+        rev = "5a6fa8d550c11552480f10e660073ca294d446b1";
+        sha256 = "1fkc094vhb3x58zy2k8n66xsjrlmzdi70fc4d2l0y5hq1jwsvnyx";
+      };
+    });
   in {
-    environment.systemPackages = with pkgs;
-      [
-        (dwmblocks.overrideAttrs (old: rec {
-          src = fetchFromGitHub {
-            owner = "LukeSmithxyz";
-            repo = "dwmblocks";
-            rev = "5a6fa8d550c11552480f10e660073ca294d446b1";
-            sha256 = "1fkc094vhb3x58zy2k8n66xsjrlmzdi70fc4d2l0y5hq1jwsvnyx";
-          };
-        }))
-      ];
+    environment.systemPackages = [ pkg ];
 
     fonts.fonts = with pkgs; [ material-design-icons ];
 
-    hm.xsession = {
-      initExtra = ''
-        PATH="$PATH:${sbPath}"
+    hm.systemd.user.services.dwmblocks = {
+      Unit = {
+        Description = "Dwmblocks statusbar widgets";
+        After = [ "graphical-session-pre.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
 
-        # Statusbar
-        dwmblocks &
-      '';
+      Install = { WantedBy = [ "graphical-session.target" ]; };
+
+      Service = {
+        Environment = "PATH=${pkgs.bash}/bin:${pkgs.coreutils}/bin:${sbPath}";
+        ExecStart = "${pkg}/bin/dwmblocks";
+        Restart = "on-abort";
+      };
     };
 
   });

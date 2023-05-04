@@ -159,6 +159,16 @@ in {
       enable = true;
       configFile = configDir + "/dunstrc";
     };
+    # Utility to quickly toggle notification mute
+    hm.home.packages = [
+      (pkgs.writeScriptBin "toggle-dunst-notifications" ''
+        #! /usr/bin/env sh
+
+        # Wrapper to toggle dunst 'set-pause' and send signal to dwmblocks to reload widget
+
+        ${pkgs.dunst}/bin/dunstctl set-paused toggle && pkill -RTMIN+19 dwmblocks
+      '')
+    ];
 
     # Enable redshift when X starts
     hm.services.redshift = {
