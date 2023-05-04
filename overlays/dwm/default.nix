@@ -33,6 +33,11 @@ final: prev: rec {
           "https://dwm.suckless.org/patches/underlinetags/dwm-underlinetags-6.2.diff";
         sha256 = "sha256-TSg2UtsRGhE+eE67qiOsfUQscTKFh2VYPb/1Sx8TOCw=";
       })
+      (prev.fetchpatch {
+        url =
+          "https://dwm.suckless.org/patches/removeborder/dwm-removeborder-20220626-d3f93c7.diff";
+        sha256 = "sha256-0QUN+wfKyXxabXyKXIcpPcdnLkH4d0Oqx8pncjc+It4=";
+      })
       ./0001-keybinds.diff
       ./0002-fonts.diff
       # dwm-statuspadding patch was not compatible with status2d
