@@ -124,6 +124,10 @@
       gtk.enable = true;
       programs.enable = true;
       qt.enable = true;
+      wacom = {
+        enable = true;
+        monitor = "eDP1";
+      };
     };
     services = {
       dnsoverhttps.enable = true;
