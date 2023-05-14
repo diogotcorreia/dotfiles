@@ -77,6 +77,7 @@
   # Modules
   modules = {
     editors.neovim.enable = true;
+    server.enable = true;
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {

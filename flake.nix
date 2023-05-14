@@ -55,6 +55,7 @@
         pink = "#B48EAD";
       };
 
+      systemFlakePath = "github:diogotcorreia/dotfiles/nixos";
       system = "x86_64-linux";
       user = "dtc";
       userFullName = "Diogo Correia";
@@ -96,7 +97,7 @@
             inherit system pkgs;
             specialArgs = {
               inherit inputs user userFullName colors sshKeys agenixPackage
-                secretsDir spicetifyPkgs;
+                secretsDir spicetifyPkgs systemFlakePath;
               configDir = ./config;
               hostSecretsDir = "${secretsDir}/${name}";
               hostName = name;
