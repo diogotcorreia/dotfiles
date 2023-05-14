@@ -128,6 +128,7 @@
         enable = true;
         monitor = "eDP1";
       };
+      xournalpp.enable = true;
     };
     services = {
       dnsoverhttps.enable = true;
