@@ -23,7 +23,6 @@ in {
 
   # FIXME: hardcoded directory because restic doesn't follow symlinks
   # See https://github.com/restic/restic/pull/3863
-  modules.services.restic.paths =
-    [ "/var/lib/private/uptime-kuma" ];
+  modules.services.restic.paths = [ "/var/lib/private/uptime-kuma" ];
 
 }
