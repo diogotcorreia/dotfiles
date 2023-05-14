@@ -132,6 +132,11 @@
         enable = true;
         cert = config.age.secrets.bacchusNebulaCert.path;
         key = config.age.secrets.bacchusNebulaKey.path;
+        firewall.inbound = [{
+          port = 22;
+          proto = "tcp";
+          group = "dtc";
+        }];
       };
       syncthing.enable = true;
     };

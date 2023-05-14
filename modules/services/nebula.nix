@@ -36,6 +36,27 @@ in {
       '';
       example = [ "192.168.100.1" ];
     };
+
+    firewall.outbound = mkOption {
+      type = types.listOf types.attrs;
+      default = [ ];
+      description = lib.mdDoc "Firewall rules for outbound traffic.";
+      example = [{
+        port = "any";
+        proto = "any";
+        host = "any";
+      }];
+    };
+    firewall.inbound = mkOption {
+      type = types.listOf types.attrs;
+      default = [ ];
+      description = lib.mdDoc "Firewall rules for inbound traffic.";
+      example = [{
+        port = "any";
+        proto = "any";
+        host = "any";
+      }];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -49,12 +70,13 @@ in {
       key = cfg.key;
       isLighthouse = cfg.isLighthouse;
       lighthouses = cfg.lighthouses;
-      # TODO support more firewall rules
+
       firewall.outbound = [{
         port = "any";
         proto = "any";
         host = "any";
-      }];
+      }] ++ cfg.firewall.outbound;
+      firewall.inbound = cfg.firewall.inbound;
 
       staticHostMap = { "192.168.100.1" = [ "146.59.199.128:4242" ]; };
     };
