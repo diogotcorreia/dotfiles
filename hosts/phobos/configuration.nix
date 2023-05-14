@@ -66,11 +66,6 @@
           reverse_proxy localhost:8000
         '';
       };
-      "uptime.diogotc.com" = {
-        extraConfig = ''
-          reverse_proxy localhost:8002
-        '';
-      };
     };
   };
 
@@ -98,7 +93,6 @@
         sshKeyFile = config.age.secrets.phobosResticSshKey.path;
 
         paths = [
-          "${config.my.homeDirectory}/uptime-kuma"
           "${config.my.homeDirectory}/healthchecks/docker/.env"
           "${config.my.homeDirectory}/healthchecks/docker/docker-compose.yml"
           "/tmp/healthchecks_db.sql"
