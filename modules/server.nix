@@ -27,5 +27,13 @@ in {
       dates = "04:00";
       randomizedDelaySec = "1h";
     };
+
+    nix.optimise.automatic = true;
+    nix.gc = {
+      automatic = true;
+
+      dates = "weekly";
+      randomizedDelaySec = "15min";
+    };
   };
 }
