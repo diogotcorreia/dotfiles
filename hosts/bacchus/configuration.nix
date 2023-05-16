@@ -29,6 +29,7 @@
   environment.persistence."/persist" = {
     directories = [
       "/etc/NetworkManager/system-connections"
+      "/var/lib/bluetooth"
       "/var/lib/docker"
       "/var/lib/libvirt"
       "/var/log"
