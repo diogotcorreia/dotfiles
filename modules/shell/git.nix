@@ -32,6 +32,7 @@ in {
           email = "diogo.t.correia@tecnico.ulisboa.pt";
         };
       }];
+      diff-so-fancy.enable = config.modules.personal.enable;
     };
   };
 }
