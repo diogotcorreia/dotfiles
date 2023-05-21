@@ -22,6 +22,8 @@ in {
       extraConfig = ''
         # Tell tmux the terminal supports RGB colors
         set -g terminal-overrides ",gnome*:RGB"
+        set -sa terminal-overrides ',xterm-256color:RGB'
+        set -sa terminal-overrides ',alacritty:RGB'
 
         # New panes/windows are always opened in the current working directory
         bind '"' split-window -c "#{pane_current_path}"
