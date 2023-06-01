@@ -504,6 +504,8 @@ in {
       twoSpaceIndentConfig;
     home.file."${config.my.configHome}/nvim/after/ftplugin/tex.vim".text =
       twoSpaceIndentConfig;
+    home.file."${config.my.configHome}/nvim/after/ftplugin/javascript.vim".text =
+      twoSpaceIndentConfig;
 
     home.file."${config.my.configHome}/nvim/lua/generic_lsp.lua".text = ''
       local lsp = require'lspconfig'
