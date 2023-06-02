@@ -21,9 +21,9 @@
   zramSwap.enable = true;
 
   # /tmp configuration
-  boot.tmpOnTmpfs = true;
-  boot.tmpOnTmpfsSize = "80%";
-  boot.cleanTmpDir = true;
+  boot.tmp.useTmpfs = true;
+  boot.tmp.tmpfsSize = "80%";
+  boot.tmp.cleanOnBoot = true;
 
   # Impermanence (root on tmpfs)
   environment.persistence."/persist" = {
@@ -50,9 +50,11 @@
   # TODO move to module
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
     authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
-    kbdInteractiveAuthentication = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
 
@@ -89,8 +91,14 @@
   # Secret manager (agenix)
   age = {
     secrets = {
-      bacchusNebulaCert.file = "${hostSecretsDir}/nebulaCert.age";
-      bacchusNebulaKey.file = "${hostSecretsDir}/nebulaKey.age";
+      bacchusNebulaCert = {
+        file = "${hostSecretsDir}/nebulaCert.age";
+        owner = "nebula-nebula0";
+      };
+      bacchusNebulaKey = {
+        file = "${hostSecretsDir}/nebulaKey.age";
+        owner = "nebula-nebula0";
+      };
     };
 
     identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];

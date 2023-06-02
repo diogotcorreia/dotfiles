@@ -9,7 +9,7 @@
   # Boot
 
   # /tmp configuration
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
 
   # Network Manager
   # TODO move to module
@@ -18,9 +18,11 @@
   # TODO move to module
   services.openssh = {
     enable = true;
-    passwordAuthentication = false;
     authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
-    kbdInteractiveAuthentication = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
 
@@ -31,8 +33,14 @@
   age = {
     secrets = {
       phobosHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
-      phobosNebulaCert.file = "${hostSecretsDir}/nebulaCert.age";
-      phobosNebulaKey.file = "${hostSecretsDir}/nebulaKey.age";
+      phobosNebulaCert = {
+        file = "${hostSecretsDir}/nebulaCert.age";
+        owner = "nebula-nebula0";
+      };
+      phobosNebulaKey = {
+        file = "${hostSecretsDir}/nebulaKey.age";
+        owner = "nebula-nebula0";
+      };
       phobosResticHealthchecksUrl.file =
         "${hostSecretsDir}/resticHealthchecksUrl.age";
       phobosResticRcloneConfig.file =

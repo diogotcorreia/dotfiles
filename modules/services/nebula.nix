@@ -61,7 +61,10 @@ in {
 
   config = mkIf cfg.enable {
     # Automatically get nebulaCA from agenix
-    age.secrets.nebulaCA.file = "${secretsDir}/nebulaCA.age";
+    age.secrets.nebulaCA = {
+      file = "${secretsDir}/nebulaCA.age";
+      owner = "nebula-nebula0";
+    };
 
     services.nebula.networks.nebula0 = {
       enable = true;

@@ -27,7 +27,6 @@ in {
       timewarrior
       # Rust
       rustup
-      pkgs.unstable.rust-analyzer
     ];
 
     hm.programs.zsh.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
