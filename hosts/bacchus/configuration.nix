@@ -163,6 +163,7 @@
     cybersec.enable = true;
     ist.enable = true;
     personal.enable = true;
+    secureboot.enable = true;
     xdg.enable = true;
   };
 

@@ -28,6 +28,10 @@
       url = "github:ojroques/nvim-osc52/main";
       flake = false;
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ ... }:
@@ -114,6 +118,7 @@
               }
               inputs.impermanence.nixosModules.impermanence
               inputs.agenix.nixosModules.default
+              inputs.lanzaboote.nixosModules.lanzaboote
             ] ++ allModules ++ (mkModules "${dir}/${name}");
           };
         }) (attrNames (readDir dir)));
