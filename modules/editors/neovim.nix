@@ -262,7 +262,12 @@ let
               },
             },
           })
-          -- tex lsp setup
+          -- other lsp setup
+          lsp_config.tsserver.setup(lsp_setup)
+          lsp_config.ccls.setup(lsp_setup)
+          lsp_config.rnix.setup(lsp_setup)
+          lsp_config.html.setup(lsp_setup)
+          lsp_config.texlab.setup(lsp_setup)
           lsp_config.texlab.setup(lsp_setup)
         '';
       }
@@ -350,6 +355,16 @@ let
               \}
         '';
       }
+    ]
+  else
+    [ ];
+  personalPackages = if personal then
+    with pkgs; [
+      python311Packages.jedi-language-server # Python LSP
+      ccls # C/C++ LSP
+      nodePackages.typescript-language-server # JS/TS LSP
+      nodePackages.vscode-html-languageserver-bin # HTML LSP
+      rnix-lsp # Nix LSP
     ]
   else
     [ ];
@@ -549,6 +564,8 @@ in {
       end
       return {capabilities = capabilities, on_attach = on_attach}
     '';
+
+    home.packages = personalPackages;
 
     home.sessionVariables = {
       EDITOR = "nvim";
