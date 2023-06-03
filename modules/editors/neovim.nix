@@ -441,10 +441,6 @@ in {
         set splitbelow
         set splitright
 
-        set shiftwidth=4
-        set softtabstop=4
-        set tabstop=4
-
         " Show (relative) line numbers
         set number
         set relativenumber
