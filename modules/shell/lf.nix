@@ -14,7 +14,7 @@ in {
 
   # Home manager modules
   config.hm = mkIf cfg.enable {
-    home.packages = with pkgs; [ file highlight python310Packages.pdftotext ];
+    home.packages = with pkgs; [ file highlight python311Packages.pdftotext ];
 
     programs.lf = {
       enable = true;
