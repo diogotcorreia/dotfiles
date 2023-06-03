@@ -179,7 +179,13 @@ let
       '';
     }
 
-    vim-commentary
+    {
+      plugin = nerdcommenter;
+      config = ''
+        let g:NERDCreateDefaultMappings = 0
+        let g:NERDSpaceDelims = 1
+      '';
+    }
 
     {
       plugin = nvim-base16;
@@ -455,6 +461,10 @@ in {
 
         " Avoiding W
         cabbrev W w
+
+        " nerdcommenter
+        nmap <leader>cc <Plug>NERDCommenterToggle
+        xmap <leader>cc <Plug>NERDCommenterToggle
       '';
       plugins = commonPlugins ++ personalPlugins ++ (if git then
         with pkgs.unstable.vimPlugins; [
