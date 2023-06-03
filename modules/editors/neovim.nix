@@ -365,6 +365,9 @@ in {
       vimAlias = true;
       vimdiffAlias = true;
       extraConfig = ''
+        " Change leader key to space bar
+        let mapleader = ' '
+
         " sane defaults
         set shiftwidth=4
         set softtabstop=4
