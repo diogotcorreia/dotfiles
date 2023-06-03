@@ -21,6 +21,8 @@ in {
       hex
       # Java Decompiler
       jadx
+      # Binary Decompiler
+      ghidra-bin
     ];
   };
 }
