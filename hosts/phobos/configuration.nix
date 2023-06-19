@@ -11,8 +11,20 @@
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;
 
-  # Network Manager
-  # TODO move to module
+  # Network Configuration
+  # Configure static IPv6 address
+  networking = {
+    interfaces = {
+      ens3.ipv6.addresses = [{
+        address = "2a03:4000:2a:1b3::";
+        prefixLength = 64;
+      }];
+    };
+    defaultGateway6 = {
+      address = "fe80::1";
+      interface = "ens3";
+    };
+  };
 
   # SSH server
   # TODO move to module
