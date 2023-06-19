@@ -31,6 +31,7 @@ in {
     nix.optimise.automatic = true;
     nix.gc = {
       automatic = true;
+      options = "-d"; # delete old generations
 
       dates = "weekly";
       randomizedDelaySec = "15min";
