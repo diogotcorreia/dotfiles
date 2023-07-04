@@ -99,6 +99,12 @@
         file = "${hostSecretsDir}/nebulaKey.age";
         owner = "nebula-nebula0";
       };
+      bacchusResticHealthchecksUrl.file =
+        "${hostSecretsDir}/resticHealthchecksUrl.age";
+      bacchusResticRcloneConfig.file =
+        "${hostSecretsDir}/resticRcloneConfig.age";
+      bacchusResticPassword.file = "${hostSecretsDir}/resticPassword.age";
+      bacchusResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
     identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
@@ -151,6 +157,27 @@
           proto = "tcp";
           group = "dtc";
         }];
+      };
+      restic = {
+        enable = true;
+        checkUrlFile = config.age.secrets.bacchusResticHealthchecksUrl.path;
+        rcloneConfigFile = config.age.secrets.bacchusResticRcloneConfig.path;
+        passwordFile = config.age.secrets.bacchusResticPassword.path;
+        sshKeyFile = config.age.secrets.bacchusResticSshKey.path;
+
+        paths = [
+          "${config.my.homeDirectory}/.ultrastardx"
+          "${config.my.homeDirectory}/documents"
+          "${config.my.homeDirectory}/pictures"
+        ];
+        exclude = [
+          "${config.my.homeDirectory}/.ultrastardx/logs"
+          "${config.my.homeDirectory}/.ultrastardx/songs"
+          "${config.my.homeDirectory}/documents/vcs"
+          ".git"
+        ];
+
+        timerConfig = { OnCalendar = "07:00"; Persistent = true; };
       };
       syncthing.enable = true;
     };

@@ -80,6 +80,19 @@ in {
       example = [ "/var/lib/postgresql" "/home/user/backup" ];
     };
 
+    exclude = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = lib.mdDoc ''
+        Patterns to exclude when backing up.
+      '';
+      example = [
+        "/var/cache"
+        "/home/*/.cache"
+        ".git"
+      ];
+    };
+
     timerConfig = mkOption {
       type = types.attrsOf unitOption;
       default = { OnCalendar = "daily"; };
@@ -129,6 +142,7 @@ in {
       passwordFile = cfg.passwordFile;
 
       paths = cfg.paths;
+      exclude = cfg.exclude;
       pruneOpts = [
         "--keep-last 20"
         "--keep-daily 7"
@@ -148,16 +162,31 @@ in {
       backupCleanupCommand = cfg.backupCleanupCommand;
     };
 
-    # Healthchecks for failures
     systemd.services.${systemdServiceName} = {
+      # Healthchecks for failures
       serviceConfig.ExecStop = getHealthchecksCmd "";
       onFailure = [ "${systemdFailServiceName}.service" ];
+
+      # Configure backups for personal machines
+      # Only on AC (for laptops) and never more frequently than 12h
+      startLimitIntervalSec = mkIf config.modules.personal.enable (12 * 60 * 60); # 12h
+      startLimitBurst  = mkIf config.modules.personal.enable 1;
+      unitConfig.ConditionACPower = mkIf config.modules.personal.enable "|true"; # | means trigger
+
+      # Only run when network is up
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
     };
+    # Healthchecks for failures
     systemd.services.${systemdFailServiceName} = {
       restartIfChanged = false;
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = getHealthchecksCmd "fail";
+        ExecStart = pkgs.writeShellScript "backup-fail" ''
+          if [[ "$MONITOR_SERVICE_RESULT" != "start-limit-hit" ]]; then
+            ${getHealthchecksCmd "fail"}
+          fi
+        '';
       };
     };
 
