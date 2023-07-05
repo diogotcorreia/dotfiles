@@ -123,6 +123,8 @@
   hm.home.packages = with pkgs; [
     # Arrange external displays
     arandr
+    # Office Suite
+    libreoffice
     # Steam Run
     # TODO Move to modules
     steam-run
