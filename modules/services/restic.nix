@@ -7,7 +7,7 @@
 
 { pkgs, config, lib, utils, ... }:
 let
-  inherit (lib) mkEnableOption mkOption types mkIf;
+  inherit (lib) mkEnableOption mkOption types mkIf optionalAttrs;
   inherit (lib.strings) optionalString;
   inherit (utils.systemdUtils.unitOptions) unitOption;
   cfg = config.modules.services.restic;
@@ -163,17 +163,15 @@ in {
       serviceConfig.ExecStop = getHealthchecksCmd "";
       onFailure = [ "${systemdFailServiceName}.service" ];
 
-      # Configure backups for personal machines
-      # Only on AC (for laptops) and never more frequently than 12h
-      startLimitIntervalSec =
-        mkIf config.modules.personal.enable (12 * 60 * 60); # 12h
-      startLimitBurst = mkIf config.modules.personal.enable 1;
-      unitConfig.ConditionACPower =
-        mkIf config.modules.personal.enable "|true"; # | means trigger
-
       # Only run when network is up
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+    } // optionalAttrs (config.modules.personal.enable) {
+      # Configure backups for personal machines
+      # Only on AC (for laptops) and never more frequently than 12h
+      startLimitIntervalSec = (12 * 60 * 60); # 12h
+      startLimitBurst = 1;
+      unitConfig.ConditionACPower = "|true"; # | means trigger
     };
     # Healthchecks for failures
     systemd.services.${systemdFailServiceName} = {
