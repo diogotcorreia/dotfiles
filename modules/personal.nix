@@ -28,7 +28,8 @@ in {
       # Rust
       rustup
     ];
-    modules.services.restic.paths = [ "${config.my.homeDirectory}/.timewarrior" ];
+    modules.services.restic.paths =
+      [ "${config.my.homeDirectory}/.timewarrior" ];
 
     hm.programs.zsh.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
 

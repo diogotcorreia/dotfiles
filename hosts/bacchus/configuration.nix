@@ -180,7 +180,10 @@
           ".git"
         ];
 
-        timerConfig = { OnCalendar = "07:00"; Persistent = true; };
+        timerConfig = {
+          OnCalendar = "07:00";
+          Persistent = true;
+        };
       };
       syncthing.enable = true;
     };

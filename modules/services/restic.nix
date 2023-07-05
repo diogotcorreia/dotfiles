@@ -86,11 +86,7 @@ in {
       description = lib.mdDoc ''
         Patterns to exclude when backing up.
       '';
-      example = [
-        "/var/cache"
-        "/home/*/.cache"
-        ".git"
-      ];
+      example = [ "/var/cache" "/home/*/.cache" ".git" ];
     };
 
     timerConfig = mkOption {
@@ -169,9 +165,11 @@ in {
 
       # Configure backups for personal machines
       # Only on AC (for laptops) and never more frequently than 12h
-      startLimitIntervalSec = mkIf config.modules.personal.enable (12 * 60 * 60); # 12h
-      startLimitBurst  = mkIf config.modules.personal.enable 1;
-      unitConfig.ConditionACPower = mkIf config.modules.personal.enable "|true"; # | means trigger
+      startLimitIntervalSec =
+        mkIf config.modules.personal.enable (12 * 60 * 60); # 12h
+      startLimitBurst = mkIf config.modules.personal.enable 1;
+      unitConfig.ConditionACPower =
+        mkIf config.modules.personal.enable "|true"; # | means trigger
 
       # Only run when network is up
       wants = [ "network-online.target" ];
