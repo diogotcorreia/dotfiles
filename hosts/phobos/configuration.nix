@@ -38,9 +38,6 @@
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
 
-  # Docker (containers)
-  virtualisation.docker.enable = true;
-
   # Secret manager (agenix)
   age = {
     secrets = {
