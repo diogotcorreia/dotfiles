@@ -15,6 +15,8 @@ in {
   "bacchus/resticPassword.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticSshKey.age".publicKeys = [ bacchusSystem ];
 
+  "phobos/healthchecksEnvVariables.age".publicKeys = [ phobosSystem ];
+  "phobos/healthchecksSecretKey.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksUrl.age".publicKeys = [ phobosSystem ];
   "phobos/nebulaCert.age".publicKeys = [ phobosSystem ];
   "phobos/nebulaKey.age".publicKeys = [ phobosSystem ];

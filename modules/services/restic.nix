@@ -102,7 +102,7 @@ in {
     };
 
     backupPrepareCommand = mkOption {
-      type = with types; nullOr str;
+      type = with types; nullOr lines;
       default = null;
       description = lib.mdDoc ''
         A script that must run before starting the backup process.
@@ -110,7 +110,7 @@ in {
     };
 
     backupCleanupCommand = mkOption {
-      type = with types; nullOr str;
+      type = with types; nullOr lines;
       default = null;
       description = lib.mdDoc ''
         A script that must run after finishing the backup process.
@@ -150,9 +150,13 @@ in {
 
       # Healthchecks configuration
       backupPrepareCommand = ''
+        set -e -o pipefail
         ${optionalString (cfg.backupPrepareCommand != null) ''
           ${cfg.backupPrepareCommand}
         ''}
+
+        # allow healthchecks command to fail
+        set +e +o pipefail
         ${getHealthchecksCmd "start"}
       '';
       backupCleanupCommand = cfg.backupCleanupCommand;

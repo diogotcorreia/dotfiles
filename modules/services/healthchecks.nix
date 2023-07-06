@@ -29,7 +29,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.healthchecks = {
+    systemd.services.ping-healthchecks = {
       restartIfChanged = false;
       serviceConfig = {
         Type = "oneshot";
@@ -38,7 +38,7 @@ in {
       };
     };
 
-    systemd.timers.healthchecks = {
+    systemd.timers.ping-healthchecks = {
       wantedBy = [ "timers.target" ];
       timerConfig = { OnCalendar = cfg.timerExpression; };
     };

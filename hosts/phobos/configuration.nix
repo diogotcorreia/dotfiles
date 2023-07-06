@@ -80,14 +80,10 @@
   services.caddy = {
     enable = true;
     email = "phobos-lets-encrypt@diogotc.com";
-    virtualHosts = {
-      "healthchecks.diogotc.com" = {
-        extraConfig = ''
-          reverse_proxy localhost:8000
-        '';
-      };
-    };
   };
+
+  # PostgreSQL
+  services.postgresql.enable = true;
 
   # Modules
   modules = {
@@ -111,19 +107,6 @@
         rcloneConfigFile = config.age.secrets.phobosResticRcloneConfig.path;
         passwordFile = config.age.secrets.phobosResticPassword.path;
         sshKeyFile = config.age.secrets.phobosResticSshKey.path;
-
-        paths = [
-          "${config.my.homeDirectory}/healthchecks/docker/.env"
-          "${config.my.homeDirectory}/healthchecks/docker/docker-compose.yml"
-          "/tmp/healthchecks_db.sql"
-        ];
-        backupPrepareCommand = ''
-          ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/healthchecks_db.sql
-          ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/healthchecks/docker/docker-compose.yml exec -T db sh -c 'PGPASSWORD=$POSTGRES_PASSWORD exec pg_dump --format=custom --username postgres $POSTGRES_DB' > /tmp/healthchecks_db.sql
-        '';
-        backupCleanupCommand = ''
-          ${pkgs.coreutils}/bin/rm /tmp/healthchecks_db.sql
-        '';
 
         timerConfig = { OnCalendar = "03:10"; };
       };
