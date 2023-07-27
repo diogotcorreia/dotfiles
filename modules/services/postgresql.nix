@@ -23,7 +23,7 @@ let
     ${pkgs.coreutils}/bin/install -b -m 600 /dev/null ${
       getFilePath databaseName
     }
-    ${pkgs.sudo}/bin/sudo -u ${postgresqlUser} ${pkgs.postgresql}/bin/pg_dump --format=custom ${
+    ${pkgs.sudo}/bin/sudo -u ${postgresqlUser} ${postgresqlCfg.package}/bin/pg_dump --format=custom ${
       escapeShellArg databaseName
     } | ${compressCmd} > ${getFilePath databaseName}
   '';
