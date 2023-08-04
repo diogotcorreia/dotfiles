@@ -32,6 +32,10 @@
       url = "github:nix-community/lanzaboote?ref=v0.3.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ ... }:
@@ -119,6 +123,7 @@
               inputs.impermanence.nixosModules.impermanence
               inputs.agenix.nixosModules.default
               inputs.lanzaboote.nixosModules.lanzaboote
+              inputs.disko.nixosModules.disko
             ] ++ allModules ++ (mkModules "${dir}/${name}");
           };
         }) (attrNames (readDir dir)));
