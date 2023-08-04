@@ -58,21 +58,20 @@ in {
     secrets = {
       diskstationSambaCredentials.file =
         "${hostSecretsDir}/diskstationSambaCredentials.age";
-      # heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
-      # heraNebulaCert = {
-      # file = "${hostSecretsDir}/nebulaCert.age";
-      # owner = "nebula-nebula0";
-      # };
-      # heraNebulaKey = {
-      # file = "${hostSecretsDir}/nebulaKey.age";
-      # owner = "nebula-nebula0";
-      # };
-      # heraResticHealthchecksUrl.file =
-      # "${hostSecretsDir}/resticHealthchecksUrl.age";
-      # heraResticRcloneConfig.file =
-      # "${hostSecretsDir}/resticRcloneConfig.age";
-      # heraResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      # heraResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      heraNebulaCert = {
+        file = "${hostSecretsDir}/nebulaCert.age";
+        owner = "nebula-nebula0";
+      };
+      heraNebulaKey = {
+        file = "${hostSecretsDir}/nebulaKey.age";
+        owner = "nebula-nebula0";
+      };
+      heraResticHealthchecksUrl.file =
+        "${hostSecretsDir}/resticHealthchecksUrl.age";
+      heraResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
+      heraResticPassword.file = "${hostSecretsDir}/resticPassword.age";
+      heraResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
     identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
@@ -97,25 +96,61 @@ in {
     server.enable = true;
     services = {
       dnsoverhttps.enable = true;
-      # healthchecks = {
-      # enable = true;
-      # checkUrlFile = config.age.secrets.heraHealthchecksUrl.path;
-      # };
+      healthchecks = {
+        enable = true;
+        checkUrlFile = config.age.secrets.heraHealthchecksUrl.path;
+      };
       # Nebula (VPN)
-      # nebula = {
-      # enable = true;
-      # cert = config.age.secrets.heraNebulaCert.path;
-      # key = config.age.secrets.heraNebulaKey.path;
-      # };
-      # restic = {
-      # enable = true;
-      # checkUrlFile = config.age.secrets.heraResticHealthchecksUrl.path;
-      # rcloneConfigFile = config.age.secrets.heraResticRcloneConfig.path;
-      # passwordFile = config.age.secrets.heraResticPassword.path;
-      # sshKeyFile = config.age.secrets.heraResticSshKey.path;
+      nebula = {
+        enable = true;
+        cert = config.age.secrets.heraNebulaCert.path;
+        key = config.age.secrets.heraNebulaKey.path;
+      };
+      restic = {
+        enable = true;
+        checkUrlFile = config.age.secrets.heraResticHealthchecksUrl.path;
+        rcloneConfigFile = config.age.secrets.heraResticRcloneConfig.path;
+        passwordFile = config.age.secrets.heraResticPassword.path;
+        sshKeyFile = config.age.secrets.heraResticSshKey.path;
 
-      # timerConfig = { OnCalendar = "03:10"; };
-      # };
+        # TODO each service should define its own paths
+        paths = [
+          "/tmp/firefly_db.sql"
+          "/tmp/nextcloud_db.sql"
+
+          "${config.my.homeDirectory}/homeassistant"
+          "${config.my.homeDirectory}/firefly-3"
+          "${config.my.homeDirectory}/dailytxt"
+          "${config.my.homeDirectory}/transmission-openvpn"
+          "${config.my.homeDirectory}/grafana"
+          "${config.my.homeDirectory}/jellyfin"
+          "${config.my.homeDirectory}/calibre-web"
+          "${config.my.homeDirectory}/conduit"
+          "${config.my.homeDirectory}/ihatetobudget-joao"
+          "${config.my.homeDirectory}/jellyfin"
+        ];
+        exclude = [
+          "**/node_modules"
+          "**/.npm"
+          "${config.my.homeDirectory}/firefly-3/santander-crawler/.env"
+          "${config.my.homeDirectory}/transmission-openvpn/data/completed"
+          "${config.my.homeDirectory}/transmission-openvpn/data/incomplete"
+        ];
+
+        backupPrepareCommand = ''
+          ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/firefly_db.sql
+          ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/firefly-3/docker-compose.yml exec -T fireflyiiidb sh -c 'exec mysqldump --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE' > /tmp/firefly_db.sql
+
+          ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/nextcloud_db.sql
+          ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/nextcloud/docker-compose.yml exec -T db sh -c 'exec mysqldump --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE' > /tmp/nextcloud_db.sql
+        '';
+        backupCleanupCommand = ''
+          ${pkgs.coreutils}/bin/rm /tmp/firefly_db.sql
+          ${pkgs.coreutils}/bin/rm /tmp/nextcloud_db.sql
+        '';
+
+        timerConfig = { OnCalendar = "03:05"; };
+      };
     };
     shell = {
       git.enable = true;
