@@ -121,6 +121,23 @@ in {
         enable = true;
         cert = config.age.secrets.heraNebulaCert.path;
         key = config.age.secrets.heraNebulaKey.path;
+        firewall.inbound = [
+          {
+            port = 22;
+            proto = "tcp";
+            group = "dtc";
+          }
+          {
+            port = 80;
+            proto = "tcp";
+            group = "dtc";
+          }
+          {
+            port = 443;
+            proto = "tcp";
+            group = "dtc";
+          }
+        ];
       };
       restic = {
         enable = true;
