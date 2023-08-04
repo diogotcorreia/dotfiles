@@ -101,6 +101,12 @@ in {
   services.caddy = {
     enable = true;
     email = "hera-lets-encrypt@diogotc.com";
+    extraConfig = ''
+      # Rules for services behind Cloudflare proxy
+      (CLOUDFLARE_PROXY) {
+        header_up X-Forwarded-For {http.request.header.CF-Connecting-IP}
+      }
+    '';
   };
 
   # PostgreSQL
@@ -151,7 +157,6 @@ in {
           "/tmp/firefly_db.sql"
           "/tmp/nextcloud_db.sql"
 
-          "${config.my.homeDirectory}/homeassistant"
           "${config.my.homeDirectory}/firefly-3"
           "${config.my.homeDirectory}/dailytxt"
           "${config.my.homeDirectory}/transmission-openvpn"
