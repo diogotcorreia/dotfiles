@@ -93,6 +93,9 @@ in {
   # Specific packages for this host
   hm.home.packages = with pkgs; [ ];
 
+  # Keep laptop on when lid is closed
+  services.logind.lidSwitch = "ignore";
+
   # Caddy (web server)
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.caddy = {
