@@ -5,7 +5,9 @@
 #
 # Configuration for hera (server).
 
-{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
+{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }:
+let diskstationAddress = "192.168.1.4";
+in {
   # Impermanence (root on tmpfs)
   environment.persistence."/persist" = {
     directories = [
@@ -14,10 +16,8 @@
       "/var/lib/systemd"
       "/var/log"
     ];
-    files = [
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-    ];
+    files =
+      [ "/etc/ssh/ssh_host_ed25519_key" "/etc/ssh/ssh_host_ed25519_key.pub" ];
   };
 
   # /tmp configuration
@@ -39,28 +39,44 @@
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
 
-  # Secret manager (agenix)
-  # age = {
-  # secrets = {
-  # heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
-  # heraNebulaCert = {
-  # file = "${hostSecretsDir}/nebulaCert.age";
-  # owner = "nebula-nebula0";
-  # };
-  # heraNebulaKey = {
-  # file = "${hostSecretsDir}/nebulaKey.age";
-  # owner = "nebula-nebula0";
-  # };
-  # heraResticHealthchecksUrl.file =
-  # "${hostSecretsDir}/resticHealthchecksUrl.age";
-  # heraResticRcloneConfig.file =
-  # "${hostSecretsDir}/resticRcloneConfig.age";
-  # heraResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-  # heraResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
-  # };
+  # NAS mounts
+  fileSystems."/media/diskstation" = {
+    device = "//${diskstationAddress}/video";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts =
+        "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-  # identityPaths = [ "/root/.ssh/id_ed25519" ];
-  # };
+    in [
+      "${automount_opts},vers=2.0,credentials=${config.age.secrets.diskstationSambaCredentials.path}"
+    ];
+  };
+
+  # Secret manager (agenix)
+  age = {
+    secrets = {
+      diskstationSambaCredentials.file =
+        "${hostSecretsDir}/diskstationSambaCredentials.age";
+      # heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      # heraNebulaCert = {
+      # file = "${hostSecretsDir}/nebulaCert.age";
+      # owner = "nebula-nebula0";
+      # };
+      # heraNebulaKey = {
+      # file = "${hostSecretsDir}/nebulaKey.age";
+      # owner = "nebula-nebula0";
+      # };
+      # heraResticHealthchecksUrl.file =
+      # "${hostSecretsDir}/resticHealthchecksUrl.age";
+      # heraResticRcloneConfig.file =
+      # "${hostSecretsDir}/resticRcloneConfig.age";
+      # heraResticPassword.file = "${hostSecretsDir}/resticPassword.age";
+      # heraResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+    };
+
+    identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+  };
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [ ];

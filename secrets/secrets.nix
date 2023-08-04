@@ -1,10 +1,12 @@
 let
   bacchusSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
+  heraSystem =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
   phobosSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 in {
-  "nebulaCA.age".publicKeys = [ bacchusSystem phobosSystem ];
+  "nebulaCA.age".publicKeys = [ bacchusSystem heraSystem phobosSystem ];
   "openvpnIstAuthUserPass.age".publicKeys = [ bacchusSystem ];
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
@@ -14,6 +16,15 @@ in {
   "bacchus/resticRcloneConfig.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticPassword.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticSshKey.age".publicKeys = [ bacchusSystem ];
+
+  "hera/diskstationSambaCredentials.age".publicKeys = [ heraSystem ];
+  "hera/healthchecksUrl.age".publicKeys = [ heraSystem ];
+  "hera/nebulaCert.age".publicKeys = [ heraSystem ];
+  "hera/nebulaKey.age".publicKeys = [ heraSystem ];
+  "hera/resticHealthchecksUrl.age".publicKeys = [ heraSystem ];
+  "hera/resticRcloneConfig.age".publicKeys = [ heraSystem ];
+  "hera/resticPassword.age".publicKeys = [ heraSystem ];
+  "hera/resticSshKey.age".publicKeys = [ heraSystem ];
 
   "phobos/healthchecksEnvVariables.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksSecretKey.age".publicKeys = [ phobosSystem ];
