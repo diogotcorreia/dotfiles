@@ -24,8 +24,18 @@ in {
   boot.tmp.cleanOnBoot = true;
 
   # Network Configuration
-  # TODO Configure static IPv4 address
-  networking.useDHCP = true;
+  networking = {
+    interfaces.eno1 = {
+      ipv4.addresses = [{
+        address = "192.168.1.3";
+        prefixLength = 24;
+      }];
+    };
+    defaultGateway = {
+      address = "192.168.1.1";
+      interface = "eno1";
+    };
+  };
 
   # SSH server
   # TODO move to module
