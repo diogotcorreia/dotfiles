@@ -191,15 +191,12 @@ in {
 
           "${config.my.homeDirectory}/firefly-3"
           "${config.my.homeDirectory}/dailytxt"
-          "${config.my.homeDirectory}/transmission-openvpn"
           "${config.my.homeDirectory}/grafana"
         ];
         exclude = [
           "**/node_modules"
           "**/.npm"
           "${config.my.homeDirectory}/firefly-3/santander-crawler/.env"
-          "${config.my.homeDirectory}/transmission-openvpn/data/completed"
-          "${config.my.homeDirectory}/transmission-openvpn/data/incomplete"
         ];
 
         backupPrepareCommand = ''
