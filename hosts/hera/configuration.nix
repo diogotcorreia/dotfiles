@@ -163,7 +163,6 @@ in {
           "${config.my.homeDirectory}/grafana"
           "${config.my.homeDirectory}/jellyfin"
           "${config.my.homeDirectory}/calibre-web"
-          "${config.my.homeDirectory}/ihatetobudget-joao"
           "${config.my.homeDirectory}/jellyfin"
         ];
         exclude = [
