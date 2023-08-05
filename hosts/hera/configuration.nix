@@ -12,10 +12,10 @@ in {
   environment.persistence."/persist" = {
     directories = [
       "/etc/NetworkManager/system-connections"
+      "/var/lib/acme"
       "/var/lib/docker"
       "/var/lib/systemd"
       "/var/log"
-      config.services.caddy.dataDir
     ];
     files =
       [ "/etc/ssh/ssh_host_ed25519_key" "/etc/ssh/ssh_host_ed25519_key.pub" ];
@@ -72,6 +72,10 @@ in {
     secrets = {
       diskstationSambaCredentials.file =
         "${hostSecretsDir}/diskstationSambaCredentials.age";
+      heraAcmeDnsCredentials = {
+        file = "${hostSecretsDir}/acmeDnsCredentials.age";
+        group = config.security.acme.defaults.group;
+      };
       heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       heraNebulaCert = {
         file = "${hostSecretsDir}/nebulaCert.age";
@@ -101,13 +105,25 @@ in {
   networking.firewall.allowedTCPPorts = [ 80 443 ];
   services.caddy = {
     enable = true;
-    email = "hera-lets-encrypt@diogotc.com";
     extraConfig = ''
       # Rules for services behind Cloudflare proxy
       (CLOUDFLARE_PROXY) {
         header_up X-Forwarded-For {http.request.header.CF-Connecting-IP}
       }
     '';
+  };
+  users.users.caddy.extraGroups = [ config.security.acme.defaults.group ];
+
+  # ACME certificates
+  security.acme = {
+    acceptTerms = true;
+    defaults = {
+      email = "hera-lets-encrypt@diogotc.com";
+      dnsProvider = "cloudflare";
+
+      # CLOUDFLARE_DNS_API_TOKEN=<token>
+      credentialsFile = config.age.secrets.heraAcmeDnsCredentials.path;
+    };
   };
 
   # PostgreSQL

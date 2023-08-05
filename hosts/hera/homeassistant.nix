@@ -6,7 +6,9 @@
 # Configuration for Home Assistant (and related programs) on Hera
 
 { pkgs, config, ... }:
-let port = 8123;
+let
+  hassDomain = "hass.diogotc.com";
+  hassPort = 8123;
 in {
 
   # TODO move docker containers to NixOS services
@@ -19,9 +21,12 @@ in {
     allowedTCPPorts = [ 8095 ];
   };
 
-  services.caddy.virtualHosts."hass.diogotc.com" = {
+  security.acme.certs.${hassDomain} = { };
+
+  services.caddy.virtualHosts.${hassDomain} = {
+    useACMEHost = hassDomain;
     extraConfig = ''
-      reverse_proxy localhost:${toString port} {
+      reverse_proxy localhost:${toString hassPort} {
         import CLOUDFLARE_PROXY
       }
     '';

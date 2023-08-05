@@ -6,12 +6,17 @@
 # Configuration for IHateToBudget on Hera
 
 { pkgs, config, ... }:
-let port = 8013;
+let
+  domain = "budget-joao.diogotc.com";
+  port = 8013;
 in {
 
   # TODO get rid of this, it is unmaintained as of 2022-12-24
 
-  services.caddy.virtualHosts."budget-joao.diogotc.com" = {
+  security.acme.certs.${domain} = { };
+
+  services.caddy.virtualHosts.${domain} = {
+    useACMEHost = domain;
     extraConfig = ''
       route /static/* {
         uri strip_prefix /static

@@ -17,6 +17,7 @@ in {
   "bacchus/resticPassword.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticSshKey.age".publicKeys = [ bacchusSystem ];
 
+  "hera/acmeDnsCredentials.age".publicKeys = [ heraSystem ];
   "hera/diskstationSambaCredentials.age".publicKeys = [ heraSystem ];
   "hera/healthchecksUrl.age".publicKeys = [ heraSystem ];
   "hera/nebulaCert.age".publicKeys = [ heraSystem ];
