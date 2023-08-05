@@ -20,3 +20,17 @@ Finally, run the nixos-anywhere command:
 ```bash
 nix run github:numtide/nixos-anywhere -- --extra-files $TEMP --flake github:diogotcorreia/dotfiles#hera root@hera
 ```
+
+## Restore Databases
+
+### Nextcloud
+
+```bash
+cat path/to/nextcloud_db.sql | _ dce -T db sh -c 'exec mysql --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
+```
+
+To access the MySQL CLI, run
+
+```bash
+_ dce db sh -c 'exec mysql --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
+```

@@ -188,7 +188,6 @@ in {
         # TODO each service should define its own paths
         paths = [
           "/tmp/firefly_db.sql"
-          "/tmp/nextcloud_db.sql"
 
           "${config.my.homeDirectory}/firefly-3"
           "${config.my.homeDirectory}/dailytxt"
@@ -209,13 +208,9 @@ in {
         backupPrepareCommand = ''
           ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/firefly_db.sql
           ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/firefly-3/docker-compose.yml exec -T fireflyiiidb sh -c 'exec mysqldump --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE' > /tmp/firefly_db.sql
-
-          ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/nextcloud_db.sql
-          ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/nextcloud/docker-compose.yml exec -T db sh -c 'exec mysqldump --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE' > /tmp/nextcloud_db.sql
         '';
         backupCleanupCommand = ''
           ${pkgs.coreutils}/bin/rm /tmp/firefly_db.sql
-          ${pkgs.coreutils}/bin/rm /tmp/nextcloud_db.sql
         '';
 
         timerConfig = { OnCalendar = "03:05"; };
