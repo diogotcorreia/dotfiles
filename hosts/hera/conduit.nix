@@ -1,0 +1,41 @@
+# hosts/hera/conduit.nix
+#
+# Author: Diogo Correia <me@diogotc.com>
+# URL:    https://github.com/diogotcorreia/dotfiles
+#
+# Configuration for Conduit (Matrix Homeserver) on Hera
+
+{ pkgs, config, ... }:
+let
+  portConduit = 6167;
+  portElement = 8012;
+in {
+
+  # TODO move docker containers to NixOS services
+
+  services.caddy.virtualHosts = {
+    "m.diogotc.com" = {
+      extraConfig = ''
+        header /.well-known/matrix/* Content-Type application/json
+        header /.well-known/matrix/* Access-Control-Allow-Origin *
+        respond /.well-known/matrix/server `{"m.server": "m.diogotc.com:443"}`
+        respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://m.diogotc.com"}}`
+        reverse_proxy /_matrix/* localhost:${toString portConduit} {
+          import CLOUDFLARE_PROXY
+        }
+        reverse_proxy /_synapse/client/* localhost:${toString portConduit} {
+          import CLOUDFLARE_PROXY
+        }
+      '';
+    };
+    "chat.diogotc.com" = {
+      extraConfig = ''
+        reverse_proxy localhost:${toString portElement} {
+          import CLOUDFLARE_PROXY
+        }
+      '';
+    };
+  };
+
+  modules.services.restic.paths = [ "${config.my.homeDirectory}/conduit" ];
+}
