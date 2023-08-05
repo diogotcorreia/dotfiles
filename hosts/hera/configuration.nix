@@ -15,6 +15,7 @@ in {
       "/var/lib/docker"
       "/var/lib/systemd"
       "/var/log"
+      config.services.caddy.dataDir
     ];
     files =
       [ "/etc/ssh/ssh_host_ed25519_key" "/etc/ssh/ssh_host_ed25519_key.pub" ];
