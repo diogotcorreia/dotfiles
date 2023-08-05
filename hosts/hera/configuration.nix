@@ -193,7 +193,6 @@ in {
           "${config.my.homeDirectory}/dailytxt"
           "${config.my.homeDirectory}/transmission-openvpn"
           "${config.my.homeDirectory}/grafana"
-          "${config.my.homeDirectory}/calibre-web"
         ];
         exclude = [
           "**/node_modules"
