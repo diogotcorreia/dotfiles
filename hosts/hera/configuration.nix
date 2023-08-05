@@ -110,6 +110,22 @@ in {
       (CLOUDFLARE_PROXY) {
         header_up X-Forwarded-For {http.request.header.CF-Connecting-IP}
       }
+
+      # Rules for services behind Nebula VPN (192.168.100.1/24)
+      (NEBULA) {
+        # Nebula + Docker
+        @not-nebula not remote_ip 192.168.100.1/24 172.16.0.0/12
+        abort @not-nebula
+      }
+
+      # Rules for services behind Authelia
+      (AUTHELIA) {
+        forward_auth 192.168.100.1:9091 {
+          uri /api/verify?rd=https://auth.diogotc.com/
+          copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+        }
+      }
+
     '';
   };
   users.users.caddy.extraGroups = [ config.security.acme.defaults.group ];
