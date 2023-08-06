@@ -176,6 +176,12 @@ in {
             proto = "tcp";
             group = "dtc";
           }
+          {
+            # allow uptime server to ping services
+            port = 443;
+            proto = "tcp";
+            group = "uptime";
+          }
         ];
       };
       restic = {
