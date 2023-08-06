@@ -187,25 +187,10 @@ in {
 
         # TODO each service should define its own paths
         paths = [
-          "/tmp/firefly_db.sql"
-
-          "${config.my.homeDirectory}/firefly-3"
           "${config.my.homeDirectory}/dailytxt"
           "${config.my.homeDirectory}/grafana"
         ];
-        exclude = [
-          "**/node_modules"
-          "**/.npm"
-          "${config.my.homeDirectory}/firefly-3/santander-crawler/.env"
-        ];
-
-        backupPrepareCommand = ''
-          ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/firefly_db.sql
-          ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/firefly-3/docker-compose.yml exec -T fireflyiiidb sh -c 'exec mysqldump --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE' > /tmp/firefly_db.sql
-        '';
-        backupCleanupCommand = ''
-          ${pkgs.coreutils}/bin/rm /tmp/firefly_db.sql
-        '';
+        exclude = [ "**/node_modules" "**/.npm" ];
 
         timerConfig = { OnCalendar = "03:05"; };
       };

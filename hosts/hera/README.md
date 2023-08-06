@@ -34,3 +34,15 @@ To access the MySQL CLI, run
 ```bash
 _ dce db sh -c 'exec mysql --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
 ```
+
+### Firefly-III
+
+```bash
+cat path/to/firefly_db.sql | _ dce -T fireflyiiidb sh -c 'exec mysql --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
+```
+
+To access the MySQL CLI, run
+
+```bash
+_ dce fireflyiiidb sh -c 'exec mysql --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
+```
