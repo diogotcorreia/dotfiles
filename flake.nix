@@ -78,10 +78,12 @@
 
       secretsDir = ./secrets;
 
+      packagesDir = ./packages;
+
       overlaysDir = ./overlays;
 
-      overlays = [ pkg-sets ] ++ mapAttrsToList
-        (name: _: import "${overlaysDir}/${name}" { inherit inputs; })
+      overlays = [ pkg-sets ] ++ mapAttrsToList (name: _:
+        import "${overlaysDir}/${name}" { inherit inputs packagesDir; })
         (readDir overlaysDir);
 
       pkgs = import inputs.nixpkgs {
