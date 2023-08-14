@@ -121,6 +121,9 @@
   };
   users.users.caddy.extraGroups = [ config.security.acme.defaults.group ];
 
+  # Ensure nginx isn't turned on by some services (e.g. services using PHP)
+  services.nginx.enable = lib.mkForce false;
+
   # ACME certificates
   security.acme = {
     acceptTerms = true;
