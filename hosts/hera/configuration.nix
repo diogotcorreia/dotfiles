@@ -5,9 +5,7 @@
 #
 # Configuration for hera (server).
 
-{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }:
-let diskstationAddress = "192.168.1.4";
-in {
+{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
   # Impermanence (root on tmpfs)
   environment.persistence."/persist" = {
     directories = [
@@ -49,20 +47,6 @@ in {
     };
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
-
-  # NAS mounts
-  fileSystems."/media/diskstation" = {
-    device = "//${diskstationAddress}/video";
-    fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts =
-        "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-
-    in [
-      "${automount_opts},vers=2.0,credentials=${config.age.secrets.diskstationSambaCredentials.path}"
-    ];
-  };
 
   # Docker (containers)
   virtualisation.docker.enable = true;
