@@ -103,7 +103,11 @@ in {
   };
 
   modules.services.restic = {
-    paths = [ "/tmp/firefly_db.sql" "${config.my.homeDirectory}/firefly-3" ];
+    paths = [
+      "/tmp/firefly_db.sql"
+      "${config.my.homeDirectory}/firefly-3"
+      configPathAutoDataImporter
+    ];
 
     backupPrepareCommand = ''
       ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/firefly_db.sql
