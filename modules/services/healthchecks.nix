@@ -58,26 +58,21 @@ in {
       }'
     '';
 
-    systemd-services = mapAttrs' (name: options:
-      nameValuePair name {
-        preStart =
-          mkBefore (getHealthchecksCmd options.checkUrlFile "start" true);
-        preStop = mkAfter (getHealthchecksCmd options.checkUrlFile "" true);
-        onFailure = [ "${name}-fail.service" ];
-      }) cfg.systemd-monitoring;
-
-    mkFailScript = url:
-      pkgs.writeShellScript "healthchecks-fail" ''
-        if [[ "$MONITOR_SERVICE_RESULT" != "start-limit-hit" ]]; then
+    # https://www.freedesktop.org/software/systemd/man/systemd.exec.html#%24EXIT_CODE
+    mkStopScript = url:
+      pkgs.writeShellScript "healthchecks-stop" ''
+        if [[ "$SERVICE_RESULT" == "success" && "$EXIT_STATUS" == "0" ]]; then
+          ${getHealthchecksCmd url "" false}
+        elif [[ "$SERVICE_RESULT" != "start-limit-hit" ]]; then
           ${getHealthchecksCmd url "fail" false}
         fi
       '';
 
-    systemd-fail-services = mapAttrs' (name: options:
-      nameValuePair "${name}-fail" {
-        restartIfChanged = false;
-        script = "${mkFailScript options.checkUrlFile}";
-        serviceConfig.Type = "oneshot";
+    systemd-services = mapAttrs' (name: options:
+      nameValuePair name {
+        preStart =
+          mkBefore (getHealthchecksCmd options.checkUrlFile "start" true);
+        postStop = mkAfter "${mkStopScript options.checkUrlFile}";
       }) cfg.systemd-monitoring;
 
   in {
@@ -90,7 +85,7 @@ in {
         };
       };
     } else
-      { }) // systemd-services // systemd-fail-services;
+      { }) // systemd-services;
 
     systemd.timers = if cfg.enable then {
       ping-healthchecks = {
