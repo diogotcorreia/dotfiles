@@ -48,6 +48,7 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIADPTInG2ZJ0LxO+IBJd1aORzmJlFPuJrcp4YRIJEE1s dtc@apollo"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINlaWu32ANU+sWFcwKrPlqD/oW3lC3/hrA1Z3+ubuh5A dtc@bacchus"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYrpjewh+Z0IQkVLipcYJ0g0v1UJu49QmB9GTVUci11 dtc@ceres"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKSySzB983nfhGMp++3FcpR0mwpYFiXu9XrGYwf/IH1w dtc@xiaomi11tpro"
       ];
       colors = {
         black = "#2E3440";
