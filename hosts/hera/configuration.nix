@@ -19,6 +19,10 @@
       [ "/etc/ssh/ssh_host_ed25519_key" "/etc/ssh/ssh_host_ed25519_key.pub" ];
   };
 
+  # ZFS configuration
+  services.zfs.autoScrub.enable = true;
+  services.zfs.trim.enable = true;
+
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;
 
