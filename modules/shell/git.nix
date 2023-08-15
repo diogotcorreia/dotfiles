@@ -24,6 +24,7 @@ in {
         url."git@github.com:".pushinsteadOf = "https://github.com/";
         commit.template = "${configDir}/gitmessage.txt";
         commit.verbose = true;
+        rerere.enabled = true;
       };
       includes = [{
         condition = "gitdir:~/documents/dsi/";
