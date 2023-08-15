@@ -119,14 +119,10 @@ in {
   };
 
   config = mkIf cfg.enable (let
-    getHealthchecksCmd = type: ''
-      ${pkgs.bash}/bin/bash -c '${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 -o /dev/null $(${pkgs.coreutils}/bin/cat ${cfg.checkUrlFile})/${type}'
-    '';
     resticName = "systemBackup";
     # must match the restic module config
     # https://github.com/NixOS/nixpkgs/blob/660e7737851506374da39c0fa550c202c824a17c/nixos/modules/services/backup/restic.nix#L294
     systemdServiceName = "restic-backups-${resticName}";
-    systemdFailServiceName = "${systemdServiceName}-fail";
   in {
     services.restic.backups.${resticName} = {
       repository = "rclone:backupserver:${cfg.repositoryPath}";
@@ -154,19 +150,11 @@ in {
         ${optionalString (cfg.backupPrepareCommand != null) ''
           ${cfg.backupPrepareCommand}
         ''}
-
-        # allow healthchecks command to fail
-        set +e +o pipefail
-        ${getHealthchecksCmd "start"}
       '';
       backupCleanupCommand = cfg.backupCleanupCommand;
     };
 
     systemd.services.${systemdServiceName} = {
-      # Healthchecks for failures
-      serviceConfig.ExecStop = getHealthchecksCmd "";
-      onFailure = [ "${systemdFailServiceName}.service" ];
-
       # Only run when network is up
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
@@ -177,18 +165,8 @@ in {
       startLimitBurst = 1;
       unitConfig.ConditionACPower = "|true"; # | means trigger
     };
-    # Healthchecks for failures
-    systemd.services.${systemdFailServiceName} = {
-      restartIfChanged = false;
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = pkgs.writeShellScript "backup-fail" ''
-          if [[ "$MONITOR_SERVICE_RESULT" != "start-limit-hit" ]]; then
-            ${getHealthchecksCmd "fail"}
-          fi
-        '';
-      };
-    };
 
+    modules.services.healthchecks.systemd-monitoring.${systemdServiceName}.checkUrlFile =
+      cfg.checkUrlFile;
   });
 }
