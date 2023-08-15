@@ -16,8 +16,9 @@ in {
   # TODO move docker containers to NixOS services
 
   networking.firewall = {
+    # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
     # UDP Port 5683 for CoIoT (Shelly push)
-    allowedUDPPorts = [ 5683 ];
+    allowedUDPPorts = [ 5353 5683 ];
 
     # TCP Port 8095 for Music Assistant
     allowedTCPPorts = [ 8095 hassPort ];

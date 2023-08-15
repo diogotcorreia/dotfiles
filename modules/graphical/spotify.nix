@@ -12,8 +12,11 @@ let
 in {
 
   # Follow graphical.programs.enabled
-  config.hm = mkIf cfg.enable {
-    programs.spicetify = {
+  config = mkIf cfg.enable {
+    # Allow mDNS discovery of Google Cast devices
+    networking.firewall.allowedUDPPorts = [ 5353 ];
+
+    hm.programs.spicetify = {
       enable = true;
       theme = spicetifyPkgs.themes.Comfy;
 
