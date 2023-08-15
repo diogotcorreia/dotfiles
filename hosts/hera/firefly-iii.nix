@@ -5,16 +5,80 @@
 #
 # Configuration for Firefly-III on Hera
 
-{ pkgs, config, ... }:
+{ pkgs, config, hostSecretsDir, lib, ... }:
 let
   domainApp = "firefly3.hera.diogotc.com";
   portApp = 8005;
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
   portDataImporter = 8006;
+  versionDataImporter = "1.3.3";
+
+  cronAutoDataImporter = "23:58";
+  configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
+
+  mkServiceName = container:
+    "${config.virtualisation.oci-containers.backend}-${container}";
 in {
 
   # TODO move docker containers to NixOS services
-  # TODO Importer cron job
+
+  age.secrets = {
+    fireflyAutoDataImporterEnv.file =
+      "${hostSecretsDir}/fireflyAutoDataImporterEnv.age";
+    fireflyAutoDataImporterHealthchecksUrl.file =
+      "${hostSecretsDir}/fireflyAutoDataImporterHealthchecksUrl.age";
+    fireflyDataImporterEnv.file =
+      "${hostSecretsDir}/fireflyDataImporterEnv.age";
+  };
+
+  virtualisation.oci-containers.containers = {
+    # Auto Importer task
+    firefly-auto-importer = {
+      autoStart = false;
+      image = "fireflyiii/data-importer:version-${versionDataImporter}";
+      volumes = [ "${configPathAutoDataImporter}:/import" ];
+      environment = {
+        FIREFLY_III_URL = "https://${domainApp}";
+        IMPORT_DIR_ALLOWLIST = "/import";
+        WEB_SERVER = "false";
+        ENABLE_MAIL_REPORT = "true";
+        TZ = "Europe/Lisbon";
+      };
+      environmentFiles = [
+        # Contains variables:
+        # - NORDIGEN_ID
+        # - NORDIGEN_KEY
+        config.age.secrets.fireflyDataImporterEnv.path
+        # Contains variables:
+        # - FIREFLY_III_ACCESS_TOKEN
+        # - MAIL_DESTINATION
+        # - MAIL_MAILER
+        # - MAIL_HOST
+        # - MAIL_PORT
+        # - MAIL_ENCRYPTION
+        # - MAIL_USERNAME
+        # - MAIL_PASSWORD
+        # - MAIL_FROM_ADDRESS
+        config.age.secrets.fireflyAutoDataImporterEnv.path
+      ];
+    };
+  };
+  # Avoid loop, since container is one-shot
+  systemd.services.${
+    mkServiceName "firefly-auto-importer"
+  }.serviceConfig.Restart = lib.mkForce "no";
+
+  # Schedule Firefly Auto Importer
+  systemd.timers.${mkServiceName "firefly-auto-importer"} = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = { OnCalendar = cronAutoDataImporter; };
+  };
+
+  # Healthchecks for Firefly Auto Importer
+  modules.services.healthchecks.systemd-monitoring.${
+    mkServiceName "firefly-auto-importer"
+  }.checkUrlFile =
+    config.age.secrets.fireflyAutoDataImporterHealthchecksUrl.path;
 
   security.acme.certs = {
     ${domainApp} = { };

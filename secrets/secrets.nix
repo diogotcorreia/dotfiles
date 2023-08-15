@@ -19,6 +19,9 @@ in {
 
   "hera/acmeDnsCredentials.age".publicKeys = [ heraSystem ];
   "hera/diskstationSambaCredentials.age".publicKeys = [ heraSystem ];
+  "hera/fireflyAutoDataImporterEnv.age".publicKeys = [ heraSystem ];
+  "hera/fireflyAutoDataImporterHealthchecksUrl.age".publicKeys = [ heraSystem ];
+  "hera/fireflyDataImporterEnv.age".publicKeys = [ heraSystem ];
   "hera/healthchecksUrl.age".publicKeys = [ heraSystem ];
   "hera/nebulaCert.age".publicKeys = [ heraSystem ];
   "hera/nebulaKey.age".publicKeys = [ heraSystem ];

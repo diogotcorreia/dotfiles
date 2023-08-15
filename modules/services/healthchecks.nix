@@ -62,8 +62,7 @@ in {
       nameValuePair name {
         preStart =
           mkBefore (getHealthchecksCmd options.checkUrlFile "start" true);
-        serviceConfig.ExecStop =
-          mkAfter (getHealthchecksCmd options.checkUrlFile "" true);
+        preStop = mkAfter (getHealthchecksCmd options.checkUrlFile "" true);
         onFailure = [ "${name}-fail.service" ];
       }) cfg.systemd-monitoring;
 
@@ -77,10 +76,8 @@ in {
     systemd-fail-services = mapAttrs' (name: options:
       nameValuePair "${name}-fail" {
         restartIfChanged = false;
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = mkFailScript options.checkUrlFile;
-        };
+        script = "${mkFailScript options.checkUrlFile}";
+        serviceConfig.Type = "oneshot";
       }) cfg.systemd-monitoring;
 
   in {

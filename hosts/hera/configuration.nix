@@ -50,6 +50,7 @@
 
   # Docker (containers)
   virtualisation.docker.enable = true;
+  virtualisation.oci-containers.backend = "docker";
 
   # Secret manager (agenix)
   age = {
