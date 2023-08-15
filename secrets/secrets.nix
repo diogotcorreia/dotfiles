@@ -11,7 +11,6 @@ in {
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
   "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];
-  "bacchus/cscptWireguardPrivateKey.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticHealthchecksUrl.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticRcloneConfig.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticPassword.age".publicKeys = [ bacchusSystem ];
