@@ -53,16 +53,16 @@ in {
 
   config = let
     getHealthchecksCmd = urlFile: type: ignoreErrors: ''
-      ${pkgs.bash}/bin/bash -c '${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 -o /dev/null $(${pkgs.coreutils}/bin/cat ${urlFile})/${type}${
-        optionalString ignoreErrors " || true"
-      }'
+      ${pkgs.bash}/bin/bash -c '${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 -o /dev/null $(${pkgs.coreutils}/bin/cat ${urlFile})${
+        optionalString (type != null) "/${type}"
+      }${optionalString ignoreErrors " || true"}'
     '';
 
     # https://www.freedesktop.org/software/systemd/man/systemd.exec.html#%24EXIT_CODE
     mkStopScript = url:
       pkgs.writeShellScript "healthchecks-stop" ''
         if [[ "$SERVICE_RESULT" == "success" && "$EXIT_STATUS" == "0" ]]; then
-          ${getHealthchecksCmd url "" false}
+          ${getHealthchecksCmd url null false}
         elif [[ "$SERVICE_RESULT" != "start-limit-hit" ]]; then
           ${getHealthchecksCmd url "fail" false}
         fi
@@ -81,7 +81,7 @@ in {
         restartIfChanged = false;
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = getHealthchecksCmd cfg.checkUrlFile "" false;
+          ExecStart = getHealthchecksCmd cfg.checkUrlFile null false;
         };
       };
     } else
