@@ -20,8 +20,8 @@ in {
     # UDP Port 5683 for CoIoT (Shelly push)
     allowedUDPPorts = [ 5353 5683 ];
 
-    # TCP Port 8095 for Music Assistant
-    allowedTCPPorts = [ 8095 hassPort ];
+    # TCP Ports 8095 and 8097 for Music Assistant
+    allowedTCPPorts = [ 8095 8097 hassPort ];
   };
 
   security.acme.certs = {
