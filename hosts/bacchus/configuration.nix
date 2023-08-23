@@ -42,6 +42,9 @@
     ];
   };
 
+  # Time zone
+  time.timeZone = "Europe/Stockholm";
+
   # Network Manager
   # TODO move to module
   networking.networkmanager.enable = true;
