@@ -18,6 +18,8 @@ in {
       discord-openasar
       # Telegram
       tdesktop
+      # Signal
+      signal-desktop
     ];
 
     # Video player
