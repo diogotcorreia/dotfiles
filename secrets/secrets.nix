@@ -8,6 +8,7 @@ let
 in {
   "nebulaCA.age".publicKeys = [ bacchusSystem heraSystem phobosSystem ];
   "openvpnIstAuthUserPass.age".publicKeys = [ bacchusSystem ];
+  "openvpnKthEN2720Config.age".publicKeys = [ bacchusSystem ];
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
   "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];

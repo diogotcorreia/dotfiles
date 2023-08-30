@@ -198,6 +198,7 @@
     };
     cybersec.enable = true;
     ist.enable = true;
+    kth.enable = true;
     personal.enable = true;
     secureboot.enable = true;
     xdg.enable = true;
