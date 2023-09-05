@@ -31,7 +31,6 @@
       "/etc/NetworkManager/system-connections"
       "/var/lib/bluetooth"
       "/var/lib/docker"
-      "/var/lib/libvirt"
       "/var/lib/systemd"
       "/var/log"
     ];
@@ -201,6 +200,7 @@
     kth.enable = true;
     personal.enable = true;
     secureboot.enable = true;
+    virtual-machines.enable = true;
     xdg.enable = true;
   };
 
