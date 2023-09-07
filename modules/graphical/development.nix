@@ -26,7 +26,8 @@ in {
       unstable.insomnia
     ];
 
-    # Firefox browser
-    programs.firefox.enable = true;
+    # TODO change to ungoogled chromium
+    # Brave browser
+    programs.brave.enable = true;
   };
 }
