@@ -46,3 +46,10 @@ To access the MySQL CLI, run
 ```bash
 _ dce fireflyiiidb sh -c 'exec mysql --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
 ```
+
+### Paperless
+
+```bash
+zstd -d postgresql_db_paperless.sql.zstd
+sudo -u paperless pg_restore -d paperless -c -1 postgresql_db_paperless.sql
+```
