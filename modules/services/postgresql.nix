@@ -31,8 +31,8 @@ let
     "${pkgs.coreutils}/bin/rm ${getFilePath databaseName}";
 in {
 
-  # Handle backup of PostgreSQL databases
   config = mkIf postgresqlCfg.enable {
+    # Handle backup of PostgreSQL databases
     modules.services.restic = {
       paths = map getFilePath postgresqlCfg.ensureDatabases;
       backupPrepareCommand = concatStringsSep "\n"
@@ -40,5 +40,8 @@ in {
       backupCleanupCommand = concatStringsSep "\n"
         (map getCleanupCommand postgresqlCfg.ensureDatabases);
     };
+
+    # Persist databases when using tmpfs
+    environment.persistence."/persist".directories = [ "/var/lib/postgresql" ];
   };
 }
