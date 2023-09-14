@@ -74,7 +74,7 @@ in {
     };
   };
 
-  environment.persistence."/persist".directories = [ dataDir ];
+  modules.impermanence.directories = [ dataDir ];
 
   modules.services.restic.paths = [ dataDir ];
 }

@@ -39,7 +39,7 @@ in {
     };
   };
 
-  environment.persistence."/persist".directories = [ statePath ];
+  modules.impermanence.directories = [ statePath ];
 
   modules.services.restic.paths = [ statePath libraryPath ];
 }

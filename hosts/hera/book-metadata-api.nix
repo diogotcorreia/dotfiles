@@ -59,6 +59,5 @@ in {
     };
   };
 
-  environment.persistence."/persist".files =
-    [ "${stateDirectory}/cookies.json" ];
+  modules.impermanence.files = [ "${stateDirectory}/cookies.json" ];
 }

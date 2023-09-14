@@ -116,7 +116,7 @@ in {
     ${config.services.bazarr.user}.extraGroups = [ mediaGroup ];
   };
 
-  environment.persistence."/persist".directories = [
+  modules.impermanence.directories = [
     "/var/lib/jellyfin"
     # also persist cache so we don't have to fetch metadata on every reboot
     "/var/cache/jellyfin"

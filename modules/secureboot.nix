@@ -24,7 +24,7 @@ in {
       enable = true;
       pkiBundle = securebootFolder;
     };
-    environment.persistence."/persist".directories = [ securebootFolder ];
+    modules.impermanence.directories = [ securebootFolder ];
 
     environment.systemPackages = [
       # For debugging and troubleshooting Secure Boot.

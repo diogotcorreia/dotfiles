@@ -42,6 +42,6 @@ in {
     };
 
     # Persist databases when using tmpfs
-    environment.persistence."/persist".directories = [ "/var/lib/postgresql" ];
+    modules.impermanence.directories = [ "/var/lib/postgresql" ];
   };
 }

@@ -23,6 +23,6 @@ in {
     environment.systemPackages = [ pkgs.virt-manager ];
 
     # Persist virtual machines on hosts with root-on-tmpfs
-    environment.persistence."/persist".directories = [ "/var/lib/libvirt" ];
+    modules.impermanence.directories = [ "/var/lib/libvirt" ];
   };
 }

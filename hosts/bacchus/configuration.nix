@@ -25,22 +25,6 @@
   boot.tmp.tmpfsSize = "80%";
   boot.tmp.cleanOnBoot = true;
 
-  # Impermanence (root on tmpfs)
-  environment.persistence."/persist" = {
-    directories = [
-      "/etc/NetworkManager/system-connections"
-      "/var/lib/bluetooth"
-      "/var/lib/docker"
-      "/var/lib/systemd"
-      "/var/log"
-    ];
-    files = [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key"
-      "/etc/ssh/ssh_host_ed25519_key.pub"
-    ];
-  };
-
   # Time zone
   time.timeZone = "Europe/Stockholm";
 
@@ -196,6 +180,15 @@
       zsh.enable = true;
     };
     cybersec.enable = true;
+    impermanence = {
+      enable = true;
+      # Impermanence (root on tmpfs)
+      directories = [
+        "/etc/NetworkManager/system-connections"
+        "/var/lib/bluetooth"
+        "/var/lib/docker"
+      ];
+    };
     ist.enable = true;
     kth.enable = true;
     personal.enable = true;

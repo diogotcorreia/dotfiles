@@ -113,7 +113,6 @@ in {
   fileSystems."/home".neededForBoot = true;
 
   # Persistence (root dataset is rollback'ed to a blank snapshot)
-  environment.persistence."/persist".files = [ "/etc/machine-id" ];
   networking.hostId = hostId;
   boot.initrd.postDeviceCommands = lib.mkAfter ''
     zfs rollback -r rpool/local/root@blank

@@ -6,19 +6,6 @@
 # Configuration for hera (server).
 
 { pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
-  # Impermanence (root on tmpfs)
-  environment.persistence."/persist" = {
-    directories = [
-      "/etc/NetworkManager/system-connections"
-      "/var/lib/acme"
-      "/var/lib/docker"
-      "/var/lib/systemd"
-      "/var/log"
-    ];
-    files =
-      [ "/etc/ssh/ssh_host_ed25519_key" "/etc/ssh/ssh_host_ed25519_key.pub" ];
-  };
-
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -205,6 +192,15 @@
       lf.enable = true;
       tmux.enable = true;
       zsh.enable = true;
+    };
+    impermanence = {
+      enable = true;
+      # Impermanence (root on tmpfs)
+      directories = [
+        "/etc/NetworkManager/system-connections"
+        "/var/lib/acme"
+        "/var/lib/docker"
+      ];
     };
   };
 
