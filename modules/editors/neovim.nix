@@ -355,6 +355,14 @@ let
               \}
         '';
       }
+
+      {
+        plugin = typst-vim;
+        type = "lua";
+        config = ''
+          vim.keymap.set('n', '<leader>tw', ':TypstWatch<cr>', {silent=true})
+        '';
+      }
     ]
   else
     [ ];
