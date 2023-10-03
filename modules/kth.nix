@@ -23,5 +23,11 @@ in {
         config ${config.age.secrets.openvpnKthEN2720Config.path}
       '';
     };
+
+    environment.systemPackages = [
+      # Wirelessly connect to displays at KTH (🤮)
+      # They don't seem to have heard of HDMI cables...
+      pkgs.my.airtame
+    ];
   };
 }
