@@ -111,6 +111,8 @@
     arandr
     # Office Suite
     libreoffice
+    # Minecraft Launcher
+    prismlauncher
     # Steam Run
     # TODO Move to modules
     steam-run
