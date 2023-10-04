@@ -23,6 +23,7 @@ in {
   "hera/fireflyAutoDataImporterHealthchecksUrl.age".publicKeys = [ heraSystem ];
   "hera/fireflyDataImporterEnv.age".publicKeys = [ heraSystem ];
   "hera/healthchecksUrl.age".publicKeys = [ heraSystem ];
+  "hera/istDelegateElectionFenixSecret.age".publicKeys = [ heraSystem ];
   "hera/nebulaCert.age".publicKeys = [ heraSystem ];
   "hera/nebulaKey.age".publicKeys = [ heraSystem ];
   "hera/paperlessEnvVariables.age".publicKeys = [ heraSystem ];

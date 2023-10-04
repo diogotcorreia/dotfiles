@@ -36,6 +36,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ist-delegate-election = {
+      url = "github:diogotcorreia/ist-delegate-election?ref=v1.0.1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ ... }:
@@ -127,6 +131,7 @@
               inputs.agenix.nixosModules.default
               inputs.lanzaboote.nixosModules.lanzaboote
               inputs.disko.nixosModules.disko
+              inputs.ist-delegate-election.nixosModules.default
             ] ++ allModules ++ (mkModules "${dir}/${name}");
           };
         }) (attrNames (readDir dir)));
