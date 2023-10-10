@@ -277,16 +277,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1696331914,
-        "narHash": "sha256-OjHCGZzB5PCcpjwtU1/pZ6JJsdJ3HqGQOKHCMBtVl4A=",
+        "lastModified": 1696939105,
+        "narHash": "sha256-5komcFSr6ZiybIHFlYT7pAcERDT9ljclDQRDdWgSxwU=",
         "owner": "diogotcorreia",
         "repo": "ist-delegate-election",
-        "rev": "bfa2a8818256fc30a2a97d9a3ce5e173e4ede51f",
+        "rev": "e89e5d89f9396008dffc8015a7a62b3d9da61d4d",
         "type": "github"
       },
       "original": {
         "owner": "diogotcorreia",
-        "ref": "v1.0.1",
+        "ref": "v1.1.0",
         "repo": "ist-delegate-election",
         "type": "github"
       }
