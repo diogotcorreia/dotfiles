@@ -410,6 +410,9 @@ in {
         " delete trailing whitespace
         autocmd FileType c,cpp,java,lua,nix,ocaml,vim,wast autocmd BufWritePre <buffer> %s/\s\+$//e
 
+        " don't save cursor position when writing git commit messages
+        autocmd BufReadPost COMMIT_EDITMSG setlocal viminfofile=NONE
+
         " makes n=Next and N=Previous for find (? / /)
         nnoremap <expr> n  'Nn'[v:searchforward]
         nnoremap <expr> N  'nN'[v:searchforward]
