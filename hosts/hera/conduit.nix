@@ -27,7 +27,7 @@ in {
         header /.well-known/matrix/* Content-Type application/json
         header /.well-known/matrix/* Access-Control-Allow-Origin *
         respond /.well-known/matrix/server `{"m.server": "m.diogotc.com:443"}`
-        respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://m.diogotc.com"}}`
+        respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://m.diogotc.com"}, "org.matrix.msc3575.proxy": {"url": "https://m.diogotc.com"}}`
         reverse_proxy /_matrix/* localhost:${toString portConduit} {
           import CLOUDFLARE_PROXY
         }
