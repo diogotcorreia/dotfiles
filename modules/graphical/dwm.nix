@@ -107,6 +107,9 @@ in {
         # Start GNOME Keyring to unlock on login
         eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh);
         export SSH_AUTH_SOCK
+
+        # Fix Java applications not rendering correctly on DWM
+        export _JAVA_AWT_WM_NONREPARENTING=1
       '';
 
       initExtra = ''
