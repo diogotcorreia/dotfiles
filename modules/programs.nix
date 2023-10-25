@@ -13,9 +13,6 @@
     zip
     unzip
 
-    # Editors
-    neovim
-
     # Terminal multiplexers
     tmux
 
