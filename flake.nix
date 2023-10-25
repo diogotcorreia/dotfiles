@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ist-delegate-election = {
-      url = "github:diogotcorreia/ist-delegate-election?ref=v1.1.0";
+      url = "github:diogotcorreia/ist-delegate-election?ref=v1.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
