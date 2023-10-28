@@ -342,6 +342,14 @@ let
       cmp-git
 
       {
+        plugin = guess-indent-nvim;
+        type = "lua";
+        config = ''
+          require('guess-indent').setup {}
+        '';
+      }
+
+      {
         plugin = typst-vim;
         type = "lua";
         config = ''
@@ -361,12 +369,6 @@ let
     ]
   else
     [ ];
-  twoSpaceIndentConfig = ''
-    setlocal shiftwidth=2
-    setlocal softtabstop=2
-    setlocal tabstop=2
-    setlocal expandtab
-  '';
 in {
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
 
@@ -382,11 +384,26 @@ in {
         -- change leader key to space bar
         vim.g.mapleader = " "
 
-        -- use 4 space identation by default
-        vim.opt.shiftwidth = 4
-        vim.opt.softtabstop = 4
-        vim.opt.tabstop = 4
-        vim.opt.expandtab = true
+        -- use 2 space identation by default
+        vim.api.nvim_create_user_command('Spaces',
+          function(opts)
+            local count = tonumber(opts.fargs[1])
+            vim.opt.shiftwidth = count
+            vim.opt.softtabstop = count
+            vim.opt.tabstop = count
+            vim.opt.expandtab = true
+          end,
+          { nargs = 1 })
+        vim.api.nvim_create_user_command('Tabs',
+          function(opts)
+            local count = tonumber(opts.fargs[1])
+            vim.opt.shiftwidth = count
+            vim.opt.softtabstop = count
+            vim.opt.tabstop = count
+            vim.opt.expandtab = false
+          end,
+          { nargs = 1 })
+        vim.cmd.Spaces(2)
 
         -- show invisible whitespace characters
         vim.opt.list = true
@@ -548,28 +565,6 @@ in {
       else
         [ ]);
     };
-
-    # languages that should use 2 space indent
-    home.file."${config.my.configHome}/nvim/after/ftplugin/markdown.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/nix.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/ocaml.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/wast.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/yaml.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/yacc.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/lex.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/cpp.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/tex.vim".text =
-      twoSpaceIndentConfig;
-    home.file."${config.my.configHome}/nvim/after/ftplugin/javascript.vim".text =
-      twoSpaceIndentConfig;
 
     home.file."${config.my.configHome}/nvim/lua/generic_lsp.lua".text = ''
       local lsp = require'lspconfig'
