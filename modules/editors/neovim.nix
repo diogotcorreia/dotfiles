@@ -32,6 +32,7 @@ let
       rust
       toml
       typescript
+      pkgs.unstable.tree-sitter-grammars.tree-sitter-typst
       vim
       yaml
     ];
@@ -267,8 +268,7 @@ let
           lsp_config.ccls.setup(lsp_setup)
           lsp_config.rnix.setup(lsp_setup)
           lsp_config.html.setup(lsp_setup)
-          lsp_config.texlab.setup(lsp_setup)
-          lsp_config.texlab.setup(lsp_setup)
+          lsp_config.typst_lsp.setup(lsp_setup)
         '';
       }
       rust-tools-nvim
@@ -386,6 +386,7 @@ let
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-html-languageserver-bin # HTML LSP
       rnix-lsp # Nix LSP
+      unstable.typst-lsp # Typst LSP
     ];
 in {
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
