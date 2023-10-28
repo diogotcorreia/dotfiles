@@ -510,8 +510,8 @@ in {
         })
 
         -- do not wrap lines
-        -- TODO! add bind to toggle this
         vim.opt.wrap = false
+        vim.keymap.set('n', '<leader>w', function() vim.opt.wrap = not vim.opt.wrap:get() end)
 
         -- keep a line offset around cursor
         vim.opt.scrolloff = 12
