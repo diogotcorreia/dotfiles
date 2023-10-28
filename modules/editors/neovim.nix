@@ -7,7 +7,7 @@
 
 { pkgs, config, lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf lists strings;
   cfg = config.modules.editors.neovim;
   personal = config.modules.personal.enable;
   git = config.modules.shell.git.enable;
@@ -20,8 +20,9 @@ let
       nix
       python
     ];
-  personalGrammars = if personal then
-    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars; [
+  personalGrammars =
+    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars;
+    lists.optionals personal [
       c
       cpp
       java
@@ -33,9 +34,7 @@ let
       typescript
       vim
       yaml
-    ]
-  else
-    [ ];
+    ];
   commonPlugins = with pkgs.unstable.vimPlugins; [
     nvim-web-devicons
     {
@@ -65,7 +64,7 @@ let
             icons_enabled = true
           },
           sections = {
-            lualine_b = { 'diff' },
+            lualine_b = { ${strings.optionalString git "'diff'"} },
             lualine_c = {
               {'diagnostics', {
                 sources = {nvim_diagnostic},
@@ -82,11 +81,10 @@ let
           },
           tabline = {
             lualine_a = { 'hostname' },
-            lualine_b = { 'branch' },
+            lualine_b = { ${strings.optionalString git "'branch'"} },
             lualine_z = { {'tabs', tabs_color = { inactive = "TermCursor", active = "ColorColumn" } } }
           },
-          extensions = { fzf'' + (if git then ", fugitive " else "") + ''
-          },
+          extensions = { fzf${strings.optionalString git ", fugitive "} },
           }
           if _G.Tabline_timer == nil then
             _G.Tabline_timer = vim.loop.new_timer()
@@ -98,7 +96,7 @@ let
                                  vim.schedule_wrap(function() -- updater function
                                                       vim.api.nvim_command('redrawtabline')
                                                    end))
-        '';
+      '';
     }
 
     {
@@ -234,8 +232,8 @@ let
       '';
     }
   ];
-  personalPlugins = if personal then
-    with pkgs.unstable.vimPlugins; [
+  personalPlugins = with pkgs.unstable.vimPlugins;
+    lists.optionals personal [
       {
         plugin = nvim-lspconfig;
         type = "lua";
@@ -356,19 +354,39 @@ let
           vim.keymap.set('n', '<leader>tw', function() vim.fn['typst#TypstWatch']() end, { silent = true })
         '';
       }
-    ]
-  else
-    [ ];
-  personalPackages = if personal then
-    with pkgs; [
+    ];
+  gitPlugins = with pkgs.unstable.vimPlugins;
+    lists.optionals git [
+      vim-fugitive
+      {
+        plugin = gitsigns-nvim;
+        type = "lua";
+        config = ''
+          require('gitsigns').setup{
+            signs = {
+              add = {  text = '+' },
+            },
+            on_attach = function(bufnr)
+              local gs = package.loaded.gitsigns
+              local function map(mode, l, r, opts)
+                opts = opts or {}
+                opts.buffer = bufnr
+                vim.keymap.set(mode, l, r, opts)
+              end
+              map('n', '<leader>gb', gs.toggle_current_line_blame)
+            end,
+          }
+        '';
+      }
+    ];
+  personalPackages = with pkgs;
+    lists.optionals personal [
       python311Packages.jedi-language-server # Python LSP
       ccls # C/C++ LSP
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-html-languageserver-bin # HTML LSP
       rnix-lsp # Nix LSP
-    ]
-  else
-    [ ];
+    ];
 in {
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
 
@@ -542,32 +560,7 @@ in {
         -- FIXME: only available starting in neovim 0.10 (nightly right now)
         -- vim.keymap.set('ca', 'W', 'w')
       '';
-      plugins = commonPlugins ++ personalPlugins ++ (if git then
-        with pkgs.unstable.vimPlugins; [
-          vim-fugitive
-          {
-            plugin = gitsigns-nvim;
-            type = "lua";
-            config = ''
-              require('gitsigns').setup{
-                signs = {
-                  add = {  text = '+' },
-                },
-                on_attach = function(bufnr)
-                  local gs = package.loaded.gitsigns
-                  local function map(mode, l, r, opts)
-                    opts = opts or {}
-                    opts.buffer = bufnr
-                    vim.keymap.set(mode, l, r, opts)
-                  end
-                  map('n', '<leader>gb', gs.toggle_current_line_blame)
-                end,
-              }
-            '';
-          }
-        ]
-      else
-        [ ]);
+      plugins = commonPlugins ++ personalPlugins ++ gitPlugins;
     };
 
     home.file."${config.my.configHome}/nvim/lua/generic_lsp.lua".text = ''
