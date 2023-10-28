@@ -181,9 +181,13 @@ let
 
     {
       plugin = nerdcommenter;
+      type = "lua";
       config = ''
-        let g:NERDCreateDefaultMappings = 0
-        let g:NERDSpaceDelims = 1
+        vim.g.NERDCreateDefaultMappings = 0
+        vim.g.NERDSpaceDelims = 1
+
+        vim.keymap.set('n', '<leader>cc', '<Plug>NERDCommenterToggle')
+        vim.keymap.set('x', '<leader>cc', '<Plug>NERDCommenterToggle')
       '';
     }
 
@@ -217,10 +221,10 @@ let
         }
 
         -- Now the '+' register will copy to system clipboard using OSC52
-        vim.api.nvim_set_keymap(''', '<Leader>p', '"+p', { noremap = true })
-        vim.api.nvim_set_keymap(''', '<Leader>P', '"+P', { noremap = true })
-        vim.api.nvim_set_keymap(''', '<Leader>y', '"+y', { noremap = true })
-        vim.api.nvim_set_keymap('n', '<Leader>Y', '"+y$', { noremap = true })
+        vim.keymap.set(''', '<leader>p', '"+p')
+        vim.keymap.set(''', '<leader>P', '"+P')
+        vim.keymap.set(''', '<leader>y', '"+y')
+        vim.keymap.set('n', '<leader>Y', '"+y$')
       '';
     }
 
@@ -360,7 +364,7 @@ let
         plugin = typst-vim;
         type = "lua";
         config = ''
-          vim.keymap.set('n', '<leader>tw', ':TypstWatch<cr>', {silent=true})
+          vim.keymap.set('n', '<leader>tw', function() vim.fn['typst#TypstWatch']() end, { silent = true })
         '';
       }
     ]
@@ -393,104 +397,134 @@ in {
       viAlias = true;
       vimAlias = true;
       vimdiffAlias = true;
-      extraConfig = ''
-        " Change leader key to space bar
-        let mapleader = ' '
+      extraLuaConfig = ''
+        -- change leader key to space bar
+        vim.g.mapleader = " "
 
-        " sane defaults
-        set shiftwidth=4
-        set softtabstop=4
-        set tabstop=4
-        set expandtab
+        -- use 4 space identation by default
+        vim.opt.shiftwidth = 4
+        vim.opt.softtabstop = 4
+        vim.opt.tabstop = 4
+        vim.opt.expandtab = true
 
-        " show invisible whitespace characters
-        set list
-        set listchars=tab:>-,trail:~,extends:>,precedes:<
+        -- show invisible whitespace characters
+        vim.opt.list = true
+        vim.opt.listchars = { tab = '>-', trail = '~', extends = '>', precedes = '<' }
 
-        " delete trailing whitespace
-        autocmd FileType c,cpp,java,lua,nix,ocaml,vim,wast autocmd BufWritePre <buffer> %s/\s\+$//e
+        -- delete trailing whitespace
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = { 'c', 'cpp', 'java', 'lua', 'nix', 'vim' },
+          callback = function()
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              buffer = 0,
+              callback = function()
+                -- make sure cursor doesn't jump around
+                local cursor_pos = vim.api.nvim_win_get_cursor(0)
+                vim.cmd('%s/\\s\\+$//e')
+                vim.api.nvim_win_set_cursor(0, cursor_pos)
+              end,
+            })
+          end,
+        })
 
-        " don't save cursor position when writing git commit messages
-        autocmd BufReadPost COMMIT_EDITMSG setlocal viminfofile=NONE
+        -- makes n=Next and N=Previous for find (? / /)
+        -- https://vi.stackexchange.com/a/2366
+        vim.keymap.set('n', 'n', "'Nn'[v:searchforward]", { expr = true })
+        vim.keymap.set('n', 'N', "'nN'[v:searchforward]", { expr = true })
 
-        " makes n=Next and N=Previous for find (? / /)
-        nnoremap <expr> n  'Nn'[v:searchforward]
-        nnoremap <expr> N  'nN'[v:searchforward]
+        -- easy bind to leave terminal mode
+        vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
-        " Easy bind to leave terminal mode
-        tnoremap <Esc> <C-\><C-n>
+        -- keep undo history over different sessions
+        vim.opt.undofile = true
+        vim.opt.undodir = '/tmp//'
 
-        " Keeps undo history over different sessions
-        set undofile
-        set undodir=/tmp//
+        -- restore last cursor position when opening buffer (file)
+        vim.api.nvim_create_autocmd('BufReadPost', {
+          pattern = '*',
+          callback = function()
+            vim.api.nvim_exec('silent! normal! g`"zv', false)
+          end,
+        })
 
-        " Saves cursor position to be used next time the file is edited
-        autocmd BufReadPost *
-        \ if line("'\"") > 1 && line("'\"") <= line("$") |
-        \   execute "normal! g`\"" |
-        \ endif
+        -- don't save cursor position when writing git commit messages
+        vim.api.nvim_create_autocmd('BufReadPost', {
+          pattern = 'COMMIT_EDITMSG',
+          callback = function()
+            vim.opt_local.viminfofile = "NONE"
+          end,
+        })
 
-        nnoremap <silent> <Up>       :resize +2<CR>
-        nnoremap <silent> <Down>     :resize -2<CR>
-        nnoremap <silent> <Left>     :vertical resize +2<CR>
-        nnoremap <silent> <Right>    :vertical resize -2<CR>
+        -- use arrows to resize windows
+        vim.keymap.set('n', '<Up>', function() vim.api.nvim_win_set_height(0, vim.api.nvim_win_get_height(0) + 2) end)
+        vim.keymap.set('n', '<Down>', function() vim.api.nvim_win_set_height(0, vim.api.nvim_win_get_height(0) - 2) end)
+        vim.keymap.set('n', '<Left>', function() vim.api.nvim_win_set_width(0, vim.api.nvim_win_get_width(0) + 2) end)
+        vim.keymap.set('n', '<Right>', function() vim.api.nvim_win_set_width(0, vim.api.nvim_win_get_width(0) - 2) end)
 
-        "move to the split in the direction shown, or create a new split
-        nnoremap <silent> <C-h> :call WinMove('h')<cr>
-        nnoremap <silent> <C-j> :call WinMove('j')<cr>
-        nnoremap <silent> <C-k> :call WinMove('k')<cr>
-        nnoremap <silent> <C-l> :call WinMove('l')<cr>
+        -- move to the split in the direction shown, or create a new split
+        function WinMove(key)
+          return function()
+            local curwin = vim.api.nvim_get_current_win()
+            vim.cmd('wincmd ' .. key)
+            if curwin == vim.api.nvim_get_current_win() then
+              -- we did not move; create new split
+              if key == 'j' or key == 'k' then
+                vim.cmd('wincmd s')
+              else
+                vim.cmd('wincmd v')
+              end
+              vim.cmd('wincmd ' .. key)
+            end
+          end
+        end
+        vim.keymap.set('n', '<C-h>', WinMove('h'), { silent = true })
+        vim.keymap.set('n', '<C-j>', WinMove('j'), { silent = true })
+        vim.keymap.set('n', '<C-k>', WinMove('k'), { silent = true })
+        vim.keymap.set('n', '<C-l>', WinMove('l'), { silent = true })
 
-        function! WinMove(key)
-          let t:curwin = winnr()
-          exec "wincmd ".a:key
-          if (t:curwin == winnr())
-            if (match(a:key,'[jk]'))
-              wincmd v
-            else
-              wincmd s
-            endif
-            exec "wincmd ".a:key
-          endif
-        endfunction
+        -- clear search highlight
+        vim.keymap.set('n', '<leader><leader>', function() vim.cmd("nohlsearch") end, { silent = true })
 
-        nnoremap <silent> <leader><leader> :nohlsearch<cr>
-        nnoremap <silent> <leader>m :silent call jobstart('make')<cr>
+        -- don't include character under cursor in selection
+        vim.opt.selection = 'exclusive'
+        -- enable mouse functionality
+        vim.opt.mouse = 'a'
 
-        set selection=exclusive
+        -- highlight yank'ed text
+        vim.api.nvim_create_autocmd('TextYankPost', {
+          callback = function()
+            vim.highlight.on_yank({ higroup = "IncSearch", timeout = 1000, on_visual = true })
+          end,
+        })
 
-        set mouse=a
+        -- do not wrap lines
+        -- TODO! add bind to toggle this
+        vim.opt.wrap = false
 
-        au TextYankPost * lua vim.highlight.on_yank {higroup="IncSearch", timeout=1000, on_visual=true}
+        -- keep a line offset around cursor
+        vim.opt.scrolloff = 12
 
-        let g:bufferline_echo = 0
+        -- when splitting, split below and to the right
+        vim.opt.splitbelow = true
+        vim.opt.splitright = true
 
-        set nowrap
+        -- show (relative) line numbers
+        vim.opt.number = true
+        vim.opt.relativenumber = true
 
-        " Keep a line offset around cursor
-        set scrolloff=12
+        -- use smart case on searches: if it's all lowercase, search is case insensitive;
+        -- if there's a upper case character, search is case sensitive
+        vim.opt.ignorecase = true
+        vim.opt.smartcase = true
 
-        set splitbelow
-        set splitright
+        -- disable audible bell for sanity reasons
+        vim.opt.belloff = 'all'
 
-        " Show (relative) line numbers
-        set number
-        set relativenumber
-
-        " Use smart case on searches: if it's all lowercase, search is case insensitive;
-        " If there's a upper case character, search is case sensitive
-        set ignorecase
-        set smartcase
-
-        " Disable audible bell for sanity reasons
-        set belloff=all
-
-        " Avoiding W
-        cabbrev W w
-
-        " nerdcommenter
-        nmap <leader>cc <Plug>NERDCommenterToggle
-        xmap <leader>cc <Plug>NERDCommenterToggle
+        -- avoid typing W instead of w to save
+        -- there is no native lua API for abbreviations
+        vim.cmd('cabbrev W w')
+        -- FIXME: only available starting in neovim 0.10 (nightly right now)
+        -- vim.keymap.set('ca', 'W', 'w')
       '';
       plugins = commonPlugins ++ personalPlugins ++ (if git then
         with pkgs.unstable.vimPlugins; [
