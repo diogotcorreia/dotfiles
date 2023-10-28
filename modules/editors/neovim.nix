@@ -532,6 +532,10 @@ in {
         -- disable audible bell for sanity reasons
         vim.opt.belloff = 'all'
 
+        -- enable spell checker
+        vim.opt.spell = true
+        vim.opt.spelllang = { 'en', 'pt' }
+
         -- avoid typing W instead of w to save
         -- there is no native lua API for abbreviations
         vim.cmd('cabbrev W w')
