@@ -342,23 +342,6 @@ let
       cmp-git
 
       {
-        plugin = vimtex;
-        config = ''
-          let g:vimtex_view_method = 'zathura'
-          let g:vimtex_compiler_latexmk = {
-              \ 'options' : [
-              \   '-pdf',
-              \   '-shell-escape',
-              \   '-verbose',
-              \   '-file-line-error',
-              \   '-synctex=1',
-              \   '-interaction=nonstopmode',
-              \ ],
-              \}
-        '';
-      }
-
-      {
         plugin = typst-vim;
         type = "lua";
         config = ''
