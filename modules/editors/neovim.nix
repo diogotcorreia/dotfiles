@@ -267,7 +267,7 @@ let
           lsp_config.tsserver.setup(lsp_setup)
           lsp_config.ccls.setup(lsp_setup)
           lsp_config.rnix.setup(lsp_setup)
-          lsp_config.html.setup(lsp_setup)
+          lsp_config.html.setup({ cmd = { "html-languageserver", "--stdio" }, unpack(lsp_setup) })
           lsp_config.typst_lsp.setup(lsp_setup)
         '';
       }
