@@ -221,8 +221,6 @@ let
         }
 
         -- Now the '+' register will copy to system clipboard using OSC52
-        vim.keymap.set(''', '<leader>p', '"+p')
-        vim.keymap.set(''', '<leader>P', '"+P')
         vim.keymap.set(''', '<leader>y', '"+y')
         vim.keymap.set('n', '<leader>Y', '"+y$')
       '';
@@ -484,6 +482,20 @@ in {
 
         -- clear search highlight
         vim.keymap.set('n', '<leader><leader>', function() vim.cmd("nohlsearch") end, { silent = true })
+
+        -- move lines up and down in visual mode
+        vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+        vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+        -- overwrite selection with clipboard without losing clipboard
+        vim.keymap.set("x", "<leader>p", '"_dP')
+
+        -- delete without losing clipboard
+        vim.keymap.set({"n", "v"}, "<leader>d", '"_d')
+
+        -- quick-replace word under cursor
+        vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+        vim.keymap.set("v", "<leader>s", [["hy:%s/\<<C-r>h\>/<C-r>h/gI<Left><Left><Left>]])
 
         -- don't include character under cursor in selection
         vim.opt.selection = 'exclusive'
