@@ -3,8 +3,8 @@
 
 let
   pin = {
-    version = "3.0.0";
-    srcHash = "sha256-e/L9Vyl+zEDBV8Vfkvh8faHneabVHcp4QE4Aa1GYem0=";
+    version = "3.1.0";
+    srcHash = "sha256-pC5cq42tEdsx+4TsapuYZnEmaryvaucqwuZvU4TWhVM=";
     yarnSha256 = "sha256-jlwg/QLIMuA45C36oQQ6BA7Yhp3y8LGktZyFH0d1F40=";
   };
 
