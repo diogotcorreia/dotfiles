@@ -12,9 +12,14 @@ let
 in {
   options.modules.cybersec.enable = mkEnableOption "cybersec";
 
-  # Home manager module
-  config.hm = mkIf cfg.enable {
-    home.packages = with pkgs; [
+  config = mkIf cfg.enable {
+    programs.wireshark = {
+      enable = true;
+      package = pkgs.wireshark; # use Qt version instead of CLI version
+    };
+    usr.extraGroups = [ "wireshark" ];
+
+    hm.home.packages = with pkgs; [
       # Enhanced GDB
       gef
       # hx (hexdump replacement)
