@@ -64,7 +64,7 @@ in {
     "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
   ];
 
-  networking.firewall.interfaces.br0 = {
+  networking.firewall.interfaces.vlan-private = {
     # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
     allowedUDPPorts = [ 5353 ];
 
