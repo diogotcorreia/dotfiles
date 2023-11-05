@@ -7,11 +7,20 @@
 
 { config, lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf mkOption types;
   cfg = config.modules.services.dnsoverhttps;
 in {
   options.modules.services.dnsoverhttps = {
     enable = mkEnableOption "Cloudflare DNS over HTTPS proxy";
+
+    all-interfaces = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether the dns proxy should listen on all interfaces or
+        only on the loopback interface.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -23,7 +32,8 @@ in {
     services.dnscrypt-proxy2 = {
       enable = true;
       settings = {
-        listen_addresses = [ "127.0.0.53:53" ];
+        listen_addresses =
+          [ (if cfg.all-interfaces then "0.0.0.0:53" else "127.0.0.53:53") ];
 
         sources.public-resolvers = {
           urls = [
