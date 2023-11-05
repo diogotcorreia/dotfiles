@@ -10,6 +10,8 @@
 let
   hassDomain = "ha.bro.diogotc.com";
   hassPort = 8123;
+
+  mqttPort = 1883;
 in {
   age.secrets = {
     hassSecrets = {
@@ -31,6 +33,9 @@ in {
     enable = true;
     package = pkgs.unstable.home-assistant.overrideAttrs
       (old: { doInstallCheck = false; });
+
+    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
+    extraComponents = [ "default_config" "esphome" "met" "mqtt" "tasmota" ];
 
     config = {
       default_config = { };
@@ -64,11 +69,26 @@ in {
     "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
   ];
 
-  networking.firewall.interfaces.vlan-private = {
-    # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
-    allowedUDPPorts = [ 5353 ];
+  services.mosquitto = {
+    enable = true;
+    listeners = [{
+      users.iot = {
+        acl = [ "readwrite #" ]; # allow read/write access to all topics
+        hashedPassword =
+          "$7$101$zKBywp7+zF4mY2Ob$Nnka6+eUPvskhwcgsuUWR5fgwuOKj1YA5TsZ1biJjfJDLkIJFtHnm0zEdqQ6x8PVUfGmuc50HXCN17KHbTQNIw==";
+      };
+      port = mqttPort;
+    }];
+  };
 
-    allowedTCPPorts = [ hassPort ];
+  networking.firewall.interfaces = {
+    vlan-private = {
+      # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
+      allowedUDPPorts = [ 5353 ];
+
+      allowedTCPPorts = [ hassPort ];
+    };
+    vlan-iot-local = { allowedTCPPorts = [ mqttPort ]; };
   };
 
   security.acme.certs = { ${hassDomain} = { }; };
@@ -82,8 +102,10 @@ in {
     };
   };
 
-  modules.impermanence.directories =
-    [ config.services.home-assistant.configDir ];
+  modules.impermanence.directories = [
+    config.services.home-assistant.configDir
+    config.services.mosquitto.dataDir
+  ];
   modules.services.restic = {
     paths = [ config.services.home-assistant.configDir ];
     exclude = [ "${config.services.home-assistant.configDir}/secrets.yaml" ];
