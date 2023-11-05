@@ -1,12 +1,15 @@
 let
   bacchusSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
+  broSystem =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ4GODzTdoSU1RS/1RU+EDZN1TxDYxqRct2q+OeWgv0f";
   heraSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
   phobosSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 in {
-  "nebulaCA.age".publicKeys = [ bacchusSystem heraSystem phobosSystem ];
+  "nebulaCA.age".publicKeys =
+    [ bacchusSystem broSystem heraSystem phobosSystem ];
   "openvpnIstAuthUserPass.age".publicKeys = [ bacchusSystem ];
   "openvpnKthEN2720Config.age".publicKeys = [ bacchusSystem ];
 
@@ -16,6 +19,15 @@ in {
   "bacchus/resticRcloneConfig.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticPassword.age".publicKeys = [ bacchusSystem ];
   "bacchus/resticSshKey.age".publicKeys = [ bacchusSystem ];
+
+  "bro/acmeDnsCredentials.age".publicKeys = [ broSystem ];
+  "bro/healthchecksUrl.age".publicKeys = [ broSystem ];
+  "bro/nebulaCert.age".publicKeys = [ broSystem ];
+  "bro/nebulaKey.age".publicKeys = [ broSystem ];
+  "bro/resticHealthchecksUrl.age".publicKeys = [ broSystem ];
+  "bro/resticRcloneConfig.age".publicKeys = [ broSystem ];
+  "bro/resticPassword.age".publicKeys = [ broSystem ];
+  "bro/resticSshKey.age".publicKeys = [ broSystem ];
 
   "hera/acmeDnsCredentials.age".publicKeys = [ heraSystem ];
   "hera/diskstationSambaCredentials.age".publicKeys = [ heraSystem ];
