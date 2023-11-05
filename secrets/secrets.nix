@@ -21,6 +21,7 @@ in {
   "bacchus/resticSshKey.age".publicKeys = [ bacchusSystem ];
 
   "bro/acmeDnsCredentials.age".publicKeys = [ broSystem ];
+  "bro/hassSecrets.age".publicKeys = [ broSystem ];
   "bro/healthchecksUrl.age".publicKeys = [ broSystem ];
   "bro/nebulaCert.age".publicKeys = [ broSystem ];
   "bro/nebulaKey.age".publicKeys = [ broSystem ];
