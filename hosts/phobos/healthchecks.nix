@@ -5,7 +5,7 @@
 #
 # Configuration for Healthchecks.io on Phobos
 
-{ pkgs, config, hostSecretsDir, ... }:
+args@{ pkgs, inputs, config, hostSecretsDir, buildEnv, ... }:
 let
   host = "healthchecks.diogotc.com";
   port = 8003;
@@ -16,6 +16,15 @@ let
     group = config.services.healthchecks.group;
   };
 in {
+
+  # Import unstable module, since it uses some python dependencies directly
+  # https://stackoverflow.com/questions/47650857/nixos-module-imports-with-arguments
+  disabledModules = [ "services/web-apps/healthchecks.nix" ];
+  imports = [
+    (import (inputs.nixpkgs-unstable
+      + "/nixos/modules/services/web-apps/healthchecks.nix")
+      (args // { pkgs = pkgs.unstable; }))
+  ];
 
   age.secrets = {
     phobosHealthchecksSecretKey = commonSecretSettings // {
