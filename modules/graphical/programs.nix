@@ -18,6 +18,8 @@ in {
       discord-openasar
       # Telegram
       tdesktop
+      # Thunderbird
+      thunderbird
       # Signal
       signal-desktop
     ];
