@@ -5,7 +5,11 @@
 #
 # Configuration for bro (server).
 
-{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
+{ pkgs, inputs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
+  disabledModules = [ "services/misc/cfdyndns.nix" ];
+  imports =
+    [ (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix") ];
+
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -35,6 +39,7 @@
         file = "${hostSecretsDir}/acmeDnsCredentials.age";
         group = config.security.acme.defaults.group;
       };
+      broCfdyndnsToken.file = "${hostSecretsDir}/cfdyndnsToken.age";
       broHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       broNebulaCert = {
         file = "${hostSecretsDir}/nebulaCert.age";
@@ -106,6 +111,13 @@
       # CLOUDFLARE_DNS_API_TOKEN=<token>
       credentialsFile = config.age.secrets.broAcmeDnsCredentials.path;
     };
+  };
+
+  # Cloudflare Dynamic DNS
+  services.cfdyndns = {
+    enable = true;
+    records = [ "world.bro.diogotc.com" ];
+    apiTokenFile = config.age.secrets.broCfdyndnsToken.path;
   };
 
   # Modules
