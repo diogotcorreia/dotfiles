@@ -35,7 +35,8 @@ in {
       (old: { doInstallCheck = false; });
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
-    extraComponents = [ "default_config" "esphome" "met" "mqtt" "tasmota" ];
+    extraComponents =
+      [ "cast" "default_config" "esphome" "met" "mqtt" "tasmota" ];
 
     config = {
       default_config = { };
