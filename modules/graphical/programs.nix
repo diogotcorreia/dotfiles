@@ -20,6 +20,8 @@ in {
       tdesktop
       # Thunderbird
       thunderbird
+      # Android screen mirroring (scrcpy)
+      scrcpy
       # Signal
       signal-desktop
     ];
