@@ -9,6 +9,32 @@
 { pkgs, config, ... }:
 
 let
+  images = {
+    serverAndMicroservices = {
+      imageName = "ghcr.io/immich-app/immich-server";
+      imageDigest =
+        "sha256:b4c9bc6778a142d9ee1ef61c30a498dc2e84d3aabb50a7d4516d9af346db2743"; # v1.85.0
+      sha256 = "sha256-Ru+u3vkb3pJ3PrNzdV0z3nc5Gf41hI0VJzFUiQtE+04=";
+    };
+    machineLearning = {
+      imageName = "ghcr.io/immich-app/immich-machine-learning";
+      imageDigest =
+        "sha256:1fc3e645169ada10d73b6a740434b5821f19003d436a8aeb7a5b9482c9b2f704"; # v1.85.0
+      sha256 = "sha256-I9A6EKHCfxTvuyK/vQ/E8+t3Qw60PnXr1ofYIDXAM2s=";
+    };
+    web = {
+      imageName = "ghcr.io/immich-app/immich-web";
+      imageDigest =
+        "sha256:10778b177594390e1a9ec0d5e80150fb9c6855ff964a7ceb2eded4728abaa821"; # v1.85.0
+      sha256 = "sha256-Z6iKFdjVkMONmbHbSCt9EehWO50E9SkZN+9qZHM0Ri4=";
+    };
+    proxy = {
+      imageName = "ghcr.io/immich-app/immich-proxy";
+      imageDigest =
+        "sha256:80e290eefe53271738cc6558b5b51296ac1cde94f1144eed873c61817a764928"; # 1.85.0
+      sha256 = "sha256-XfAdmLF7nxKvnNI01uadSPqSumHqx6WheQus0gmx+sQ=";
+    };
+  };
   dbUsername = "immich";
   dbDatabaseName = "immich";
 
@@ -90,11 +116,8 @@ in {
   virtualisation.oci-containers.containers = {
     immich_server = {
       imageFile = wrapImage {
+        inherit (images.serverAndMicroservices) imageName imageDigest sha256;
         name = "immich_server";
-        imageName = "ghcr.io/immich-app/immich-server";
-        imageDigest =
-          "sha256:3440f320004fe32a95d6dd7b6359de6a352218b931103ad70d8f73088aae255d"; # v1.84.0
-        sha256 = "sha256-DDsXHZD/I549z+oy3hw4ZE2alCPRiqTkZ+QNpYk+Uhw=";
         entrypoint = [ "/bin/sh" "start-server.sh" ];
       };
       image = "immich_server:release";
@@ -119,11 +142,8 @@ in {
 
     immich_microservices = {
       imageFile = wrapImage {
+        inherit (images.serverAndMicroservices) imageName imageDigest sha256;
         name = "immich_microservices";
-        imageName = "ghcr.io/immich-app/immich-server";
-        imageDigest =
-          "sha256:3440f320004fe32a95d6dd7b6359de6a352218b931103ad70d8f73088aae255d"; # v1.84.0
-        sha256 = "sha256-DDsXHZD/I549z+oy3hw4ZE2alCPRiqTkZ+QNpYk+Uhw=";
         entrypoint = [ "/bin/sh" "start-microservices.sh" ];
       };
       image = "immich_microservices:release";
@@ -148,12 +168,7 @@ in {
     };
 
     immich_machine_learning = {
-      imageFile = pkgs.dockerTools.pullImage {
-        imageName = "ghcr.io/immich-app/immich-machine-learning";
-        imageDigest =
-          "sha256:3ca2825ccfe44eacc8c856e1cf66bdf6f7354b752d8bbebee91f2f64b79c5675"; # v1.84.0
-        sha256 = "sha256-0sYIXd50+Ln/QDIlIF1os0/z+Ub5mKZ7b1gJ1KJ144s=";
-      };
+      imageFile = pkgs.dockerTools.pullImage images.machineLearning;
       image = "ghcr.io/immich-app/immich-machine-learning";
       extraOptions = [ "--network=immich-bridge" ];
 
@@ -165,12 +180,7 @@ in {
     };
 
     immich_web = {
-      imageFile = pkgs.dockerTools.pullImage {
-        imageName = "ghcr.io/immich-app/immich-web";
-        imageDigest =
-          "sha256:cd199bc511516cf4af3e6b2ae83a4ad1abd852464cfb29cda21759601c5ba15c"; # v1.84.0
-        sha256 = "sha256-SFwLvG5x8nT8/XKRGTSseiLDSIezq+63wKsIVKGin/8=";
-      };
+      imageFile = pkgs.dockerTools.pullImage images.web;
       image = "ghcr.io/immich-app/immich-web";
       extraOptions = [ "--network=immich-bridge" ];
 
@@ -196,12 +206,7 @@ in {
     };
 
     immich_proxy = {
-      imageFile = pkgs.dockerTools.pullImage {
-        imageName = "ghcr.io/immich-app/immich-proxy";
-        imageDigest =
-          "sha256:277290787ca1ffca88b51088a581ed0a9c344ccb650ef435469c602d10d67b7e"; # 1.84.0
-        sha256 = "sha256-LMASqIUZinjwxd5Hf24c89Iot9cXa2xOd2TELTI0ATg=";
-      };
+      imageFile = pkgs.dockerTools.pullImage images.proxy;
       image = "ghcr.io/immich-app/immich-proxy:release";
       extraOptions = [ "--network=immich-bridge" ];
 
