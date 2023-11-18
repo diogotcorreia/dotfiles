@@ -13,26 +13,26 @@ let
     serverAndMicroservices = {
       imageName = "ghcr.io/immich-app/immich-server";
       imageDigest =
-        "sha256:b4c9bc6778a142d9ee1ef61c30a498dc2e84d3aabb50a7d4516d9af346db2743"; # v1.85.0
-      sha256 = "sha256-Ru+u3vkb3pJ3PrNzdV0z3nc5Gf41hI0VJzFUiQtE+04=";
+        "sha256:f260c047e105a8851ee35057a234f5d98ea7e188fa2e666e6cc280d100a8a772"; # v1.87.0
+      sha256 = "sha256-M4u9LM3bhCQwpNXWg5sDtnRBA1qtHpvDZUihIhyDMnk=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
       imageDigest =
-        "sha256:1fc3e645169ada10d73b6a740434b5821f19003d436a8aeb7a5b9482c9b2f704"; # v1.85.0
-      sha256 = "sha256-I9A6EKHCfxTvuyK/vQ/E8+t3Qw60PnXr1ofYIDXAM2s=";
+        "sha256:9413adc9a2b9a761031b77ce1bfb479aaef3dc46ec57990c5b5646a9e7f853d5"; # v1.87.0
+      sha256 = "sha256-heYh0sntPD+1cKoX331OxfzKW6/K3/oVCs01WX8wwMM=";
     };
     web = {
       imageName = "ghcr.io/immich-app/immich-web";
       imageDigest =
-        "sha256:10778b177594390e1a9ec0d5e80150fb9c6855ff964a7ceb2eded4728abaa821"; # v1.85.0
-      sha256 = "sha256-Z6iKFdjVkMONmbHbSCt9EehWO50E9SkZN+9qZHM0Ri4=";
+        "sha256:2bef28adbcc60a2ee5dee8cafe109e3d5c6b7bca88d90acdd3eec376200a6d6e"; # v1.87.0
+      sha256 = "sha256-t7wLNL3nG0znB4Pv/jk1PbQIGQdz7szLLnhxKo+cC3A=";
     };
     proxy = {
       imageName = "ghcr.io/immich-app/immich-proxy";
       imageDigest =
-        "sha256:80e290eefe53271738cc6558b5b51296ac1cde94f1144eed873c61817a764928"; # 1.85.0
-      sha256 = "sha256-XfAdmLF7nxKvnNI01uadSPqSumHqx6WheQus0gmx+sQ=";
+        "sha256:9b60f2a6c9492306d4a2d182ac9274de6d9df6e6680ca7d55c8fd8348adcdaa6"; # 1.87.0
+      sha256 = "sha256-EP7Q3A6WAZExf+dGL8ANKQ2OepKCh/Zl7k+0nZxA7L4=";
     };
   };
   dbUsername = "immich";
