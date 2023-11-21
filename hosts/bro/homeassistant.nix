@@ -36,7 +36,7 @@ in {
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
     extraComponents =
-      [ "cast" "default_config" "esphome" "met" "mqtt" "tasmota" ];
+      [ "cast" "default_config" "esphome" "met" "mqtt" "tasmota" "zha" ];
 
     config = {
       default_config = { };
@@ -56,6 +56,7 @@ in {
         use_x_forwarded_for = true;
         trusted_proxies = [ "127.0.0.1" "::1" ];
       };
+      zha.zigpy_config.ota.ikea_provider = true;
 
       "automation manual" = [ ];
       "automation ui" = "!include automations.yaml";
