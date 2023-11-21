@@ -13,26 +13,14 @@ let
     serverAndMicroservices = {
       imageName = "ghcr.io/immich-app/immich-server";
       imageDigest =
-        "sha256:f260c047e105a8851ee35057a234f5d98ea7e188fa2e666e6cc280d100a8a772"; # v1.87.0
-      sha256 = "sha256-M4u9LM3bhCQwpNXWg5sDtnRBA1qtHpvDZUihIhyDMnk=";
+        "sha256:dbda82bd14cd90242a12be3e75d8d664baa510fcc3c8c00c9355d7275b2e819a"; # v1.88.1
+      sha256 = "sha256-3ysfCQfbpjs/7WFMWz8smeq8dkSXTnvl4D9jRXrqvZI=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
       imageDigest =
-        "sha256:9413adc9a2b9a761031b77ce1bfb479aaef3dc46ec57990c5b5646a9e7f853d5"; # v1.87.0
-      sha256 = "sha256-heYh0sntPD+1cKoX331OxfzKW6/K3/oVCs01WX8wwMM=";
-    };
-    web = {
-      imageName = "ghcr.io/immich-app/immich-web";
-      imageDigest =
-        "sha256:2bef28adbcc60a2ee5dee8cafe109e3d5c6b7bca88d90acdd3eec376200a6d6e"; # v1.87.0
-      sha256 = "sha256-t7wLNL3nG0znB4Pv/jk1PbQIGQdz7szLLnhxKo+cC3A=";
-    };
-    proxy = {
-      imageName = "ghcr.io/immich-app/immich-proxy";
-      imageDigest =
-        "sha256:9b60f2a6c9492306d4a2d182ac9274de6d9df6e6680ca7d55c8fd8348adcdaa6"; # 1.87.0
-      sha256 = "sha256-EP7Q3A6WAZExf+dGL8ANKQ2OepKCh/Zl7k+0nZxA7L4=";
+        "sha256:8204aa8196c7c8ca587bb7730fd6cd169d802971b31059fdc457149dfb04ff1b"; # v1.88.1
+      sha256 = "sha256-ILLKhqmyCULMG/vnX2/Ht2C/H3r1LTU4mfK+0Y9r5ok=";
     };
   };
   dbUsername = "immich";
@@ -54,6 +42,7 @@ let
   domain = "photos.diogotc.com";
   immichExternalPort = 8084;
 
+  typesenseHost = "immich_typesense";
   typesenseApiKey =
     "abcxyz123"; # doesn't matter since it's not accessible from the outside
 
@@ -64,6 +53,7 @@ let
 
     UPLOAD_LOCATION = photosLocation;
 
+    TYPESENSE_HOST = typesenseHost;
     TYPESENSE_API_KEY = typesenseApiKey;
 
     IMMICH_WEB_URL = immichWebUrl;
@@ -135,7 +125,9 @@ in {
         PGID = toString gid;
       };
 
-      dependsOn = [ "typesense" ];
+      dependsOn = [ typesenseHost ];
+
+      ports = [ "${toString immichExternalPort}:3001" ];
 
       autoStart = true;
     };
@@ -162,7 +154,7 @@ in {
         REVERSE_GEOCODING_DUMP_DIRECTORY = "/tmp/reverse-geocoding-dump";
       };
 
-      dependsOn = [ "typesense" ];
+      dependsOn = [ typesenseHost ];
 
       autoStart = true;
     };
@@ -179,17 +171,7 @@ in {
       autoStart = true;
     };
 
-    immich_web = {
-      imageFile = pkgs.dockerTools.pullImage images.web;
-      image = "ghcr.io/immich-app/immich-web";
-      extraOptions = [ "--network=immich-bridge" ];
-
-      environment = environment;
-
-      autoStart = true;
-    };
-
-    typesense = {
+    ${typesenseHost} = {
       image = "typesense/typesense:0.24.0";
       extraOptions = [ "--network=immich-bridge" ];
 
@@ -201,26 +183,6 @@ in {
       log-driver = "none";
 
       volumes = [ "immich-tsdata:/data" ];
-
-      autoStart = true;
-    };
-
-    immich_proxy = {
-      imageFile = pkgs.dockerTools.pullImage images.proxy;
-      image = "ghcr.io/immich-app/immich-proxy:release";
-      extraOptions = [ "--network=immich-bridge" ];
-
-      environment = {
-        IMMICH_SERVER_URL = immichServerUrl;
-        IMMICH_WEB_URL = immichWebUrl;
-        IMMICH_MACHINE_LEARNING_URL = immichMachineLearningUrl;
-      };
-
-      log-driver = "none";
-
-      dependsOn = [ "typesense" ];
-
-      ports = [ "${toString immichExternalPort}:8080" ];
 
       autoStart = true;
     };
