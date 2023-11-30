@@ -40,6 +40,7 @@ in {
   "hera/istDelegateElectionFenixSecret.age".publicKeys = [ heraSystem ];
   "hera/nebulaCert.age".publicKeys = [ heraSystem ];
   "hera/nebulaKey.age".publicKeys = [ heraSystem ];
+  "hera/nextcloudSecrets.age".publicKeys = [ heraSystem ];
   "hera/paperlessEnvVariables.age".publicKeys = [ heraSystem ];
   "hera/resticHealthchecksUrl.age".publicKeys = [ heraSystem ];
   "hera/resticRcloneConfig.age".publicKeys = [ heraSystem ];
