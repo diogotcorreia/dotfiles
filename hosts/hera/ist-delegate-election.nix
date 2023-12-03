@@ -11,7 +11,6 @@ let
   port = 8385;
 
   dbUser = config.services.ist-delegate-election.user;
-  dbName = dbUser;
 in {
 
   age.secrets.heraIstDelegateElectionFenixSecret = {
@@ -30,7 +29,7 @@ in {
       FENIX_BASE_URL = "https://fenix.tecnico.ulisboa.pt";
       FENIX_CLIENT_ID = "3103289965019140";
 
-      DATABASE_URL = "postgres:///${dbName}";
+      DATABASE_URL = "postgres:///${dbUser}";
     };
 
     settingsFile = config.age.secrets.heraIstDelegateElectionFenixSecret.path;
@@ -39,9 +38,9 @@ in {
   services.postgresql = {
     ensureUsers = [{
       name = dbUser;
-      ensurePermissions = { "DATABASE \"${dbName}\"" = "ALL PRIVILEGES"; };
+      ensureDBOwnership = true;
     }];
-    ensureDatabases = [ dbName ];
+    ensureDatabases = [ dbUser ];
   };
 
   security.acme.certs.${domain} = { };

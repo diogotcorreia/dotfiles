@@ -13,7 +13,6 @@ let
   dataDir = config.services.paperless.dataDir;
 
   dbUser = config.services.paperless.user;
-  dbName = dbUser;
 in {
 
   age.secrets.heraPaperlessEnvVariables = {
@@ -56,9 +55,9 @@ in {
   services.postgresql = {
     ensureUsers = [{
       name = dbUser;
-      ensurePermissions = { "DATABASE ${dbName}" = "ALL PRIVILEGES"; };
+      ensureDBOwnership = true;
     }];
-    ensureDatabases = [ dbName ];
+    ensureDatabases = [ dbUser ];
   };
 
   security.acme.certs.${domain} = { };

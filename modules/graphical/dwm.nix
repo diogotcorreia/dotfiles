@@ -36,7 +36,7 @@ in {
       '')
     ];
 
-    fonts.fonts = with pkgs; [
+    fonts.packages = with pkgs; [
       fira-code
       nerdfonts
       noto-fonts

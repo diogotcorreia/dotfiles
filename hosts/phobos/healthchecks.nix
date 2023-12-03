@@ -10,7 +10,6 @@ let
   host = "healthchecks.diogotc.com";
   port = 8003;
   dbUser = config.services.healthchecks.user;
-  dbName = "healthchecks";
   commonSecretSettings = {
     owner = config.services.healthchecks.user;
     group = config.services.healthchecks.group;
@@ -38,9 +37,9 @@ in {
   services.postgresql = {
     ensureUsers = [{
       name = dbUser;
-      ensurePermissions = { "DATABASE ${dbName}" = "ALL PRIVILEGES"; };
+      ensureDBOwnership = true;
     }];
-    ensureDatabases = [ dbName ];
+    ensureDatabases = [ dbUser ];
   };
 
   services.healthchecks = {
@@ -56,7 +55,7 @@ in {
       # Database configuration (using peer authentication; no password needed)
       DB = "postgres";
       DB_HOST = "";
-      DB_NAME = dbName;
+      DB_NAME = dbUser;
       DB_USER = dbUser;
 
       # WebAuthn domain

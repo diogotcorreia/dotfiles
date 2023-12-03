@@ -23,8 +23,7 @@ let
       sha256 = "sha256-fyKMf0+x5Wf/qR4njsvw9pwFjVH4nTTJBjSBMtNJrrs=";
     };
   };
-  dbUsername = "immich";
-  dbDatabaseName = "immich";
+  dbUsername = user;
 
   redisName = "immich";
 
@@ -47,7 +46,7 @@ let
     "abcxyz123"; # doesn't matter since it's not accessible from the outside
 
   environment = {
-    DB_URL = "socket://${dbUsername}:@/run/postgresql?db=${dbDatabaseName}";
+    DB_URL = "socket://${dbUsername}:@/run/postgresql?db=${dbUsername}";
 
     REDIS_SOCKET = config.services.redis.servers.${redisName}.unixSocket;
 
@@ -89,11 +88,9 @@ in {
   services.postgresql = {
     ensureUsers = [{
       name = dbUsername;
-      ensurePermissions = {
-        "DATABASE \"${dbDatabaseName}\"" = "ALL PRIVILEGES";
-      };
+      ensureDBOwnership = true;
     }];
-    ensureDatabases = [ dbDatabaseName ];
+    ensureDatabases = [ dbUsername ];
   };
 
   services.redis.servers.${redisName} = {

@@ -20,7 +20,7 @@ in {
       dataDir = "${config.my.homeDirectory}/.syncthing";
       overrideFolders = false;
       overrideDevices = false;
-      extraOptions = { gui = { theme = "dark"; }; };
+      settings = { gui = { theme = "dark"; }; };
     };
   };
 }

@@ -224,7 +224,7 @@ in {
   in {
     environment.systemPackages = [ pkg ];
 
-    fonts.fonts = with pkgs; [ material-design-icons ];
+    fonts.packages = with pkgs; [ material-design-icons ];
 
     hm.systemd.user.services.dwmblocks = {
       Unit = {

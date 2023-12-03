@@ -40,6 +40,7 @@ in mkYarnPackage rec {
       nativeBuildInputs = [
         pkg-config
         nodePackages.semver
+        nodePackages.node-gyp
         # nodePackages.node-gyp-build
         # nodePackages.node-pre-gyp
         python3
