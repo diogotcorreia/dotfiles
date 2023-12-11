@@ -109,6 +109,8 @@
   hm.home.packages = with pkgs; [
     # Arrange external displays
     arandr
+    # Heroic Games Launcher (FOSS Epic Games Launcher)
+    heroic
     # Office Suite
     libreoffice
     # Minecraft Launcher
