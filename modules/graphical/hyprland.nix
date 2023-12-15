@@ -9,6 +9,11 @@
 let
   inherit (lib) mkEnableOption mkIf escapeShellArg;
   cfg = config.modules.graphical;
+
+  hyprlandPackage = pkgs.unstable.hyprland;
+  hyprlandPortalPackage = pkgs.unstable.xdg-desktop-portal-hyprland.override {
+    hyprland = config.home-manager.users.${user}.wayland.windowManager.hyprland.finalPackage;
+  };
 in
 {
   # options.modules.graphical.enable =
@@ -19,13 +24,15 @@ in
 
     hm.wayland.windowManager.hyprland = {
       enable = true;
-      package = pkgs.unstable.hyprland;
+      package = hyprlandPackage;
+
+      systemd.enable = true;
 
       settings = {
         "$mod" = "SUPER";
 
         # https://wiki.hyprland.org/Configuring/Monitors/
-        monitor = ",preferred,auto,auto";
+        monitor = ",preferred,auto,1";
 
         # https://wiki.hyprland.org/Configuring/Variables/
         input = {
@@ -37,7 +44,7 @@ in
 
           touchpad = {
             disable_while_typing = false;
-            natural_scroll = false;
+            natural_scroll = true;
 
             # TODO seems interesting, experimenting for a while
             drag_lock = true;
@@ -53,6 +60,10 @@ in
           "col.inactive_border" = "rgba(595959aa)";
 
           layout = "dwindle";
+        };
+
+        misc = {
+          disable_hyprland_logo = true;
         };
 
         decoration = {
@@ -104,7 +115,7 @@ in
 
         # https://wiki.hyprland.org/Configuring/Binds/
         bind = [
-          "$mod, ENTER, exec, alacritty"
+          "$mod, return, exec, ${pkgs.alacritty}/bin/alacritty"
           "$mod, Q, killactive,"
           "$mod, M, exit,"
           "$mod, E, exec, dolphin"
@@ -146,6 +157,9 @@ in
           # Scroll through existing workspaces with mainMod + scroll
           "$mod, mouse_down, workspace, e+1"
           "$mod, mouse_up, workspace, e-1"
+
+          ", print, exec, ${pkgs.flameshot}/bin/flameshot gui"
+          "SHIFT, print, exec, ${pkgs.flameshot}/bin/flameshot full --path \"$XDG_PICTURES_DIR\""
         ];
 
         bindm = [
@@ -154,6 +168,15 @@ in
           "$mod, mouse:273, resizewindow"
         ];
       };
+    };
+
+    # Add extra portals (file picker, etc)
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ hyprlandPortalPackage
+      # pkgs.xdg-desktop-portal-gtk
+      ];
+      configPackages = [ hyprlandPackage ];
     };
 
     # Notification daemon

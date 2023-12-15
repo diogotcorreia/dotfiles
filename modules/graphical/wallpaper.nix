@@ -37,7 +37,11 @@ let
     '') wallpapers}
 
     if [ -n "$chosen_wallpaper" ]; then
-      ${pkgs.feh}/bin/feh --bg-fill --no-fehbg "$chosen_wallpaper"
+      if [ -n "$WAYLAND_DISPLAY" ]; then
+        ${pkgs.swaybg}/bin/swaybg --mode fill --image "$chosen_wallpaper"
+      else
+        ${pkgs.feh}/bin/feh --bg-fill --no-fehbg "$chosen_wallpaper"
+      fi
     fi
   '';
 in {
@@ -48,7 +52,7 @@ in {
   config.hm = mkIf cfg.enable {
     systemd.user.services.set-wallpaper = {
       Unit = {
-        Description = "Set desktop background using feh";
+        Description = "Set desktop background using swaybg";
         After = [ "graphical-session-pre.target" ];
         PartOf = [ "graphical-session.target" ];
       };
@@ -62,7 +66,7 @@ in {
       Install = { WantedBy = [ "graphical-session.target" ]; };
     };
     systemd.user.timers.set-wallpaper = {
-      Unit = { Description = "Set desktop background using feh"; };
+      Unit = { Description = "Set desktop background using swaybg"; };
 
       Timer = {
         OnCalendar = catAttrs "startTime" wallpapers;
