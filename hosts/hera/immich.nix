@@ -13,14 +13,14 @@ let
     serverAndMicroservices = {
       imageName = "ghcr.io/immich-app/immich-server";
       imageDigest =
-        "sha256:71b1e4f64e08aa26df1cb02687c58214ebded1fdc10eef21fedf08138e9771dd"; # v1.90.1
-      sha256 = "sha256-ypHkVpFE4NgG+7FFKyvS5ppnc8bO3F5pX+hs0DROvEM=";
+        "sha256:293673607cdc62be83d4982db491544959070982bdd7bab3181f8bbed485e619"; # v1.91.0
+      sha256 = "sha256-lbgZ82TJzNnsjx2VHaN/KEOUK55wKeTjA0bkubnaUt8=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
       imageDigest =
-        "sha256:04d2f5dea4b623c7442f84195927eb81d9c273882fe0cc360c56116f1dd7a948"; # v1.90.1
-      sha256 = "sha256-9I5Pjrt0L6ccRpGjO0L6JSFIc/qZhKq1+tCk8OkEUCQ=";
+        "sha256:4d5614c2f372acdc779a398f9c27e10ae35f3777fd34dd3f63cf88012644438f"; # v1.91.0
+      sha256 = "sha256-df00J92Uils7uaoqMkxt97ALgWIjXwY+fxku0OvIiHY=";
     };
   };
   dbUsername = user;
@@ -41,19 +41,12 @@ let
   domain = "photos.diogotc.com";
   immichExternalPort = 8084;
 
-  typesenseHost = "immich_typesense";
-  typesenseApiKey =
-    "abcxyz123"; # doesn't matter since it's not accessible from the outside
-
   environment = {
     DB_URL = "socket://${dbUsername}:@/run/postgresql?db=${dbUsername}";
 
     REDIS_SOCKET = config.services.redis.servers.${redisName}.unixSocket;
 
     UPLOAD_LOCATION = photosLocation;
-
-    TYPESENSE_HOST = typesenseHost;
-    TYPESENSE_API_KEY = typesenseApiKey;
 
     IMMICH_WEB_URL = immichWebUrl;
     IMMICH_SERVER_URL = immichServerUrl;
@@ -91,6 +84,14 @@ in {
       ensureDBOwnership = true;
     }];
     ensureDatabases = [ dbUsername ];
+
+    extraPlugins = [
+      (pkgs.my.pgvecto-rs.override rec {
+        postgresql = config.services.postgresql.package;
+        stdenv = postgresql.stdenv;
+      })
+    ];
+    settings = { shared_preload_libraries = "vectors.so"; };
   };
 
   services.redis.servers.${redisName} = {
@@ -122,8 +123,6 @@ in {
         PGID = toString gid;
       };
 
-      dependsOn = [ typesenseHost ];
-
       ports = [ "${toString immichExternalPort}:3001" ];
 
       autoStart = true;
@@ -151,8 +150,6 @@ in {
         REVERSE_GEOCODING_DUMP_DIRECTORY = "/tmp/reverse-geocoding-dump";
       };
 
-      dependsOn = [ typesenseHost ];
-
       autoStart = true;
     };
 
@@ -164,22 +161,6 @@ in {
       environment = environment;
 
       volumes = [ "immich-model-cache:/cache" ];
-
-      autoStart = true;
-    };
-
-    ${typesenseHost} = {
-      image = "typesense/typesense:0.24.0";
-      extraOptions = [ "--network=immich-bridge" ];
-
-      environment = {
-        TYPESENSE_API_KEY = typesenseApiKey;
-        TYPESENSE_DATA_DIR = "/data";
-      };
-
-      log-driver = "none";
-
-      volumes = [ "immich-tsdata:/data" ];
 
       autoStart = true;
     };
