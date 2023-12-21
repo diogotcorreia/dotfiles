@@ -21,7 +21,7 @@ in {
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud27;
+    package = pkgs.nextcloud28;
     hostName = domain;
     database.createLocally = true; # automatically uses pgsql through sockets
     configureRedis = true;
