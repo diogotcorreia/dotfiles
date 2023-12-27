@@ -49,7 +49,7 @@
       inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
       inherit (lib) mapAttrsToList hasSuffix;
       sshKeys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIADPTInG2ZJ0LxO+IBJd1aORzmJlFPuJrcp4YRIJEE1s dtc@apollo"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICYiuCHjX9Dmq69WoAn7EfgovnFLv0VhjL7BSTYQcFa7 dtc@apollo"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINlaWu32ANU+sWFcwKrPlqD/oW3lC3/hrA1Z3+ubuh5A dtc@bacchus"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYrpjewh+Z0IQkVLipcYJ0g0v1UJu49QmB9GTVUci11 dtc@ceres"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKSySzB983nfhGMp++3FcpR0mwpYFiXu9XrGYwf/IH1w dtc@xiaomi11tpro"

@@ -1,4 +1,6 @@
 let
+  apolloSystem =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBotkuo1Z6ZbLFhfx7qt7lUS8Kr3xnu1X1fqjlbQ8BLE";
   bacchusSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
   broSystem =
@@ -9,8 +11,15 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 in {
   "nebulaCA.age".publicKeys =
-    [ bacchusSystem broSystem heraSystem phobosSystem ];
-  "openvpnIstAuthUserPass.age".publicKeys = [ bacchusSystem ];
+    [ apolloSystem bacchusSystem broSystem heraSystem phobosSystem ];
+  "openvpnIstAuthUserPass.age".publicKeys = [ apolloSystem bacchusSystem ];
+
+  "apollo/nebulaCert.age".publicKeys = [ apolloSystem ];
+  "apollo/nebulaKey.age".publicKeys = [ apolloSystem ];
+  "apollo/resticHealthchecksUrl.age".publicKeys = [ apolloSystem ];
+  "apollo/resticRcloneConfig.age".publicKeys = [ apolloSystem ];
+  "apollo/resticPassword.age".publicKeys = [ apolloSystem ];
+  "apollo/resticSshKey.age".publicKeys = [ apolloSystem ];
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
   "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];
