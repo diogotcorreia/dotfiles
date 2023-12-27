@@ -11,7 +11,6 @@ in {
   "nebulaCA.age".publicKeys =
     [ bacchusSystem broSystem heraSystem phobosSystem ];
   "openvpnIstAuthUserPass.age".publicKeys = [ bacchusSystem ];
-  "openvpnKthEN2720Config.age".publicKeys = [ bacchusSystem ];
 
   "bacchus/nebulaCert.age".publicKeys = [ bacchusSystem ];
   "bacchus/nebulaKey.age".publicKeys = [ bacchusSystem ];

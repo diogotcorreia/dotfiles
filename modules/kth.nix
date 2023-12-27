@@ -13,15 +13,5 @@ let
 in {
   options.modules.kth.enable = mkEnableOption "kth";
 
-  config = mkIf cfg.enable {
-    # OpenVPN for Ethical Hacking course
-    age.secrets.openvpnKthEN2720Config.file =
-      "${secretsDir}/openvpnKthEN2720Config.age";
-    services.openvpn.servers.kth-ethhak = {
-      autoStart = false;
-      config = ''
-        config ${config.age.secrets.openvpnKthEN2720Config.path}
-      '';
-    };
-  };
+  config = mkIf cfg.enable { };
 }
