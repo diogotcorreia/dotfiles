@@ -26,7 +26,8 @@
   boot.tmp.cleanOnBoot = true;
 
   # Time zone
-  time.timeZone = "Europe/Stockholm";
+  time.timeZone = null;
+  services.automatic-timezoned.enable = true;
 
   # Network Manager
   # TODO move to module
