@@ -15,6 +15,17 @@ in {
 
   # TODO move docker containers to NixOS services
 
+  # https://github.com/esphome/issues/issues/2669
+  boot = {
+    kernel = {
+      sysctl = {
+        # Forward on all interfaces.
+        "net.ipv4.igmp_max_memberships" = 50;
+        "net.ipv6.igmp_max_msf" = 30;
+      };
+    };
+  };
+
   networking.firewall = {
     # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
     # UDP Port 5683 for CoIoT (Shelly push)
