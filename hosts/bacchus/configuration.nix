@@ -131,7 +131,10 @@
       autorandr.laptop.enable = true;
       development.enable = true;
       gtk.enable = true;
-      programs.enable = true;
+      programs = {
+        enable = true;
+        laptop = true;
+      };
       qt.enable = true;
       wacom = {
         enable = true;

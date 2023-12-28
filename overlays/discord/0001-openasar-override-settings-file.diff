@@ -1,0 +1,45 @@
+diff --git a/src/appSettings.js b/src/appSettings.js
+index 1fee704..6a3bc8e 100644
+--- a/src/appSettings.js
++++ b/src/appSettings.js
+@@ -1,17 +1,23 @@
+ const fs = require('fs');
+ 
+ class Settings { // Heavily based on original for compat, but simplified and tweaked
+-  constructor(path) {
++  constructor(path, pathOverride) {
+     try {
+       this.store = JSON.parse(fs.readFileSync(path));
+     } catch {
+       this.store = {};
+     }
++    try {
++      this.storeOverride = JSON.parse(fs.readFileSync(pathOverride));
++    } catch {
++      this.storeOverride = {};
++    }
+ 
+     this.path = path;
+     this.mod = this.getMod();
+ 
+     log('Settings', this.path, this.store);
++    log('Settings Override', pathOverride, this.storeOverride);
+   }
+ 
+   getMod() { // Get when file was last modified
+@@ -21,7 +27,7 @@ class Settings { // Heavily based on original for compat, but simplified and twe
+   }
+ 
+   get(k, d) {
+-    return this.store[k] ?? d;
++    return this.storeOverride[k] ?? this.store[k] ?? d;
+   }
+ 
+   set(k, v) {
+@@ -43,4 +49,4 @@ class Settings { // Heavily based on original for compat, but simplified and twe
+ }
+ 
+ let inst; // Instance of class
+-exports.getSettings = () => inst = inst ?? new Settings(require('path').join(require('./paths').getUserData(), 'settings.json'));
+\ No newline at end of file
++exports.getSettings = () => inst = inst ?? new Settings(require('path').join(require('./paths').getUserData(), 'settings.json'), require('path').join(require('./paths').getUserData(), 'settings-override.json'));
