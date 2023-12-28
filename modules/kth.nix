@@ -10,8 +10,22 @@
 let
   inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.kth;
+
+  courseUrls = {
+    nss = "https://canvas.kth.se/courses/42913";
+    cybsoc = "https://canvas.kth.se/courses/43064";
+    cybsam = "https://canvas.kth.se/courses/41786";
+  };
 in {
   options.modules.kth.enable = mkEnableOption "kth";
 
-  config = mkIf cfg.enable { };
+  config = mkIf cfg.enable {
+    # Course shortcuts
+    hm.home.packages = map (courseName:
+      pkgs.writeScriptBin courseName ''
+        ${pkgs.xdg-utils}/bin/xdg-open ${
+          escapeShellArg (getAttr courseName courseUrls)
+        }
+      '') (attrNames courseUrls);
+  };
 }
