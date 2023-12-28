@@ -16,12 +16,8 @@ in {
   # Home manager module
   config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
-      # Jetbrains Gateway (remote development)
-      unstable.jetbrains.gateway
       # IntelliJ IDEA (Ultimate)
       unstable.jetbrains.idea-ultimate
-      # Visual Studio Code
-      unstable.vscode
       # Insomnia REST Client
       unstable.insomnia
     ];
