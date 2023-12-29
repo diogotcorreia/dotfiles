@@ -111,6 +111,12 @@ in {
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/home".neededForBoot = true;
 
+  # External Drive
+  fileSystems."/media/files" = {
+    device = "/dev/disk/by-uuid/7257ad05-1068-4545-936b-94231db82bb1";
+    fsType = "ext4";
+  };
+
   # Persistence (root dataset is rollback'ed to a blank snapshot)
   networking.hostId = hostId;
   boot.initrd.postDeviceCommands = lib.mkAfter ''
