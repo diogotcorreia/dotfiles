@@ -167,8 +167,8 @@
         paths = [
           "${config.my.homeDirectory}/.ultrastardx"
           "${config.my.homeDirectory}/documents"
-          "${config.my.homeDirectory}/games/Heroic/Prefixes/default/Overcooked 2/pfx/drive_c/users/steamuser/AppData/LocalLow/Team17/Overcooked2"
           "${config.my.homeDirectory}/pictures"
+          "/media/files/documents"
         ];
         exclude = [
           "${config.my.homeDirectory}/.ultrastardx/logs"
