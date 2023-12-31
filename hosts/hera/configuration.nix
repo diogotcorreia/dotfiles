@@ -52,6 +52,8 @@
         file = "${hostSecretsDir}/acmeDnsCredentials.age";
         group = config.security.acme.defaults.group;
       };
+      heraAutoUpgradeHealthchecksUrl.file =
+        "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
       heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       heraNebulaCert = {
         file = "${hostSecretsDir}/nebulaCert.age";
@@ -134,7 +136,11 @@
   # Modules
   modules = {
     editors.neovim.enable = true;
-    server.enable = true;
+    server = {
+      enable = true;
+      autoUpgradeCheckUrlFile =
+        config.age.secrets.heraAutoUpgradeHealthchecksUrl.path;
+    };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {

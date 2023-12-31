@@ -41,6 +41,8 @@
   # Secret manager (agenix)
   age = {
     secrets = {
+      phobosAutoUpgradeHealthchecksUrl.file =
+        "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
       phobosHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       phobosNebulaCert = {
         file = "${hostSecretsDir}/nebulaCert.age";
@@ -85,7 +87,11 @@
   # Modules
   modules = {
     editors.neovim.enable = true;
-    server.enable = true;
+    server = {
+      enable = true;
+      autoUpgradeCheckUrlFile =
+        config.age.secrets.phobosAutoUpgradeHealthchecksUrl.path;
+    };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {

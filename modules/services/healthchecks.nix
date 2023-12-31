@@ -45,7 +45,7 @@ in {
       }));
       default = { };
       example = {
-        restic-backups-systemBackup.url =
+        restic-backups-systemBackup.checkUrlFile =
           "config.age.secrets.healthchecksUrl.path";
       };
     };

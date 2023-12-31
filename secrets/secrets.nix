@@ -29,6 +29,7 @@ in {
   "bacchus/resticSshKey.age".publicKeys = [ bacchusSystem ];
 
   "bro/acmeDnsCredentials.age".publicKeys = [ broSystem ];
+  "bro/autoUpgradeHealthchecksUrl.age".publicKeys = [ broSystem ];
   "bro/cfdyndnsToken.age".publicKeys = [ broSystem ];
   "bro/hassSecrets.age".publicKeys = [ broSystem ];
   "bro/healthchecksUrl.age".publicKeys = [ broSystem ];
@@ -40,6 +41,7 @@ in {
   "bro/resticSshKey.age".publicKeys = [ broSystem ];
 
   "hera/acmeDnsCredentials.age".publicKeys = [ heraSystem ];
+  "hera/autoUpgradeHealthchecksUrl.age".publicKeys = [ heraSystem ];
   "hera/diskstationSambaCredentials.age".publicKeys = [ heraSystem ];
   "hera/fireflyAutoDataImporterEnv.age".publicKeys = [ heraSystem ];
   "hera/fireflyAutoDataImporterHealthchecksUrl.age".publicKeys = [ heraSystem ];
@@ -55,6 +57,7 @@ in {
   "hera/resticPassword.age".publicKeys = [ heraSystem ];
   "hera/resticSshKey.age".publicKeys = [ heraSystem ];
 
+  "phobos/autoUpgradeHealthchecksUrl.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksEnvVariables.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksSecretKey.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksUrl.age".publicKeys = [ phobosSystem ];

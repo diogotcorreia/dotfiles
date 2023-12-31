@@ -39,6 +39,8 @@
         file = "${hostSecretsDir}/acmeDnsCredentials.age";
         group = config.security.acme.defaults.group;
       };
+      broAutoUpgradeHealthchecksUrl.file =
+        "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
       broCfdyndnsToken.file = "${hostSecretsDir}/cfdyndnsToken.age";
       broHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       broNebulaCert = {
@@ -123,7 +125,11 @@
   # Modules
   modules = {
     editors.neovim.enable = true;
-    server.enable = true;
+    server = {
+      enable = true;
+      autoUpgradeCheckUrlFile =
+        config.age.secrets.broAutoUpgradeHealthchecksUrl.path;
+    };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {
