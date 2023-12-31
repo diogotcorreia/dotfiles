@@ -73,11 +73,18 @@
       user = "dtc";
       userFullName = "Diogo Correia";
 
+      # homeassistant-chip-core (matter) requires openssl 1.1.1
+      # https://github.com/NixOS/nixpkgs/issues/269713#issuecomment-1826082142
+      permittedInsecurePackages = [ "openssl-1.1.1w" ];
+
       pkg-sets = final: prev:
         let
           args = {
             system = final.system;
-            config.allowUnfree = true;
+            config = {
+              inherit permittedInsecurePackages;
+              allowUnfree = true;
+            };
           };
         in { unstable = import inputs.nixpkgs-unstable args; };
 
