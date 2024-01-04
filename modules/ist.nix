@@ -38,6 +38,8 @@ in {
         "IST.UTL.PT" = { admin_server = "kerberosmaster.ist.utl.pt"; };
       };
     };
+    # By default, the kerberos pam module is enabled when kerberos is enabled, which we don't want
+    security.pam.krb5.enable = false;
 
     # OpenVPN
     age.secrets.openvpnIstAuthUserPass.file =
