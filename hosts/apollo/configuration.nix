@@ -140,7 +140,7 @@
       qt.enable = true;
       wacom = {
         enable = true;
-        monitor = "DVI-D-0";
+        monitor = "HEAD-0"; # nvidia drivers don't work with DVI-D-0
       };
       xournalpp.enable = true;
     };
