@@ -28,6 +28,12 @@
   # Time zone
   time.timeZone = null;
   services.automatic-timezoned.enable = true;
+  systemd.services.automatic-timezoned.serviceConfig = {
+    # zone1970.tab does not contain all timezones anymore, for some weird reason (e.g., Europe/Stockholm since 2022b)
+    # Use deprecated zone.tab that includes all timezones
+    ExecStart = lib.mkForce
+      "${config.services.automatic-timezoned.package}/bin/automatic-timezoned --zoneinfo-path=${pkgs.tzdata}/share/zoneinfo/zone.tab";
+  };
 
   # Network Manager
   # TODO move to module
