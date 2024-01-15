@@ -1,0 +1,20 @@
+diff --git a/src/splash/index.js b/src/splash/index.js
+index 41b2048..81d5f2f 100644
+--- a/src/splash/index.js
++++ b/src/splash/index.js
+@@ -14,7 +14,7 @@ exports.initSplash = (startMin) => {
+   launchSplash(startMin);
+ 
+ 
+-  if (process.env.OPENASAR_QUICKSTART || oaConfig.quickstart) setTimeout(() => {
++  if (process.env.OPENASAR_QUICKSTART ?? oaConfig.quickstart) setTimeout(() => {
+     destroySplash();
+ 
+     launchMain();
+@@ -224,4 +224,4 @@ const fail = (c) => {
+   sendState('fail', { seconds: 10 });
+ 
+   setTimeout(c, 10000);
+-};
+\ No newline at end of file
++};

@@ -15,7 +15,10 @@ final: prev: rec {
         + "/pkgs/applications/networking/instant-messengers/discord/openasar.nix")
         { };
     in openasarPkg.overrideAttrs (oldAttrs: rec {
-      patches = [ ./0001-openasar-override-settings-file.diff ];
+      patches = [
+        ./0001-openasar-override-settings-file.diff
+        ./0002-openasar-allow-skip-quickstart.diff
+      ];
     });
   };
 }
