@@ -203,6 +203,10 @@
         "/var/lib/bluetooth"
         "/var/lib/docker"
       ];
+      files = [
+        # Store automatic timezone between reboots
+        "/etc/localtime"
+      ];
     };
     ist.enable = true;
     kth.enable = true;
