@@ -9,10 +9,13 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
   phobosSystem =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
+
+  personalSystems = [ apolloSystem bacchusSystem ];
+  allSystems = personalSystems ++ [ broSystem heraSystem phobosSystem ];
 in {
-  "nebulaCA.age".publicKeys =
-    [ apolloSystem bacchusSystem broSystem heraSystem phobosSystem ];
-  "openvpnIstAuthUserPass.age".publicKeys = [ apolloSystem bacchusSystem ];
+  "nebulaCA.age".publicKeys = allSystems;
+  "nixCacheDiogotcReadTokenNetrc.age".publicKeys = allSystems;
+  "openvpnIstAuthUserPass.age".publicKeys = personalSystems;
 
   "apollo/nebulaCert.age".publicKeys = [ apolloSystem ];
   "apollo/nebulaKey.age".publicKeys = [ apolloSystem ];
@@ -57,6 +60,7 @@ in {
   "hera/resticPassword.age".publicKeys = [ heraSystem ];
   "hera/resticSshKey.age".publicKeys = [ heraSystem ];
 
+  "phobos/atticdEnvVariables.age".publicKeys = [ phobosSystem ];
   "phobos/autoUpgradeHealthchecksUrl.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksEnvVariables.age".publicKeys = [ phobosSystem ];
   "phobos/healthchecksSecretKey.age".publicKeys = [ phobosSystem ];

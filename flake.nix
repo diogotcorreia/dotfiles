@@ -36,6 +36,11 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+    };
     ist-delegate-election = {
       url = "github:diogotcorreia/ist-delegate-election?ref=v1.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -138,6 +143,7 @@
               inputs.agenix.nixosModules.default
               inputs.lanzaboote.nixosModules.lanzaboote
               inputs.disko.nixosModules.disko
+              inputs.attic.nixosModules.atticd
               inputs.ist-delegate-election.nixosModules.default
             ] ++ allModules ++ (mkModules "${dir}/${name}");
           };
