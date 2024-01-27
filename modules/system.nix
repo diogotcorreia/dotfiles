@@ -50,6 +50,9 @@
     SystemMaxUse=500M
   '';
 
+  # Avoid running out of space on the boot partition
+  boot.loader.systemd-boot.configurationLimit = lib.mkDefault 10;
+
   # dedup equal pages
   hardware.ksm = {
     enable = true;
