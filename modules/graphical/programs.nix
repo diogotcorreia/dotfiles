@@ -26,6 +26,8 @@ in {
 
   config = mkIf cfg.enable {
     hm.home.packages = with pkgs; [
+      # Anki Flashcards
+      unstable.anki
       # Discord
       discord-openasar
       # Telegram
