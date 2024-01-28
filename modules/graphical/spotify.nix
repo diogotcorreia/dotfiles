@@ -5,7 +5,7 @@
 #
 # Spotify configuration and themeing with Spicetify
 
-{ config, lib, spicetifyPkgs, ... }:
+{ config, lib, pkgs, spicetifyPkgs, ... }:
 let
   inherit (lib) mkIf;
   cfg = config.modules.graphical.programs;
@@ -18,6 +18,9 @@ in {
 
     hm.programs.spicetify = {
       enable = true;
+      spotifyPackage = pkgs.unstable.spotify;
+      spicetifyPackage = pkgs.unstable.spicetify-cli;
+
       theme = spicetifyPkgs.themes.Comfy;
 
       enabledExtensions = with spicetifyPkgs.extensions; [

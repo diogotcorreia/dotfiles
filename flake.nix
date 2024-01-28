@@ -21,7 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     spicetify-nix = {
-      url = "github:the-argus/spicetify-nix";
+      url = "github:A1ca7raz/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nvim-osc52 = {
