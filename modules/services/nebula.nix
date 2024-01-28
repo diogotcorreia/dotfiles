@@ -57,6 +57,11 @@ in {
         host = "any";
       }];
     };
+    firewall.allowPinging = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to allow ICMP pings to this node.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -79,7 +84,11 @@ in {
         proto = "any";
         host = "any";
       }] ++ cfg.firewall.outbound;
-      firewall.inbound = cfg.firewall.inbound;
+      firewall.inbound = (lib.lists.optional cfg.firewall.allowPinging {
+        port = "any";
+        proto = "icmp";
+        host = "any";
+      }) ++ cfg.firewall.inbound;
 
       staticHostMap = { "192.168.100.1" = [ "146.59.199.128:4242" ]; };
     };
