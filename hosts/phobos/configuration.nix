@@ -103,6 +103,7 @@
         enable = true;
         cert = config.age.secrets.phobosNebulaCert.path;
         key = config.age.secrets.phobosNebulaKey.path;
+        isLighthouse = true;
       };
       restic = {
         enable = true;

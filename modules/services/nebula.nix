@@ -12,12 +12,14 @@ let
 in {
   options.modules.services.nebula = {
     enable = mkEnableOption "nebula";
-    cert = mkOption { # Required
+    cert = mkOption {
+      # Required
       type = types.path;
       example = "/etc/nebula/host.crt";
       description = "Path to the host certificate.";
     };
-    key = mkOption { # Required
+    key = mkOption {
+      # Required
       type = types.path;
       example = "/etc/nebula/host.key";
       description = "Path to the host key.";
@@ -26,15 +28,6 @@ in {
       type = types.bool;
       default = false;
       description = "Whether this node is a lighthouse.";
-    };
-    lighthouses = mkOption {
-      type = types.listOf types.str;
-      default = [ "192.168.100.1" ];
-      description = ''
-        List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
-        nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
-      '';
-      example = [ "192.168.100.1" ];
     };
 
     firewall.outbound = mkOption {
@@ -77,7 +70,10 @@ in {
       cert = cfg.cert;
       key = cfg.key;
       isLighthouse = cfg.isLighthouse;
-      lighthouses = cfg.lighthouses;
+      lighthouses = lib.lists.optionals (!cfg.isLighthouse) [
+        "192.168.100.1"
+        "192.168.100.7"
+      ];
 
       firewall.outbound = [{
         port = "any";
@@ -90,7 +86,10 @@ in {
         host = "any";
       }) ++ cfg.firewall.inbound;
 
-      staticHostMap = { "192.168.100.1" = [ "146.59.199.128:4242" ]; };
+      staticHostMap = {
+        "192.168.100.1" = [ "zeus.diogotc.com:4242" ];
+        "192.168.100.7" = [ "phobos.diogotc.com:4242" ];
+      };
     };
   };
 }
