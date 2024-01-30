@@ -17,7 +17,10 @@ in {
       enable = true;
       package = pkgs.wireshark; # use Qt version instead of CLI version
     };
-    usr.extraGroups = [ "wireshark" ];
+    usr.extraGroups = [
+      "wireshark"
+      "dialout" # access USB TTY devices without sudo
+    ];
 
     hm.home.packages = with pkgs; [
       # Enhanced GDB
