@@ -11,7 +11,7 @@ let
   portApp = 8005;
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
   portDataImporter = 8006;
-  versionDataImporter = "1.3.3";
+  versionDataImporter = "1.4.2";
 
   cronAutoDataImporter = "23:58";
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
