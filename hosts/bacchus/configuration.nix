@@ -78,6 +78,8 @@
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
   '';
+  # Suspend even if plugged in to external monitor
+  services.logind.lidSwitchDocked = "suspend";
 
   # Docker (containers)
   virtualisation.docker.enable = true;
