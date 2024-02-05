@@ -4,17 +4,23 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for bacchus (PC).
-
-{ pkgs, lib, sshKeys, config, hostSecretsDir, ... }: {
+{
+  pkgs,
+  lib,
+  sshKeys,
+  config,
+  hostSecretsDir,
+  ...
+}: {
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
 
   # ZFS
-  boot.supportedFilesystems = [ "zfs" ];
+  boot.supportedFilesystems = ["zfs"];
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-  boot.kernelParams = [ "nohibernate" ];
+  boot.kernelParams = ["nohibernate"];
   networking.hostId = "239be557";
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -31,7 +37,8 @@
   systemd.services.automatic-timezoned.serviceConfig = {
     # zone1970.tab does not contain all timezones anymore, for some weird reason (e.g., Europe/Stockholm since 2022b)
     # Use deprecated zone.tab that includes all timezones
-    ExecStart = lib.mkForce
+    ExecStart =
+      lib.mkForce
       "${config.services.automatic-timezoned.package}/bin/automatic-timezoned --zoneinfo-path=${pkgs.tzdata}/share/zoneinfo/zone.tab";
   };
 
@@ -42,13 +49,13 @@
     ethernet.macAddress = "stable";
     wifi.macAddress = "stable";
   };
-  usr.extraGroups = [ "networkmanager" ];
+  usr.extraGroups = ["networkmanager"];
 
   # SSH server
   # TODO move to module
   services.openssh = {
     enable = true;
-    authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
+    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
@@ -99,15 +106,13 @@
         file = "${hostSecretsDir}/nebulaKey.age";
         owner = "nebula-nebula0";
       };
-      bacchusResticHealthchecksUrl.file =
-        "${hostSecretsDir}/resticHealthchecksUrl.age";
-      bacchusResticRcloneConfig.file =
-        "${hostSecretsDir}/resticRcloneConfig.age";
+      bacchusResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
+      bacchusResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
       bacchusResticPassword.file = "${hostSecretsDir}/resticPassword.age";
       bacchusResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
-    identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
 
   # GnuPG (GPG)
@@ -161,11 +166,13 @@
         enable = true;
         cert = config.age.secrets.bacchusNebulaCert.path;
         key = config.age.secrets.bacchusNebulaKey.path;
-        firewall.inbound = [{
-          port = 22;
-          proto = "tcp";
-          group = "dtc";
-        }];
+        firewall.inbound = [
+          {
+            port = 22;
+            proto = "tcp";
+            group = "dtc";
+          }
+        ];
       };
       restic = {
         enable = true;

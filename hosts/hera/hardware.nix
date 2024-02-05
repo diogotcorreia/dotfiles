@@ -1,21 +1,25 @@
 # the default hardware config can be generated with `nixos-generate-config --show-hardware-config`
-{ config, lib, pkgs, modulesPath, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: let
   # a host id can be generated with `head -c4 /dev/urandom | od -A none -t x4`
   hostId = "9832f4c7";
 
   diskDevice = "/dev/sda";
   espSize = "512M";
 in {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  imports = [(modulesPath + "/installer/scan/not-detected.nix")];
 
-  boot.initrd.availableKernelModules =
-    [ "xhci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = ["xhci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" "rtsx_pci_sdmmc"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
 
-  boot.supportedFilesystems = [ "zfs" ];
+  boot.supportedFilesystems = ["zfs"];
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   boot.loader.systemd-boot.enable = true;
@@ -58,7 +62,7 @@ in {
     zpool = {
       rpool = {
         type = "zpool";
-        options = { ashift = "12"; };
+        options = {ashift = "12";};
         rootFsOptions = {
           acltype = "posixacl";
           atime = "off";
@@ -74,7 +78,7 @@ in {
           "local/root" = {
             type = "zfs_fs";
             mountpoint = "/";
-            mountOptions = [ "zfsutil" ];
+            mountOptions = ["zfsutil"];
 
             postCreateHook = ''
               zfs snapshot rpool/local/root@blank
@@ -83,7 +87,7 @@ in {
           "local/nix" = {
             type = "zfs_fs";
             mountpoint = "/nix";
-            mountOptions = [ "zfsutil" ];
+            mountOptions = ["zfsutil"];
           };
           # To be used in emergencies if the disk goes full
           "local/reserved" = {
@@ -96,12 +100,12 @@ in {
           "safe/persist" = {
             type = "zfs_fs";
             mountpoint = "/persist";
-            mountOptions = [ "zfsutil" ];
+            mountOptions = ["zfsutil"];
           };
           "safe/home" = {
             type = "zfs_fs";
             mountpoint = "/home";
-            mountOptions = [ "zfsutil" ];
+            mountOptions = ["zfsutil"];
           };
         };
       };

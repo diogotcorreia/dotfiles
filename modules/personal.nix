@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # non-graphical configuration for personal computers.
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.personal;
 in {
@@ -28,8 +31,7 @@ in {
       # Rust
       rustup
     ];
-    modules.services.restic.paths =
-      [ "${config.my.homeDirectory}/.timewarrior" ];
+    modules.services.restic.paths = ["${config.my.homeDirectory}/.timewarrior"];
 
     hm.programs.zsh.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
 
@@ -37,17 +39,17 @@ in {
       enable = true;
       nix-direnv.enable = true;
     };
-    hm.programs.git.ignores = [ ".envrc" ".direnv" ];
+    hm.programs.git.ignores = [".envrc" ".direnv"];
 
     # Android Debug Bridge
-    usr.extraGroups = [ "adbusers" ];
+    usr.extraGroups = ["adbusers"];
     programs.adb.enable = true;
 
     # ssh client config
     hm.programs.ssh = {
       enable = true;
       matchBlocks = {
-        "* !apollo !bacchus !ceres".setEnv = { TERM = "xterm-256color"; };
+        "* !apollo !bacchus !ceres".setEnv = {TERM = "xterm-256color";};
 
         apollo = {
           hostname = "192.168.100.2";

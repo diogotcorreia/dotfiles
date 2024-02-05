@@ -4,15 +4,16 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Home Assistant (and related programs) on Hera
-
-{ pkgs, config, ... }:
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   hassDomain = "hass.diogotc.com";
   hassPort = 8123;
   noderedDomain = "nodered.hera.diogotc.com";
   noderedPort = 1880;
 in {
-
   # TODO move docker containers to NixOS services
 
   # https://github.com/esphome/issues/issues/2669
@@ -29,15 +30,15 @@ in {
   networking.firewall = {
     # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
     # UDP Port 5683 for CoIoT (Shelly push)
-    allowedUDPPorts = [ 5353 5683 ];
+    allowedUDPPorts = [5353 5683];
 
     # TCP Ports 8095 and 8097 for Music Assistant
-    allowedTCPPorts = [ 8095 8097 hassPort ];
+    allowedTCPPorts = [8095 8097 hassPort];
   };
 
   security.acme.certs = {
-    ${hassDomain} = { };
-    ${noderedDomain} = { };
+    ${hassDomain} = {};
+    ${noderedDomain} = {};
   };
 
   services.caddy.virtualHosts = {
@@ -59,6 +60,5 @@ in {
     };
   };
 
-  modules.services.restic.paths =
-    [ "${config.my.homeDirectory}/homeassistant" ];
+  modules.services.restic.paths = ["${config.my.homeDirectory}/homeassistant"];
 }

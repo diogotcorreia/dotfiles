@@ -5,21 +5,20 @@
 #
 # Configuration for Immich on Hera
 # Adapted from https://github.com/solomon-b/nixos-config/blob/87bd7ad355d8de2897f13a0f0e96739ff6d06196/config/machines/servers/sower/immich.nix
-
-{ pkgs, config, ... }:
-
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   images = {
     serverAndMicroservices = {
       imageName = "ghcr.io/immich-app/immich-server";
-      imageDigest =
-        "sha256:c7b80752d48464dea1c4495ff810365a0809d89c2ac219547d3c1aed81c6411f"; # v1.94.1
+      imageDigest = "sha256:c7b80752d48464dea1c4495ff810365a0809d89c2ac219547d3c1aed81c6411f"; # v1.94.1
       sha256 = "sha256-Xd/dBmT9fqT1zVpAr0dfMSnBJ6LI2X5YI31cIrqPULk=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
-      imageDigest =
-        "sha256:a3c612c548d5f547a31d001d97f661d7acd4a0ae354de76a70e45162d2b81014"; # v1.94.1
+      imageDigest = "sha256:a3c612c548d5f547a31d001d97f661d7acd4a0ae354de76a70e45162d2b81014"; # v1.94.1
       sha256 = "sha256-ePrVgaJ/QTz15TuJgp/C6UkrKKWD/yGeIn6Fs3EbXzE=";
     };
   };
@@ -53,8 +52,14 @@ let
     IMMICH_MACHINE_LEARNING_URL = immichMachineLearningUrl;
   };
 
-  wrapImage = { name, imageName, imageDigest, sha256, entrypoint }:
-    pkgs.dockerTools.buildImage ({
+  wrapImage = {
+    name,
+    imageName,
+    imageDigest,
+    sha256,
+    entrypoint,
+  }:
+    pkgs.dockerTools.buildImage {
       name = name;
       tag = "release";
       fromImage = pkgs.dockerTools.pullImage {
@@ -63,27 +68,30 @@ let
         sha256 = sha256;
       };
       created = "now";
-      config = if builtins.length entrypoint == 0 then
-        null
-      else {
-        Cmd = entrypoint;
-        WorkingDir = "/usr/src/app";
-      };
-    });
+      config =
+        if builtins.length entrypoint == 0
+        then null
+        else {
+          Cmd = entrypoint;
+          WorkingDir = "/usr/src/app";
+        };
+    };
   mkMount = dir: "${dir}:${dir}";
 in {
   users.users.${user} = {
     inherit group uid;
     isSystemUser = true;
   };
-  users.groups.${group} = { inherit gid; };
+  users.groups.${group} = {inherit gid;};
 
   services.postgresql = {
-    ensureUsers = [{
-      name = dbUsername;
-      ensureDBOwnership = true;
-    }];
-    ensureDatabases = [ dbUsername ];
+    ensureUsers = [
+      {
+        name = dbUsername;
+        ensureDBOwnership = true;
+      }
+    ];
+    ensureDatabases = [dbUsername];
 
     extraPlugins = [
       (pkgs.my.pgvecto-rs.override rec {
@@ -91,7 +99,7 @@ in {
         stdenv = postgresql.stdenv;
       })
     ];
-    settings = { shared_preload_libraries = "vectors.so"; };
+    settings = {shared_preload_libraries = "vectors.so";};
   };
 
   services.redis.servers.${redisName} = {
@@ -99,18 +107,17 @@ in {
     enable = true;
   };
 
-  systemd.tmpfiles.rules = [ "d ${photosLocation} 0750 ${user} ${group}" ];
+  systemd.tmpfiles.rules = ["d ${photosLocation} 0750 ${user} ${group}"];
 
   virtualisation.oci-containers.containers = {
     immich_server = {
       imageFile = wrapImage {
         inherit (images.serverAndMicroservices) imageName imageDigest sha256;
         name = "immich_server";
-        entrypoint = [ "/bin/sh" "start-server.sh" ];
+        entrypoint = ["/bin/sh" "start-server.sh"];
       };
       image = "immich_server:release";
-      extraOptions =
-        [ "--network=immich-bridge" "--user=${toString uid}:${toString gid}" ];
+      extraOptions = ["--network=immich-bridge" "--user=${toString uid}:${toString gid}"];
 
       volumes = [
         "${photosLocation}:/usr/src/app/upload"
@@ -118,12 +125,14 @@ in {
         (mkMount "/run/redis-${redisName}")
       ];
 
-      environment = environment // {
-        PUID = toString uid;
-        PGID = toString gid;
-      };
+      environment =
+        environment
+        // {
+          PUID = toString uid;
+          PGID = toString gid;
+        };
 
-      ports = [ "${toString immichExternalPort}:3001" ];
+      ports = ["${toString immichExternalPort}:3001"];
 
       autoStart = true;
     };
@@ -132,11 +141,10 @@ in {
       imageFile = wrapImage {
         inherit (images.serverAndMicroservices) imageName imageDigest sha256;
         name = "immich_microservices";
-        entrypoint = [ "/bin/sh" "start-microservices.sh" ];
+        entrypoint = ["/bin/sh" "start-microservices.sh"];
       };
       image = "immich_microservices:release";
-      extraOptions =
-        [ "--network=immich-bridge" "--user=${toString uid}:${toString gid}" ];
+      extraOptions = ["--network=immich-bridge" "--user=${toString uid}:${toString gid}"];
 
       volumes = [
         "${photosLocation}:/usr/src/app/upload"
@@ -144,11 +152,13 @@ in {
         (mkMount "/run/redis-${redisName}")
       ];
 
-      environment = environment // {
-        PUID = toString uid;
-        PGID = toString gid;
-        REVERSE_GEOCODING_DUMP_DIRECTORY = "/tmp/reverse-geocoding-dump";
-      };
+      environment =
+        environment
+        // {
+          PUID = toString uid;
+          PGID = toString gid;
+          REVERSE_GEOCODING_DUMP_DIRECTORY = "/tmp/reverse-geocoding-dump";
+        };
 
       autoStart = true;
     };
@@ -156,11 +166,11 @@ in {
     immich_machine_learning = {
       imageFile = pkgs.dockerTools.pullImage images.machineLearning;
       image = "ghcr.io/immich-app/immich-machine-learning";
-      extraOptions = [ "--network=immich-bridge" ];
+      extraOptions = ["--network=immich-bridge"];
 
       environment = environment;
 
-      volumes = [ "immich-model-cache:/cache" ];
+      volumes = ["immich-model-cache:/cache"];
 
       autoStart = true;
     };
@@ -168,8 +178,8 @@ in {
 
   systemd.services.init-immich-network = {
     description = "Create the network bridge for immich.";
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
     serviceConfig.Type = "oneshot";
     script = ''
       # Put a true at the end to prevent getting non-zero return code, which will
@@ -182,7 +192,7 @@ in {
     '';
   };
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {

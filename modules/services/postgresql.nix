@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Postgresql configuration
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (builtins) concatStringsSep;
   inherit (lib) mkIf escapeShellArg;
 
@@ -16,8 +19,7 @@ let
   compressSuffix = ".zstd";
   compressCmd = "${pkgs.zstd}/bin/zstd -c --adapt";
 
-  getFilePath = databaseName:
-    "/tmp/postgresql_db_${databaseName}.sql${compressSuffix}";
+  getFilePath = databaseName: "/tmp/postgresql_db_${databaseName}.sql${compressSuffix}";
 
   getPrepareCommand = databaseName: ''
     ${pkgs.coreutils}/bin/install -b -m 600 /dev/null ${
@@ -27,21 +29,21 @@ let
       escapeShellArg databaseName
     } | ${compressCmd} > ${getFilePath databaseName}
   '';
-  getCleanupCommand = databaseName:
-    "${pkgs.coreutils}/bin/rm ${getFilePath databaseName}";
+  getCleanupCommand = databaseName: "${pkgs.coreutils}/bin/rm ${getFilePath databaseName}";
 in {
-
   config = mkIf postgresqlCfg.enable {
     # Handle backup of PostgreSQL databases
     modules.services.restic = {
       paths = map getFilePath postgresqlCfg.ensureDatabases;
-      backupPrepareCommand = concatStringsSep "\n"
+      backupPrepareCommand =
+        concatStringsSep "\n"
         (map getPrepareCommand postgresqlCfg.ensureDatabases);
-      backupCleanupCommand = concatStringsSep "\n"
+      backupCleanupCommand =
+        concatStringsSep "\n"
         (map getCleanupCommand postgresqlCfg.ensureDatabases);
     };
 
     # Persist databases when using tmpfs
-    modules.impermanence.directories = [ "/var/lib/postgresql" ];
+    modules.impermanence.directories = ["/var/lib/postgresql"];
   };
 }

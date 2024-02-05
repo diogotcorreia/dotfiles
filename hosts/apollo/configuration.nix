@@ -4,9 +4,14 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for apollo (PC).
-
-{ pkgs, lib, sshKeys, config, hostSecretsDir, ... }: {
-
+{
+  pkgs,
+  lib,
+  sshKeys,
+  config,
+  hostSecretsDir,
+  ...
+}: {
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -30,10 +35,12 @@
   networking = {
     interfaces.enp9s0 = {
       ipv4 = {
-        addresses = [{
-          address = "192.168.1.2";
-          prefixLength = 24;
-        }];
+        addresses = [
+          {
+            address = "192.168.1.2";
+            prefixLength = 24;
+          }
+        ];
       };
       wakeOnLan.enable = true;
     };
@@ -47,7 +54,7 @@
   # TODO move to module
   services.openssh = {
     enable = true;
-    authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
+    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
@@ -93,15 +100,13 @@
         file = "${hostSecretsDir}/nebulaKey.age";
         owner = "nebula-nebula0";
       };
-      apolloResticHealthchecksUrl.file =
-        "${hostSecretsDir}/resticHealthchecksUrl.age";
-      apolloResticRcloneConfig.file =
-        "${hostSecretsDir}/resticRcloneConfig.age";
+      apolloResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
+      apolloResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
       apolloResticPassword.file = "${hostSecretsDir}/resticPassword.age";
       apolloResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
-    identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
 
   # GnuPG (GPG)
@@ -151,11 +156,13 @@
         enable = true;
         cert = config.age.secrets.apolloNebulaCert.path;
         key = config.age.secrets.apolloNebulaKey.path;
-        firewall.inbound = [{
-          port = 22;
-          proto = "tcp";
-          group = "dtc";
-        }];
+        firewall.inbound = [
+          {
+            port = 22;
+            proto = "tcp";
+            group = "dtc";
+          }
+        ];
       };
       restic = {
         enable = true;

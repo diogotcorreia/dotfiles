@@ -4,8 +4,11 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # global programs and packages
-
-{ pkgs, agenixPackage, ... }: {
+{
+  pkgs,
+  agenixPackage,
+  ...
+}: {
   # Essential packages
   environment.systemPackages = with pkgs; [
     # Compressed archives

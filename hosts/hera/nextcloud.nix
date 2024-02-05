@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Nextcloud on Hera
-
-{ pkgs, config, hostSecretsDir, ... }:
-let
+{
+  pkgs,
+  config,
+  hostSecretsDir,
+  ...
+}: let
   domain = "cloud.diogotc.com";
   port = 8007;
 
@@ -27,13 +30,14 @@ in {
     configureRedis = true;
     maxUploadSize = "2G";
     config = {
-      adminpassFile = toString (pkgs.writeText "nc-first-install-pwd"
-        "changeMeAfterFirstInstallPlease");
+      adminpassFile =
+        toString (pkgs.writeText "nc-first-install-pwd"
+          "changeMeAfterFirstInstallPlease");
       dbtype = "pgsql";
       dbuser = dbUsername;
       dbname = dbDatabaseName;
 
-      trustedProxies = [ "127.0.0.1" "::1" ];
+      trustedProxies = ["127.0.0.1" "::1"];
       overwriteProtocol = "https";
 
       defaultPhoneRegion = "PT";
@@ -65,9 +69,9 @@ in {
     "listen.owner" = config.services.caddy.user;
     "listen.group" = config.services.caddy.group;
   };
-  users.groups.nextcloud.members = [ config.services.caddy.user ];
+  users.groups.nextcloud.members = [config.services.caddy.user];
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {
@@ -136,6 +140,6 @@ in {
     };
   };
 
-  modules.impermanence.directories = [ config.services.nextcloud.home ];
-  modules.services.restic.paths = [ config.services.nextcloud.home ];
+  modules.impermanence.directories = [config.services.nextcloud.home];
+  modules.services.restic.paths = [config.services.nextcloud.home];
 }

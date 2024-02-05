@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Xournal++ configuration
-
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf strings;
   inherit (strings) concatStringsSep;
   cfg = config.modules.graphical.xournalpp;
@@ -92,7 +95,7 @@ in {
     mkEnableOption "xournal++ with custom toolbar";
 
   config = mkIf cfg.enable {
-    hm.home.packages = [ pkgs.unstable.xournalpp ];
+    hm.home.packages = [pkgs.unstable.xournalpp];
 
     hm.xdg.configFile."xournalpp/colornames.ini" = {
       text = ''

@@ -4,9 +4,11 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Calibre Web on Hera
-
-{ pkgs, config, ... }:
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   domain = "calibre.diogotc.com";
   port = 8011;
 
@@ -26,7 +28,7 @@ in {
     };
   };
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {
@@ -39,7 +41,7 @@ in {
     };
   };
 
-  modules.impermanence.directories = [ statePath ];
+  modules.impermanence.directories = [statePath];
 
-  modules.services.restic.paths = [ statePath libraryPath ];
+  modules.services.restic.paths = [statePath libraryPath];
 }

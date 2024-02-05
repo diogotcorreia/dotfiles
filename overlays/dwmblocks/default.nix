@@ -4,9 +4,7 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Apply patches to DWMBlocks
-
-{ ... }:
-final: prev: rec {
+{...}: final: prev: rec {
   dwmblocks = prev.dwmblocks.overrideAttrs (oldAttrs: rec {
     src = prev.fetchFromGitHub {
       owner = "LukeSmithxyz";
@@ -16,8 +14,7 @@ final: prev: rec {
     };
     patches = [
       (prev.fetchpatch {
-        url =
-          "https://github.com/torrinfail/dwmblocks/commit/4d92b6ca6caae215a79f00d88404c018b9eac15f.patch";
+        url = "https://github.com/torrinfail/dwmblocks/commit/4d92b6ca6caae215a79f00d88404c018b9eac15f.patch";
         sha256 = "sha256-Rahx1EU9ijsKuqjdcuODDLWhsAq4X23j1kwstGXJrVQ=";
       })
       ./0001-cleanup.diff

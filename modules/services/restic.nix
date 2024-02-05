@@ -4,9 +4,13 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # restic backups configuration with healthchecks ping.
-
-{ pkgs, config, lib, utils, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  utils,
+  ...
+}: let
   inherit (lib) mkEnableOption mkOption types mkIf optionalAttrs;
   inherit (lib.strings) optionalString;
   inherit (utils.systemdUtils.unitOptions) unitOption;
@@ -77,21 +81,21 @@ in {
         backup command will be run. This can be used to create a
         prune-only job.
       '';
-      example = [ "/var/lib/postgresql" "/home/user/backup" ];
+      example = ["/var/lib/postgresql" "/home/user/backup"];
     };
 
     exclude = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = lib.mdDoc ''
         Patterns to exclude when backing up.
       '';
-      example = [ "/var/cache" "/home/*/.cache" ".git" ];
+      example = ["/var/cache" "/home/*/.cache" ".git"];
     };
 
     timerConfig = mkOption {
       type = types.attrsOf unitOption;
-      default = { OnCalendar = "daily"; };
+      default = {OnCalendar = "daily";};
       description = lib.mdDoc ''
         When to run the backup. See man systemd.timer for details.
       '';
@@ -154,17 +158,19 @@ in {
       backupCleanupCommand = cfg.backupCleanupCommand;
     };
 
-    systemd.services.${systemdServiceName} = {
-      # Only run when network is up
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-    } // optionalAttrs (config.modules.personal.enable) {
-      # Configure backups for personal machines
-      # Only on AC (for laptops) and never more frequently than 12h
-      startLimitIntervalSec = (12 * 60 * 60); # 12h
-      startLimitBurst = 1;
-      unitConfig.ConditionACPower = "|true"; # | means trigger
-    };
+    systemd.services.${systemdServiceName} =
+      {
+        # Only run when network is up
+        wants = ["network-online.target"];
+        after = ["network-online.target"];
+      }
+      // optionalAttrs (config.modules.personal.enable) {
+        # Configure backups for personal machines
+        # Only on AC (for laptops) and never more frequently than 12h
+        startLimitIntervalSec = 12 * 60 * 60; # 12h
+        startLimitBurst = 1;
+        unitConfig.ConditionACPower = "|true"; # | means trigger
+      };
 
     modules.services.healthchecks.systemd-monitoring.${systemdServiceName}.checkUrlFile =
       cfg.checkUrlFile;

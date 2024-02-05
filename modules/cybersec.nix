@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Cybersecurity and CTF related tools.
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.cybersec;
 in {

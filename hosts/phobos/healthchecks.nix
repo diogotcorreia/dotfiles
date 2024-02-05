@@ -4,9 +4,14 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Healthchecks.io on Phobos
-
-args@{ pkgs, inputs, config, hostSecretsDir, buildEnv, ... }:
-let
+args @ {
+  pkgs,
+  inputs,
+  config,
+  hostSecretsDir,
+  buildEnv,
+  ...
+}: let
   host = "healthchecks.diogotc.com";
   port = 8003;
   dbUser = config.services.healthchecks.user;
@@ -15,31 +20,34 @@ let
     group = config.services.healthchecks.group;
   };
 in {
-
   # Import unstable module, since it uses some python dependencies directly
   # https://stackoverflow.com/questions/47650857/nixos-module-imports-with-arguments
-  disabledModules = [ "services/web-apps/healthchecks.nix" ];
+  disabledModules = ["services/web-apps/healthchecks.nix"];
   imports = [
     (import (inputs.nixpkgs-unstable
       + "/nixos/modules/services/web-apps/healthchecks.nix")
-      (args // { pkgs = pkgs.unstable; }))
+    (args // {pkgs = pkgs.unstable;}))
   ];
 
   age.secrets = {
-    phobosHealthchecksSecretKey = commonSecretSettings // {
-      file = "${hostSecretsDir}/healthchecksSecretKey.age";
-    };
+    phobosHealthchecksSecretKey =
+      commonSecretSettings
+      // {
+        file = "${hostSecretsDir}/healthchecksSecretKey.age";
+      };
     phobosHealthchecksEnvVariables = {
       file = "${hostSecretsDir}/healthchecksEnvVariables.age";
     };
   };
 
   services.postgresql = {
-    ensureUsers = [{
-      name = dbUser;
-      ensureDBOwnership = true;
-    }];
-    ensureDatabases = [ dbUser ];
+    ensureUsers = [
+      {
+        name = dbUser;
+        ensureDBOwnership = true;
+      }
+    ];
+    ensureDatabases = [dbUser];
   };
 
   services.healthchecks = {
@@ -49,7 +57,7 @@ in {
 
     # Pass non-secret settings
     settings = {
-      ALLOWED_HOSTS = [ host ];
+      ALLOWED_HOSTS = [host];
       APPRISE_ENABLED = "False";
 
       # Database configuration (using peer authentication; no password needed)
@@ -81,8 +89,7 @@ in {
   systemd.services = let
     commonConfig = {
       serviceConfig = {
-        EnvironmentFile =
-          [ config.age.secrets.phobosHealthchecksEnvVariables.path ];
+        EnvironmentFile = [config.age.secrets.phobosHealthchecksEnvVariables.path];
       };
     };
   in {
@@ -98,6 +105,5 @@ in {
     '';
   };
 
-  modules.services.restic.paths = [ config.services.healthchecks.dataDir ];
-
+  modules.services.restic.paths = [config.services.healthchecks.dataDir];
 }

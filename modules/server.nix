@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Common configuration for servers.
-
-{ config, lib, systemFlakePath, ... }:
-let
+{
+  config,
+  lib,
+  systemFlakePath,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf mkOption optionalAttrs types;
   cfg = config.modules.server;
 in {
@@ -16,8 +19,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "config.age.secrets.autoUpgradeHealthchecksUrl.path";
-      description =
-        "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
+      description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
     };
   };
 
@@ -37,13 +39,15 @@ in {
       randomizedDelaySec = "1h";
     };
 
-    modules.services.healthchecks.systemd-monitoring = optionalAttrs
-      (config.system.autoUpgrade.enable && cfg.autoUpgradeCheckUrlFile
+    modules.services.healthchecks.systemd-monitoring =
+      optionalAttrs
+      (config.system.autoUpgrade.enable
+        && cfg.autoUpgradeCheckUrlFile
         != null) {
-          # must match service of system.autoUpgrade
-          # https://github.com/NixOS/nixpkgs/blob/9dd7699928e26c3c00d5d46811f1358524081062/nixos/modules/tasks/auto-upgrade.nix#L175
-          nixos-upgrade.checkUrlFile = cfg.autoUpgradeCheckUrlFile;
-        };
+        # must match service of system.autoUpgrade
+        # https://github.com/NixOS/nixpkgs/blob/9dd7699928e26c3c00d5d46811f1358524081062/nixos/modules/tasks/auto-upgrade.nix#L175
+        nixos-upgrade.checkUrlFile = cfg.autoUpgradeCheckUrlFile;
+      };
 
     nix.optimise.automatic = true;
     nix.gc = {

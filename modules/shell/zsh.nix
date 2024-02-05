@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # zsh (with oh-my-zsh) configuration.
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.zsh;
 in {
@@ -19,7 +22,7 @@ in {
         enable = true;
         oh-my-zsh = {
           enable = true;
-          plugins = [ "git" "docker-compose" "zoxide" ];
+          plugins = ["git" "docker-compose" "zoxide"];
         };
         plugins = [
           {

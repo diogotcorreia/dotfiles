@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Paperless-ngx on Hera
-
-{ pkgs, config, hostSecretsDir, ... }:
-let
+{
+  pkgs,
+  config,
+  hostSecretsDir,
+  ...
+}: let
   domain = "paperless.diogotc.com";
   port = config.services.paperless.port;
 
@@ -14,7 +17,6 @@ let
 
   dbUser = config.services.paperless.user;
 in {
-
   age.secrets.heraPaperlessEnvVariables = {
     file = "${hostSecretsDir}/paperlessEnvVariables.age";
     owner = config.services.paperless.user;
@@ -42,7 +44,7 @@ in {
     commonConfig = {
       serviceConfig = {
         # has PAPERLESS_SECRET_KEY
-        EnvironmentFile = [ config.age.secrets.heraPaperlessEnvVariables.path ];
+        EnvironmentFile = [config.age.secrets.heraPaperlessEnvVariables.path];
       };
     };
   in {
@@ -53,14 +55,16 @@ in {
   };
 
   services.postgresql = {
-    ensureUsers = [{
-      name = dbUser;
-      ensureDBOwnership = true;
-    }];
-    ensureDatabases = [ dbUser ];
+    ensureUsers = [
+      {
+        name = dbUser;
+        ensureDBOwnership = true;
+      }
+    ];
+    ensureDatabases = [dbUser];
   };
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {
@@ -73,7 +77,7 @@ in {
     };
   };
 
-  modules.impermanence.directories = [ dataDir ];
+  modules.impermanence.directories = [dataDir];
 
-  modules.services.restic.paths = [ dataDir ];
+  modules.services.restic.paths = [dataDir];
 }

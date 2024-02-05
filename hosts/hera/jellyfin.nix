@@ -4,9 +4,11 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Jellyfin on Hera
-
-{ pkgs, config, ... }:
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   domainJellyfin = "jellyfin.diogotc.com";
   portJellyfin = 8096;
   domainRadarr = "radarr.hera.diogotc.com";
@@ -23,12 +25,11 @@ let
   diskstationAddress = "192.168.1.4";
   mediaGroup = "diskstation-media";
 in {
-
   # https://nixos.wiki/wiki/Accelerated_Video_Playback
   nixpkgs.overlays = [
     (final: prev: {
       intel-vaapi-driver =
-        prev.intel-vaapi-driver.override { enableHybridCodec = true; };
+        prev.intel-vaapi-driver.override {enableHybridCodec = true;};
     })
   ];
   hardware.opengl = {
@@ -62,8 +63,7 @@ in {
     fsType = "cifs";
     options = let
       # this line prevents hanging on network split
-      automount_opts =
-        "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
       permissions = "uid=root,gid=${mediaGroup},file_mode=0664,dir_mode=0775";
     in [
@@ -73,14 +73,14 @@ in {
 
   # Open Jellyfin local discovery ports
   # https://jellyfin.org/docs/general/networking/index.html
-  networking.firewall.allowedUDPPorts = [ 1900 7359 ];
+  networking.firewall.allowedUDPPorts = [1900 7359];
 
   security.acme.certs = {
-    ${domainJellyfin} = { };
-    ${domainRadarr} = { };
-    ${domainSonarr} = { };
-    ${domainJackett} = { };
-    ${domainBazarr} = { };
+    ${domainJellyfin} = {};
+    ${domainRadarr} = {};
+    ${domainSonarr} = {};
+    ${domainJackett} = {};
+    ${domainBazarr} = {};
   };
 
   services.caddy.virtualHosts = {
@@ -124,11 +124,11 @@ in {
     };
   };
 
-  users.groups.${mediaGroup} = { };
+  users.groups.${mediaGroup} = {};
   users.users = {
-    ${config.services.radarr.user}.extraGroups = [ mediaGroup ];
-    ${config.services.sonarr.user}.extraGroups = [ mediaGroup ];
-    ${config.services.bazarr.user}.extraGroups = [ mediaGroup ];
+    ${config.services.radarr.user}.extraGroups = [mediaGroup];
+    ${config.services.sonarr.user}.extraGroups = [mediaGroup];
+    ${config.services.bazarr.user}.extraGroups = [mediaGroup];
   };
 
   modules.impermanence.directories = [

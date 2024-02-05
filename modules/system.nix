@@ -4,22 +4,26 @@
 # URL:    https://github.com/RageKnify/Config
 #
 # System config common across all hosts
-
-{ config, inputs, pkgs, lib, secretsDir, ... }: {
+{
+  config,
+  inputs,
+  pkgs,
+  lib,
+  secretsDir,
+  ...
+}: {
   # Contains:
   # machine nix-cache.diogotc.com
   # password <token>
-  age.secrets.nixCacheDiogotcReadTokenNetrc.file =
-    "${secretsDir}/nixCacheDiogotcReadTokenNetrc.age";
+  age.secrets.nixCacheDiogotcReadTokenNetrc.file = "${secretsDir}/nixCacheDiogotcReadTokenNetrc.age";
 
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
-      trusted-users = [ "root" "@wheel" ];
-      substituters = [ "https://nix-cache.diogotc.com/dtc" ];
-      trusted-public-keys =
-        [ "dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=" ];
+      experimental-features = ["nix-command" "flakes"];
+      trusted-users = ["root" "@wheel"];
+      substituters = ["https://nix-cache.diogotc.com/dtc"];
+      trusted-public-keys = ["dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U="];
       netrc-file = config.age.secrets.nixCacheDiogotcReadTokenNetrc.path;
     };
 

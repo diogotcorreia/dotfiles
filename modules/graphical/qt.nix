@@ -4,9 +4,11 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Qt theme configuration
-
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.qt;
 in {

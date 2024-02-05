@@ -5,9 +5,12 @@
 #
 # Secure Boot configuration
 # https://github.com/nix-community/lanzaboote/
-
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.secureboot;
 
@@ -24,7 +27,7 @@ in {
       enable = true;
       pkiBundle = securebootFolder;
     };
-    modules.impermanence.directories = [ securebootFolder ];
+    modules.impermanence.directories = [securebootFolder];
 
     environment.systemPackages = [
       # For debugging and troubleshooting Secure Boot.

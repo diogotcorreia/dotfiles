@@ -5,9 +5,13 @@
 #
 # Configuration for services and programs needed while studying
 # at Royal Institute of Technology (KTH).
-
-{ pkgs, config, lib, secretsDir, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  secretsDir,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.kth;
 
@@ -30,9 +34,9 @@ in {
 
     # IL1333
     environment.systemPackages = with pkgs; [
-      (quartus-prime-lite.override { supportedDevices = [ "Cyclone V" ]; })
+      (quartus-prime-lite.override {supportedDevices = ["Cyclone V"];})
       cutecom
     ];
-    services.udev.packages = [ pkgs.usb-blaster-udev-rules ];
+    services.udev.packages = [pkgs.usb-blaster-udev-rules];
   };
 }

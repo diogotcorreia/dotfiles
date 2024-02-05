@@ -4,16 +4,17 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Transmission on Hera
-
-{ pkgs, config, ... }:
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   domain = "transmission.hera.diogotc.com";
   port = 9091;
 in {
-
   # TODO move docker containers to NixOS services
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {
@@ -27,11 +28,10 @@ in {
   };
 
   modules.services.restic = {
-    paths = [ "${config.my.homeDirectory}/transmission-openvpn" ];
+    paths = ["${config.my.homeDirectory}/transmission-openvpn"];
     exclude = [
       "${config.my.homeDirectory}/transmission-openvpn/data/completed"
       "${config.my.homeDirectory}/transmission-openvpn/data/incomplete"
-
     ];
   };
 }

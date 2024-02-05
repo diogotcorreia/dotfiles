@@ -4,8 +4,6 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Use cfdyndns from nixos-unstable
-
-{ ... }:
-final: prev: rec {
+{...}: final: prev: rec {
   cfdyndns = prev.unstable.cfdyndns;
 }

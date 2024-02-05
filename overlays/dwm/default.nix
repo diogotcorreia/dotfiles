@@ -4,9 +4,7 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Apply patches to DWM
-
-{ ... }:
-final: prev: rec {
+{...}: final: prev: rec {
   dwm = prev.dwm.overrideAttrs (oldAttrs: rec {
     patches = [
       (prev.fetchpatch {
@@ -14,28 +12,23 @@ final: prev: rec {
         sha256 = "sha256-thwe2p2uw09a7Se3Petik1ILkUSsblkZDb5BbfEQKSw=";
       })
       (prev.fetchpatch {
-        url =
-          "https://dwm.suckless.org/patches/statuscmd/dwm-statuscmd-status2d-20210405-60bb3df.diff";
+        url = "https://dwm.suckless.org/patches/statuscmd/dwm-statuscmd-status2d-20210405-60bb3df.diff";
         sha256 = "sha256-d7kkM6o+K9KbpEyTkdyJZRBHhN4Lb7cLX3JFb4q+zs4=";
       })
       (prev.fetchpatch {
-        url =
-          "https://dwm.suckless.org/patches/focusmonmouse/dwm-focusmonmouse-6.2.diff";
+        url = "https://dwm.suckless.org/patches/focusmonmouse/dwm-focusmonmouse-6.2.diff";
         sha256 = "sha256-BsbcljMjsQne4gLbLE1o1RbQD43DwPcGDF9N3eu7AF8=";
       })
       (prev.fetchpatch {
-        url =
-          "https://dwm.suckless.org/patches/actualfullscreen/dwm-actualfullscreen-20191112-cb3f58a.diff";
+        url = "https://dwm.suckless.org/patches/actualfullscreen/dwm-actualfullscreen-20191112-cb3f58a.diff";
         sha256 = "sha256-SMqYYKM2dq+6aD2R3EDEuiGIn5yIhiYhnJKtrHacXBc=";
       })
       (prev.fetchpatch {
-        url =
-          "https://dwm.suckless.org/patches/underlinetags/dwm-underlinetags-6.2.diff";
+        url = "https://dwm.suckless.org/patches/underlinetags/dwm-underlinetags-6.2.diff";
         sha256 = "sha256-TSg2UtsRGhE+eE67qiOsfUQscTKFh2VYPb/1Sx8TOCw=";
       })
       (prev.fetchpatch {
-        url =
-          "https://dwm.suckless.org/patches/removeborder/dwm-removeborder-20220626-d3f93c7.diff";
+        url = "https://dwm.suckless.org/patches/removeborder/dwm-removeborder-20220626-d3f93c7.diff";
         sha256 = "sha256-0QUN+wfKyXxabXyKXIcpPcdnLkH4d0Oqx8pncjc+It4=";
       })
       ./0001-keybinds.diff

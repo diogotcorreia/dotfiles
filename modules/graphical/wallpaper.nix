@@ -4,9 +4,13 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # wallpaper scripts. changes wallpapers based on time of day
-
-{ pkgs, config, lib, configDir, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  configDir,
+  ...
+}: let
   inherit (builtins) catAttrs;
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical;
@@ -31,10 +35,11 @@ let
   wallpaperScript = pkgs.writers.writeBash "setbg" ''
     now=$(${pkgs.coreutils}/bin/date +%s)
     ${lib.strings.concatMapStringsSep "\n" (wallpaper: ''
-      if [[ `${pkgs.coreutils}/bin/date --date='${wallpaper.startTime}' +%s` -le "$now" ]]; then
-        chosen_wallpaper='${wallpaper.path}'
-      fi
-    '') wallpapers}
+        if [[ `${pkgs.coreutils}/bin/date --date='${wallpaper.startTime}' +%s` -le "$now" ]]; then
+          chosen_wallpaper='${wallpaper.path}'
+        fi
+      '')
+      wallpapers}
 
     if [ -n "$chosen_wallpaper" ]; then
       ${pkgs.feh}/bin/feh --bg-fill --no-fehbg "$chosen_wallpaper"
@@ -49,8 +54,8 @@ in {
     systemd.user.services.set-wallpaper = {
       Unit = {
         Description = "Set desktop background using feh";
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
+        After = ["graphical-session-pre.target"];
+        PartOf = ["graphical-session.target"];
       };
 
       Service = {
@@ -59,17 +64,17 @@ in {
         IOSchedulingClass = "idle";
       };
 
-      Install = { WantedBy = [ "graphical-session.target" ]; };
+      Install = {WantedBy = ["graphical-session.target"];};
     };
     systemd.user.timers.set-wallpaper = {
-      Unit = { Description = "Set desktop background using feh"; };
+      Unit = {Description = "Set desktop background using feh";};
 
       Timer = {
         OnCalendar = catAttrs "startTime" wallpapers;
         Persistent = true;
       };
 
-      Install = { WantedBy = [ "timers.target" ]; };
+      Install = {WantedBy = ["timers.target"];};
     };
   };
 }

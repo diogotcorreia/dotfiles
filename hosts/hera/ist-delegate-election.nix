@@ -4,15 +4,17 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for IST Delegate Election on Hera
-
-{ pkgs, config, hostSecretsDir, ... }:
-let
+{
+  pkgs,
+  config,
+  hostSecretsDir,
+  ...
+}: let
   domain = "ist-delegate-election.diogotc.com";
   port = 8385;
 
   dbUser = config.services.ist-delegate-election.user;
 in {
-
   age.secrets.heraIstDelegateElectionFenixSecret = {
     file = "${hostSecretsDir}/istDelegateElectionFenixSecret.age";
     owner = config.services.ist-delegate-election.user;
@@ -36,14 +38,16 @@ in {
   };
 
   services.postgresql = {
-    ensureUsers = [{
-      name = dbUser;
-      ensureDBOwnership = true;
-    }];
-    ensureDatabases = [ dbUser ];
+    ensureUsers = [
+      {
+        name = dbUser;
+        ensureDBOwnership = true;
+      }
+    ];
+    ensureDatabases = [dbUser];
   };
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {
@@ -53,5 +57,4 @@ in {
       '';
     };
   };
-
 }

@@ -4,15 +4,14 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Enable (proprietary :/) NVIDIA drivers
-
-{ config, ... }: {
+{config, ...}: {
   hardware.opengl = {
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
   };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = ["nvidia"];
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -21,4 +20,3 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 }
-

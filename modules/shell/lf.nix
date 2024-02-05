@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # lf file manager configuration.
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.lf;
 in {
@@ -14,11 +17,11 @@ in {
 
   # Home manager modules
   config.hm = mkIf cfg.enable {
-    home.packages = with pkgs; [ file highlight python311Packages.pdftotext ];
+    home.packages = with pkgs; [file highlight python311Packages.pdftotext];
 
     programs.lf = {
       enable = true;
-      settings = { icons = true; };
+      settings = {icons = true;};
       previewer = {
         keybinding = "i";
         source = pkgs.writeShellScript "previewer.sh" ''
@@ -79,7 +82,7 @@ in {
           }}
         '';
       };
-      keybindings = { gs = ":fzf_search"; };
+      keybindings = {gs = ":fzf_search";};
     };
 
     # LFCD is a wrapper around LF that sets the CWD to the

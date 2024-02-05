@@ -4,8 +4,15 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for hera (server).
-
-{ pkgs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
+{
+  pkgs,
+  lib,
+  sshKeys,
+  config,
+  hostSecretsDir,
+  agenixPackage,
+  ...
+}: {
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -16,10 +23,12 @@
   # Network Configuration
   networking = {
     interfaces.eno1 = {
-      ipv4.addresses = [{
-        address = "192.168.1.3";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "192.168.1.3";
+          prefixLength = 24;
+        }
+      ];
     };
     defaultGateway = {
       address = "192.168.1.1";
@@ -31,7 +40,7 @@
   # TODO move to module
   services.openssh = {
     enable = true;
-    authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
+    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
@@ -46,14 +55,12 @@
   # Secret manager (agenix)
   age = {
     secrets = {
-      diskstationSambaCredentials.file =
-        "${hostSecretsDir}/diskstationSambaCredentials.age";
+      diskstationSambaCredentials.file = "${hostSecretsDir}/diskstationSambaCredentials.age";
       heraAcmeDnsCredentials = {
         file = "${hostSecretsDir}/acmeDnsCredentials.age";
         group = config.security.acme.defaults.group;
       };
-      heraAutoUpgradeHealthchecksUrl.file =
-        "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
+      heraAutoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
       heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       heraNebulaCert = {
         file = "${hostSecretsDir}/nebulaCert.age";
@@ -63,24 +70,23 @@
         file = "${hostSecretsDir}/nebulaKey.age";
         owner = "nebula-nebula0";
       };
-      heraResticHealthchecksUrl.file =
-        "${hostSecretsDir}/resticHealthchecksUrl.age";
+      heraResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
       heraResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
       heraResticPassword.file = "${hostSecretsDir}/resticPassword.age";
       heraResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
-    identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
 
   # Specific packages for this host
-  hm.home.packages = with pkgs; [ ];
+  hm.home.packages = with pkgs; [];
 
   # Keep laptop on when lid is closed
   services.logind.lidSwitch = "ignore";
 
   # Caddy (web server)
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [80 443];
   services.caddy = {
     enable = true;
     extraConfig = ''
@@ -113,7 +119,7 @@
 
     '';
   };
-  users.users.caddy.extraGroups = [ config.security.acme.defaults.group ];
+  users.users.caddy.extraGroups = [config.security.acme.defaults.group];
 
   # Ensure nginx isn't turned on by some services (e.g. services using PHP)
   services.nginx.enable = lib.mkForce false;
@@ -188,9 +194,9 @@
           "${config.my.homeDirectory}/dailytxt"
           "${config.my.homeDirectory}/grafana"
         ];
-        exclude = [ "**/node_modules" "**/.npm" ];
+        exclude = ["**/node_modules" "**/.npm"];
 
-        timerConfig = { OnCalendar = "03:05"; };
+        timerConfig = {OnCalendar = "03:05";};
       };
     };
     shell = {

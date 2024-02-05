@@ -4,15 +4,17 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # misc GUI programs
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkOption mkIf types;
   cfg = config.modules.graphical.programs;
 
   discordThemeFile = builtins.fetchurl {
-    url =
-      "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.8/uniform/nordic.theme.css";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.8/uniform/nordic.theme.css";
     sha256 = "sha256-nsz20H5Vc79DVkL4dE+0y3FRJiN88Z7aJPRchIImTYY=";
   };
 in {
@@ -50,7 +52,10 @@ in {
     hm.xdg.configFile."discord/settings-override.json".text = builtins.toJSON {
       openasar = {
         setup = true;
-        cmdPreset = if cfg.laptop then "battery" else "perf";
+        cmdPreset =
+          if cfg.laptop
+          then "battery"
+          else "perf";
         quickstart = true;
         css = ''
           ${builtins.readFile discordThemeFile}

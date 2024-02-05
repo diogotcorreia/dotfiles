@@ -4,20 +4,21 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Conduit (Matrix Homeserver) on Hera
-
-{ pkgs, config, ... }:
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   domainConduit = "m.diogotc.com";
   portConduit = 6167;
   domainElement = "chat.diogotc.com";
   portElement = 8012;
 in {
-
   # TODO move docker containers to NixOS services
 
   security.acme.certs = {
-    ${domainConduit} = { };
-    ${domainElement} = { };
+    ${domainConduit} = {};
+    ${domainElement} = {};
   };
 
   services.caddy.virtualHosts = {
@@ -46,5 +47,5 @@ in {
     };
   };
 
-  modules.services.restic.paths = [ "${config.my.homeDirectory}/conduit" ];
+  modules.services.restic.paths = ["${config.my.homeDirectory}/conduit"];
 }

@@ -4,9 +4,13 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Libvirt configuration.
-
-{ pkgs, config, lib, secretsDir, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  secretsDir,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.virtual-machines;
 in {
@@ -18,11 +22,11 @@ in {
       onBoot = "ignore";
     };
 
-    usr.extraGroups = [ "libvirtd" ];
+    usr.extraGroups = ["libvirtd"];
 
-    environment.systemPackages = [ pkgs.virt-manager ];
+    environment.systemPackages = [pkgs.virt-manager];
 
     # Persist virtual machines on hosts with root-on-tmpfs
-    modules.impermanence.directories = [ "/var/lib/libvirt" ];
+    modules.impermanence.directories = ["/var/lib/libvirt"];
   };
 }

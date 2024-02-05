@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # nebula (VPN) configuration.
-
-{ config, lib, secretsDir, ... }:
-let
+{
+  config,
+  lib,
+  secretsDir,
+  ...
+}: let
   inherit (lib) mkEnableOption mkOption types mkIf;
   cfg = config.modules.services.nebula;
 in {
@@ -32,23 +35,27 @@ in {
 
     firewall.outbound = mkOption {
       type = types.listOf types.attrs;
-      default = [ ];
+      default = [];
       description = lib.mdDoc "Firewall rules for outbound traffic.";
-      example = [{
-        port = "any";
-        proto = "any";
-        host = "any";
-      }];
+      example = [
+        {
+          port = "any";
+          proto = "any";
+          host = "any";
+        }
+      ];
     };
     firewall.inbound = mkOption {
       type = types.listOf types.attrs;
-      default = [ ];
+      default = [];
       description = lib.mdDoc "Firewall rules for inbound traffic.";
-      example = [{
-        port = "any";
-        proto = "any";
-        host = "any";
-      }];
+      example = [
+        {
+          port = "any";
+          proto = "any";
+          host = "any";
+        }
+      ];
     };
     firewall.allowPinging = mkOption {
       type = types.bool;
@@ -75,20 +82,26 @@ in {
         "192.168.100.7"
       ];
 
-      firewall.outbound = [{
-        port = "any";
-        proto = "any";
-        host = "any";
-      }] ++ cfg.firewall.outbound;
-      firewall.inbound = (lib.lists.optional cfg.firewall.allowPinging {
-        port = "any";
-        proto = "icmp";
-        host = "any";
-      }) ++ cfg.firewall.inbound;
+      firewall.outbound =
+        [
+          {
+            port = "any";
+            proto = "any";
+            host = "any";
+          }
+        ]
+        ++ cfg.firewall.outbound;
+      firewall.inbound =
+        (lib.lists.optional cfg.firewall.allowPinging {
+          port = "any";
+          proto = "icmp";
+          host = "any";
+        })
+        ++ cfg.firewall.inbound;
 
       staticHostMap = {
-        "192.168.100.1" = [ "zeus.diogotc.com:4242" ];
-        "192.168.100.7" = [ "phobos.diogotc.com:4242" ];
+        "192.168.100.1" = ["zeus.diogotc.com:4242"];
+        "192.168.100.7" = ["phobos.diogotc.com:4242"];
       };
     };
   };

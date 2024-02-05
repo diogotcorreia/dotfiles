@@ -4,9 +4,13 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # DWM window manager and graphical environment configuration
-
-{ pkgs, config, lib, colors, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  colors,
+  ...
+}: let
   inherit (lib) mkIf;
   cfg = config.modules.graphical;
 in {
@@ -222,18 +226,18 @@ in {
       };
     });
   in {
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [pkg];
 
-    fonts.packages = with pkgs; [ material-design-icons ];
+    fonts.packages = with pkgs; [material-design-icons];
 
     hm.systemd.user.services.dwmblocks = {
       Unit = {
         Description = "Dwmblocks statusbar widgets";
-        After = [ "graphical-session-pre.target" ];
-        PartOf = [ "graphical-session.target" ];
+        After = ["graphical-session-pre.target"];
+        PartOf = ["graphical-session.target"];
       };
 
-      Install = { WantedBy = [ "graphical-session.target" ]; };
+      Install = {WantedBy = ["graphical-session.target"];};
 
       Service = {
         Environment = "PATH=${pkgs.bash}/bin:${pkgs.coreutils}/bin:${sbPath}";
@@ -241,6 +245,5 @@ in {
         Restart = "on-abort";
       };
     };
-
   });
 }

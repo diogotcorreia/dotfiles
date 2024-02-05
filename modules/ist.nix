@@ -5,15 +5,18 @@
 #
 # Configuration for services and programs needed while studying
 # at Técnico Lisboa (IST).
-
-{ pkgs, config, lib, secretsDir, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  secretsDir,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.ist;
 
   istVpnConfiguration = pkgs.fetchurl {
-    url =
-      "https://suporte.dsi.tecnico.ulisboa.pt/sites/default/files/files/tecnico.ovpn";
+    url = "https://suporte.dsi.tecnico.ulisboa.pt/sites/default/files/files/tecnico.ovpn";
     sha256 = "sha256-3vQ5eyrB2IEKHJXXDJk3kPXRbNwGsRpcN8hmPl7ihBQ=";
   };
 in {
@@ -35,15 +38,14 @@ in {
         ".ist.utl.pt" = "IST.UTL.PT";
       };
       realms = {
-        "IST.UTL.PT" = { admin_server = "kerberosmaster.ist.utl.pt"; };
+        "IST.UTL.PT" = {admin_server = "kerberosmaster.ist.utl.pt";};
       };
     };
     # By default, the kerberos pam module is enabled when kerberos is enabled, which we don't want
     security.pam.krb5.enable = false;
 
     # OpenVPN
-    age.secrets.openvpnIstAuthUserPass.file =
-      "${secretsDir}/openvpnIstAuthUserPass.age";
+    age.secrets.openvpnIstAuthUserPass.file = "${secretsDir}/openvpnIstAuthUserPass.age";
     services.openvpn.servers.ist = {
       autoStart = false;
       config = ''

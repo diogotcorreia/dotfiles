@@ -4,11 +4,18 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for bro (server).
-
-{ pkgs, inputs, lib, sshKeys, config, hostSecretsDir, agenixPackage, ... }: {
-  disabledModules = [ "services/misc/cfdyndns.nix" ];
-  imports =
-    [ (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix") ];
+{
+  pkgs,
+  inputs,
+  lib,
+  sshKeys,
+  config,
+  hostSecretsDir,
+  agenixPackage,
+  ...
+}: {
+  disabledModules = ["services/misc/cfdyndns.nix"];
+  imports = [(inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix")];
 
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
@@ -24,7 +31,7 @@
   # TODO move to module
   services.openssh = {
     enable = true;
-    authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
+    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
@@ -39,8 +46,7 @@
         file = "${hostSecretsDir}/acmeDnsCredentials.age";
         group = config.security.acme.defaults.group;
       };
-      broAutoUpgradeHealthchecksUrl.file =
-        "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
+      broAutoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
       broCfdyndnsToken.file = "${hostSecretsDir}/cfdyndnsToken.age";
       broHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       broNebulaCert = {
@@ -51,21 +57,20 @@
         file = "${hostSecretsDir}/nebulaKey.age";
         owner = "nebula-nebula0";
       };
-      broResticHealthchecksUrl.file =
-        "${hostSecretsDir}/resticHealthchecksUrl.age";
+      broResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
       broResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
       broResticPassword.file = "${hostSecretsDir}/resticPassword.age";
       broResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
     };
 
-    identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
 
   # Specific packages for this host
-  hm.home.packages = with pkgs; [ ];
+  hm.home.packages = with pkgs; [];
 
   # Caddy (web server)
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.allowedTCPPorts = [80 443];
   services.caddy = {
     enable = true;
     extraConfig = ''
@@ -98,7 +103,7 @@
 
     '';
   };
-  users.users.caddy.extraGroups = [ config.security.acme.defaults.group ];
+  users.users.caddy.extraGroups = [config.security.acme.defaults.group];
 
   # Ensure nginx isn't turned on by some services (e.g. services using PHP)
   services.nginx.enable = lib.mkForce false;
@@ -118,7 +123,7 @@
   # Cloudflare Dynamic DNS
   services.cfdyndns = {
     enable = true;
-    records = [ "world.bro.diogotc.com" ];
+    records = ["world.bro.diogotc.com"];
     apiTokenFile = config.age.secrets.broCfdyndnsToken.path;
   };
 
@@ -172,7 +177,7 @@
         passwordFile = config.age.secrets.broResticPassword.path;
         sshKeyFile = config.age.secrets.broResticSshKey.path;
 
-        timerConfig = { OnCalendar = "12:20"; };
+        timerConfig = {OnCalendar = "12:20";};
       };
     };
     shell = {
@@ -184,7 +189,7 @@
     impermanence = {
       enable = true;
       # Impermanence (root on tmpfs)
-      directories = [ "/var/lib/acme" "/var/lib/docker" ];
+      directories = ["/var/lib/acme" "/var/lib/docker"];
     };
   };
 

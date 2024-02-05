@@ -4,24 +4,25 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # neovim home configuration. (Based on RageKnify's)
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf lists strings;
   cfg = config.modules.editors.neovim;
   personal = config.modules.personal.enable;
   git = config.modules.shell.git.enable;
-  commonGrammars =
-    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars; [
-      bash
-      comment
-      html
-      markdown
-      nix
-      python
-    ];
-  personalGrammars =
-    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars;
+  commonGrammars = with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars; [
+    bash
+    comment
+    html
+    markdown
+    nix
+    python
+  ];
+  personalGrammars = with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars;
     lists.optionals personal [
       c
       cpp
@@ -119,8 +120,9 @@ let
     }
 
     {
-      plugin = (nvim-treesitter.withPlugins
-        (plugins: commonGrammars ++ personalGrammars));
+      plugin =
+        nvim-treesitter.withPlugins
+        (plugins: commonGrammars ++ personalGrammars);
       type = "lua";
       config = ''
         -- enable highlighting
@@ -605,6 +607,6 @@ in {
       EDITOR = "nvim";
       MANPAGER = "nvim +Man!";
     };
-    systemd.user.sessionVariables = { EDITOR = "nvim"; };
+    systemd.user.sessionVariables = {EDITOR = "nvim";};
   };
 }

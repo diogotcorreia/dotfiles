@@ -4,16 +4,17 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for IHateToBudget on Hera
-
-{ pkgs, config, ... }:
-let
+{
+  pkgs,
+  config,
+  ...
+}: let
   domain = "budget-joao.diogotc.com";
   port = 8013;
 in {
-
   # TODO get rid of this, it is unmaintained as of 2022-12-24
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts.${domain} = {
     useACMEHost = domain;
@@ -34,6 +35,5 @@ in {
     '';
   };
 
-  modules.services.restic.paths =
-    [ "${config.my.homeDirectory}/ihatetobudget-joao" ];
+  modules.services.restic.paths = ["${config.my.homeDirectory}/ihatetobudget-joao"];
 }

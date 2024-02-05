@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # tmux configuration (Based on RageKnify's)
-
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.tmux;
 in {
@@ -41,10 +44,10 @@ in {
       '';
       historyLimit = 50000;
       keyMode = "vi";
-      terminal = if config.modules.graphical.programs.enable then
-        "alacritty"
-      else
-        "tmux-256color";
+      terminal =
+        if config.modules.graphical.programs.enable
+        then "alacritty"
+        else "tmux-256color";
     };
   };
 }

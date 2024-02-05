@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # syncthing configuration
-
-{ config, lib, user, ... }:
-let
+{
+  config,
+  lib,
+  user,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.services.syncthing;
 in {
@@ -20,7 +23,7 @@ in {
       dataDir = "${config.my.homeDirectory}/.syncthing";
       overrideFolders = false;
       overrideDevices = false;
-      settings = { gui = { theme = "dark"; }; };
+      settings = {gui = {theme = "dark";};};
     };
   };
 }

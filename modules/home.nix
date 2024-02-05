@@ -5,16 +5,22 @@
 #
 # Home manager configuration and aliases.
 # Inspired by EdSwordmith and luishfonseca.
-
-{ pkgs, options, config, lib, user, userFullName, ... }:
-let
+{
+  pkgs,
+  options,
+  config,
+  lib,
+  user,
+  userFullName,
+  ...
+}: let
   inherit (lib) mkAliasDefinitions mkOption types;
 
-  mkOpt = type: default: mkOption { inherit type default; };
+  mkOpt = type: default: mkOption {inherit type default;};
 in {
   options = {
-    hm = mkOption { type = types.attrs; };
-    usr = mkOption { type = types.attrs; };
+    hm = mkOption {type = types.attrs;};
+    usr = mkOption {type = types.attrs;};
 
     # FIXME this is very hacky, but no idea how to get around
     my = {
@@ -32,10 +38,9 @@ in {
       isNormalUser = true;
       createHome = true;
       description = userFullName;
-      hashedPassword =
-        "$y$j9T$U.2Gk7rztC3F8cSSBzElT/$6IJUtc3etUKuO8tWY4mCmQZ6LaRsTuteKPcXxJKnsZC";
+      hashedPassword = "$y$j9T$U.2Gk7rztC3F8cSSBzElT/$6IJUtc3etUKuO8tWY4mCmQZ6LaRsTuteKPcXxJKnsZC";
       shell = pkgs.zsh;
-      extraGroups = [ "wheel" ];
+      extraGroups = ["wheel"];
     };
 
     # Home Manager needs a bit of information about you and the

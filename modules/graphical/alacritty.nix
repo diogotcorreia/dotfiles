@@ -4,15 +4,16 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Alacritty terminal configuration
-
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkIf;
   cfg = config.modules.graphical.programs;
 in {
   # Follow graphical.programs.enabled
   config.hm = mkIf cfg.enable {
-
     programs.alacritty = {
       enable = true;
       settings = {
@@ -80,6 +81,5 @@ in {
         };
       };
     };
-
   };
 }

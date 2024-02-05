@@ -4,9 +4,13 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for Firefly-III on Hera
-
-{ pkgs, config, hostSecretsDir, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  hostSecretsDir,
+  lib,
+  ...
+}: let
   domainApp = "firefly3.hera.diogotc.com";
   portApp = 8005;
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
@@ -16,19 +20,14 @@ let
   cronAutoDataImporter = "23:58";
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
 
-  mkServiceName = container:
-    "${config.virtualisation.oci-containers.backend}-${container}";
+  mkServiceName = container: "${config.virtualisation.oci-containers.backend}-${container}";
 in {
-
   # TODO move docker containers to NixOS services
 
   age.secrets = {
-    fireflyAutoDataImporterEnv.file =
-      "${hostSecretsDir}/fireflyAutoDataImporterEnv.age";
-    fireflyAutoDataImporterHealthchecksUrl.file =
-      "${hostSecretsDir}/fireflyAutoDataImporterHealthchecksUrl.age";
-    fireflyDataImporterEnv.file =
-      "${hostSecretsDir}/fireflyDataImporterEnv.age";
+    fireflyAutoDataImporterEnv.file = "${hostSecretsDir}/fireflyAutoDataImporterEnv.age";
+    fireflyAutoDataImporterHealthchecksUrl.file = "${hostSecretsDir}/fireflyAutoDataImporterHealthchecksUrl.age";
+    fireflyDataImporterEnv.file = "${hostSecretsDir}/fireflyDataImporterEnv.age";
   };
 
   virtualisation.oci-containers.containers = {
@@ -36,7 +35,7 @@ in {
     firefly-auto-importer = {
       autoStart = false;
       image = "fireflyiii/data-importer:version-${versionDataImporter}";
-      volumes = [ "${configPathAutoDataImporter}:/import" ];
+      volumes = ["${configPathAutoDataImporter}:/import"];
       environment = {
         FIREFLY_III_URL = "https://${domainApp}";
         IMPORT_DIR_ALLOWLIST = "/import";
@@ -66,12 +65,13 @@ in {
   # Avoid loop, since container is one-shot
   systemd.services.${
     mkServiceName "firefly-auto-importer"
-  }.serviceConfig.Restart = lib.mkForce "no";
+  }.serviceConfig.Restart =
+    lib.mkForce "no";
 
   # Schedule Firefly Auto Importer
   systemd.timers.${mkServiceName "firefly-auto-importer"} = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = { OnCalendar = cronAutoDataImporter; };
+    wantedBy = ["timers.target"];
+    timerConfig = {OnCalendar = cronAutoDataImporter;};
   };
 
   # Healthchecks for Firefly Auto Importer
@@ -81,8 +81,8 @@ in {
     config.age.secrets.fireflyAutoDataImporterHealthchecksUrl.path;
 
   security.acme.certs = {
-    ${domainApp} = { };
-    ${domainDataImporter} = { };
+    ${domainApp} = {};
+    ${domainDataImporter} = {};
   };
 
   services.caddy.virtualHosts = {

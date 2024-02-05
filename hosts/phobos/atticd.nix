@@ -4,14 +4,18 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Configuration for atticd (Nix Binary Cache) on Phobos
-
-args@{ pkgs, inputs, config, hostSecretsDir, buildEnv, ... }:
-let
+args @ {
+  pkgs,
+  inputs,
+  config,
+  hostSecretsDir,
+  buildEnv,
+  ...
+}: let
   host = "nix-cache.diogotc.com";
   port = 8004;
   dbUser = config.services.atticd.user;
 in {
-
   age.secrets = {
     phobosAtticdEnvVariables = {
       # Contains the following variables:
@@ -21,11 +25,13 @@ in {
   };
 
   services.postgresql = {
-    ensureUsers = [{
-      name = dbUser;
-      ensureDBOwnership = true;
-    }];
-    ensureDatabases = [ dbUser ];
+    ensureUsers = [
+      {
+        name = dbUser;
+        ensureDBOwnership = true;
+      }
+    ];
+    ensureDatabases = [dbUser];
   };
 
   services.atticd = {
@@ -34,7 +40,7 @@ in {
     credentialsFile = config.age.secrets.phobosAtticdEnvVariables.path;
     settings = {
       listen = "[::]:${toString port}";
-      allowed-hosts = [ host ];
+      allowed-hosts = [host];
       api-endpoint = "https://${host}/";
       soft-delete-caches = false;
       require-proof-of-possession = true;
@@ -48,7 +54,7 @@ in {
         max-size = 262144; # 256 KiB
       };
 
-      compression = { type = "zstd"; };
+      compression = {type = "zstd";};
 
       garbage-collection = {
         interval = "12 hours";
@@ -59,12 +65,11 @@ in {
 
   # The service above is supposed to detect this based on the database string,
   # but since we're using the shorthand, it doesn't.
-  systemd.services.atticd.after = [ "postgresql.service" "nss-lookup.target" ];
+  systemd.services.atticd.after = ["postgresql.service" "nss-lookup.target"];
 
   services.caddy.virtualHosts.${host} = {
     extraConfig = ''
       reverse_proxy localhost:${toString port}
     '';
   };
-
 }

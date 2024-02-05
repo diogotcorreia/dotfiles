@@ -5,9 +5,13 @@
 #
 # Configuration for Home Assistant (and related programs) on Bro
 # Inspired by https://github.com/Mic92/dotfiles/tree/2580420b65b20196b72ab58d4541b2d972dec668/nixos/eve/modules/home-assistant
-
-{ inputs, pkgs, config, hostSecretsDir, ... }:
-let
+{
+  inputs,
+  pkgs,
+  config,
+  hostSecretsDir,
+  ...
+}: let
   hassDomain = "ha.bro.diogotc.com";
   hassPort = 8123;
 
@@ -16,30 +20,29 @@ in {
   age.secrets = {
     hassSecrets = {
       file = "${hostSecretsDir}/hassSecrets.age";
-      path =
-        "/persist/${config.services.home-assistant.configDir}/secrets.yaml";
+      path = "/persist/${config.services.home-assistant.configDir}/secrets.yaml";
       mode = "400";
       owner = "hass";
       group = "hass";
     };
   };
 
-  disabledModules = [ "services/home-automation/home-assistant.nix" ];
+  disabledModules = ["services/home-automation/home-assistant.nix"];
   imports = [
     (inputs.nixpkgs-unstable
       + "/nixos/modules/services/home-automation/home-assistant.nix")
   ];
   services.home-assistant = {
     enable = true;
-    package = pkgs.unstable.home-assistant.overrideAttrs
-      (old: { doInstallCheck = false; });
+    package =
+      pkgs.unstable.home-assistant.overrideAttrs
+      (old: {doInstallCheck = false;});
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
-    extraComponents =
-      [ "cast" "default_config" "esphome" "met" "mqtt" "tasmota" "zha" ];
+    extraComponents = ["cast" "default_config" "esphome" "met" "mqtt" "tasmota" "zha"];
 
     config = {
-      default_config = { };
+      default_config = {};
 
       homeassistant = {
         name = "Home";
@@ -49,18 +52,18 @@ in {
         unit_system = "metric";
         time_zone = config.time.timeZone;
       };
-      frontend = { };
+      frontend = {};
       http = {
         ip_ban_enabled = true;
         login_attempts_threshold = 3;
         use_x_forwarded_for = true;
-        trusted_proxies = [ "127.0.0.1" "::1" ];
+        trusted_proxies = ["127.0.0.1" "::1"];
       };
       zha.zigpy_config.ota.ikea_provider = true;
 
-      "automation manual" = [ ];
+      "automation manual" = [];
       "automation ui" = "!include automations.yaml";
-      "scene manual" = [ ];
+      "scene manual" = [];
       "scene ui" = "!include scenes.yaml";
     };
   };
@@ -73,27 +76,28 @@ in {
 
   services.mosquitto = {
     enable = true;
-    listeners = [{
-      users.iot = {
-        acl = [ "readwrite #" ]; # allow read/write access to all topics
-        hashedPassword =
-          "$7$101$zKBywp7+zF4mY2Ob$Nnka6+eUPvskhwcgsuUWR5fgwuOKj1YA5TsZ1biJjfJDLkIJFtHnm0zEdqQ6x8PVUfGmuc50HXCN17KHbTQNIw==";
-      };
-      port = mqttPort;
-    }];
+    listeners = [
+      {
+        users.iot = {
+          acl = ["readwrite #"]; # allow read/write access to all topics
+          hashedPassword = "$7$101$zKBywp7+zF4mY2Ob$Nnka6+eUPvskhwcgsuUWR5fgwuOKj1YA5TsZ1biJjfJDLkIJFtHnm0zEdqQ6x8PVUfGmuc50HXCN17KHbTQNIw==";
+        };
+        port = mqttPort;
+      }
+    ];
   };
 
   networking.firewall.interfaces = {
     vlan-private = {
       # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
-      allowedUDPPorts = [ 5353 ];
+      allowedUDPPorts = [5353];
 
-      allowedTCPPorts = [ hassPort ];
+      allowedTCPPorts = [hassPort];
     };
-    vlan-iot-local = { allowedTCPPorts = [ mqttPort ]; };
+    vlan-iot-local = {allowedTCPPorts = [mqttPort];};
   };
 
-  security.acme.certs = { ${hassDomain} = { }; };
+  security.acme.certs = {${hassDomain} = {};};
 
   services.caddy.virtualHosts = {
     ${hassDomain} = {
@@ -109,7 +113,7 @@ in {
     config.services.mosquitto.dataDir
   ];
   modules.services.restic = {
-    paths = [ config.services.home-assistant.configDir ];
-    exclude = [ "${config.services.home-assistant.configDir}/secrets.yaml" ];
+    paths = [config.services.home-assistant.configDir];
+    exclude = ["${config.services.home-assistant.configDir}/secrets.yaml"];
   };
 }

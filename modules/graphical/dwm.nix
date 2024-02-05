@@ -4,9 +4,15 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # DWM window manager and graphical environment configuration
-
-{ pkgs, config, lib, configDir, user, colors, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  configDir,
+  user,
+  colors,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf escapeShellArg;
   cfg = config.modules.graphical;
 
@@ -18,8 +24,8 @@ let
     defaultCursor = "left_ptr";
 
     cursorPath = "${package}/share/icons/${escapeShellArg name}/cursors/${
-        escapeShellArg defaultCursor
-      }";
+      escapeShellArg defaultCursor
+    }";
   };
 in {
   options.modules.graphical.enable =
@@ -48,7 +54,7 @@ in {
     # Avoid typing the username on TTY and only prompt for the password
     # https://wiki.archlinux.org/title/Getty#Prompt_only_the_password_for_a_default_user_in_virtual_console_login
     services.getty.loginOptions = "-p -- ${user}";
-    services.getty.extraArgs = [ "--noclear" "--skip-login" ];
+    services.getty.extraArgs = ["--noclear" "--skip-login"];
 
     # https://unix.stackexchange.com/questions/344402/how-to-unlock-gnome-keyring-automatically-in-nixos
     services.gnome.gnome-keyring.enable = true;
@@ -61,7 +67,7 @@ in {
       xkbVariant = "altgr-intl";
       autorun = true;
       displayManager.startx.enable = true;
-      windowManager = { dwm.enable = true; };
+      windowManager = {dwm.enable = true;};
       libinput = {
         enable = true;
         touchpad = {
@@ -90,8 +96,7 @@ in {
 
     hm.xsession = {
       enable = true;
-      windowManager.command =
-        "while type dwm >/dev/null; do dwm && continue || break; done";
+      windowManager.command = "while type dwm >/dev/null; do dwm && continue || break; done";
 
       profileExtra = ''
         # https://nixos.wiki/wiki/Using_X_without_a_Display_Manager
@@ -128,13 +133,13 @@ in {
     '';
 
     programs.light.enable = true;
-    usr.extraGroups = [ "video" ];
+    usr.extraGroups = ["video"];
 
     hm.services.picom = {
       enable = true;
       backend = "glx";
       vSync = true;
-      settings = { unredir-if-possible = false; };
+      settings = {unredir-if-possible = false;};
     };
 
     hm.services.flameshot = {

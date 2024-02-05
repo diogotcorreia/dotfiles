@@ -4,9 +4,7 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Router configuration
-
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   wanInterface = "eno1";
   lanInterface = "enp0s20f0u4";
 
@@ -56,7 +54,7 @@ in {
 
   # TODO this needs way better rules
   networking.firewall = {
-    trustedInterfaces = [ "vlan-private" ];
+    trustedInterfaces = ["vlan-private"];
     interfaces = {
       vlan-iot-cloud = {
         allowedUDPPorts = [
@@ -90,39 +88,46 @@ in {
 
   networking.nat = {
     enable = true;
-    internalInterfaces =
-      [ "vlan-private" "vlan-iot-cloud" "vlan-iot-local" "vlan-guest" ];
+    internalInterfaces = ["vlan-private" "vlan-iot-cloud" "vlan-iot-local" "vlan-guest"];
     externalInterface = wanInterface;
   };
 
   networking.interfaces = {
     vlan-private = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "${privateSubnet}.1";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "${privateSubnet}.1";
+          prefixLength = 24;
+        }
+      ];
     };
     vlan-iot-cloud = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "${iotCloudSubnet}.1";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "${iotCloudSubnet}.1";
+          prefixLength = 24;
+        }
+      ];
     };
     vlan-iot-local = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "${iotLocalSubnet}.1";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "${iotLocalSubnet}.1";
+          prefixLength = 24;
+        }
+      ];
     };
     vlan-guest = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "${guestSubnet}.1";
-        prefixLength = 24;
-      }];
+      ipv4.addresses = [
+        {
+          address = "${guestSubnet}.1";
+          prefixLength = 24;
+        }
+      ];
     };
   };
 
@@ -136,8 +141,7 @@ in {
       bogus-priv = true;
       no-resolv = true;
 
-      interface =
-        [ "vlan-private" "vlan-iot-cloud" "vlan-iot-local" "vlan-guest" ];
+      interface = ["vlan-private" "vlan-iot-cloud" "vlan-iot-local" "vlan-guest"];
       dhcp-range = [
         "${privateSubnet}.50,${privateSubnet}.254,24h"
         "${iotCloudSubnet}.50,${iotCloudSubnet}.254,24h"
@@ -153,5 +157,5 @@ in {
   };
   modules.services.dnsoverhttps.all-interfaces = true;
 
-  modules.impermanence.directories = [ "/var/lib/dnsmasq" ];
+  modules.impermanence.directories = ["/var/lib/dnsmasq"];
 }

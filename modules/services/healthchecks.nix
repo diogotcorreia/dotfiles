@@ -4,12 +4,25 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # healthchecks ping configuration.
-
-{ pkgs, config, lib, ... }:
-let
-  inherit (lib)
-    mkEnableOption mkOption types mkIf recursiveUpdate mapAttrs' optionalString
-    mkBefore mkAfter nameValuePair;
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  inherit
+    (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkIf
+    recursiveUpdate
+    mapAttrs'
+    optionalString
+    mkBefore
+    mkAfter
+    nameValuePair
+    ;
   cfg = config.modules.services.healthchecks;
 in {
   options.modules.services.healthchecks = {
@@ -18,35 +31,30 @@ in {
       type = types.path;
       default = "/dev/null";
       example = "config.age.secrets.healthchecksUrl.path";
-      description =
-        "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
+      description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
     };
     timerExpression = mkOption {
       type = types.str;
       default = "*-*-* *:*:00"; # every minute
       example = "*:5/10"; # every 5 minutes
-      description =
-        "A system timer expression to control when the URL is pinged. https://www.freedesktop.org/software/systemd/man/systemd.time.html";
+      description = "A system timer expression to control when the URL is pinged. https://www.freedesktop.org/software/systemd/man/systemd.time.html";
     };
 
     systemd-monitoring = mkOption {
-      description =
-        "Systemd services to wrap with healthcheck start, failure and finish pings";
-      type = types.attrsOf (types.submodule ({ config, ... }: {
+      description = "Systemd services to wrap with healthcheck start, failure and finish pings";
+      type = types.attrsOf (types.submodule ({config, ...}: {
         options = {
           checkUrlFile = mkOption {
             type = types.path;
             default = "/dev/null";
             example = "config.age.secrets.healthchecksUrl.path";
-            description =
-              "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
+            description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
           };
         };
       }));
-      default = { };
+      default = {};
       example = {
-        restic-backups-systemBackup.checkUrlFile =
-          "config.age.secrets.healthchecksUrl.path";
+        restic-backups-systemBackup.checkUrlFile = "config.age.secrets.healthchecksUrl.path";
       };
     };
   };
@@ -73,26 +81,33 @@ in {
         preStart =
           mkBefore (getHealthchecksCmd options.checkUrlFile "start" true);
         postStop = mkAfter "${mkStopScript options.checkUrlFile}";
-      }) cfg.systemd-monitoring;
-
+      })
+    cfg.systemd-monitoring;
   in {
-    systemd.services = (if cfg.enable then {
-      ping-healthchecks = {
-        restartIfChanged = false;
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = getHealthchecksCmd cfg.checkUrlFile null false;
-        };
-      };
-    } else
-      { }) // systemd-services;
+    systemd.services =
+      (
+        if cfg.enable
+        then {
+          ping-healthchecks = {
+            restartIfChanged = false;
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = getHealthchecksCmd cfg.checkUrlFile null false;
+            };
+          };
+        }
+        else {}
+      )
+      // systemd-services;
 
-    systemd.timers = if cfg.enable then {
-      ping-healthchecks = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = { OnCalendar = cfg.timerExpression; };
-      };
-    } else
-      { };
+    systemd.timers =
+      if cfg.enable
+      then {
+        ping-healthchecks = {
+          wantedBy = ["timers.target"];
+          timerConfig = {OnCalendar = cfg.timerExpression;};
+        };
+      }
+      else {};
   };
 }

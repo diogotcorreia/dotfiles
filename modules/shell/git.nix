@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Git configuration. (Based on RageKnify's)
-
-{ lib, config, configDir, ... }:
-let
+{
+  lib,
+  config,
+  configDir,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.git;
 in {
@@ -26,13 +29,15 @@ in {
         commit.verbose = true;
         rerere.enabled = true;
       };
-      includes = [{
-        condition = "gitdir:~/documents/dsi/";
-        contents.user = {
-          name = "Diogo Correia";
-          email = "diogo.t.correia@tecnico.ulisboa.pt";
-        };
-      }];
+      includes = [
+        {
+          condition = "gitdir:~/documents/dsi/";
+          contents.user = {
+            name = "Diogo Correia";
+            email = "diogo.t.correia@tecnico.ulisboa.pt";
+          };
+        }
+      ];
       delta = {
         enable = config.modules.personal.enable;
         options = {

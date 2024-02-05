@@ -5,9 +5,12 @@
 #
 # Configuration for Grocy on Hera
 # Module inspired by Nixpkgs' https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/web-apps/grocy.nix
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) boolToString optionalString;
 
   domain = "grocy.diogotc.com";
@@ -29,11 +32,11 @@ let
       Setting('CULTURE', '${settings.culture}');
       Setting('CURRENCY', '${settings.currency}');
       Setting('CALENDAR_FIRST_DAY_OF_WEEK', '${
-        toString settings.calendar.firstDayOfWeek
-      }');
+      toString settings.calendar.firstDayOfWeek
+    }');
       Setting('CALENDAR_SHOW_WEEK_OF_YEAR', ${
-        boolToString settings.calendar.showWeekNumber
-      });
+      boolToString settings.calendar.showWeekNumber
+    });
   '';
 in {
   users.users.${user} = {
@@ -41,10 +44,10 @@ in {
     home = dataDir;
     isSystemUser = true;
   };
-  users.groups.${group}.members = [ user config.services.caddy.user ];
+  users.groups.${group}.members = [user config.services.caddy.user];
 
-  systemd.tmpfiles.rules = map (dirName:
-    "d '${dataDir}${
+  systemd.tmpfiles.rules =
+    map (dirName: "d '${dataDir}${
       optionalString (dirName != null) "/${dirName}"
     }' 0750 ${user} ${group}") [
       null
@@ -82,7 +85,7 @@ in {
     };
   };
 
-  security.acme.certs.${domain} = { };
+  security.acme.certs.${domain} = {};
 
   services.caddy.virtualHosts = {
     ${domain} = {
@@ -107,7 +110,7 @@ in {
     };
   };
 
-  modules.impermanence.directories = [ dataDir ];
+  modules.impermanence.directories = [dataDir];
 
-  modules.services.restic.paths = [ dataDir ];
+  modules.services.restic.paths = [dataDir];
 }

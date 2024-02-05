@@ -4,9 +4,12 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Wacom drawing tablet configuration
-
-{ config, pkgs, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkOption types mkIf;
   cfg = config.modules.graphical.wacom;
 
@@ -60,17 +63,16 @@ in {
     hm.systemd.user.services.wacom = {
       Unit = {
         Description = "Wacom setup script";
-        After = [ "graphical-session.target" ];
-        PartOf = [ "graphical-session.target" ];
+        After = ["graphical-session.target"];
+        PartOf = ["graphical-session.target"];
       };
 
-      Install = { WantedBy = [ "graphical-session.target" ]; };
+      Install = {WantedBy = ["graphical-session.target"];};
 
       Service = {
         ExecStart = "${setupScript}";
         Type = "oneshot";
       };
     };
-
   };
 }

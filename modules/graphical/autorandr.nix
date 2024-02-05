@@ -4,9 +4,11 @@
 # URL:    https://github.com/diogotcorreia/dotfiles
 #
 # Autorandr configuration for laptops
-
-{ config, lib, ... }:
-let
+{
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.autorandr;
 in {
@@ -19,7 +21,7 @@ in {
       defaultTarget = "laptop";
       profiles = {
         laptop = {
-          fingerprint = { "eDP1" = "*"; };
+          fingerprint = {"eDP1" = "*";};
           config = {
             eDP1 = {
               enable = true;
@@ -59,8 +61,7 @@ in {
         alt-laptop-dual = {
           fingerprint = {
             "eDP1" = "*";
-            "HDMI1" =
-              "00ffffffffffff0010ac79a0554130331c1b010380342078eaee95a3544c99260f5054a1080081408180a940b300d1c0010101010101283c80a070b023403020360006442100001a000000ff005950505930373743333041550a000000fc0044454c4c2055323431324d0a20000000fd00323d1e5311000a2020202020200020";
+            "HDMI1" = "00ffffffffffff0010ac79a0554130331c1b010380342078eaee95a3544c99260f5054a1080081408180a940b300d1c0010101010101283c80a070b023403020360006442100001a000000ff005950505930373743333041550a000000fc0044454c4c2055323431324d0a20000000fd00323d1e5311000a2020202020200020";
           };
           config = {
             HDMI1 = {

@@ -5,9 +5,12 @@
 #
 # Wrapper around nix-community/impermanence to allow shared configs
 # between hosts with and without ephemeral root storage
-
-{ pkgs, config, lib, ... }:
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   inherit (lib) types mkOption mkEnableOption mkIf;
   cfg = config.modules.impermanence;
 
@@ -18,14 +21,14 @@ in {
 
     files = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         Files that should be stored in persistent storage.
       '';
     };
     directories = mkOption {
       type = types.listOf types.str;
-      default = [ ];
+      default = [];
       description = ''
         Directories to bind mount to persistent storage.
       '';
@@ -34,12 +37,14 @@ in {
 
   config = mkIf cfg.enable {
     environment.persistence.${persistDirectory} = {
-      directories = cfg.directories ++ [ "/var/lib/systemd" "/var/log" ];
-      files = cfg.files ++ [
-        "/etc/machine-id"
-        "/etc/ssh/ssh_host_ed25519_key"
-        "/etc/ssh/ssh_host_ed25519_key.pub"
-      ];
+      directories = cfg.directories ++ ["/var/lib/systemd" "/var/log"];
+      files =
+        cfg.files
+        ++ [
+          "/etc/machine-id"
+          "/etc/ssh/ssh_host_ed25519_key"
+          "/etc/ssh/ssh_host_ed25519_key.pub"
+        ];
     };
   };
 }
