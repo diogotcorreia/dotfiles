@@ -37,7 +37,11 @@
 
   # Network Manager
   # TODO move to module
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    ethernet.macAddress = "stable";
+    wifi.macAddress = "stable";
+  };
   usr.extraGroups = [ "networkmanager" ];
 
   # SSH server
