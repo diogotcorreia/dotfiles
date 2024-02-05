@@ -17,7 +17,7 @@
     tmux
 
     # Nix formatter
-    nixfmt
+    alejandra
 
     # System monitor
     htop
