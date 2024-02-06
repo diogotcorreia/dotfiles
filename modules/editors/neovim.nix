@@ -282,9 +282,9 @@
               },
             },
           }))
-          lsp_config.html.setup({ cmd = { "html-languageserver", "--stdio" }, unpack(lsp_setup) })
+          lsp_config.html.setup(with_config({ cmd = { "html-languageserver", "--stdio" } }))
           -- don't let the LSP generate the PDF, otherwise it will collide with typst watch
-          lsp_config.typst_lsp.setup({ settings = { exportPdf = "never" }, unpack(lsp_setup) })
+          lsp_config.typst_lsp.setup(with_config({ settings = { exportPdf = "never" } }))
         '';
       }
       rust-tools-nvim
