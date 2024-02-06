@@ -266,9 +266,22 @@
             },
           })
           -- other lsp setup
+          local with_config = function(config)
+            config['capabilities'] = capabilities
+            config['on_attach'] = on_attach
+            return config
+          end
           lsp_config.tsserver.setup(lsp_setup)
           lsp_config.ccls.setup(lsp_setup)
-          lsp_config.rnix.setup(lsp_setup)
+          lsp_config.nil_ls.setup(with_config({
+            settings = {
+              ['nil'] = {
+                formatting = {
+                  command = { "${lib.getExe pkgs.alejandra}" }
+                },
+              },
+            },
+          }))
           lsp_config.html.setup({ cmd = { "html-languageserver", "--stdio" }, unpack(lsp_setup) })
           -- don't let the LSP generate the PDF, otherwise it will collide with typst watch
           lsp_config.typst_lsp.setup({ settings = { exportPdf = "never" }, unpack(lsp_setup) })
@@ -388,7 +401,7 @@
       ccls # C/C++ LSP
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-html-languageserver-bin # HTML LSP
-      rnix-lsp # Nix LSP
+      nil # Nix LSP
       unstable.typst-lsp # Typst LSP
     ];
 in {
