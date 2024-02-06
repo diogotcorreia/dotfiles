@@ -66,14 +66,7 @@
     };
 
     identityPaths = ["/root/.ssh/id_ed25519"];
-
-    # This VPS does not support an instruction used by the "rage" backend.
-    # Therefore, use "age" instead.
-    # See https://github.com/ryantm/agenix/pull/81
-    ageBin = "${pkgs.age}/bin/age";
   };
-  # See comment above about ageBin
-  environment.systemPackages = [(pkgs.agenix.override {ageBin = "${pkgs.age}/bin/age";})];
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [];
