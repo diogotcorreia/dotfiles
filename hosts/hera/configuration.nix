@@ -10,7 +10,6 @@
   sshKeys,
   config,
   hostSecretsDir,
-  agenixPackage,
   ...
 }: {
   # ZFS configuration

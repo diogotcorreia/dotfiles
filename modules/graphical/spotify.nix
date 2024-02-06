@@ -8,7 +8,6 @@
   config,
   lib,
   pkgs,
-  spicetifyPkgs,
   ...
 }: let
   inherit (lib) mkIf;
@@ -24,16 +23,16 @@ in {
       spotifyPackage = pkgs.unstable.spotify;
       spicetifyPackage = pkgs.unstable.spicetify-cli;
 
-      theme = spicetifyPkgs.themes.Comfy;
+      theme = pkgs.spicetify.themes.Comfy;
 
-      enabledExtensions = with spicetifyPkgs.extensions; [
+      enabledExtensions = with pkgs.spicetify.extensions; [
         fullAppDisplay
         autoSkipVideo
         shuffle # shuffle+
         hidePodcasts
       ];
 
-      enabledCustomApps = with spicetifyPkgs.apps; [lyrics-plus];
+      enabledCustomApps = with pkgs.spicetify.apps; [lyrics-plus];
     };
   };
 }

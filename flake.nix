@@ -88,7 +88,8 @@
           allowUnfree = true;
         };
       };
-    in {unstable = import inputs.nixpkgs-unstable args;};
+    in
+      {unstable = import inputs.nixpkgs-unstable args;} // (extraPackages args);
 
     secretsDir = ./secrets;
 
@@ -107,8 +108,10 @@
       config.allowUnfree = true;
     };
 
-    agenixPackage = inputs.agenix.packages.${system}.default;
-    spicetifyPkgs = inputs.spicetify-nix.packages.${system}.default;
+    extraPackages = {system, ...}: {
+      agenix = inputs.agenix.packages.${system}.default;
+      spicetify = inputs.spicetify-nix.packages.${system}.default;
+    };
 
     allModules = mkModules ./modules;
 
@@ -128,9 +131,7 @@
               userFullName
               colors
               sshKeys
-              agenixPackage
               secretsDir
-              spicetifyPkgs
               systemFlakePath
               ;
             configDir = ./config;

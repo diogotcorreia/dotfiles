@@ -10,7 +10,6 @@
   sshKeys,
   config,
   hostSecretsDir,
-  agenixPackage,
   ...
 }: {
   # Boot
@@ -74,7 +73,7 @@
     ageBin = "${pkgs.age}/bin/age";
   };
   # See comment above about ageBin
-  environment.systemPackages = [(agenixPackage.override {ageBin = "${pkgs.age}/bin/age";})];
+  environment.systemPackages = [(pkgs.agenix.override {ageBin = "${pkgs.age}/bin/age";})];
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [];

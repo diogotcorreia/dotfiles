@@ -11,7 +11,6 @@
   sshKeys,
   config,
   hostSecretsDir,
-  agenixPackage,
   ...
 }: {
   disabledModules = ["services/misc/cfdyndns.nix"];
