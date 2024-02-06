@@ -30,6 +30,9 @@ in {
       unstable.typstfmt
       # Rust
       rustup
+
+      # lidl-to-grocy (custom program to import lidl receipts into grocy)
+      lidl-to-grocy
     ];
     modules.services.restic.paths = ["${config.my.homeDirectory}/.timewarrior"];
 

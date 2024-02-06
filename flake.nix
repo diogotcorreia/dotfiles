@@ -44,6 +44,10 @@
       url = "github:diogotcorreia/ist-delegate-election?ref=v1.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lidl-to-grocy = {
+      url = "github:diogotcorreia/lidl-to-grocy?ref=v1.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {...}: let
@@ -110,6 +114,7 @@
 
     extraPackages = {system, ...}: {
       agenix = inputs.agenix.packages.${system}.default;
+      lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
       spicetify = inputs.spicetify-nix.packages.${system}.default;
     };
 
