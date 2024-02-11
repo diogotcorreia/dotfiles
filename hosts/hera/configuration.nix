@@ -33,6 +33,10 @@
       address = "192.168.1.1";
       interface = "eno1";
     };
+    nat = {
+      enable = true;
+      externalInterface = "eno1";
+    };
   };
 
   # SSH server
