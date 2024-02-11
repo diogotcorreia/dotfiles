@@ -25,6 +25,7 @@ in {
   "bacchus/resticRcloneConfig.age".publicKeys = [bacchusSystem];
   "bacchus/resticPassword.age".publicKeys = [bacchusSystem];
   "bacchus/resticSshKey.age".publicKeys = [bacchusSystem];
+  "bacchus/wireguardClientHeraPrivateKey.age".publicKeys = [bacchusSystem];
 
   "bro/acmeDnsCredentials.age".publicKeys = [broSystem];
   "bro/autoUpgradeHealthchecksUrl.age".publicKeys = [broSystem];

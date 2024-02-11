@@ -200,6 +200,11 @@
         };
       };
       syncthing.enable = true;
+      wireguard-client.hera = {
+        # public key: HitADKIgPbbk2fhCxd9iuTsT683ayLithrwnQagb4B0=
+        enable = true;
+        lastOctect = 3;
+      };
     };
     shell = {
       git.enable = true;
