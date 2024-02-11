@@ -2,12 +2,12 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkOption types;
   cfg = config.modules.services.dnsoverhttps;
 
+  # https://dnscrypt.info/stamps/
   upstreams = [
     "sdns://AgcAAAAAAAAABzEuMS4xLjEAEmRucy5jbG91ZGZsYXJlLmNvbQovZG5zLXF1ZXJ5" # 1.1.1.1
     "sdns://AgcAAAAAAAAABzEuMC4wLjEAEmRucy5jbG91ZGZsYXJlLmNvbQovZG5zLXF1ZXJ5" # 1.0.0.1
@@ -34,70 +34,19 @@ in {
       dhcpcd.extraConfig = "nohook resolv.conf";
     };
 
-    # TODO nixos-24.05: use new module in nixpkgs
-    systemd.services.dnsproxy = let
-      extraArgs = [
-        "--cache"
-        "--listen=${
-          if cfg.all-interfaces
-          then "0.0.0.0"
-          else "127.0.0.53"
-        }"
-      ];
-
-      finalArgs = map (upstream: "--upstream=${upstream}") upstreams ++ extraArgs;
-    in {
-      description = "dnsproxy client";
-      wants = [
-        "network-online.target"
-        "nss-lookup.target"
-      ];
-      before = [
-        "nss-lookup.target"
-      ];
-      wantedBy = [
-        "multi-user.target"
-      ];
-      serviceConfig = {
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        CacheDirectory = "dnsproxy";
-        DynamicUser = true;
-        # TODO nixos-24.05: use stable package
-        ExecStart = "${lib.getExe pkgs.unstable.dnsproxy} ${lib.escapeShellArgs finalArgs}";
-        LockPersonality = true;
-        LogsDirectory = "dnsproxy";
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        NonBlocking = true;
-        PrivateDevices = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        Restart = "always";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RuntimeDirectory = "dnsproxy";
-        StateDirectory = "dnsproxy";
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "@chown"
-          "~@aio"
-          "~@keyring"
-          "~@memlock"
-          "~@setuid"
-          "~@timer"
+    services.dnsproxy = {
+      enable = true;
+      settings = {
+        upstream = upstreams;
+        listen-addrs = [
+          (
+            if cfg.all-interfaces
+            then "0.0.0.0"
+            else "127.0.0.53"
+          )
         ];
       };
+      flags = ["--cache"];
     };
   };
 }
