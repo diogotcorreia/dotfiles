@@ -65,6 +65,11 @@ in {
             --background-secondary: var(--primary-600);
             --background-tertiary: var(--primary-700);
           }
+
+          /* fix for broken background when hovering mentions */
+          .mouse-mode.full-motion .mentioned__58017:hover {
+            background-color: var(--background-mentioned-hover) !important;
+          }
         '';
       };
       DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING = true;
