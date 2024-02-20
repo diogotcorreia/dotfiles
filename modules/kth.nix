@@ -9,16 +9,16 @@
   pkgs,
   config,
   lib,
-  secretsDir,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
   cfg = config.modules.kth;
 
   courseUrls = {
-    nss = "https://canvas.kth.se/courses/42913";
-    cybsoc = "https://canvas.kth.se/courses/43064";
+    acrypto = "https://canvas.kth.se/courses/45246";
+    bnss = "https://canvas.kth.se/courses/44880";
     cybsam = "https://canvas.kth.se/courses/41786";
+    hwsec = "https://canvas.kth.se/courses/45192";
   };
 in {
   options.modules.kth.enable = mkEnableOption "kth";
