@@ -40,10 +40,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
-    ist-delegate-election = {
-      url = "github:diogotcorreia/ist-delegate-election?ref=v1.2.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     lidl-to-grocy = {
       url = "github:diogotcorreia/lidl-to-grocy?ref=v1.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -162,7 +158,6 @@
               inputs.lanzaboote.nixosModules.lanzaboote
               inputs.disko.nixosModules.disko
               inputs.attic.nixosModules.atticd
-              inputs.ist-delegate-election.nixosModules.default
             ]
             ++ allModules
             ++ (mkModules "${dir}/${name}");
