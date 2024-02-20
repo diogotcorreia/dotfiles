@@ -31,12 +31,5 @@ in {
           escapeShellArg (getAttr courseName courseUrls)
         }
       '') (attrNames courseUrls);
-
-    # IL1333
-    environment.systemPackages = with pkgs; [
-      (quartus-prime-lite.override {supportedDevices = ["Cyclone V"];})
-      cutecom
-    ];
-    services.udev.packages = [pkgs.usb-blaster-udev-rules];
   };
 }
