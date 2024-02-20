@@ -193,9 +193,10 @@
     }
 
     {
-      plugin = nvim-base16;
+      plugin = base16-nvim;
       config = ''
         " colorscheme settings
+        set termguicolors
         set background=dark
         colorscheme base16-nord
       '';
