@@ -145,7 +145,10 @@
           };
           modules =
             [
-              {networking.hostName = name;}
+              {
+                networking.hostName = name;
+                hardware.enableRedistributableFirmware = true;
+              }
               inputs.home.nixosModules.home-manager
               {
                 home-manager = {
