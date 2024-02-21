@@ -140,6 +140,10 @@ in {
     };
   };
 
+  # Pin nextcloud user's UID and GID, otherwise files may change owner
+  users.users.nextcloud.uid = 900;
+  users.groups.nextcloud.gid = 900;
+
   modules.impermanence.directories = [config.services.nextcloud.home];
   modules.services.restic.paths = [config.services.nextcloud.home];
 }
