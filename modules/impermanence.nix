@@ -37,7 +37,13 @@ in {
 
   config = mkIf cfg.enable {
     environment.persistence.${persistDirectory} = {
-      directories = cfg.directories ++ ["/var/lib/systemd" "/var/log"];
+      directories =
+        cfg.directories
+        ++ [
+          "/var/lib/systemd"
+          "/var/lib/nixos" # contains user/group id map
+          "/var/log"
+        ];
       files =
         cfg.files
         ++ [
