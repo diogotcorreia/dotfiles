@@ -28,7 +28,6 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       # We make our netrc file that is used to make authorized requests to Attic
-      # We also make sure that we use our custom GitHub token if we need to clone submodules or anything like that
       - run: |
           sudo mkdir -p /etc/nix
           echo "machine nix-cache.diogotc.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
@@ -46,9 +45,51 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
 
       # We build each system in a separate job, targeting the configuration using matrix.machine.host
-      # Once built, we login to Attic and push the built system to our `system` cache!
-      - name: Build and push system
+      - name: Build system
         run: |
           nix build .#nixosConfigurations.${{ matrix.machine.host }}.config.system.build.toplevel
-          nix run github:zhaofengli/attic#default login phobos https://nix-cache.diogotc.com ${{ secrets.ATTIC_TOKEN }}
-          nix run github:zhaofengli/attic#default push dtc result -j 2
+
+      # Once built, we login to Attic and push the built system to our cache!
+      - name: Push system
+        run: |
+          nix run .#attic login phobos https://nix-cache.diogotc.com ${{ secrets.ATTIC_TOKEN }}
+          nix run .#attic push dtc result -j 2
+  build-packages:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # Here we specify the packages to build
+      matrix:
+        package:
+          - attic
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # We make our netrc file that is used to make authorized requests to Attic
+      - run: |
+          sudo mkdir -p /etc/nix
+          echo "machine nix-cache.diogotc.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
+          extra-conf: |
+            fallback = true
+            http-connections = 128
+            max-substitution-jobs = 128
+            extra-platforms = i686-linux aarch64-linux
+            substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      # We build each package in a separate job, targeting the configuration using matrix.package
+      - name: Build package
+        run: |
+          nix build .#${{ matrix.package }}
+
+      # Once built, we login to Attic and push the built package to our cache!
+      - name: Push package
+        run: |
+          nix run .#attic login phobos https://nix-cache.diogotc.com ${{ secrets.ATTIC_TOKEN }}
+          nix run .#attic push dtc result -j 2

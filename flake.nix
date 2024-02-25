@@ -166,6 +166,12 @@
   in {
     nixosConfigurations = mkHosts ./hosts;
 
+    packages = {
+      x86_64-linux = {
+        attic = inputs.attic.packages.x86_64-linux.attic-nixpkgs.override {clientOnly = true;};
+      };
+    };
+
     formatter = {
       x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
     };
