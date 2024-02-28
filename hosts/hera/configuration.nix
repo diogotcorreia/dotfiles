@@ -140,7 +140,10 @@
   };
 
   # PostgreSQL
-  services.postgresql.enable = true;
+  services.postgresql = {
+    enable = true;
+    package = pkgs.dtc-pgvecto-rs.postgresql_14;
+  };
 
   # Modules
   modules = {

@@ -13,13 +13,13 @@
   images = {
     serverAndMicroservices = {
       imageName = "ghcr.io/immich-app/immich-server";
-      imageDigest = "sha256:c7b80752d48464dea1c4495ff810365a0809d89c2ac219547d3c1aed81c6411f"; # v1.94.1
-      sha256 = "sha256-Xd/dBmT9fqT1zVpAr0dfMSnBJ6LI2X5YI31cIrqPULk=";
+      imageDigest = "sha256:78665b75735f248b2ee1646a671d340b6a221260d87c38771c060aef62421a19"; # v1.95.1
+      sha256 = "sha256-YecLPbEeFM8KawwMEVJeZPFJMKia+MoJ8XmcNtwzJLo=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
-      imageDigest = "sha256:a3c612c548d5f547a31d001d97f661d7acd4a0ae354de76a70e45162d2b81014"; # v1.94.1
-      sha256 = "sha256-ePrVgaJ/QTz15TuJgp/C6UkrKKWD/yGeIn6Fs3EbXzE=";
+      imageDigest = "sha256:33211bbedb8af1a24c1416617c1e2504d6011a18d6ed83a4b8023647bfbfe58a"; # v1.95.1
+      sha256 = "sha256-PyucWEwXSV9Ll0ni16nLSNAkI7OGPFCHuScaxeJFxDs=";
     };
   };
   dbUsername = user;
@@ -94,9 +94,8 @@ in {
     ensureDatabases = [dbUsername];
 
     extraPlugins = [
-      (pkgs.my.pgvecto-rs.override rec {
+      (pkgs.dtc-pgvecto-rs.postgresqlPackages.pgvecto-rs.override rec {
         postgresql = config.services.postgresql.package;
-        stdenv = postgresql.stdenv;
       })
     ];
     settings = {shared_preload_libraries = "vectors.so";};

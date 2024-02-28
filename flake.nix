@@ -10,6 +10,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-dtc-pgvecto-rs.url = "github:diogotcorreia/nixpkgs/pgvecto.rs";
     impermanence.url = "github:nix-community/impermanence/master";
     home = {
       url = "github:nix-community/home-manager/release-23.11";
@@ -89,7 +90,11 @@
         };
       };
     in
-      {unstable = import inputs.nixpkgs-unstable args;} // (extraPackages args);
+      {
+        unstable = import inputs.nixpkgs-unstable args;
+        dtc-pgvecto-rs = import inputs.nixpkgs-dtc-pgvecto-rs args;
+      }
+      // (extraPackages args);
 
     secretsDir = ./secrets;
 
