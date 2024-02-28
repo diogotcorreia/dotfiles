@@ -20,6 +20,7 @@ jobs:
           - host: phobos
             platform: x86-64-linux
 
+    needs: ["build-packages"]
     steps:
       - uses: actions/checkout@v4
 
