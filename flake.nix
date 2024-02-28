@@ -171,9 +171,15 @@
   in {
     nixosConfigurations = mkHosts ./hosts;
 
+    # Packages are here so they are built by CI and cached
     packages = {
       x86_64-linux = {
         attic = inputs.attic.packages.x86_64-linux.attic-nixpkgs.override {clientOnly = true;};
+        # TODO remove in 24.05, since override for unstable will not be needed
+        pgvecto-rs = inputs.nixpkgs-dtc-pgvecto-rs.legacyPackages.x86_64-linux.postgresqlPackages.pgvecto-rs.override {
+          # This is what hera is using at the moment
+          postgresql = inputs.nixpkgs.legacyPackages.x86_64-linux.postgresql_14;
+        };
       };
     };
 
