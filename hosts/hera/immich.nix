@@ -94,7 +94,7 @@ in {
     ensureDatabases = [dbUsername];
 
     extraPlugins = [
-      (pkgs.dtc-pgvecto-rs.postgresqlPackages.pgvecto-rs.override rec {
+      (pkgs.dtc-pgvecto-rs.postgresqlPackages.pgvecto-rs.override {
         postgresql = config.services.postgresql.package;
       })
     ];
