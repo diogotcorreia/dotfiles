@@ -5,6 +5,7 @@
 #
 # Configuration for hera (server).
 {
+  inputs,
   pkgs,
   lib,
   sshKeys,
@@ -12,6 +13,14 @@
   hostSecretsDir,
   ...
 }: {
+  # Fix Docker containers not gracefully shutting down
+  # https://github.com/NixOS/nixpkgs/pull/248315
+  # TODO remove in nixos-24.05
+  disabledModules = ["virtualisation/oci-containers.nix"];
+  imports = [
+    (inputs.nixpkgs-unstable + "/nixos/modules/virtualisation/oci-containers.nix")
+  ];
+
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
