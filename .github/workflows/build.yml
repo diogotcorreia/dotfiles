@@ -13,6 +13,10 @@ jobs:
       # Here we specify the matrix of our hosts and their target platform architectures
       matrix:
         machine:
+          - host: apollo
+            platform: x86-64-linux
+          - host: bacchus
+            platform: x86-64-linux
           - host: bro
             platform: x86-64-linux
           - host: hera
