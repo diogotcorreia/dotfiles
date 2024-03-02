@@ -10,7 +10,6 @@ let
 in {
   "nebulaCA.age".publicKeys = allSystems;
   "nixCacheDiogotcReadTokenNetrc.age".publicKeys = allSystems;
-  "openvpnIstAuthUserPass.age".publicKeys = personalSystems;
 
   "apollo/nebulaCert.age".publicKeys = [apolloSystem];
   "apollo/nebulaKey.age".publicKeys = [apolloSystem];
