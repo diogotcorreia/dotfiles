@@ -22,6 +22,36 @@ jobs:
 
     needs: ["build-packages"]
     steps:
+      # Inspired by https://github.com/workflow/dotfiles/blob/c5ff98fc2ef05cefdca3b663d46dc517696e418e/.github/workflows/nixos.yml
+      - name: "Create Directory for Nix Store"
+        run: |
+          sudo mkdir /nix
+      - name: "Maximize Disk Space"
+        run: |
+          sudo rm -rf $AGENT_TOOLSDIRECTORY
+          sudo rm -rf /usr/local/.ghcup
+          sudo rm -rf /usr/local/share/powershell
+          sudo rm -rf /usr/local/share/chromium
+          sudo rm -rf /usr/local/lib/node_modules
+          sudo rm -rf /usr/local/lib/heroku
+          sudo rm -rf /var/lib/docker/overlay2
+          sudo rm -rf /home/linuxbrew
+          sudo rm -rf /home/runner/.rustup
+      - name: "Maximize Disk Space 2"
+        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
+        with:
+          root-reserve-mb: 8192
+          swap-size-mb: 1024
+          build-mount-path: /nix
+          remove-dotnet: "true"
+          remove-android: "true"
+          remove-haskell: "true"
+          remove-codeql: "true"
+          remove-docker-images: "true"
+      - name: Assert Correct Ownership on /nix
+        run: |
+          sudo chown root:root /nix
+
       - uses: actions/checkout@v4
 
       # We only run this if we are building an aarch64-linux system
