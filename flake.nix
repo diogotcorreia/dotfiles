@@ -10,7 +10,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-dtc-pgvecto-rs.url = "github:diogotcorreia/nixpkgs/pgvecto.rs";
+    nixpkgs-dtc-pgvecto-rs.url = "github:diogotcorreia/nixpkgs?rev=0439adadf3f191b96cbbd340b9e9f1dfcb3acbeb"; # pgvecto.rs branch
     impermanence.url = "github:nix-community/impermanence/master";
     home = {
       url = "github:nix-community/home-manager/release-23.11";

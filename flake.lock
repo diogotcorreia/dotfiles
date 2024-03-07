@@ -415,17 +415,17 @@
     },
     "nixpkgs-dtc-pgvecto-rs": {
       "locked": {
-        "lastModified": 1708993127,
-        "narHash": "sha256-0mGm19ceMDArwzBdofpk+S5SaCNAWc/8aly6zb3bU4w=",
+        "lastModified": 1709816485,
+        "narHash": "sha256-s70L01uDCA7avysozOKGA8/4zIR8ytjmHdOLPFp/gx4=",
         "owner": "diogotcorreia",
         "repo": "nixpkgs",
-        "rev": "4cce87321cfd05d5f4fb79e47402801e805a6624",
+        "rev": "0439adadf3f191b96cbbd340b9e9f1dfcb3acbeb",
         "type": "github"
       },
       "original": {
         "owner": "diogotcorreia",
-        "ref": "pgvecto.rs",
         "repo": "nixpkgs",
+        "rev": "0439adadf3f191b96cbbd340b9e9f1dfcb3acbeb",
         "type": "github"
       }
     },
