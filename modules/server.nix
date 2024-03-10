@@ -34,6 +34,11 @@ in {
         upper = "06:00";
       };
       allowReboot = true;
+      flags = [
+        # Only use one job to avoid running out of memory and disrupting operations
+        "--max-jobs"
+        "1"
+      ];
 
       dates = "04:00";
       randomizedDelaySec = "1h";
