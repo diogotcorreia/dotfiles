@@ -32,11 +32,11 @@ in {
     (inputs.nixpkgs-unstable
       + "/nixos/modules/services/home-automation/home-assistant.nix")
   ];
-  services.home-assistant = {
+  services.home-assistant = let
+    package = pkgs.unstable.home-assistant.overrideAttrs (old: {doInstallCheck = false;});
+  in {
+    inherit package;
     enable = true;
-    package =
-      pkgs.unstable.home-assistant.overrideAttrs
-      (old: {doInstallCheck = false;});
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
     extraComponents = ["cast" "default_config" "esphome" "met" "mqtt" "tasmota" "zha"];
@@ -66,6 +66,13 @@ in {
       "scene manual" = [];
       "scene ui" = "!include scenes.yaml";
     };
+
+    customComponents = [
+      (pkgs.my.hasl3.override {
+        inherit (pkgs.unstable) buildHomeAssistantComponent;
+        home-assistant = package;
+      })
+    ];
   };
 
   # https://nixos.wiki/wiki/Home_Assistant#Combine_declarative_and_UI_defined_automations
