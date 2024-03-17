@@ -7,7 +7,6 @@
 {
   config,
   inputs,
-  pkgs,
   lib,
   secretsDir,
   ...
@@ -34,6 +33,7 @@
     registry = {
       pkgs.flake = inputs.nixpkgs; # alias to nixpkgs
       unstable.flake = inputs.nixpkgs-unstable;
+      my.flake = inputs.self; # this flake itself
     };
 
     nixPath = [
