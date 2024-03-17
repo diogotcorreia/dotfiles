@@ -180,6 +180,9 @@
           # This is what hera is using at the moment
           postgresql = inputs.nixpkgs.legacyPackages.x86_64-linux.postgresql_14;
         };
+
+        # TODO this should be auto generated
+        inherit (pkgs.my) flask-unsign;
       };
     };
 
