@@ -18,7 +18,9 @@
     acrypto = "https://canvas.kth.se/courses/45246";
     bnss = "https://canvas.kth.se/courses/44880";
     cybsam = "https://canvas.kth.se/courses/41786";
+    fcrypto = "https://canvas.kth.se/courses/46237";
     hwsec = "https://canvas.kth.se/courses/45192";
+    langsec = "https://canvas.kth.se/courses/46200";
   };
 in {
   options.modules.kth.enable = mkEnableOption "kth";
