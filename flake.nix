@@ -182,7 +182,7 @@
         };
 
         # TODO this should be auto generated
-        inherit (pkgs.my) flask-unsign pycdc;
+        inherit (pkgs.my) flask-unsign pycdc troupe;
       };
     };
 
