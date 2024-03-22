@@ -42,10 +42,16 @@ in {
 
       defaultPhoneRegion = "PT";
     };
+    phpOptions = {
+      "opcache.interned_strings_buffer" = "16";
+      "opcache.revalidate_freq" = "5";
+      "opcache.jit" = "1255";
+      "opcache.jit_buffer_size" = "128M";
+    };
     extraOptions = {
       "overwrite.cli.url" = "https://${domain}/";
       "upgrade.disable-web" = true;
-      # "htaccess.RewriteBase" = "/";
+      "maintenance_window_start" = 2;
     };
     # Has:
     # mail_from_address
