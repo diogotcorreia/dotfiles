@@ -5,7 +5,7 @@
 #
 # My config, based on RageKnify's
 {
-  description = "Nix configuration for PCs and servers.";
+  description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
@@ -49,7 +49,6 @@
 
   outputs = inputs @ {...}: let
     inherit (builtins) listToAttrs attrNames readDir filter;
-    inherit (inputs.nixpkgs) lib;
     inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
     inherit (lib) mapAttrsToList hasSuffix;
     sshKeys = [
@@ -81,6 +80,12 @@
     # https://github.com/NixOS/nixpkgs/issues/269713#issuecomment-1826082142
     permittedInsecurePackages = ["openssl-1.1.1w"];
 
+    lib = inputs.nixpkgs.lib.extend (self: super:
+      import ./lib {
+        inherit inputs profiles pkgs nixosConfigurations;
+        lib = self;
+      });
+
     pkg-sets = final: prev: let
       args = {
         system = final.system;
@@ -98,31 +103,11 @@
 
     secretsDir = ./secrets;
 
-    packagesDir = ./packages;
-
-    overlaysDir = ./overlays;
-
-    overlays =
-      [pkg-sets]
-      ++ mapAttrsToList (name: _:
-        import "${overlaysDir}/${name}" {inherit inputs packagesDir;})
-      (readDir overlaysDir);
-
-    pkgs = import inputs.nixpkgs {
-      inherit system overlays;
-      config.allowUnfree = true;
-    };
-
     extraPackages = {system, ...}: {
       agenix = inputs.agenix.packages.${system}.default;
       lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
       spicetify = inputs.spicetify-nix.packages.${system}.default;
     };
-
-    allModules = mkModules ./modules;
-
-    # Imports every nix module from a directory, recursively.
-    mkModules = path: filter (hasSuffix ".nix") (listFilesRecursive path);
 
     # Imports every host defined in a directory.
     mkHosts = dir:
@@ -168,6 +153,22 @@
             ++ (mkModules "${dir}/${name}");
         };
       }) (attrNames (readDir dir)));
+
+    overlays = lib.acme.mkOverlays ./overlays;
+    pkgs = lib.acme.mkPkgs overlays;
+    nixosConfigurations = lib.acme.mkHosts ./hosts {
+      extraArgs = {
+        inherit
+          colors
+          sshKeys
+          systemFlakePath
+          user
+          userFullName
+          ;
+        configDir = ./config;
+      };
+    };
+    profiles = lib.acme.mkProfiles ./profiles;
   in {
     nixosConfigurations = mkHosts ./hosts;
 
