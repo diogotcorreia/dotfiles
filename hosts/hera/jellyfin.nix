@@ -24,6 +24,8 @@
 
   diskstationAddress = "192.168.1.4";
   mediaGroup = "diskstation-media";
+
+  transmissionGroup = config.services.transmission.group;
 in {
   # https://nixos.wiki/wiki/Accelerated_Video_Playback
   nixpkgs.overlays = [
@@ -126,8 +128,8 @@ in {
 
   users.groups.${mediaGroup} = {};
   users.users = {
-    ${config.services.radarr.user}.extraGroups = [mediaGroup];
-    ${config.services.sonarr.user}.extraGroups = [mediaGroup];
+    ${config.services.radarr.user}.extraGroups = [mediaGroup transmissionGroup];
+    ${config.services.sonarr.user}.extraGroups = [mediaGroup transmissionGroup];
     ${config.services.bazarr.user}.extraGroups = [mediaGroup];
   };
 

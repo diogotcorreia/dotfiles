@@ -54,6 +54,8 @@ in {
   "hera/resticRcloneConfig.age".publicKeys = [heraSystem];
   "hera/resticPassword.age".publicKeys = [heraSystem];
   "hera/resticSshKey.age".publicKeys = [heraSystem];
+  "hera/transmissionProxySshConfig.age".publicKeys = [heraSystem];
+  "hera/transmissionProxySshPassword.age".publicKeys = [heraSystem];
   "hera/wireguardPrivateKey.age".publicKeys = [heraSystem];
 
   "phobos/atticdEnvVariables.age".publicKeys = [phobosSystem];
