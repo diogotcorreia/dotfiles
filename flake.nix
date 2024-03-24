@@ -5,7 +5,7 @@
 #
 # My config, based on RageKnify's
 {
-  description = "Nix configuration for PCs and servers.";
+  description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
@@ -47,10 +47,8 @@
   };
 
   outputs = inputs @ {...}: let
-    inherit (builtins) listToAttrs attrNames readDir filter;
-    inherit (inputs.nixpkgs) lib;
-    inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
-    inherit (lib) mapAttrsToList hasSuffix;
+    inherit (lib.my) mkHosts mkOverlays mkPkgs mkProfiles;
+
     sshKeys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICYiuCHjX9Dmq69WoAn7EfgovnFLv0VhjL7BSTYQcFa7 dtc@apollo"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINlaWu32ANU+sWFcwKrPlqD/oW3lC3/hrA1Z3+ubuh5A dtc@bacchus"
@@ -72,39 +70,26 @@
     };
 
     systemFlakePath = "github:diogotcorreia/dotfiles/nixos";
-    system = "x86_64-linux";
     user = "dtc";
     userFullName = "Diogo Correia";
 
-    pkg-sets = final: prev: let
-      args = {
-        system = final.system;
-        config = {
-          allowUnfree = true;
-        };
-      };
-    in
-      {
-        unstable = import inputs.nixpkgs-unstable args;
-      }
-      // (extraPackages args);
-
-    secretsDir = ./secrets;
-
-    packagesDir = ./packages;
-
-    overlaysDir = ./overlays;
-
-    overlays =
-      [pkg-sets]
-      ++ mapAttrsToList (name: _:
-        import "${overlaysDir}/${name}" {inherit inputs packagesDir;})
-      (readDir overlaysDir);
-
-    pkgs = import inputs.nixpkgs {
-      inherit system overlays;
-      config.allowUnfree = true;
+    extraArgs = {
+      inherit
+        colors # TODO move to lib
+        sshKeys # TODO move to profile
+        systemFlakePath # TODO move to profile
+        user
+        userFullName
+        ;
+      configDir = ./config;
     };
+
+    lib = inputs.nixpkgs.lib.extend (self: super:
+      import ./lib ({
+          inherit inputs profiles pkgs nixosConfigurations;
+          lib = self;
+        }
+        // extraArgs));
 
     extraPackages = {system, ...}: {
       agenix = inputs.agenix.packages.${system}.default;
@@ -112,57 +97,37 @@
       spicetify = inputs.spicetify-nix.packages.${system}.default;
     };
 
-    allModules = mkModules ./modules;
-
-    # Imports every nix module from a directory, recursively.
-    mkModules = path: filter (hasSuffix ".nix") (listFilesRecursive path);
-
-    # Imports every host defined in a directory.
-    mkHosts = dir:
-      listToAttrs (map (name: {
-        inherit name;
-        value = inputs.nixpkgs.lib.nixosSystem {
-          inherit system pkgs;
-          specialArgs = {
-            inherit
-              inputs
-              user
-              userFullName
-              colors
-              sshKeys
-              secretsDir
-              systemFlakePath
-              ;
-            configDir = ./config;
-            hostSecretsDir = "${secretsDir}/${name}";
-            hostName = name;
+    overlays =
+      (mkOverlays ./overlays)
+      // {
+        extraPkgs = self: super: (extraPackages {system = "x86_64-linux";});
+      };
+    pkgs = mkPkgs overlays;
+    nixosConfigurations = mkHosts ./hosts {
+      inherit extraArgs;
+      # TODO move to profiles
+      extraModules = [
+        {
+          hardware.enableRedistributableFirmware = true;
+        }
+        inputs.home.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            sharedModules = [inputs.spicetify-nix.homeManagerModule];
           };
-          modules =
-            [
-              {
-                networking.hostName = name;
-                hardware.enableRedistributableFirmware = true;
-              }
-              inputs.home.nixosModules.home-manager
-              {
-                home-manager = {
-                  useGlobalPkgs = true;
-                  useUserPackages = true;
-                  sharedModules = [inputs.spicetify-nix.homeManagerModule];
-                };
-              }
-              inputs.impermanence.nixosModules.impermanence
-              inputs.agenix.nixosModules.default
-              inputs.lanzaboote.nixosModules.lanzaboote
-              inputs.disko.nixosModules.disko
-              inputs.attic.nixosModules.atticd
-            ]
-            ++ allModules
-            ++ (mkModules "${dir}/${name}");
-        };
-      }) (attrNames (readDir dir)));
+        }
+        inputs.impermanence.nixosModules.impermanence
+        inputs.agenix.nixosModules.default
+        inputs.lanzaboote.nixosModules.lanzaboote
+        inputs.disko.nixosModules.disko
+        inputs.attic.nixosModules.atticd
+      ];
+    };
+    profiles = mkProfiles ./profiles;
   in {
-    nixosConfigurations = mkHosts ./hosts;
+    inherit nixosConfigurations;
 
     # Packages are here so they are built by CI and cached
     packages = {
