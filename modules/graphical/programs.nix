@@ -13,9 +13,9 @@
   inherit (lib) mkEnableOption mkOption mkIf types;
   cfg = config.modules.graphical.programs;
 
-  discordThemeFile = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.8/uniform/nordic.theme.css";
-    sha256 = "sha256-nsz20H5Vc79DVkL4dE+0y3FRJiN88Z7aJPRchIImTYY=";
+  discordThemeFile = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.9/uniform/nordic.theme.css";
+    hash = "sha256-SDLprtPs4F3NirCHn/SL7WAWl8iK0+4JglVr6oP0ejs=";
   };
 in {
   options.modules.graphical.programs.enable = mkEnableOption "programs";
@@ -66,9 +66,15 @@ in {
             --background-tertiary: var(--primary-700);
           }
 
-          /* fix for broken background when hovering mentions */
-          .mouse-mode.full-motion .mentioned__58017:hover {
-            background-color: var(--background-mentioned-hover) !important;
+          /* fix for broken background on server icon list */
+          .wrapper__216eb {
+            background-color: var(--background-primary);
+            border-right: 1px solid var(--background-secondary-alt);
+          }
+
+          /* fix for other's reactions being too light */
+          .reaction__4a43f {
+            background: var(--background-secondary) !important;
           }
         '';
       };
