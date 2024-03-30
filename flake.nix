@@ -10,7 +10,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-dtc-pgvecto-rs.url = "github:diogotcorreia/nixpkgs?rev=0439adadf3f191b96cbbd340b9e9f1dfcb3acbeb"; # pgvecto.rs branch
     impermanence.url = "github:nix-community/impermanence/master";
     home = {
       url = "github:nix-community/home-manager/release-23.11";
@@ -92,7 +91,6 @@
     in
       {
         unstable = import inputs.nixpkgs-unstable args;
-        dtc-pgvecto-rs = import inputs.nixpkgs-dtc-pgvecto-rs args;
       }
       // (extraPackages args);
 
@@ -176,7 +174,7 @@
       x86_64-linux = {
         attic = inputs.attic.packages.x86_64-linux.attic-nixpkgs.override {clientOnly = true;};
         # TODO remove in 24.05, since override for unstable will not be needed
-        pgvecto-rs = inputs.nixpkgs-dtc-pgvecto-rs.legacyPackages.x86_64-linux.postgresqlPackages.pgvecto-rs.override {
+        pgvecto-rs = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.postgresqlPackages.pgvecto-rs.override {
           # This is what hera is using at the moment
           postgresql = inputs.nixpkgs.legacyPackages.x86_64-linux.postgresql_14;
         };

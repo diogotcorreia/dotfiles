@@ -413,22 +413,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-dtc-pgvecto-rs": {
-      "locked": {
-        "lastModified": 1709816485,
-        "narHash": "sha256-s70L01uDCA7avysozOKGA8/4zIR8ytjmHdOLPFp/gx4=",
-        "owner": "diogotcorreia",
-        "repo": "nixpkgs",
-        "rev": "0439adadf3f191b96cbbd340b9e9f1dfcb3acbeb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "diogotcorreia",
-        "repo": "nixpkgs",
-        "rev": "0439adadf3f191b96cbbd340b9e9f1dfcb3acbeb",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1678872516,
@@ -519,7 +503,6 @@
         "lanzaboote": "lanzaboote",
         "lidl-to-grocy": "lidl-to-grocy",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-dtc-pgvecto-rs": "nixpkgs-dtc-pgvecto-rs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nvim-osc52": "nvim-osc52",
         "spicetify-nix": "spicetify-nix"
