@@ -175,20 +175,30 @@ in {
     };
   };
 
-  systemd.services.init-immich-network = {
-    description = "Create the network bridge for immich.";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      # Put a true at the end to prevent getting non-zero return code, which will
-      # crash the whole service.
-      check=$(${pkgs.docker}/bin/docker network ls | grep "immich-bridge" || true)
-      if [ -z "$check" ];
-        then ${pkgs.docker}/bin/docker network create immich-bridge
-        else echo "immich-bridge already exists in docker"
-      fi
-    '';
+  systemd.services = let
+    backend = config.virtualisation.oci-containers.backend;
+  in {
+    # Restart Immich containers when postgresql restarts,
+    # otherwise they lose connection to the socket
+    "${backend}-immich_server".requires = ["postgresql.service"];
+    "${backend}-immich_microservices".requires = ["postgresql.service"];
+    "${backend}-immich_machine_learning".requires = ["postgresql.service"];
+
+    init-immich-network = {
+      description = "Create the network bridge for immich.";
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        # Put a true at the end to prevent getting non-zero return code, which will
+        # crash the whole service.
+        check=$(${pkgs.docker}/bin/docker network ls | grep "immich-bridge" || true)
+        if [ -z "$check" ];
+          then ${pkgs.docker}/bin/docker network create immich-bridge
+          else echo "immich-bridge already exists in docker"
+        fi
+      '';
+    };
   };
 
   security.acme.certs.${domain} = {};
