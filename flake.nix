@@ -20,8 +20,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     spicetify-nix = {
-      url = "github:A1ca7raz/spicetify-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:MichaelPachec0/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nvim-osc52 = {
       url = "github:ojroques/nvim-osc52/main";
