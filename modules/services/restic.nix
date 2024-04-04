@@ -1,8 +1,3 @@
-# modules/services/restic.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # restic backups configuration with healthchecks ping.
 {
   pkgs,

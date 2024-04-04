@@ -1,8 +1,3 @@
-# modules/services/healthchecks.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # healthchecks ping configuration.
 {
   pkgs,

@@ -1,9 +1,4 @@
-# hosts/bro/configuration.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Configuration for bro (server).
+# Configuration for bro (home server)
 {
   config,
   hostSecretsDir,

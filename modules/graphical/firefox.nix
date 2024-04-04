@@ -1,8 +1,3 @@
-# modules/graphical/firefox.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Firefox web browser configuration
 {
   config,

@@ -1,8 +1,3 @@
-# modules/home/shell/git.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Git configuration. (Based on RageKnify's)
 {
   lib,

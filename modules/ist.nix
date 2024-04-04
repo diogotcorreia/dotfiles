@@ -1,8 +1,3 @@
-# modules/ist.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for services and programs needed while studying
 # at Técnico Lisboa (IST).
 {

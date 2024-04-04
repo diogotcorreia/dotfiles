@@ -1,8 +1,3 @@
-# hosts/hera/conduit.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Conduit (Matrix Homeserver) on Hera
 {
   pkgs,

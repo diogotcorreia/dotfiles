@@ -1,8 +1,3 @@
-# overlays/dwm/default.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Apply patches to DWM
 {...}: final: prev: rec {
   dwm = prev.dwm.overrideAttrs (oldAttrs: rec {

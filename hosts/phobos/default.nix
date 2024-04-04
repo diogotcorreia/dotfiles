@@ -1,9 +1,4 @@
-# hosts/phobos/configuration.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Configuration for phobos (server).
+# Configuration for phobos (VPS)
 {
   config,
   hostSecretsDir,

@@ -1,8 +1,3 @@
-# hosts/hera/device-aliases.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Caddy configuration for device domain aliases (i.e. access local devices from outside the network)
 {lib, ...}: let
   inherit (lib) fold optionalString recursiveUpdate;

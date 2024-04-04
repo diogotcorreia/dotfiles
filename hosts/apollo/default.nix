@@ -1,9 +1,4 @@
-# hosts/apollo/configuration.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Configuration for apollo (PC).
+# Configuration for apollo (desktop PC)
 {
   config,
   hostSecretsDir,

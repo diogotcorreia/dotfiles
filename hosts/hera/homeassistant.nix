@@ -1,8 +1,3 @@
-# hosts/hera/homeassistant.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Home Assistant (and related programs) on Hera
 {
   pkgs,

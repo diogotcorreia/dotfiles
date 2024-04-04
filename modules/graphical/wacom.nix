@@ -1,8 +1,3 @@
-# modules/graphical/wacom.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Wacom drawing tablet configuration
 {
   config,

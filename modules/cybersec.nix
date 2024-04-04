@@ -1,8 +1,3 @@
-# modules/cybersec.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Cybersecurity and CTF related tools.
 {
   pkgs,

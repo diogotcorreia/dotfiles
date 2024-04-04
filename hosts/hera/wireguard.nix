@@ -1,3 +1,4 @@
+# Wireguard server on Hera
 {
   pkgs,
   config,

@@ -1,8 +1,3 @@
-# overlays/dmenu/default.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Apply patches to dmenu
 {...}: final: prev: rec {
   dmenu = prev.dmenu.overrideAttrs (oldAttrs: rec {

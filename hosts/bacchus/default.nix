@@ -1,9 +1,4 @@
-# hosts/bacchus/configuration.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Configuration for bacchus (PC).
+# Configuration for bacchus (laptop PC)
 {
   config,
   hostSecretsDir,

@@ -1,8 +1,3 @@
-# modules/personal.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # non-graphical configuration for personal computers.
 {
   pkgs,

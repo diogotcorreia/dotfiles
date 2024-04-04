@@ -1,8 +1,3 @@
-# hosts/hera/transmission.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Transmission on Hera
 {
   config,

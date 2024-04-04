@@ -1,8 +1,3 @@
-# overlays/discord/default.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Enable OpenASAR for Discord
 # Additionally, add a patch to allow to declaratively set settings
 {inputs, ...}: final: prev: rec {

@@ -1,8 +1,3 @@
-# modules/graphical/qt.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Qt theme configuration
 {
   config,

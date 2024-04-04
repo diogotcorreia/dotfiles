@@ -1,8 +1,3 @@
-# modules/zsh.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # zsh (with oh-my-zsh) configuration.
 {
   pkgs,

@@ -1,8 +1,3 @@
-# hosts/phobos/atticd.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for atticd (Nix Binary Cache) on Phobos
 args @ {
   pkgs,

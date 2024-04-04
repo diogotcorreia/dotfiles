@@ -1,8 +1,3 @@
-# modules/graphical/spotify.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Spotify configuration and themeing with Spicetify
 {
   config,

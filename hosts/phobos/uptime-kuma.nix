@@ -1,8 +1,3 @@
-# hosts/phobos/uptime-kuma.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Uptime Kuma on Phobos
 {
   pkgs,

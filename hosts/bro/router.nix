@@ -1,9 +1,4 @@
-# hosts/bro/router.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Router configuration
+# Router configuration on Bro
 {pkgs, ...}: let
   wanInterface = "eno1";
   lanInterface = "enp0s20f0u4";

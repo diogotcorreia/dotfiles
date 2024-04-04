@@ -1,8 +1,3 @@
-# overlays/dwmblocks/default.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Apply patches to DWMBlocks
 {...}: final: prev: rec {
   dwmblocks = prev.dwmblocks.overrideAttrs (oldAttrs: rec {

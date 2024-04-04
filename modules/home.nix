@@ -1,8 +1,3 @@
-# modules/home.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Home manager configuration and aliases.
 # Inspired by EdSwordmith and luishfonseca.
 {

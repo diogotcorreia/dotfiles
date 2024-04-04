@@ -1,8 +1,3 @@
-# modules/programs.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # global programs and packages
 {pkgs, ...}: {
   # Essential packages

@@ -1,8 +1,3 @@
-# modules/services/dnsoverhttps.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Local DNS proxy server to use Cloudflare's DNS over HTTPS.
 {
   config,

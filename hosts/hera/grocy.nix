@@ -1,8 +1,3 @@
-# hosts/hera/grocy.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Grocy on Hera
 # Module inspired by Nixpkgs' https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/web-apps/grocy.nix
 {

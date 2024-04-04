@@ -1,8 +1,3 @@
-# hosts/hera/paperless.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Paperless-ngx on Hera
 {
   pkgs,

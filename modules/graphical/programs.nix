@@ -1,8 +1,3 @@
-# modules/graphical/programs.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # misc GUI programs
 {
   pkgs,

@@ -1,8 +1,3 @@
-# hosts/bacchus/blacklist-nvidia.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Blacklist NVIDIA drivers and use integrated Intel graphics instead
 {
   lib,

@@ -1,8 +1,3 @@
-# modules/graphical/wallpaper.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # wallpaper scripts. changes wallpapers based on time of day
 {
   pkgs,

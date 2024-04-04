@@ -1,8 +1,3 @@
-# modules/system.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/RageKnify/Config
-#
 # System config common across all hosts
 {
   config,

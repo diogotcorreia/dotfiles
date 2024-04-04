@@ -1,9 +1,4 @@
-# modules/server.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Common configuration for servers.
+# Common configuration for servers
 {
   config,
   lib,

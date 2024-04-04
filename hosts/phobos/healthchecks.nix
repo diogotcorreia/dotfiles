@@ -1,8 +1,3 @@
-# hosts/phobos/healthchecks.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Healthchecks.io on Phobos
 args @ {
   pkgs,

@@ -1,8 +1,3 @@
-# hosts/hera/book-metadata-api.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Book Metadata API on Hera
 {
   pkgs,

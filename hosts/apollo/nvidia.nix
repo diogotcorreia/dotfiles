@@ -1,8 +1,3 @@
-# hosts/apollo/nvidia.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Enable (proprietary :/) NVIDIA drivers
 {config, ...}: {
   hardware.opengl = {

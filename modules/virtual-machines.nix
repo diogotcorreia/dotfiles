@@ -1,9 +1,4 @@
-# modules/virtual-machines.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Libvirt configuration.
+# Libvirt configuration
 {
   pkgs,
   config,

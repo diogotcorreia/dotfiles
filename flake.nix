@@ -1,9 +1,3 @@
-# flake.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# My config, based on RageKnify's
 {
   description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 

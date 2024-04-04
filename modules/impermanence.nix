@@ -1,8 +1,3 @@
-# modules/impermanence.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Wrapper around nix-community/impermanence to allow shared configs
 # between hosts with and without ephemeral root storage
 {

@@ -1,8 +1,3 @@
-# modules/shell/lf.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # lf file manager configuration.
 {
   pkgs,

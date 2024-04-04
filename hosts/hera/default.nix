@@ -1,9 +1,4 @@
-# hosts/hera/configuration.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
-# Configuration for hera (server).
+# Configuration for hera (home server)
 {
   config,
   hostSecretsDir,

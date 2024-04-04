@@ -1,8 +1,3 @@
-# modules/secureboot.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Secure Boot configuration
 # https://github.com/nix-community/lanzaboote/
 {

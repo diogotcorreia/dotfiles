@@ -1,8 +1,3 @@
-# hosts/hera/firefly-iii.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Configuration for Firefly-III on Hera
 {
   pkgs,

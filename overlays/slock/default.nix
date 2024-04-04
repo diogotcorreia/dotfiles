@@ -1,8 +1,3 @@
-# overlays/slock/default.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Apply patches to slock
 {...}: final: prev: rec {
   slock = prev.slock.overrideAttrs (oldAttrs: rec {

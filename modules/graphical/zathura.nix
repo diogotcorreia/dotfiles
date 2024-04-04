@@ -1,8 +1,3 @@
-# modules/graphical/zathura.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # PDF viewer
 {
   config,

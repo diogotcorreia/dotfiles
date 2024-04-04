@@ -1,8 +1,3 @@
-# modules/graphical/alacritty.nix
-#
-# Author: Diogo Correia <me@diogotc.com>
-# URL:    https://github.com/diogotcorreia/dotfiles
-#
 # Alacritty terminal configuration
 {
   config,
