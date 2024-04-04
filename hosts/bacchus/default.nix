@@ -5,13 +5,17 @@
 #
 # Configuration for bacchus (PC).
 {
-  pkgs,
-  lib,
-  sshKeys,
   config,
   hostSecretsDir,
+  lib,
+  pkgs,
+  profiles,
   ...
 }: {
+  imports = with profiles; [
+    services.ssh
+  ];
+
   # Boot
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -79,18 +83,6 @@
     wifi.macAddress = "stable";
   };
   usr.extraGroups = ["networkmanager"];
-
-  # SSH server
-  # TODO move to module
-  services.openssh = {
-    enable = true;
-    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  usr.openssh.authorizedKeys.keys = sshKeys;
 
   # Audio
   # TODO move to module

@@ -5,13 +5,16 @@
 #
 # Configuration for phobos (server).
 {
-  pkgs,
-  lib,
-  sshKeys,
   config,
   hostSecretsDir,
+  pkgs,
+  profiles,
   ...
 }: {
+  imports = with profiles; [
+    services.ssh
+  ];
+
   # Boot
 
   # /tmp configuration
@@ -33,18 +36,6 @@
       interface = "ens3";
     };
   };
-
-  # SSH server
-  # TODO move to module
-  services.openssh = {
-    enable = true;
-    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  usr.openssh.authorizedKeys.keys = sshKeys;
 
   # Secret manager (agenix)
   age = {

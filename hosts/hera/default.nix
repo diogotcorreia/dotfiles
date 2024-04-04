@@ -5,21 +5,25 @@
 #
 # Configuration for hera (server).
 {
-  inputs,
-  pkgs,
-  lib,
-  sshKeys,
   config,
   hostSecretsDir,
+  inputs,
+  lib,
+  pkgs,
+  profiles,
   ...
 }: {
   # Fix Docker containers not gracefully shutting down
   # https://github.com/NixOS/nixpkgs/pull/248315
   # TODO remove in nixos-24.05
   disabledModules = ["virtualisation/oci-containers.nix"];
-  imports = [
-    (inputs.nixpkgs-unstable + "/nixos/modules/virtualisation/oci-containers.nix")
-  ];
+  imports =
+    [
+      (inputs.nixpkgs-unstable + "/nixos/modules/virtualisation/oci-containers.nix")
+    ]
+    ++ (with profiles; [
+      services.ssh
+    ]);
 
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
@@ -47,18 +51,6 @@
       externalInterface = "eno1";
     };
   };
-
-  # SSH server
-  # TODO move to module
-  services.openssh = {
-    enable = true;
-    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  usr.openssh.authorizedKeys.keys = sshKeys;
 
   # Docker (containers)
   virtualisation.docker.enable = true;

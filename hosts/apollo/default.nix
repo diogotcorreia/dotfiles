@@ -5,13 +5,16 @@
 #
 # Configuration for apollo (PC).
 {
-  pkgs,
-  lib,
-  sshKeys,
   config,
   hostSecretsDir,
+  pkgs,
+  profiles,
   ...
 }: {
+  imports = with profiles; [
+    services.ssh
+  ];
+
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -49,18 +52,6 @@
       interface = "enp9s0";
     };
   };
-
-  # SSH server
-  # TODO move to module
-  services.openssh = {
-    enable = true;
-    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  usr.openssh.authorizedKeys.keys = sshKeys;
 
   # Audio
   # TODO move to module

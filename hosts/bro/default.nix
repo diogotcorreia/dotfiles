@@ -5,16 +5,22 @@
 #
 # Configuration for bro (server).
 {
-  pkgs,
-  inputs,
-  lib,
-  sshKeys,
   config,
   hostSecretsDir,
+  inputs,
+  lib,
+  pkgs,
+  profiles,
   ...
 }: {
   disabledModules = ["services/misc/cfdyndns.nix"];
-  imports = [(inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix")];
+  imports =
+    [
+      (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix")
+    ]
+    ++ (with profiles; [
+      services.ssh
+    ]);
 
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
@@ -25,18 +31,6 @@
 
   # Time zone
   time.timeZone = "Europe/Stockholm";
-
-  # SSH server
-  # TODO move to module
-  services.openssh = {
-    enable = true;
-    authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
-    settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-    };
-  };
-  usr.openssh.authorizedKeys.keys = sshKeys;
 
   # Secret manager (agenix)
   age = {
