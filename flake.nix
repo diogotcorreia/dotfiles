@@ -23,10 +23,6 @@
       url = "github:MichaelPachec0/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nvim-osc52 = {
-      url = "github:ojroques/nvim-osc52/main";
-      flake = false;
-    };
     lanzaboote = {
       url = "github:nix-community/lanzaboote?ref=v0.3.0";
       inputs.nixpkgs.follows = "nixpkgs";

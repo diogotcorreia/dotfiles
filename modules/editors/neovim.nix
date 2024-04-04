@@ -205,7 +205,7 @@
     plenary-nvim
 
     {
-      plugin = pkgs.nvim-osc52;
+      plugin = nvim-osc52;
       type = "lua";
       config = ''
         local function copy(lines, _)

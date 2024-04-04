@@ -445,23 +445,6 @@
         "type": "github"
       }
     },
-    "nvim-osc52": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1699797099,
-        "narHash": "sha256-gkJMgWfO+cIXTDCiofmGtdYg0s21eiaH+2gVZnKAmio=",
-        "owner": "ojroques",
-        "repo": "nvim-osc52",
-        "rev": "5e0210990b3c809ec58bbf830e0dabd4bda3a949",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ojroques",
-        "ref": "main",
-        "repo": "nvim-osc52",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks-nix": {
       "inputs": {
         "flake-compat": [
@@ -504,7 +487,6 @@
         "lidl-to-grocy": "lidl-to-grocy",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "nvim-osc52": "nvim-osc52",
         "spicetify-nix": "spicetify-nix"
       }
     },
