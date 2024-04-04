@@ -55,19 +55,6 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYrpjewh+Z0IQkVLipcYJ0g0v1UJu49QmB9GTVUci11 dtc@ceres"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICmAw3MrBc3MERcNBkerJwfh9fmfD1OCeYnLVJVxs2Rs dtc@xiaomi11tpro"
     ];
-    colors = {
-      black = "#2E3440";
-      white = "#D8DEE9";
-      grey = "#373d49";
-      lightblue = "#88C0D0";
-      blue = "#81A1C1";
-      darkblue = "#7292b2";
-      red = "#BF616A";
-      orange = "#D08770";
-      yellow = "#EBCB8B";
-      green = "#A3BE8C";
-      pink = "#B48EAD";
-    };
 
     systemFlakePath = "github:diogotcorreia/dotfiles/nixos";
     user = "dtc";
@@ -75,7 +62,6 @@
 
     extraArgs = {
       inherit
-        colors # TODO move to lib
         sshKeys # TODO move to profile
         systemFlakePath # TODO move to profile
         user

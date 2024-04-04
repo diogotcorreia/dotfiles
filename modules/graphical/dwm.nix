@@ -10,7 +10,6 @@
   lib,
   configDir,
   user,
-  colors,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf escapeShellArg;
@@ -150,7 +149,7 @@ in {
           savePath = "/tmp";
           savePathFixed = false;
           saveAsFileExtension = ".png";
-          uiColor = "${colors.lightblue}";
+          uiColor = "${lib.my.colors.lightblue}";
           startupLaunch = false;
           antialiasingPinZoom = true;
           uploadWithoutConfirmation = false;
