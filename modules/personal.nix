@@ -47,7 +47,7 @@ in {
     hm.programs.ssh = {
       enable = true;
       matchBlocks = {
-        "* !apollo !bacchus !ceres".setEnv = {TERM = "xterm-256color";};
+        "* !apollo !bacchus".setEnv = {TERM = "xterm-256color";};
 
         apollo = {
           hostname = "192.168.100.2";
@@ -55,10 +55,6 @@ in {
         };
         bacchus = {
           hostname = "192.168.100.3";
-          user = "dtc";
-        };
-        ceres = {
-          hostname = "192.168.100.4";
           user = "dtc";
         };
 
