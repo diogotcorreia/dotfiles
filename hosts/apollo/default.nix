@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    graphical.firefox
     services.ssh
   ];
 

@@ -8,6 +8,8 @@
   ...
 }: {
   imports = with profiles; [
+    graphical.captive-portals-client
+    graphical.firefox
     services.ssh
   ];
 
