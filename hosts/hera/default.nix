@@ -29,7 +29,7 @@
 
   # Network Configuration
   networking = {
-    interfaces.eno1 = {
+    interfaces.${config.my.networking.wiredInterface} = {
       ipv4.addresses = [
         {
           address = "192.168.1.3";
@@ -39,13 +39,15 @@
     };
     defaultGateway = {
       address = "192.168.1.1";
-      interface = "eno1";
+      interface = config.my.networking.wiredInterface;
     };
     nat = {
       enable = true;
-      externalInterface = "eno1";
+      externalInterface = config.my.networking.wiredInterface;
     };
   };
+
+  my.networking.wiredInterface = "eno1";
 
   # Docker (containers)
   virtualisation.docker.enable = true;

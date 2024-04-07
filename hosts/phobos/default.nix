@@ -19,7 +19,7 @@
   # Configure static IPv6 address
   networking = {
     interfaces = {
-      ens3.ipv6.addresses = [
+      ${config.my.networking.wiredInterface}.ipv6.addresses = [
         {
           address = "2a03:4000:2a:1b3::";
           prefixLength = 64;
@@ -28,9 +28,11 @@
     };
     defaultGateway6 = {
       address = "fe80::1";
-      interface = "ens3";
+      interface = config.my.networking.wiredInterface;
     };
   };
+
+  my.networking.wiredInterface = "ens3";
 
   # Secret manager (agenix)
   age = {

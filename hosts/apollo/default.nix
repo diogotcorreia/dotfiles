@@ -31,7 +31,7 @@
 
   # Network Manager
   networking = {
-    interfaces.enp9s0 = {
+    interfaces.${config.my.networking.wiredInterface} = {
       ipv4 = {
         addresses = [
           {
@@ -44,9 +44,11 @@
     };
     defaultGateway = {
       address = "192.168.1.1";
-      interface = "enp9s0";
+      interface = config.my.networking.wiredInterface;
     };
   };
+
+  my.networking.wiredInterface = "enp9s0";
 
   # Audio
   # TODO move to module

@@ -1,6 +1,6 @@
 # Router configuration on Bro
-{pkgs, ...}: let
-  wanInterface = "eno1";
+{config, ...}: let
+  wanInterface = config.my.networking.wiredInterface;
   lanInterface = "enp0s20f0u4";
 
   # /24 subnets

@@ -115,6 +115,8 @@
     apiTokenFile = config.age.secrets.broCfdyndnsToken.path;
   };
 
+  my.networking.wiredInterface = "eno1";
+
   # Modules
   modules = {
     editors.neovim.enable = true;

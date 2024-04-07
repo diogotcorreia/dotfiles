@@ -79,6 +79,8 @@
   };
   usr.extraGroups = ["networkmanager"];
 
+  my.networking.wirelessInterface = "wlo1";
+
   # Audio
   # TODO move to module
   security.rtkit.enable = true;
