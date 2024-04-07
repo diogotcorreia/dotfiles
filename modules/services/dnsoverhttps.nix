@@ -34,6 +34,7 @@ in {
       dhcpcd.extraConfig = "nohook resolv.conf";
     };
 
+    # TODO nixos-24.05: use new module in nixpkgs
     systemd.services.dnsproxy = let
       extraArgs = [
         "--cache"
@@ -61,7 +62,8 @@ in {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnsproxy";
         DynamicUser = true;
-        ExecStart = "${lib.getExe pkgs.dnsproxy} ${lib.escapeShellArgs finalArgs}";
+        # TODO nixos-24.05: use stable package
+        ExecStart = "${lib.getExe pkgs.unstable.dnsproxy} ${lib.escapeShellArgs finalArgs}";
         LockPersonality = true;
         LogsDirectory = "dnsproxy";
         MemoryDenyWriteExecute = true;
