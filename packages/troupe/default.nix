@@ -64,6 +64,10 @@
       cp -r ./trp-rt/out $out/trp-rt
 
       ln -s ${troupeCompiler}/bin/troupec $out/bin/troupec
+      ln -s $out/lib/node_modules/picomlret/rt $out/rt
+
+      # Teacher's scripts assume files are .js instead of .mjs, so create symlinks for all of them
+      find $out/rt/built -name "*.mjs" -exec bash -c 'ln -s $(realpath "{}") $(echo "{}" | sed "s/\.mjs$/\.js/" -)' \;
     '';
   };
 
