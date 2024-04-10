@@ -8,13 +8,13 @@
   writeScript,
   ...
 }: let
-  version = "unstable-2024-02-19";
+  version = "unstable-2023-06-17";
 
   src = fetchFromGitHub {
     owner = "TroupeLang";
     repo = "Troupe";
-    rev = "0dea01aee6497e14c563ea8983830a53d5d8719c";
-    hash = "sha256-X/jas6dL1OqXRqYNmRsxj8Fxssm7G+AYFXBk4h477jY=";
+    rev = "a979eeaa62ea9a9ce35128ef64a118197a5c03b2";
+    hash = "sha256-f/3Zcswrcc7/PPr7w3SLPukDZ2CuQEbe46M4DbEq4uY=";
   };
 
   runtimeWrapper = writeScript "troupe" ''
@@ -35,10 +35,10 @@
 
     postPatch = ''
       cp ${./package-lock.json} ./package-lock.json
-      substituteInPlace ./rt/src/deserialize.mts \
+      substituteInPlace ./rt/src/deserialize.ts \
         --replace 'process.env.TROUPE' '"${troupeCompiler}"'
     '';
-    npmDepsHash = "sha256-ybSK40LF3zrKGosJH6rncW+DtuPUaQ8VKcfzccPYcew=";
+    npmDepsHash = "sha256-w5pHbGdnItqgjBKq8lg96CXmmDdB8N3SaUswtcQjhug=";
 
     dontNpmBuild = true;
 
@@ -55,7 +55,7 @@
       mkdir -p $out/bin
       cp ${runtimeWrapper} $out/bin/troupe
       substituteInPlace $out/bin/troupe \
-        --subst-var-by 'troupe_rt' "$out/lib/node_modules/picomlret/rt/built/troupe.mjs" \
+        --subst-var-by 'troupe_rt' "$out/lib/node_modules/picomlret/rt/built/troupe.js" \
         --subst-var-by 'troupe' "$out"
 
       mkdir -p $out/lib
@@ -65,9 +65,6 @@
 
       ln -s ${troupeCompiler}/bin/troupec $out/bin/troupec
       ln -s $out/lib/node_modules/picomlret/rt $out/rt
-
-      # Teacher's scripts assume files are .js instead of .mjs, so create symlinks for all of them
-      find $out/rt/built -name "*.mjs" -exec bash -c 'ln -s $(realpath "{}") $(echo "{}" | sed "s/\.mjs$/\.js/" -)' \;
     '';
   };
 
