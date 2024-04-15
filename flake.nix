@@ -31,7 +31,7 @@
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
     lidl-to-grocy = {
-      url = "github:diogotcorreia/lidl-to-grocy?ref=v1.0.0";
+      url = "github:diogotcorreia/lidl-to-grocy?ref=v1.1.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

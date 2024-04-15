@@ -383,16 +383,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1707161743,
-        "narHash": "sha256-YyRcAJsQl8hEddidQ3ous7qM1ZXAagRvtopJDb6itvM=",
+        "lastModified": 1713206021,
+        "narHash": "sha256-1ScwvymHolZg8VlqRhi1bFG58CQhqTVroM686Cd9q0g=",
         "owner": "diogotcorreia",
         "repo": "lidl-to-grocy",
-        "rev": "f95f407d7c86be0d586794f6f0d23148e770900c",
+        "rev": "1e95361bad016667d7b472ce4ccbeae531e8c73b",
         "type": "github"
       },
       "original": {
         "owner": "diogotcorreia",
-        "ref": "v1.0.0",
+        "ref": "v1.1.1",
         "repo": "lidl-to-grocy",
         "type": "github"
       }
