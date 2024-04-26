@@ -28,5 +28,15 @@ in {
           escapeShellArg (getAttr courseName courseUrls)
         }
       '') (attrNames courseUrls);
+
+    hm.programs.git.includes = [
+      {
+        condition = "gitdir:~/documents/kth/";
+        contents.user = {
+          name = "Diogo Correia";
+          email = "diogotc@kth.se";
+        };
+      }
+    ];
   };
 }
