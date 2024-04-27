@@ -95,6 +95,23 @@ in {
         redir /.well-known/* /index.php{uri} 301 # Nextcloud front-controller handles routes to /.well-known
         redir /remote/* /remote.php{uri} 301
 
+        # Required for legacy
+        @notlegacy {
+          path *.php
+          not path /index*
+          not path /remote*
+          not path /public*
+          not path /cron*
+          not path /core/ajax/update*
+          not path /status*
+          not path /ocs/v1*
+          not path /ocs/v2*
+          not path /updater/*
+          not path /ocs-provider/*
+          not path */richdocumentscode/proxy*
+        }
+        rewrite @notlegacy /index.php{uri}
+
         # Deny access to sensible files and directories
         @forbidden {
           path /build/* /tests/* /config/* /lib/* /3rdparty/* /templates/* /data/*
