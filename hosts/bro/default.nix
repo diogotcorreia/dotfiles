@@ -14,6 +14,7 @@
       (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix")
     ]
     ++ (with profiles; [
+      caddy.rproxy
       services.ssh
     ]);
 
