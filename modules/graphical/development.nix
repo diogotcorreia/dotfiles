@@ -20,8 +20,9 @@ in {
       unstable.jetbrains.idea-ultimate
     ];
 
-    # TODO change to ungoogled chromium
-    # Brave browser
-    programs.brave.enable = true;
+    programs.chromium = {
+      enable = true;
+      package = pkgs.ungoogled-chromium;
+    };
   };
 }
