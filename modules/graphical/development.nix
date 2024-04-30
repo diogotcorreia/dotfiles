@@ -14,10 +14,10 @@ in {
   # Home manager module
   config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
+      # Bruno REST Client
+      unstable.bruno
       # IntelliJ IDEA (Ultimate)
       unstable.jetbrains.idea-ultimate
-      # Insomnia REST Client
-      unstable.insomnia
     ];
 
     # TODO change to ungoogled chromium
