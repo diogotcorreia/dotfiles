@@ -14,7 +14,8 @@
       (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix")
     ]
     ++ (with profiles; [
-      caddy.rproxy
+      services.caddy.common
+      services.caddy.rproxy
       services.ssh
     ]);
 
@@ -57,45 +58,6 @@
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [];
-
-  # Caddy (web server)
-  networking.firewall.allowedTCPPorts = [80 443];
-  services.caddy = {
-    enable = true;
-    extraConfig = ''
-      # Rules for services behind Cloudflare proxy
-      (CLOUDFLARE_PROXY) {
-        header_up X-Forwarded-For {http.request.header.CF-Connecting-IP}
-      }
-
-      # Rules for services behind Nebula VPN (192.168.100.1/24)
-      (NEBULA) {
-        # Nebula
-        @not-nebula not remote_ip 192.168.100.1/24
-        abort @not-nebula
-      }
-
-      # Rules for services behind Authelia
-      (AUTHELIA) {
-        @not_healthchecks {
-          not {
-            method GET
-            path /
-            remote_ip 192.168.100.7 # phobos
-          }
-        }
-        forward_auth @not_healthchecks 192.168.100.1:9091 {
-          uri /api/verify?rd=https://auth.diogotc.com/
-          copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
-        }
-      }
-
-    '';
-  };
-  users.users.caddy.extraGroups = [config.security.acme.defaults.group];
-
-  # Ensure nginx isn't turned on by some services (e.g. services using PHP)
-  services.nginx.enable = lib.mkForce false;
 
   # ACME certificates
   security.acme = {

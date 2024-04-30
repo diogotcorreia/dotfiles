@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    services.caddy.common
     services.ssh
   ];
 
@@ -58,13 +59,6 @@
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [];
-
-  # Caddy (web server)
-  networking.firewall.allowedTCPPorts = [80 443];
-  services.caddy = {
-    enable = true;
-    email = "phobos-lets-encrypt@diogotc.com";
-  };
 
   # PostgreSQL
   services.postgresql.enable = true;
