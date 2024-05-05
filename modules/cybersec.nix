@@ -28,7 +28,7 @@ in {
       # Java Decompiler
       jadx
       # Binary Decompiler
-      ghidra-bin
+      unstable.ghidra
     ];
   };
 }
