@@ -68,6 +68,10 @@ in {
         home-assistant = package;
       })
     ];
+
+    customZhaQuirks = with pkgs.my.home-assistant-custom-zha-quirks; [
+      tuya-persence-sensor-ts0225
+    ];
   };
 
   # https://nixos.wiki/wiki/Home_Assistant#Combine_declarative_and_UI_defined_automations

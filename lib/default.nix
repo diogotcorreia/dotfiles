@@ -1,8 +1,10 @@
 {lib, ...} @ args: let
-  listModulesRecursive = dir:
+  listFilesWithSuffixRecursive = suffix: dir:
     lib.filter
-    (p: lib.hasSuffix ".nix" p && !(lib.hasPrefix "_" (builtins.baseNameOf p)))
+    (p: lib.hasSuffix suffix p && !(lib.hasPrefix "_" (builtins.baseNameOf p)))
     (lib.filesystem.listFilesRecursive dir);
+
+  listModulesRecursive = listFilesWithSuffixRecursive ".nix";
 
   listModulesRecursive' = dir:
     lib.filter
@@ -11,7 +13,7 @@
 in {
   my =
     {
-      inherit listModulesRecursive listModulesRecursive';
+      inherit listFilesWithSuffixRecursive listModulesRecursive listModulesRecursive';
     }
     // lib.foldr (path: acc: acc // (import path args)) {} (listModulesRecursive' ./.);
 }

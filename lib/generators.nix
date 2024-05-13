@@ -52,7 +52,7 @@
   */
   mkOverlays = overlaysDir:
     lib.mapAttrsRecursive
-    (_: module: import module {inherit rakeLeaves inputs;})
+    (_: module: import module {inherit lib rakeLeaves inputs;})
     (rakeLeaves overlaysDir);
 
   /*
