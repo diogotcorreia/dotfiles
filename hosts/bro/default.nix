@@ -16,6 +16,7 @@
     ++ (with profiles; [
       services.caddy.common
       services.caddy.rproxy
+      services.grocy
       services.ssh
     ]);
 

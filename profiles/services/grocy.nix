@@ -1,5 +1,6 @@
-# Configuration for Grocy on Hera
+# Configuration for Grocy (https://github.com/grocy/grocy).
 # Module inspired by Nixpkgs' https://github.com/NixOS/nixpkgs/blob/nixos-23.05/nixos/modules/services/web-apps/grocy.nix
+# but adapted to work with Caddy instead of Nginx.
 {
   pkgs,
   config,
