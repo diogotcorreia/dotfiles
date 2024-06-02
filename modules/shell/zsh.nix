@@ -56,7 +56,7 @@ in {
 
       # eza (modern ls replacement)
       programs.eza.enable = true;
-      programs.eza.enableAliases = true;
+      programs.eza.enableZshIntegration = true;
       # starship (shell theme)
       programs.starship.package = pkgs.unstable.starship;
       programs.starship.enable = true;
