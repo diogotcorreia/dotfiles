@@ -27,7 +27,6 @@
       lua
       rust
       toml
-      pkgs.my.tree-sitter-troupe
       typescript
       pkgs.unstable.tree-sitter-grammars.tree-sitter-typst
       vim
@@ -122,15 +121,6 @@
       type = "lua";
       config = ''
         -- enable highlighting
-        local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-        parser_config.troupe = {
-          install_info = {
-            url = "https://github.com/MatthewFluet/tree-sitter-sml",
-            files = { "src/scanner.c" },
-          },
-          filetype = "trp",
-        }
-
         require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
 
         local function define_fdm()
@@ -582,9 +572,6 @@ in {
         vim.cmd('cabbrev W w')
         -- FIXME: only available starting in neovim 0.10 (nightly right now)
         -- vim.keymap.set('ca', 'W', 'w')
-
-
-        vim.filetype.add({ extension = { trp = "troupe" } })
       '';
       plugins = commonPlugins ++ personalPlugins ++ gitPlugins;
     };
@@ -622,8 +609,6 @@ in {
       end
       return {capabilities = capabilities, on_attach = on_attach}
     '';
-
-    home.file."${config.my.configHome}/nvim/queries/troupe/highlights.scm".source = "${pkgs.my.tree-sitter-troupe}/queries/highlights.scm";
 
     home.packages = personalPackages;
 

@@ -100,7 +100,6 @@ jobs:
           - flask-unsign
           - pgvecto-rs
           - pycdc
-          - troupe
 
     steps:
       - uses: actions/checkout@v4
