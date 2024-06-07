@@ -57,18 +57,21 @@ in {
 
     services.xserver = {
       enable = true;
-      layout = "us";
-      xkbVariant = "altgr-intl";
+      xkb = {
+        layout = "us";
+        variant = "altgr-intl";
+      };
       autorun = true;
       displayManager.startx.enable = true;
       windowManager = {dwm.enable = true;};
-      libinput = {
-        enable = true;
-        touchpad = {
-          tapping = true;
-          naturalScrolling = true;
-          middleEmulation = false;
-        };
+    };
+
+    services.libinput = {
+      enable = true;
+      touchpad = {
+        tapping = true;
+        naturalScrolling = true;
+        middleEmulation = false;
       };
     };
 
