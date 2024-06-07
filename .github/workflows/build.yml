@@ -44,7 +44,8 @@ jobs:
       - name: "Maximize Disk Space 2"
         uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
         with:
-          root-reserve-mb: 8192
+          # Save some space on root for /tmp (where packages are built)
+          root-reserve-mb: 16384 # 16 GiB
           swap-size-mb: 1024
           build-mount-path: /nix
           remove-dotnet: "true"
