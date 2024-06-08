@@ -3,6 +3,7 @@
   lib,
   config,
   configDir,
+  user,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf;
@@ -23,6 +24,10 @@ in {
         commit.template = "${configDir}/gitmessage.txt";
         commit.verbose = true;
         rerere.enabled = true;
+      };
+      signing = {
+        key = lib.mkDefault null;
+        signByDefault = lib.mkDefault (config.home-manager.users.${user}.programs.git.signing.key != null);
       };
       includes = [
         {

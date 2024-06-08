@@ -10,6 +10,7 @@
     graphical.firefox
     graphical.thunderbird
     services.ssh
+    shell.gpg
   ];
 
   # ZFS configuration
@@ -100,12 +101,7 @@
   };
 
   # GnuPG (GPG)
-  hm.programs.gpg.enable = true;
-  hm.services.gpg-agent.enable = true;
-  hm.programs.git.signing = {
-    key = "7B5273B10C4495CF";
-    signByDefault = true;
-  };
+  hm.programs.git.signing.key = "12B4F3AC9C065D08";
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [

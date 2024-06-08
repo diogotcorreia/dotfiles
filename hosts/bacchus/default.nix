@@ -12,6 +12,7 @@
     graphical.firefox
     graphical.thunderbird
     services.ssh
+    shell.gpg
   ];
 
   # Boot
@@ -137,12 +138,7 @@
   };
 
   # GnuPG (GPG)
-  hm.programs.gpg.enable = true;
-  hm.services.gpg-agent.enable = true;
-  hm.programs.git.signing = {
-    key = "7B5273B10C4495CF";
-    signByDefault = true;
-  };
+  hm.programs.git.signing.key = "7B5273B10C4495CF";
 
   # Specific packages for this host
   hm.home.packages = with pkgs; [
