@@ -29,8 +29,6 @@ in {
       discord-openasar
       # Telegram
       tdesktop
-      # Thunderbird
-      thunderbird
       # Android screen mirroring (scrcpy)
       scrcpy
       # Signal

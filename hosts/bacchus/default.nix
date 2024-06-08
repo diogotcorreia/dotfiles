@@ -10,6 +10,7 @@
   imports = with profiles; [
     graphical.captive-portals-client
     graphical.firefox
+    graphical.thunderbird
     services.ssh
   ];
 

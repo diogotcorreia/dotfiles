@@ -8,6 +8,7 @@
 }: {
   imports = with profiles; [
     graphical.firefox
+    graphical.thunderbird
     services.ssh
   ];
 
