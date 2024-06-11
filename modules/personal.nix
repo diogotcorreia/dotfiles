@@ -66,6 +66,10 @@ in {
           hostname = "world.bro.diogotc.com";
           user = "dtc";
         };
+        feb = {
+          hostname = "feb.diogotc.com";
+          user = "dtc";
+        };
         hades = {
           hostname = "hades.pedropirescoaching.com";
           user = "dtc";

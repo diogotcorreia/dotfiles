@@ -2,11 +2,12 @@ let
   apolloSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBotkuo1Z6ZbLFhfx7qt7lUS8Kr3xnu1X1fqjlbQ8BLE";
   bacchusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
   broSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ4GODzTdoSU1RS/1RU+EDZN1TxDYxqRct2q+OeWgv0f";
+  febSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBVtyO4NZ3FNrffEJOGLzkVgtgpkMV1ouRkk34GslroU";
   heraSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 
   personalSystems = [apolloSystem bacchusSystem];
-  allSystems = personalSystems ++ [broSystem heraSystem phobosSystem];
+  allSystems = personalSystems ++ [broSystem febSystem heraSystem phobosSystem];
 in {
   "nebulaCA.age".publicKeys = allSystems;
   "nixCacheDiogotcReadTokenNetrc.age".publicKeys = allSystems;
@@ -37,6 +38,17 @@ in {
   "bro/resticRcloneConfig.age".publicKeys = [broSystem];
   "bro/resticPassword.age".publicKeys = [broSystem];
   "bro/resticSshKey.age".publicKeys = [broSystem];
+
+  "feb/autoUpgradeHealthchecksUrl.age".publicKeys = [febSystem];
+  "feb/cloudflareToken.age".publicKeys = [febSystem];
+  "feb/hassSecrets.age".publicKeys = [febSystem];
+  "feb/healthchecksUrl.age".publicKeys = [febSystem];
+  "feb/nebulaCert.age".publicKeys = [febSystem];
+  "feb/nebulaKey.age".publicKeys = [febSystem];
+  "feb/resticHealthchecksUrl.age".publicKeys = [febSystem];
+  "feb/resticRcloneConfig.age".publicKeys = [febSystem];
+  "feb/resticPassword.age".publicKeys = [febSystem];
+  "feb/resticSshKey.age".publicKeys = [febSystem];
 
   "hera/acmeDnsCredentials.age".publicKeys = [heraSystem];
   "hera/autoUpgradeHealthchecksUrl.age".publicKeys = [heraSystem];

@@ -19,6 +19,8 @@ jobs:
             platform: x86-64-linux
           - host: bro
             platform: x86-64-linux
+          - host: feb
+            platform: x86-64-linux
           - host: hera
             platform: x86-64-linux
           - host: phobos
