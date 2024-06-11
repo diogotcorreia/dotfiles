@@ -108,7 +108,7 @@
         };
 
         # TODO this should be auto generated
-        inherit (pkgs.my) flask-unsign githacker jwt-tool pycdc;
+        inherit (pkgs.my) flask-unsign githacker jwt-tool pycdc pyinstxtractor;
       };
     };
 
