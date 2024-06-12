@@ -6,6 +6,7 @@
   ...
 }: {
   imports = with profiles; [
+    networking.ddns.cloudflare
     services.caddy.common
     services.ssh
   ];

@@ -47,6 +47,8 @@
   # TODO perhaps set this per host
   time.timeZone = lib.mkDefault "Europe/Lisbon";
 
+  networking.domain = lib.mkDefault "diogotc.com";
+
   services.journald.extraConfig = ''
     SystemMaxUse=500M
   '';
