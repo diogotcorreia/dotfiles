@@ -2,23 +2,18 @@
 {
   config,
   hostSecretsDir,
-  inputs,
   lib,
   pkgs,
   profiles,
   ...
 }: {
-  disabledModules = ["services/misc/cfdyndns.nix"];
-  imports =
-    [
-      (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/cfdyndns.nix")
-    ]
-    ++ (with profiles; [
-      services.caddy.common
-      services.caddy.rproxy
-      services.grocy
-      services.ssh
-    ]);
+  imports = with profiles; [
+    networking.ddns.cloudflare
+    services.caddy.common
+    services.caddy.rproxy
+    services.grocy
+    services.ssh
+  ];
 
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
@@ -38,7 +33,6 @@
         group = config.security.acme.defaults.group;
       };
       broAutoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
-      broCfdyndnsToken.file = "${hostSecretsDir}/cfdyndnsToken.age";
       broHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
       broNebulaCert = {
         file = "${hostSecretsDir}/nebulaCert.age";
@@ -70,13 +64,6 @@
       # CLOUDFLARE_DNS_API_TOKEN=<token>
       credentialsFile = config.age.secrets.broAcmeDnsCredentials.path;
     };
-  };
-
-  # Cloudflare Dynamic DNS
-  services.cfdyndns = {
-    enable = true;
-    records = ["world.bro.diogotc.com"];
-    apiTokenFile = config.age.secrets.broCfdyndnsToken.path;
   };
 
   my.networking.wiredInterface = "eno1";

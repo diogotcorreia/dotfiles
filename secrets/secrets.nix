@@ -29,7 +29,7 @@ in {
 
   "bro/acmeDnsCredentials.age".publicKeys = [broSystem];
   "bro/autoUpgradeHealthchecksUrl.age".publicKeys = [broSystem];
-  "bro/cfdyndnsToken.age".publicKeys = [broSystem];
+  "bro/cloudflareToken.age".publicKeys = [broSystem];
   "bro/hassSecrets.age".publicKeys = [broSystem];
   "bro/healthchecksUrl.age".publicKeys = [broSystem];
   "bro/nebulaCert.age".publicKeys = [broSystem];
