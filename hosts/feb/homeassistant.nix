@@ -58,6 +58,12 @@ in {
       "scene manual" = [];
       "scene ui" = "!include scenes.yaml";
     };
+
+    customComponents = [
+      (pkgs.my.hass-resol-km2.override {
+        inherit (pkgs.unstable) buildHomeAssistantComponent;
+      })
+    ];
   };
 
   # https://nixos.wiki/wiki/Home_Assistant#Combine_declarative_and_UI_defined_automations
