@@ -6,15 +6,15 @@
   ...
 }: let
   images = {
-    serverAndMicroservices = {
+    server = {
       imageName = "ghcr.io/immich-app/immich-server";
-      imageDigest = "sha256:658b40420d7a39d6eb34c797cec8d36ff315f5adb168301aaf27dc4eafc8e228"; # v1.105.1
-      sha256 = "sha256-vRYW2D7NkyzxEjeo7ZYh7kATVjcEAkoVOS/tgWNWxyM=";
+      imageDigest = "sha256:d39cb7ecbcc9924f2c51a3e0deb8a469075996c6ba9e1384eb2ddb550984848e"; # v1.106.4
+      sha256 = "sha256-yt0/neyBIiyr+zpX9jB2UjsBHxLKyZSbnjSa32OchNA=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
-      imageDigest = "sha256:2e2736ba2f2270485c0b6fa33eee66ea0b2279b70b92ea838a015c4d5289c9f0"; # v1.105.1
-      sha256 = "sha256-kztYHOpfLwRfKBli4aXdDEgDOO4noBQGhHv2oZr1hQc=";
+      imageDigest = "sha256:9db20e5c2033bef01fa2be50fa0a2c3d62e43f069aedde4d49a65e65a436d40b"; # v1.106.4
+      sha256 = "sha256-CB+do2YQ/HTYf40NxyM2WdpD0NAsqvCu+xG95hl5GUI=";
     };
   };
   dbUsername = user;
@@ -28,7 +28,6 @@
   uid = 15015;
   gid = 15015;
 
-  immichWebUrl = "http://immich_web:3000";
   immichServerUrl = "http://immich_server:3001";
   immichMachineLearningUrl = "http://immich_machine_learning:3003";
 
@@ -42,7 +41,6 @@
 
     UPLOAD_LOCATION = photosLocation;
 
-    IMMICH_WEB_URL = immichWebUrl;
     IMMICH_SERVER_URL = immichServerUrl;
     IMMICH_MACHINE_LEARNING_URL = immichMachineLearningUrl;
   };
@@ -89,7 +87,7 @@ in {
     ensureDatabases = [dbUsername];
 
     extraPlugins = [
-      (pkgs.unstable.postgresqlPackages.pgvecto-rs.override {
+      (pkgs.postgresqlPackages.pgvecto-rs.override {
         postgresql = config.services.postgresql.package;
       })
     ];
@@ -105,12 +103,8 @@ in {
 
   virtualisation.oci-containers.containers = {
     immich_server = {
-      imageFile = wrapImage {
-        inherit (images.serverAndMicroservices) imageName imageDigest sha256;
-        name = "immich_server";
-        entrypoint = ["/bin/sh" "start-server.sh"];
-      };
-      image = "immich_server:release";
+      imageFile = pkgs.dockerTools.pullImage images.server;
+      image = "ghcr.io/immich-app/immich-server";
       extraOptions = ["--network=immich-bridge" "--user=${toString uid}:${toString gid}"];
 
       volumes = [
@@ -131,32 +125,6 @@ in {
       autoStart = true;
     };
 
-    immich_microservices = {
-      imageFile = wrapImage {
-        inherit (images.serverAndMicroservices) imageName imageDigest sha256;
-        name = "immich_microservices";
-        entrypoint = ["/bin/sh" "start-microservices.sh"];
-      };
-      image = "immich_microservices:release";
-      extraOptions = ["--network=immich-bridge" "--user=${toString uid}:${toString gid}"];
-
-      volumes = [
-        "${photosLocation}:/usr/src/app/upload"
-        (mkMount "/run/postgresql")
-        (mkMount "/run/redis-${redisName}")
-      ];
-
-      environment =
-        environment
-        // {
-          PUID = toString uid;
-          PGID = toString gid;
-          REVERSE_GEOCODING_DUMP_DIRECTORY = "/tmp/reverse-geocoding-dump";
-        };
-
-      autoStart = true;
-    };
-
     immich_machine_learning = {
       imageFile = pkgs.dockerTools.pullImage images.machineLearning;
       image = "ghcr.io/immich-app/immich-machine-learning";
@@ -173,11 +141,9 @@ in {
   systemd.services = let
     backend = config.virtualisation.oci-containers.backend;
   in {
-    # Restart Immich containers when postgresql restarts,
-    # otherwise they lose connection to the socket
+    # Restart Immich container when postgresql restarts,
+    # otherwise it loses connection to the socket
     "${backend}-immich_server".requires = ["postgresql.service"];
-    "${backend}-immich_microservices".requires = ["postgresql.service"];
-    "${backend}-immich_machine_learning".requires = ["postgresql.service"];
 
     init-immich-network = {
       description = "Create the network bridge for immich.";

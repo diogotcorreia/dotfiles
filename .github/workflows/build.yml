@@ -101,7 +101,6 @@ jobs:
         package:
           - attic
           - flask-unsign
-          - pgvecto-rs
           - pycdc
 
     steps:
