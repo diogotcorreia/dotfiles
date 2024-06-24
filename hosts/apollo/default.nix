@@ -9,6 +9,7 @@
   imports = with profiles; [
     graphical.firefox
     graphical.thunderbird
+    misc.kth
     services.ssh
     shell.gpg
   ];
@@ -193,7 +194,6 @@
         "/var/lib/docker"
       ];
     };
-    kth.enable = true;
     personal.enable = true;
     secureboot.enable = true;
     xdg.enable = true;

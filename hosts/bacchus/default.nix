@@ -11,6 +11,7 @@
     graphical.captive-portals-client
     graphical.firefox
     graphical.thunderbird
+    misc.kth
     services.ssh
     shell.gpg
   ];
@@ -241,7 +242,6 @@
         "/var/lib/automatic-timezoned"
       ];
     };
-    kth.enable = true;
     personal.enable = true;
     secureboot.enable = true;
     virtual-machines.enable = true;
