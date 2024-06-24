@@ -241,7 +241,6 @@
         "/var/lib/automatic-timezoned"
       ];
     };
-    ist.enable = true;
     kth.enable = true;
     personal.enable = true;
     secureboot.enable = true;
