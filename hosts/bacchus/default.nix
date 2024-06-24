@@ -39,13 +39,10 @@
   time.timeZone = null;
   services.automatic-timezoned = {
     enable = true;
-    package = pkgs.unstable.automatic-timezoned;
+    package = pkgs.automatic-timezoned;
   };
   systemd.services.automatic-timezoned = {
     serviceConfig = {
-      # TODO remove on nixos-24.05
-      ExecStart = lib.mkForce "${lib.getExe config.services.automatic-timezoned.package}";
-
       StateDirectory = "automatic-timezoned";
       StateDirectoryMode = "0755";
     };

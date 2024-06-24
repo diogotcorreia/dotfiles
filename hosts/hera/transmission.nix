@@ -13,12 +13,6 @@
   socksSocket = "/run/${socketDirectory}/transmission-socks-proxy";
   socketDirectory = "transmission-proxy";
 in {
-  # TODO transmission.webHome does not exist on 23.11
-  disabledModules = ["services/torrent/transmission.nix"];
-  imports = [
-    "${inputs.nixpkgs-unstable}/nixos/modules/services/torrent/transmission.nix"
-  ];
-
   age.secrets = {
     # Contains:
     # Host proxy

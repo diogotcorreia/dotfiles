@@ -2,21 +2,11 @@
 {
   config,
   hostSecretsDir,
-  inputs,
-  lib,
   pkgs,
   profiles,
   ...
 }: {
-  # Fix Docker containers not gracefully shutting down
-  # https://github.com/NixOS/nixpkgs/pull/248315
-  # TODO remove in nixos-24.05
-  disabledModules = ["virtualisation/oci-containers.nix"];
-  imports =
-    [
-      (inputs.nixpkgs-unstable + "/nixos/modules/virtualisation/oci-containers.nix")
-    ]
-    ++ (with profiles; [
+  imports = (with profiles; [
       services.caddy.common
       services.ssh
     ]);
