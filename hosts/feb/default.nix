@@ -56,13 +56,6 @@
     };
   };
 
-  # Cloudflare Dynamic DNS
-  services.cfdyndns = {
-    enable = true;
-    records = ["world.feb.diogotc.com"];
-    apiTokenFile = config.age.secrets.cloudflareToken.path;
-  };
-
   my.networking.wiredInterface = "enp0s31f6";
 
   # Modules
