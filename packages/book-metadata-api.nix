@@ -1,5 +1,4 @@
 {
-  lib,
   fetchFromGitHub,
   makeWrapper,
   mkYarnPackage,
@@ -10,6 +9,7 @@
   vips,
   nodePackages,
   python3,
+  ...
 }: let
   pin = {
     version = "3.1.0";

@@ -6,10 +6,10 @@
   profiles,
   ...
 }: {
-  imports = (with profiles; [
-      services.caddy.common
-      services.ssh
-    ]);
+  imports = with profiles; [
+    services.caddy.common
+    services.ssh
+  ];
 
   # ZFS configuration
   services.zfs.autoScrub.enable = true;
@@ -70,9 +70,6 @@
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
-
-  # Specific packages for this host
-  hm.home.packages = with pkgs; [];
 
   # Keep laptop on when lid is closed
   services.logind.lidSwitch = "ignore";

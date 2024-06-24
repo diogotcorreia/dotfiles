@@ -2,7 +2,6 @@
 {
   config,
   hostSecretsDir,
-  pkgs,
   profiles,
   ...
 }: {
@@ -56,9 +55,6 @@
 
     identityPaths = ["/root/.ssh/id_ed25519"];
   };
-
-  # Specific packages for this host
-  hm.home.packages = with pkgs; [];
 
   # PostgreSQL
   services.postgresql.enable = true;

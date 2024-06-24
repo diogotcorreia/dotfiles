@@ -1,6 +1,5 @@
 # restic backups configuration with healthchecks ping.
 {
-  pkgs,
   config,
   lib,
   utils,

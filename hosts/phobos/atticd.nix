@@ -1,10 +1,7 @@
 # Configuration for atticd (Nix Binary Cache) on Phobos
-args @ {
-  pkgs,
-  inputs,
+{
   config,
   hostSecretsDir,
-  buildEnv,
   ...
 }: let
   host = "nix-cache.diogotc.com";

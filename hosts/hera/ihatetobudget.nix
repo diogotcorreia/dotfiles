@@ -1,9 +1,5 @@
 # Configuration for IHateToBudget on Hera
-{
-  pkgs,
-  config,
-  ...
-}: let
+{config, ...}: let
   domain = "budget-joao.diogotc.com";
   port = 8013;
 in {

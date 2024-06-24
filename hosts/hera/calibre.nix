@@ -1,9 +1,5 @@
 # Configuration for Calibre Web on Hera
-{
-  pkgs,
-  config,
-  ...
-}: let
+{config, ...}: let
   domain = "calibre.diogotc.com";
   port = 8011;
 

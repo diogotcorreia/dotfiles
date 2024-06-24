@@ -3,7 +3,6 @@
   config,
   hostSecretsDir,
   lib,
-  pkgs,
   profiles,
   ...
 }: {
@@ -50,9 +49,6 @@
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
-
-  # Specific packages for this host
-  hm.home.packages = with pkgs; [];
 
   # ACME certificates
   security.acme = {

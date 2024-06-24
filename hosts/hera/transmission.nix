@@ -2,7 +2,6 @@
 {
   config,
   hostSecretsDir,
-  inputs,
   lib,
   pkgs,
   ...

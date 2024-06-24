@@ -45,30 +45,6 @@
     IMMICH_MACHINE_LEARNING_URL = immichMachineLearningUrl;
   };
 
-  wrapImage = {
-    name,
-    imageName,
-    imageDigest,
-    sha256,
-    entrypoint,
-  }:
-    pkgs.dockerTools.buildImage {
-      name = name;
-      tag = "release";
-      fromImage = pkgs.dockerTools.pullImage {
-        imageName = imageName;
-        imageDigest = imageDigest;
-        sha256 = sha256;
-      };
-      created = "now";
-      config =
-        if builtins.length entrypoint == 0
-        then null
-        else {
-          Cmd = entrypoint;
-          WorkingDir = "/usr/src/app";
-        };
-    };
   mkMount = dir: "${dir}:${dir}";
 in {
   users.users.${user} = {

@@ -1,9 +1,5 @@
 # Configuration for Uptime Kuma on Phobos
-{
-  pkgs,
-  config,
-  ...
-}: let
+{pkgs, ...}: let
   port = 8002;
 in {
   services.uptime-kuma = {

@@ -1,6 +1,6 @@
 # Apply patches to DWMBlocks
-{...}: final: prev: rec {
-  dwmblocks = prev.dwmblocks.overrideAttrs (oldAttrs: rec {
+{...}: final: prev: {
+  dwmblocks = prev.dwmblocks.overrideAttrs (oldAttrs: {
     src = prev.fetchFromGitHub {
       owner = "LukeSmithxyz";
       repo = "dwmblocks";

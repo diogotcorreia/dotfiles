@@ -3,10 +3,9 @@
   pkgs,
   config,
   lib,
-  secretsDir,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf escapeShellArg getAttr attrNames;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.virtual-machines;
 in {
   options.modules.virtual-machines.enable = mkEnableOption "libvirt";

@@ -1,6 +1,6 @@
 # Use cfdyndns from nixos-unstable
-{...}: final: prev: rec {
-  cfdyndns = prev.unstable.cfdyndns.overrideAttrs (oldAttrs: rec {
+{...}: final: prev: {
+  cfdyndns = prev.unstable.cfdyndns.overrideAttrs (oldAttrs: {
     patches = [
       # Fix cfdyndns not working if CAA records are present in the zone
       # https://github.com/nrdxp/cfdyndns/pull/56

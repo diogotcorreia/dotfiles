@@ -1,7 +1,6 @@
 # Wrapper around nix-community/impermanence to allow shared configs
 # between hosts with and without ephemeral root storage
 {
-  pkgs,
   config,
   lib,
   ...

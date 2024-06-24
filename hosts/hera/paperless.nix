@@ -1,6 +1,5 @@
 # Configuration for Paperless-ngx on Hera
 {
-  pkgs,
   config,
   hostSecretsDir,
   ...

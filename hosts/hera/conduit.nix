@@ -1,9 +1,5 @@
 # Configuration for Conduit (Matrix Homeserver) on Hera
-{
-  pkgs,
-  config,
-  ...
-}: let
+{config, ...}: let
   domainConduit = "m.diogotc.com";
   portConduit = 6167;
   domainElement = "chat.diogotc.com";

@@ -1,9 +1,5 @@
 # Configuration for Home Assistant (and related programs) on Hera
-{
-  pkgs,
-  config,
-  ...
-}: let
+{config, ...}: let
   hassDomain = "hass.diogotc.com";
   hassPort = 8123;
   noderedDomain = "nodered.hera.diogotc.com";

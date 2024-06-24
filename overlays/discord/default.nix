@@ -1,6 +1,6 @@
 # Enable OpenASAR for Discord
 # Additionally, add a patch to allow to declaratively set settings
-{inputs, ...}: final: prev: {
+{...}: final: prev: {
   discord-openasar = prev.discord.override {
     withOpenASAR = true;
   };

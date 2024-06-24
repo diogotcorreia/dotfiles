@@ -6,7 +6,6 @@
   ...
 }: let
   domain = "cloud.diogotc.com";
-  port = 8007;
 
   dbUsername = "nextcloud";
   dbDatabaseName = "nextcloud";

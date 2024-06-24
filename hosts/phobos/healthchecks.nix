@@ -4,7 +4,7 @@ args @ {
   inputs,
   config,
   hostSecretsDir,
-  buildEnv,
+  buildEnv, # unused, but has to be here because of the import of nixpkgs healthchecks module
   ...
 }: let
   host = "healthchecks.diogotc.com";

@@ -10,8 +10,6 @@
     mkEnableOption
     mkOption
     types
-    mkIf
-    recursiveUpdate
     mapAttrs'
     optionalString
     mkBefore
@@ -37,7 +35,7 @@ in {
 
     systemd-monitoring = mkOption {
       description = "Systemd services to wrap with healthcheck start, failure and finish pings";
-      type = types.attrsOf (types.submodule ({config, ...}: {
+      type = types.attrsOf (types.submodule ({...}: {
         options = {
           checkUrlFile = mkOption {
             type = types.path;

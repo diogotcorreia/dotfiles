@@ -1,6 +1,6 @@
 # Apply patches to dmenu
-{...}: final: prev: rec {
-  dmenu = prev.dmenu.overrideAttrs (oldAttrs: rec {
+{...}: final: prev: {
+  dmenu = prev.dmenu.overrideAttrs (oldAttrs: {
     patches = [
       (prev.fetchpatch {
         url = "https://tools.suckless.org/dmenu/patches/fuzzymatch/dmenu-fuzzymatch-4.9.diff";
