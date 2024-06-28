@@ -9,8 +9,8 @@
   cfg = config.modules.graphical.programs;
 
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.13/uniform/nordic.theme.css";
-    hash = "sha256-qaDvDIH3vyYKxbGgjuXkabGxpCr6qTeloQTinl7a62A=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.14/uniform/nordic.theme.css";
+    hash = "sha256-Qju3KUeC18k9m/VJ3feQNvy88YnC7zMNBRI0vRKYpxY=";
   };
 in {
   options.modules.graphical.programs.enable = mkEnableOption "programs";
