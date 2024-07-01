@@ -8,6 +8,7 @@
 }: {
   imports = with profiles; [
     networking.ddns.cloudflare
+    security.fail2ban
     services.caddy.common
     services.caddy.rproxy
     services.grocy

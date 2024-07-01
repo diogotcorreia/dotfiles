@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    security.fail2ban
     services.caddy.common
     services.ssh
   ];
