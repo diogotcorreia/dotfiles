@@ -245,6 +245,14 @@
     xdg.enable = true;
   };
 
+  # Wayland specialisation
+  # TODO: make default
+  specialisation.wayland.configuration = {
+    imports = with profiles; [
+      graphical.niri
+    ];
+  };
+
   # Statem state version
   system.stateVersion = "22.11";
 }
