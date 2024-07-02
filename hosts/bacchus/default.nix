@@ -2,7 +2,6 @@
 {
   config,
   hostSecretsDir,
-  lib,
   pkgs,
   profiles,
   ...
@@ -11,6 +10,7 @@
     graphical.captive-portals-client
     graphical.firefox
     graphical.thunderbird
+    laptop.auto-timezone
     misc.cybersec
     misc.kth
     services.ssh
@@ -37,43 +37,6 @@
   boot.tmp.useTmpfs = true;
   boot.tmp.tmpfsSize = "80%";
   boot.tmp.cleanOnBoot = true;
-
-  # Time zone
-  time.timeZone = null;
-  services.automatic-timezoned = {
-    enable = true;
-    package = pkgs.automatic-timezoned;
-  };
-  systemd.services.automatic-timezoned = {
-    serviceConfig = {
-      StateDirectory = "automatic-timezoned";
-      StateDirectoryMode = "0755";
-    };
-
-    # Restore timezone from previous boot
-    preStart = ''
-      if [[ -f "$STATE_DIRECTORY/timezone" ]]; then
-        timezone=$(cat "$STATE_DIRECTORY/timezone")
-        if [[ -n "$timezone" ]]; then
-          ${lib.getExe' pkgs.dbus "dbus-send"} --system \
-            --dest=org.freedesktop.timedate1 \
-            --print-reply /org/freedesktop/timedate1 \
-            org.freedesktop.timedate1.SetTimezone \
-            string:"$timezone" \
-            boolean:false
-        fi
-      fi
-    '';
-    postStop = ''
-      if [[ "$SERVICE_RESULT" == "success" && -h /etc/localtime ]]; then
-        # Can't use D-Bus here because it doesn't work on shutdown
-        timezone=$(readlink /etc/localtime | sed 's/\.\.\/etc\/zoneinfo\///')
-        if [[ -n "$timezone" ]]; then
-          echo "$timezone" > "$STATE_DIRECTORY/timezone"
-        fi
-      fi
-    '';
-  };
 
   # Network Manager
   # TODO move to module
