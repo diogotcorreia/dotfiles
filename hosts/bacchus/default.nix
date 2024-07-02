@@ -15,6 +15,7 @@
     misc.kth
     services.ssh
     shell.gpg
+    virtualisation.virtual-machines
   ];
 
   # Boot
@@ -241,7 +242,6 @@
     };
     personal.enable = true;
     secureboot.enable = true;
-    virtual-machines.enable = true;
     xdg.enable = true;
   };
 
