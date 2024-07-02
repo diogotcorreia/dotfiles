@@ -127,7 +127,7 @@
     impermanence = {
       enable = true;
       # Impermanence (root on tmpfs)
-      directories = ["/var/lib/acme" "/var/lib/docker"];
+      directories = ["/var/lib/acme"];
     };
   };
 

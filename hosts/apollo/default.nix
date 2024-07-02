@@ -13,6 +13,7 @@
     misc.kth
     services.ssh
     shell.gpg
+    virtualisation.docker
   ];
 
   # ZFS configuration
@@ -78,9 +79,6 @@
   services.logind.extraConfig = ''
     HandlePowerKey=ignore
   '';
-
-  # Docker (containers)
-  virtualisation.docker.enable = true;
 
   # Secret manager (agenix)
   age = {
@@ -191,7 +189,6 @@
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
-        "/var/lib/docker"
       ];
     };
     personal.enable = true;

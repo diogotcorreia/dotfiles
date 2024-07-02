@@ -15,6 +15,7 @@
     misc.kth
     services.ssh
     shell.gpg
+    virtualisation.docker
     virtualisation.virtual-machines
   ];
 
@@ -113,9 +114,6 @@
   '';
   # Suspend even if plugged in to external monitor
   services.logind.lidSwitchDocked = "suspend";
-
-  # Docker (containers)
-  virtualisation.docker.enable = true;
 
   # Secret manager (agenix)
   age = {
@@ -235,7 +233,6 @@
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
-        "/var/lib/docker"
 
         "/var/lib/automatic-timezoned"
       ];

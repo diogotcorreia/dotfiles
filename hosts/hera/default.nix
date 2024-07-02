@@ -10,6 +10,7 @@
     security.fail2ban
     services.caddy.common
     services.ssh
+    virtualisation.docker
   ];
 
   # ZFS configuration
@@ -40,10 +41,6 @@
   };
 
   my.networking.wiredInterface = "eno1";
-
-  # Docker (containers)
-  virtualisation.docker.enable = true;
-  virtualisation.oci-containers.backend = "docker";
 
   # Secret manager (agenix)
   age = {
@@ -165,7 +162,6 @@
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/acme"
-        "/var/lib/docker"
       ];
     };
   };
