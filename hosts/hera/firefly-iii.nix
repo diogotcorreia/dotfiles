@@ -60,10 +60,6 @@ in {
   systemd.services.${mkServiceName "firefly-auto-importer"} = {
     # Avoid loop, since container is one-shot
     serviceConfig.Restart = lib.mkForce "no";
-    # Ignore `docker stop` error
-    # https://github.com/NixOS/nixpkgs/issues/292551
-    # TODO remove me when https://github.com/NixOS/nixpkgs/pull/292552 gets merged
-    preStop = lib.mkForce "${config.virtualisation.oci-containers.backend} stop firefly-auto-importer || true";
   };
 
   # Schedule Firefly Auto Importer
