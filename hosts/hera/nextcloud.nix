@@ -30,11 +30,6 @@ in {
       dbtype = "pgsql";
       dbuser = dbUsername;
       dbname = dbDatabaseName;
-
-      trustedProxies = ["127.0.0.1" "::1"];
-      overwriteProtocol = "https";
-
-      defaultPhoneRegion = "PT";
     };
     phpOptions = {
       "opcache.interned_strings_buffer" = "16";
@@ -42,10 +37,15 @@ in {
       "opcache.jit" = "1255";
       "opcache.jit_buffer_size" = "128M";
     };
-    extraOptions = {
+    settings = {
+      trusted_proxies = ["127.0.0.1" "::1"];
+      overwriteprotocol = "https";
+
+      default_phone_region = "PT";
+
       "overwrite.cli.url" = "https://${domain}/";
       "upgrade.disable-web" = true;
-      "maintenance_window_start" = 2;
+      maintenance_window_start = 2;
     };
     # Has:
     # mail_from_address

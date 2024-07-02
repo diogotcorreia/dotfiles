@@ -20,7 +20,7 @@ in {
   services.paperless = {
     enable = true;
 
-    extraConfig = {
+    settings = {
       PAPERLESS_OCR_LANGUAGE = "eng+por+swe";
       PAPERLESS_DBHOST = "/run/postgresql";
       PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
