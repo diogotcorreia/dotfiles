@@ -196,6 +196,6 @@
     xdg.enable = true;
   };
 
-  # Statem state version
+  # System state version
   system.stateVersion = "23.11";
 }

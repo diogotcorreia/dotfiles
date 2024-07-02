@@ -99,6 +99,6 @@
     };
   };
 
-  # Statem state version
+  # System state version
   system.stateVersion = "21.11";
 }
