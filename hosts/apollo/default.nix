@@ -9,6 +9,7 @@
   imports = with profiles; [
     graphical.firefox
     graphical.thunderbird
+    misc.cybersec
     misc.kth
     services.ssh
     shell.gpg
@@ -184,7 +185,6 @@
       tmux.enable = true;
       zsh.enable = true;
     };
-    cybersec.enable = true;
     impermanence = {
       enable = true;
       # Impermanence (root on tmpfs)
