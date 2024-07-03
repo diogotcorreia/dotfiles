@@ -10,6 +10,7 @@
     graphical.captive-portals-client
     graphical.firefox
     graphical.thunderbird
+    hardware.zram
     laptop.auto-timezone
     misc.cybersec
     misc.kth
@@ -31,7 +32,6 @@
   networking.hostId = "239be557";
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
-  zramSwap.enable = true;
 
   # /tmp configuration
   boot.tmp.useTmpfs = true;

@@ -6,6 +6,7 @@
   ...
 }: {
   imports = with profiles; [
+    hardware.zram
     networking.ddns.cloudflare
     security.fail2ban
     services.caddy.common

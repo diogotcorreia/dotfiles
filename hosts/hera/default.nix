@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    hardware.zram
     security.fail2ban
     services.caddy.common
     services.ssh

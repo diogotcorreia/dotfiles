@@ -9,6 +9,7 @@
   imports = with profiles; [
     graphical.firefox
     graphical.thunderbird
+    hardware.zram
     misc.cybersec
     misc.kth
     services.ssh
