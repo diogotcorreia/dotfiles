@@ -9,6 +9,7 @@
   imports = with profiles; [
     graphical.firefox
     graphical.thunderbird
+    hardware.filesystem.zfs-impermanence
     hardware.zram
     misc.cybersec
     misc.kth
@@ -17,9 +18,9 @@
     virtualisation.docker
   ];
 
-  # ZFS configuration
-  services.zfs.autoScrub.enable = true;
-  services.zfs.trim.enable = true;
+  networking.hostId = "30c1f688";
+
+  my.filesystem.mainDisk = "/dev/nvme0n1";
 
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;
@@ -185,8 +186,6 @@
       zsh.enable = true;
     };
     impermanence = {
-      enable = true;
-      # Impermanence (root on tmpfs)
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"

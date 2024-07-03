@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    hardware.filesystem.zfs-impermanence
     hardware.zram
     security.fail2ban
     services.caddy.common
@@ -14,9 +15,10 @@
     virtualisation.docker
   ];
 
-  # ZFS configuration
-  services.zfs.autoScrub.enable = true;
-  services.zfs.trim.enable = true;
+  # Host Id
+  networking.hostId = "9832f4c7";
+
+  my.filesystem.mainDisk = "/dev/sda";
 
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;
@@ -158,8 +160,6 @@
       zsh.enable = true;
     };
     impermanence = {
-      enable = true;
-      # Impermanence (root on tmpfs)
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/acme"

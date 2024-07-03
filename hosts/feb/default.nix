@@ -6,6 +6,7 @@
   ...
 }: {
   imports = with profiles; [
+    hardware.filesystem.zfs-impermanence
     hardware.zram
     networking.ddns.cloudflare
     security.fail2ban
@@ -13,9 +14,8 @@
     services.ssh
   ];
 
-  # ZFS configuration
-  services.zfs.autoScrub.enable = true;
-  services.zfs.trim.enable = true;
+  networking.hostId = "1215a7f5";
+  my.filesystem.mainDisk = "/dev/nvme0n1";
 
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;
@@ -119,8 +119,6 @@
       zsh.enable = true;
     };
     impermanence = {
-      enable = true;
-      # Impermanence (root on tmpfs)
       directories = ["/var/lib/acme"];
     };
   };

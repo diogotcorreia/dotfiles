@@ -89,7 +89,6 @@
         inputs.impermanence.nixosModules.impermanence
         inputs.agenix.nixosModules.default
         inputs.lanzaboote.nixosModules.lanzaboote
-        inputs.disko.nixosModules.disko
         inputs.attic.nixosModules.atticd
       ];
     };

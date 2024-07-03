@@ -191,8 +191,6 @@
       zsh.enable = true;
     };
     impermanence = {
-      enable = true;
-      # Impermanence (root on tmpfs)
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
