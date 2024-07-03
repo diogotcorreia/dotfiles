@@ -1,7 +1,7 @@
 # Configuration for apollo (desktop PC)
 {
   config,
-  hostSecretsDir,
+  secrets,
   pkgs,
   profiles,
   ...
@@ -86,17 +86,17 @@
   age = {
     secrets = {
       apolloNebulaCert = {
-        file = "${hostSecretsDir}/nebulaCert.age";
+        file = secrets.host.nebulaCert;
         owner = "nebula-nebula0";
       };
       apolloNebulaKey = {
-        file = "${hostSecretsDir}/nebulaKey.age";
+        file = secrets.host.nebulaKey;
         owner = "nebula-nebula0";
       };
-      apolloResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
-      apolloResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
-      apolloResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      apolloResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      apolloResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      apolloResticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      apolloResticPassword.file = secrets.host.resticPassword;
+      apolloResticSshKey.file = secrets.host.resticSshKey;
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];

@@ -1,8 +1,8 @@
 # Configuration for phobos (VPS)
 {
   config,
-  hostSecretsDir,
   profiles,
+  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -38,20 +38,20 @@
   # Secret manager (agenix)
   age = {
     secrets = {
-      phobosAutoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
-      phobosHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      phobosAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
+      phobosHealthchecksUrl.file = secrets.host.healthchecksUrl;
       phobosNebulaCert = {
-        file = "${hostSecretsDir}/nebulaCert.age";
+        file = secrets.host.nebulaCert;
         owner = "nebula-nebula0";
       };
       phobosNebulaKey = {
-        file = "${hostSecretsDir}/nebulaKey.age";
+        file = secrets.host.nebulaKey;
         owner = "nebula-nebula0";
       };
-      phobosResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
-      phobosResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
-      phobosResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      phobosResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      phobosResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      phobosResticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      phobosResticPassword.file = secrets.host.resticPassword;
+      phobosResticSshKey.file = secrets.host.resticSshKey;
     };
 
     identityPaths = ["/root/.ssh/id_ed25519"];

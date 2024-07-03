@@ -1,8 +1,8 @@
 # Configuration for feb (home server)
 {
   config,
-  hostSecretsDir,
   profiles,
+  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -26,21 +26,21 @@
   # Secret manager (agenix)
   age = {
     secrets = {
-      autoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
-      cloudflareToken.file = "${hostSecretsDir}/cloudflareToken.age";
-      healthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      autoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
+      cloudflareToken.file = secrets.host.cloudflareToken;
+      healthchecksUrl.file = secrets.host.healthchecksUrl;
       nebulaCert = {
-        file = "${hostSecretsDir}/nebulaCert.age";
+        file = secrets.host.nebulaCert;
         owner = "nebula-nebula0";
       };
       nebulaKey = {
-        file = "${hostSecretsDir}/nebulaKey.age";
+        file = secrets.host.nebulaKey;
         owner = "nebula-nebula0";
       };
-      resticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
-      resticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
-      resticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      resticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      resticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      resticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      resticPassword.file = secrets.host.resticPassword;
+      resticSshKey.file = secrets.host.resticSshKey;
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];

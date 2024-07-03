@@ -1,7 +1,7 @@
 # Configuration for Transmission on Hera
 {
   config,
-  hostSecretsDir,
+  secrets,
   lib,
   pkgs,
   ...
@@ -18,9 +18,9 @@ in {
     #   HostName <host>
     #   User <username>
     #   KnownHostsCommand /usr/bin/env printf "%H ssh-ed25519 <host public key>"
-    transmissionProxySshConfig.file = "${hostSecretsDir}/transmissionProxySshConfig.age";
+    transmissionProxySshConfig.file = secrets.host.transmissionProxySshConfig;
     # Contains password for remote SSH user
-    transmissionProxySshPassword.file = "${hostSecretsDir}/transmissionProxySshPassword.age";
+    transmissionProxySshPassword.file = secrets.host.transmissionProxySshPassword;
   };
 
   services.transmission = {

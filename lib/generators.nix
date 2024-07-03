@@ -1,12 +1,13 @@
 {
+  inputs,
   lib,
+  nixosConfigurations,
   pkgs,
   profiles,
-  inputs,
-  nixosConfigurations,
+  secrets,
   ...
 } @ args: let
-  inherit (lib.my) listModulesRecursive' rakeLeaves;
+  inherit (lib.my) listModulesRecursive' rakeLeaves rakeLeavesWithSuffix;
 
   /*
   Synopsis: mkPkgs overlays
@@ -73,6 +74,23 @@
   mkProfiles = profilesDir: rakeLeaves profilesDir;
 
   /*
+  Synopsis: mkSecrets secretsDir
+
+  Generate a secrets attributes from the age files found in the specified directory.
+
+  Inputs:
+  - secretsDir: The path to the directory containing encrypted age files.
+
+  Output Format:
+  An attribute set representing profiles.
+  The function uses the `rakeLeavesWithSuffix` function to recursively collect age files
+  and directories within the `secretsDir` directory.
+  The result is an attribute set mapping age files and directories
+  to their corresponding keys.
+  */
+  mkSecrets = secretsDir: rakeLeavesWithSuffix ".age" {} secretsDir;
+
+  /*
   Synopsis: mkHost hostname  { system, hostPath, extraModules ? [] }
 
   Generate a NixOS system configuration for the specified hostname.
@@ -99,10 +117,13 @@
     lib.nixosSystem {
       inherit system pkgs lib;
       specialArgs =
-        rec {
+        {
           inherit profiles inputs nixosConfigurations;
-          secretsDir = ../secrets;
-          hostSecretsDir = "${secretsDir}/${hostname}";
+          secrets =
+            secrets
+            // {
+              host = secrets.${hostname};
+            };
         }
         // extraArgs;
       modules =
@@ -176,5 +197,5 @@
       )
     ];
 in {
-  inherit mkPkgs mkOverlays mkProfiles mkHosts;
+  inherit mkPkgs mkOverlays mkProfiles mkSecrets mkHosts;
 }

@@ -1,9 +1,9 @@
 # Configuration for hera (home server)
 {
   config,
-  hostSecretsDir,
   pkgs,
   profiles,
+  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -48,25 +48,25 @@
   # Secret manager (agenix)
   age = {
     secrets = {
-      diskstationSambaCredentials.file = "${hostSecretsDir}/diskstationSambaCredentials.age";
+      diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
       heraAcmeDnsCredentials = {
-        file = "${hostSecretsDir}/acmeDnsCredentials.age";
+        file = secrets.host.acmeDnsCredentials;
         group = config.security.acme.defaults.group;
       };
-      heraAutoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
-      heraHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      heraAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
+      heraHealthchecksUrl.file = secrets.host.healthchecksUrl;
       heraNebulaCert = {
-        file = "${hostSecretsDir}/nebulaCert.age";
+        file = secrets.host.nebulaCert;
         owner = "nebula-nebula0";
       };
       heraNebulaKey = {
-        file = "${hostSecretsDir}/nebulaKey.age";
+        file = secrets.host.nebulaKey;
         owner = "nebula-nebula0";
       };
-      heraResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
-      heraResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
-      heraResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      heraResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      heraResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      heraResticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      heraResticPassword.file = secrets.host.resticPassword;
+      heraResticSshKey.file = secrets.host.resticSshKey;
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];

@@ -3,13 +3,13 @@
   config,
   inputs,
   lib,
-  secretsDir,
+  secrets,
   ...
 }: {
   # Contains:
   # machine nix-cache.diogotc.com
   # password <token>
-  age.secrets.nixCacheDiogotcReadTokenNetrc.file = "${secretsDir}/nixCacheDiogotcReadTokenNetrc.age";
+  age.secrets.nixCacheDiogotcReadTokenNetrc.file = secrets.nixCacheDiogotcReadTokenNetrc;
 
   nix = {
     settings = {

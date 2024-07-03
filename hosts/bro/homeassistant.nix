@@ -4,7 +4,7 @@
   inputs,
   pkgs,
   config,
-  hostSecretsDir,
+  secrets,
   ...
 }: let
   hassDomain = "ha.bro.diogotc.com";
@@ -14,7 +14,7 @@
 in {
   age.secrets = {
     hassSecrets = {
-      file = "${hostSecretsDir}/hassSecrets.age";
+      file = secrets.host.hassSecrets;
       path = "/persist/${config.services.home-assistant.configDir}/secrets.yaml";
       mode = "400";
       owner = "hass";

@@ -1,6 +1,6 @@
 {
   config,
-  hostSecretsDir,
+  secrets,
   lib,
   pkgs,
   ...
@@ -27,5 +27,5 @@ in {
     '';
   };
 
-  age.secrets."cloudflareToken".file = "${hostSecretsDir}/cloudflareToken.age";
+  age.secrets."cloudflareToken".file = secrets.host.cloudflareToken;
 }

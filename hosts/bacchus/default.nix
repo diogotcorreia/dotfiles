@@ -1,9 +1,9 @@
 # Configuration for bacchus (laptop PC)
 {
   config,
-  hostSecretsDir,
   pkgs,
   profiles,
+  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -82,17 +82,17 @@
   age = {
     secrets = {
       bacchusNebulaCert = {
-        file = "${hostSecretsDir}/nebulaCert.age";
+        file = secrets.host.nebulaCert;
         owner = "nebula-nebula0";
       };
       bacchusNebulaKey = {
-        file = "${hostSecretsDir}/nebulaKey.age";
+        file = secrets.host.nebulaKey;
         owner = "nebula-nebula0";
       };
-      bacchusResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
-      bacchusResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
-      bacchusResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      bacchusResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      bacchusResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      bacchusResticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      bacchusResticPassword.file = secrets.host.resticPassword;
+      bacchusResticSshKey.file = secrets.host.resticSshKey;
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];

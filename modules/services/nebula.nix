@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  secretsDir,
+  secrets,
   ...
 }: let
   inherit (builtins) attrNames;
@@ -68,7 +68,7 @@ in {
   config = mkIf cfg.enable {
     # Automatically get nebulaCA from agenix
     age.secrets.nebulaCA = {
-      file = "${secretsDir}/nebulaCA.age";
+      file = secrets.nebulaCA;
       owner = "nebula-nebula0";
     };
 

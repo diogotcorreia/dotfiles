@@ -1,9 +1,9 @@
 # Configuration for bro (home server)
 {
   config,
-  hostSecretsDir,
   lib,
   profiles,
+  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -31,23 +31,23 @@
   age = {
     secrets = {
       broAcmeDnsCredentials = {
-        file = "${hostSecretsDir}/acmeDnsCredentials.age";
+        file = secrets.host.acmeDnsCredentials;
         group = config.security.acme.defaults.group;
       };
-      broAutoUpgradeHealthchecksUrl.file = "${hostSecretsDir}/autoUpgradeHealthchecksUrl.age";
-      broHealthchecksUrl.file = "${hostSecretsDir}/healthchecksUrl.age";
+      broAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
+      broHealthchecksUrl.file = secrets.host.healthchecksUrl;
       broNebulaCert = {
-        file = "${hostSecretsDir}/nebulaCert.age";
+        file = secrets.host.nebulaCert;
         owner = "nebula-nebula0";
       };
       broNebulaKey = {
-        file = "${hostSecretsDir}/nebulaKey.age";
+        file = secrets.host.nebulaKey;
         owner = "nebula-nebula0";
       };
-      broResticHealthchecksUrl.file = "${hostSecretsDir}/resticHealthchecksUrl.age";
-      broResticRcloneConfig.file = "${hostSecretsDir}/resticRcloneConfig.age";
-      broResticPassword.file = "${hostSecretsDir}/resticPassword.age";
-      broResticSshKey.file = "${hostSecretsDir}/resticSshKey.age";
+      broResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      broResticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      broResticPassword.file = secrets.host.resticPassword;
+      broResticSshKey.file = secrets.host.resticSshKey;
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];

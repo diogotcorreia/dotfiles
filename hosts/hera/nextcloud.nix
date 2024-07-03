@@ -2,7 +2,7 @@
 {
   pkgs,
   config,
-  hostSecretsDir,
+  secrets,
   ...
 }: let
   domain = "cloud.diogotc.com";
@@ -11,7 +11,7 @@
   dbDatabaseName = "nextcloud";
 in {
   age.secrets.nextcloudSecrets = {
-    file = "${hostSecretsDir}/nextcloudSecrets.age";
+    file = secrets.host.nextcloudSecrets;
     owner = "nextcloud";
     group = "nextcloud";
   };

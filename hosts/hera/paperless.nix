@@ -1,7 +1,7 @@
 # Configuration for Paperless-ngx on Hera
 {
   config,
-  hostSecretsDir,
+  secrets,
   ...
 }: let
   domain = "paperless.diogotc.com";
@@ -12,7 +12,7 @@
   dbUser = config.services.paperless.user;
 in {
   age.secrets.heraPaperlessEnvVariables = {
-    file = "${hostSecretsDir}/paperlessEnvVariables.age";
+    file = secrets.host.paperlessEnvVariables;
     owner = config.services.paperless.user;
     group = config.services.paperless.user;
   };

@@ -3,7 +3,7 @@ args @ {
   pkgs,
   inputs,
   config,
-  hostSecretsDir,
+  secrets,
   buildEnv, # unused, but has to be here because of the import of nixpkgs healthchecks module
   ...
 }: let
@@ -28,10 +28,10 @@ in {
     phobosHealthchecksSecretKey =
       commonSecretSettings
       // {
-        file = "${hostSecretsDir}/healthchecksSecretKey.age";
+        file = secrets.host.healthchecksSecretKey;
       };
     phobosHealthchecksEnvVariables = {
-      file = "${hostSecretsDir}/healthchecksEnvVariables.age";
+      file = secrets.host.healthchecksEnvVariables;
     };
   };
 

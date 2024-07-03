@@ -2,7 +2,7 @@
 {
   pkgs,
   config,
-  hostSecretsDir,
+  secrets,
   lib,
   ...
 }: let
@@ -20,9 +20,9 @@ in {
   # TODO move docker containers to NixOS services
 
   age.secrets = {
-    fireflyAutoDataImporterEnv.file = "${hostSecretsDir}/fireflyAutoDataImporterEnv.age";
-    fireflyAutoDataImporterHealthchecksUrl.file = "${hostSecretsDir}/fireflyAutoDataImporterHealthchecksUrl.age";
-    fireflyDataImporterEnv.file = "${hostSecretsDir}/fireflyDataImporterEnv.age";
+    fireflyAutoDataImporterEnv.file = secrets.host.fireflyAutoDataImporterEnv;
+    fireflyAutoDataImporterHealthchecksUrl.file = secrets.host.fireflyAutoDataImporterHealthchecksUrl;
+    fireflyDataImporterEnv.file = secrets.host.fireflyDataImporterEnv;
   };
 
   virtualisation.oci-containers.containers = {

@@ -1,7 +1,7 @@
 # Configuration for atticd (Nix Binary Cache) on Phobos
 {
   config,
-  hostSecretsDir,
+  secrets,
   ...
 }: let
   host = "nix-cache.diogotc.com";
@@ -12,7 +12,7 @@ in {
     phobosAtticdEnvVariables = {
       # Contains the following variables:
       # - ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64
-      file = "${hostSecretsDir}/atticdEnvVariables.age";
+      file = secrets.host.atticdEnvVariables;
     };
   };
 

@@ -2,7 +2,7 @@
 {
   config,
   lib,
-  hostSecretsDir,
+  secrets,
   ...
 }: let
   inherit (lib) mkEnableOption mkOption types mkIf;
@@ -28,7 +28,7 @@ in {
   config = {
     age.secrets = {
       wireguardClientHeraPrivateKey = mkIf cfg.hera.enable {
-        file = "${hostSecretsDir}/wireguardClientHeraPrivateKey.age";
+        file = secrets.host.wireguardClientHeraPrivateKey;
       };
     };
 

@@ -37,7 +37,7 @@
   };
 
   outputs = inputs @ {...}: let
-    inherit (lib.my) mkHosts mkOverlays mkPkgs mkProfiles;
+    inherit (lib.my) mkHosts mkOverlays mkPkgs mkProfiles mkSecrets;
 
     systemFlakePath = "github:diogotcorreia/dotfiles/nixos";
     user = "dtc";
@@ -54,7 +54,7 @@
 
     lib = inputs.nixpkgs.lib.extend (self: super:
       import ./lib ({
-          inherit inputs profiles pkgs nixosConfigurations;
+          inherit inputs nixosConfigurations profiles pkgs secrets;
           lib = self;
         }
         // extraArgs));
@@ -93,8 +93,9 @@
       ];
     };
     profiles = mkProfiles ./profiles;
+    secrets = mkSecrets ./secrets;
   in {
-    inherit nixosConfigurations;
+    inherit nixosConfigurations lib overlays;
 
     # Packages are here so they are built by CI and cached
     packages = {

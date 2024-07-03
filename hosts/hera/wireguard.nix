@@ -2,7 +2,7 @@
 {
   pkgs,
   config,
-  hostSecretsDir,
+  secrets,
   ...
 }: let
   listenPort = 51820;
@@ -22,7 +22,7 @@ in {
   };
 
   age.secrets = {
-    wireguardPrivateKey.file = "${hostSecretsDir}/wireguardPrivateKey.age";
+    wireguardPrivateKey.file = secrets.host.wireguardPrivateKey;
   };
 
   networking.wireguard.interfaces = {
