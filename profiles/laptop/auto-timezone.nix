@@ -49,4 +49,6 @@
       fi
     '';
   };
+
+  modules.impermanence.directories = ["/var/lib/automatic-timezoned"];
 }

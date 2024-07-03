@@ -194,8 +194,6 @@
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
-
-        "/var/lib/automatic-timezoned"
       ];
     };
     personal.enable = true;
