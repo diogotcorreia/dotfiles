@@ -191,6 +191,7 @@
       zsh.enable = true;
     };
     impermanence = {
+      enable = true;
       directories = [
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
