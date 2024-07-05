@@ -1,5 +1,13 @@
 # Niri window manager (wayland)
-{pkgs, ...}: {
+{
+  pkgs,
+  profiles,
+  ...
+}: {
+  imports = with profiles; [
+    graphical.fonts
+  ];
+
   hm.home.packages = with pkgs; [niri];
 
   hm.programs.zsh.initExtra = ''
