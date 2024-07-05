@@ -1,6 +1,7 @@
 # Configuration for bacchus (laptop PC)
 {
   config,
+  lib,
   pkgs,
   profiles,
   secrets,
@@ -208,6 +209,12 @@
     imports = with profiles; [
       graphical.niri
     ];
+
+    # Disable DWM configuration
+    modules.graphical = {
+      enable = lib.mkForce false;
+      autorandr.laptop.enable = lib.mkForce false;
+    };
   };
 
   # System state version
