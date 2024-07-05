@@ -2,6 +2,11 @@
 {pkgs, ...}: {
   hm.home.packages = with pkgs; [niri];
 
+  hm.programs.zsh.initExtra = ''
+    # Start graphical server on user's current tty if not already running.
+    [ "$(tty)" = "/dev/tty1" ] && ! pidof -s niri >/dev/null 2>&1 && exec niri-session &> /dev/null
+  '';
+
   # The generator exposed by home-manager is semi-broken and can't represent
   # certain needed options for the config (e.g. input.touchpad.tap).
   # For the time being, write the config manually using KDL.
