@@ -8,6 +8,7 @@
 }: {
   imports = with profiles; [
     graphical.firefox
+    graphical.firefox-proxied
     graphical.thunderbird
     hardware.filesystem.zfs-impermanence
     hardware.zram
