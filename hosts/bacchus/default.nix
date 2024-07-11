@@ -119,6 +119,8 @@
     ultrastardx
   ];
 
+  hardware.flipperzero.enable = true;
+
   # Modules
   modules = {
     editors.neovim.enable = true;
