@@ -18,6 +18,7 @@
     misc.kth
     services.ssh
     shell.gpg
+    shell.zellij
     virtualisation.docker
     virtualisation.virtual-machines
   ];
