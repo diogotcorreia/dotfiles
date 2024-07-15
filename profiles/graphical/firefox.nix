@@ -5,6 +5,10 @@
     profiles.default = {
       id = 0;
       isDefault = true;
+      settings = {
+        # disable privacy invasive "private attribution" ad-tracking "feature"
+        "dom.private-attribution.submission.enabled" = false;
+      };
     };
   };
 
