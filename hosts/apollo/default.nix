@@ -1,6 +1,7 @@
 # Configuration for apollo (desktop PC)
 {
   config,
+  lib,
   secrets,
   pkgs,
   profiles,
@@ -196,6 +197,20 @@
     personal.enable = true;
     secureboot.enable = true;
     xdg.enable = true;
+  };
+
+  # Wayland specialisation
+  # TODO: make default
+  specialisation.wayland.configuration = {
+    imports = with profiles; [
+      graphical.niri
+    ];
+
+    # Disable DWM configuration
+    modules.graphical = {
+      enable = lib.mkForce false;
+      autorandr.laptop.enable = lib.mkForce false;
+    };
   };
 
   # System state version
