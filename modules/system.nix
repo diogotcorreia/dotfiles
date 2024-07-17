@@ -57,6 +57,7 @@
   '';
 
   # Avoid running out of space on the boot partition
+  boot.loader.grub.configurationLimit = lib.mkDefault 10;
   boot.loader.systemd-boot.configurationLimit = lib.mkDefault 10;
 
   # dedup equal pages

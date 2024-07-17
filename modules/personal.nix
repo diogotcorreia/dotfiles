@@ -62,6 +62,10 @@ in {
           hostname = "artemis.diogotc.com";
           user = "dtc";
         };
+        athena = {
+          hostname = "world.athena.diogotc.com";
+          user = "dtc";
+        };
         bro = {
           hostname = "world.bro.diogotc.com";
           user = "dtc";

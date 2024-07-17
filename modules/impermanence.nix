@@ -7,11 +7,15 @@
 }: let
   inherit (lib) types mkOption mkEnableOption mkIf;
   cfg = config.modules.impermanence;
-
-  persistDirectory = "/persist";
 in {
   options.modules.impermanence = {
     enable = mkEnableOption "Enable impermanence module";
+
+    persistDirectory = mkOption {
+      type = types.str;
+      default = "/persist";
+      description = "Root of persistent storage";
+    };
 
     files = mkOption {
       type = types.listOf types.str;
@@ -30,7 +34,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.persistence.${persistDirectory} = {
+    environment.persistence.${cfg.persistDirectory} = {
       directories =
         cfg.directories
         ++ [

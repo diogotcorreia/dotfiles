@@ -8,7 +8,7 @@
   lib,
   ...
 }: let
-  espSize = "512M";
+  inherit (config.my.filesystem) espSize;
 in {
   imports = [
     inputs.disko.nixosModules.disko
@@ -32,7 +32,10 @@ in {
   services.zfs.trim.enable = true;
 
   # Persist certain data across reboots
-  modules.impermanence.enable = true;
+  modules.impermanence = {
+    enable = true;
+    persistDirectory = "/persist";
+  };
 
   # Partitions configuration (using disko)
   disko.devices = {

@@ -1,5 +1,6 @@
 let
   apolloSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBotkuo1Z6ZbLFhfx7qt7lUS8Kr3xnu1X1fqjlbQ8BLE";
+  athenaSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJT+5r75Hg9eTdKGav4SCYUkMPA3gRrrnLMB+IO6sDlk";
   bacchusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
   broSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ4GODzTdoSU1RS/1RU+EDZN1TxDYxqRct2q+OeWgv0f";
   febSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBVtyO4NZ3FNrffEJOGLzkVgtgpkMV1ouRkk34GslroU";
@@ -7,7 +8,7 @@ let
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 
   personalSystems = [apolloSystem bacchusSystem];
-  serverSystems = [broSystem febSystem heraSystem phobosSystem];
+  serverSystems = [athenaSystem broSystem febSystem heraSystem phobosSystem];
   allSystems = personalSystems ++ serverSystems;
 
   mkSystem = dir: publicKeys: files:
@@ -42,6 +43,18 @@ in
     ])
 
     (mkSystem "apollo" [apolloSystem] [
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+    ])
+
+    (mkSystem "athena" [athenaSystem] [
+      "autoUpgradeHealthchecksUrl"
+      "cloudflareToken"
+      "healthchecksUrl"
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
