@@ -31,6 +31,7 @@ let
 in
   mkSecrets [
     (mkSystem null allSystems [
+      "ecscWireguardPrivateKey"
       "nebulaCA"
       "nixCacheDiogotcReadTokenNetrc"
     ])

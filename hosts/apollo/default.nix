@@ -15,6 +15,7 @@
     hardware.zram
     misc.cybersec
     misc.kth
+    networking.wireguard.ecsc
     services.ssh
     shell.gpg
     shell.zellij

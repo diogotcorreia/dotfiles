@@ -16,6 +16,7 @@
     laptop.auto-timezone
     misc.cybersec
     misc.kth
+    networking.wireguard.ecsc
     services.ssh
     shell.gpg
     shell.zellij
