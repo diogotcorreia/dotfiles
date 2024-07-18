@@ -7,78 +7,113 @@ let
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
 
   personalSystems = [apolloSystem bacchusSystem];
-  allSystems = personalSystems ++ [broSystem febSystem heraSystem phobosSystem];
-in {
-  "nebulaCA.age".publicKeys = allSystems;
-  "nixCacheDiogotcReadTokenNetrc.age".publicKeys = allSystems;
+  serverSystems = [broSystem febSystem heraSystem phobosSystem];
+  allSystems = personalSystems ++ serverSystems;
 
-  "apollo/nebulaCert.age".publicKeys = [apolloSystem];
-  "apollo/nebulaKey.age".publicKeys = [apolloSystem];
-  "apollo/resticHealthchecksUrl.age".publicKeys = [apolloSystem];
-  "apollo/resticRcloneConfig.age".publicKeys = [apolloSystem];
-  "apollo/resticPassword.age".publicKeys = [apolloSystem];
-  "apollo/resticSshKey.age".publicKeys = [apolloSystem];
+  mkSystem = dir: publicKeys: files:
+    builtins.foldl' (acc: file: let
+      filePrefix =
+        if dir == null
+        then ""
+        else "${dir}/";
+    in
+      acc
+      ++ [
+        {
+          name = "${filePrefix}${file}.age";
+          value = {inherit publicKeys;};
+        }
+      ]) []
+    files;
 
-  "bacchus/nebulaCert.age".publicKeys = [bacchusSystem];
-  "bacchus/nebulaKey.age".publicKeys = [bacchusSystem];
-  "bacchus/resticHealthchecksUrl.age".publicKeys = [bacchusSystem];
-  "bacchus/resticRcloneConfig.age".publicKeys = [bacchusSystem];
-  "bacchus/resticPassword.age".publicKeys = [bacchusSystem];
-  "bacchus/resticSshKey.age".publicKeys = [bacchusSystem];
-  "bacchus/wireguardClientHeraPrivateKey.age".publicKeys = [bacchusSystem];
+  flatten = list: builtins.foldl' (acc: system: acc ++ system) [] list;
+  mkSecrets = systems: builtins.listToAttrs (flatten systems);
+in
+  mkSecrets [
+    (mkSystem null allSystems [
+      "nebulaCA"
+      "nixCacheDiogotcReadTokenNetrc"
+    ])
 
-  "bro/acmeDnsCredentials.age".publicKeys = [broSystem];
-  "bro/autoUpgradeHealthchecksUrl.age".publicKeys = [broSystem];
-  "bro/cloudflareToken.age".publicKeys = [broSystem];
-  "bro/hassSecrets.age".publicKeys = [broSystem];
-  "bro/healthchecksUrl.age".publicKeys = [broSystem];
-  "bro/nebulaCert.age".publicKeys = [broSystem];
-  "bro/nebulaKey.age".publicKeys = [broSystem];
-  "bro/resticHealthchecksUrl.age".publicKeys = [broSystem];
-  "bro/resticRcloneConfig.age".publicKeys = [broSystem];
-  "bro/resticPassword.age".publicKeys = [broSystem];
-  "bro/resticSshKey.age".publicKeys = [broSystem];
+    (mkSystem "apollo" apolloSystem [
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+    ])
 
-  "feb/autoUpgradeHealthchecksUrl.age".publicKeys = [febSystem];
-  "feb/cloudflareToken.age".publicKeys = [febSystem];
-  "feb/hassSecrets.age".publicKeys = [febSystem];
-  "feb/healthchecksUrl.age".publicKeys = [febSystem];
-  "feb/nebulaCert.age".publicKeys = [febSystem];
-  "feb/nebulaKey.age".publicKeys = [febSystem];
-  "feb/resticHealthchecksUrl.age".publicKeys = [febSystem];
-  "feb/resticRcloneConfig.age".publicKeys = [febSystem];
-  "feb/resticPassword.age".publicKeys = [febSystem];
-  "feb/resticSshKey.age".publicKeys = [febSystem];
+    (mkSystem "bacchus" bacchusSystem [
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+      "wireguardClientHeraPrivateKey"
+    ])
 
-  "hera/acmeDnsCredentials.age".publicKeys = [heraSystem];
-  "hera/autoUpgradeHealthchecksUrl.age".publicKeys = [heraSystem];
-  "hera/diskstationSambaCredentials.age".publicKeys = [heraSystem];
-  "hera/fireflyAutoDataImporterEnv.age".publicKeys = [heraSystem];
-  "hera/fireflyAutoDataImporterHealthchecksUrl.age".publicKeys = [heraSystem];
-  "hera/fireflyDataImporterEnv.age".publicKeys = [heraSystem];
-  "hera/healthchecksUrl.age".publicKeys = [heraSystem];
-  "hera/istDelegateElectionFenixSecret.age".publicKeys = [heraSystem];
-  "hera/nebulaCert.age".publicKeys = [heraSystem];
-  "hera/nebulaKey.age".publicKeys = [heraSystem];
-  "hera/nextcloudSecrets.age".publicKeys = [heraSystem];
-  "hera/paperlessEnvVariables.age".publicKeys = [heraSystem];
-  "hera/resticHealthchecksUrl.age".publicKeys = [heraSystem];
-  "hera/resticRcloneConfig.age".publicKeys = [heraSystem];
-  "hera/resticPassword.age".publicKeys = [heraSystem];
-  "hera/resticSshKey.age".publicKeys = [heraSystem];
-  "hera/transmissionProxySshConfig.age".publicKeys = [heraSystem];
-  "hera/transmissionProxySshPassword.age".publicKeys = [heraSystem];
-  "hera/wireguardPrivateKey.age".publicKeys = [heraSystem];
+    (mkSystem "bro" broSystem [
+      "acmeDnsCredentials"
+      "autoUpgradeHealthchecksUrl"
+      "cloudflareToken"
+      "hassSecrets"
+      "healthchecksUrl"
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+    ])
 
-  "phobos/atticdEnvVariables.age".publicKeys = [phobosSystem];
-  "phobos/autoUpgradeHealthchecksUrl.age".publicKeys = [phobosSystem];
-  "phobos/healthchecksEnvVariables.age".publicKeys = [phobosSystem];
-  "phobos/healthchecksSecretKey.age".publicKeys = [phobosSystem];
-  "phobos/healthchecksUrl.age".publicKeys = [phobosSystem];
-  "phobos/nebulaCert.age".publicKeys = [phobosSystem];
-  "phobos/nebulaKey.age".publicKeys = [phobosSystem];
-  "phobos/resticHealthchecksUrl.age".publicKeys = [phobosSystem];
-  "phobos/resticRcloneConfig.age".publicKeys = [phobosSystem];
-  "phobos/resticPassword.age".publicKeys = [phobosSystem];
-  "phobos/resticSshKey.age".publicKeys = [phobosSystem];
-}
+    (mkSystem "feb" febSystem [
+      "autoUpgradeHealthchecksUrl"
+      "cloudflareToken"
+      "hassSecrets"
+      "healthchecksUrl"
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+    ])
+
+    (mkSystem "hera" heraSystem [
+      "acmeDnsCredentials"
+      "autoUpgradeHealthchecksUrl"
+      "diskstationSambaCredentials"
+      "fireflyAutoDataImporterEnv"
+      "fireflyAutoDataImporterHealthchecksUrl"
+      "fireflyDataImporterEnv"
+      "healthchecksUrl"
+      "istDelegateElectionFenixSecret"
+      "nebulaCert"
+      "nebulaKey"
+      "nextcloudSecrets"
+      "paperlessEnvVariables"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+      "transmissionProxySshConfig"
+      "transmissionProxySshPassword"
+      "wireguardPrivateKey"
+    ])
+
+    (mkSystem "phobos" phobosSystem [
+      "atticdEnvVariables"
+      "autoUpgradeHealthchecksUrl"
+      "healthchecksEnvVariables"
+      "healthchecksSecretKey"
+      "healthchecksUrl"
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+    ])
+  ]
