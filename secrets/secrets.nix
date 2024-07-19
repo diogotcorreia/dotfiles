@@ -36,7 +36,7 @@ in
       "nixCacheDiogotcReadTokenNetrc"
     ])
 
-    (mkSystem "apollo" apolloSystem [
+    (mkSystem "apollo" [apolloSystem] [
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
@@ -45,7 +45,7 @@ in
       "resticSshKey"
     ])
 
-    (mkSystem "bacchus" bacchusSystem [
+    (mkSystem "bacchus" [bacchusSystem] [
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
@@ -55,7 +55,7 @@ in
       "wireguardClientHeraPrivateKey"
     ])
 
-    (mkSystem "bro" broSystem [
+    (mkSystem "bro" [broSystem] [
       "acmeDnsCredentials"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
@@ -69,7 +69,7 @@ in
       "resticSshKey"
     ])
 
-    (mkSystem "feb" febSystem [
+    (mkSystem "feb" [febSystem] [
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "hassSecrets"
@@ -82,7 +82,7 @@ in
       "resticSshKey"
     ])
 
-    (mkSystem "hera" heraSystem [
+    (mkSystem "hera" [heraSystem] [
       "acmeDnsCredentials"
       "autoUpgradeHealthchecksUrl"
       "diskstationSambaCredentials"
@@ -104,7 +104,7 @@ in
       "wireguardPrivateKey"
     ])
 
-    (mkSystem "phobos" phobosSystem [
+    (mkSystem "phobos" [phobosSystem] [
       "atticdEnvVariables"
       "autoUpgradeHealthchecksUrl"
       "healthchecksEnvVariables"
