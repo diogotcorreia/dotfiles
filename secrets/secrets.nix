@@ -84,6 +84,7 @@ in
 
     (mkSystem "hera" [heraSystem] [
       "acmeDnsCredentials"
+      "altUrlsDiscordBotEnv"
       "autoUpgradeHealthchecksUrl"
       "diskstationSambaCredentials"
       "fireflyAutoDataImporterEnv"

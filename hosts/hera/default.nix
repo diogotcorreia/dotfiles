@@ -11,6 +11,7 @@
     hardware.zram
     security.fail2ban
     services.caddy.common
+    services.discord-bots.alt-urls-discord-bot
     services.ssh
     virtualisation.docker
   ];

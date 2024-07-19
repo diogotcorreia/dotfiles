@@ -99,6 +99,7 @@ jobs:
       # Here we specify the packages to build
       matrix:
         package:
+          - alt-urls-discord-bot
           - attic
           - flask-unsign
           - pycdc
