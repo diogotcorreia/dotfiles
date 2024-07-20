@@ -31,9 +31,13 @@ let
 in
   mkSecrets [
     (mkSystem null allSystems [
-      "ecscWireguardPrivateKey"
       "nebulaCA"
       "nixCacheDiogotcReadTokenNetrc"
+    ])
+
+    (mkSystem null personalSystems [
+      "ecscWireguardPrivateKey"
+      "heroisDoMarWireguardPrivateKey"
     ])
 
     (mkSystem "apollo" [apolloSystem] [
