@@ -14,6 +14,7 @@
     hardware.filesystem.zfs-impermanence
     hardware.zram
     misc.cybersec
+    misc.geoclue
     misc.kth
     networking.wireguard.ecsc
     services.ssh

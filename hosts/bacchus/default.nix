@@ -15,6 +15,7 @@
     hardware.zram
     laptop.auto-timezone
     misc.cybersec
+    misc.geoclue
     misc.kth
     networking.wireguard.ecsc
     services.ssh
