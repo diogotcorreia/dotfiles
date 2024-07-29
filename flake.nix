@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     spicetify-nix = {
-      url = "github:MichaelPachec0/spicetify-nix";
+      url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     lanzaboote = {
@@ -62,7 +62,7 @@
     extraPackages = {system, ...}: {
       agenix = inputs.agenix.packages.${system}.default;
       lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
-      spicetify = inputs.spicetify-nix.packages.${system}.default;
+      spicetify = inputs.spicetify-nix.legacyPackages.${system};
     };
 
     overlays =
@@ -83,7 +83,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            sharedModules = [inputs.spicetify-nix.homeManagerModule];
+            sharedModules = [inputs.spicetify-nix.homeManagerModules.default];
           };
         }
         inputs.impermanence.nixosModules.impermanence

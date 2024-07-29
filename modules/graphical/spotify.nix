@@ -18,7 +18,7 @@ in {
       spotifyPackage = pkgs.unstable.spotify;
       spicetifyPackage = pkgs.unstable.spicetify-cli;
 
-      theme = pkgs.spicetify.themes.Comfy;
+      theme = pkgs.spicetify.themes.comfy;
 
       enabledExtensions = with pkgs.spicetify.extensions; [
         fullAppDisplay
@@ -27,7 +27,7 @@ in {
         hidePodcasts
       ];
 
-      enabledCustomApps = with pkgs.spicetify.apps; [lyrics-plus];
+      enabledCustomApps = with pkgs.spicetify.apps; [lyricsPlus];
     };
   };
 }
