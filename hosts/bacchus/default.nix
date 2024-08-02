@@ -185,10 +185,16 @@
         };
       };
       syncthing.enable = true;
-      wireguard-client.hera = {
+      wireguard-client = {
         # public key: HitADKIgPbbk2fhCxd9iuTsT683ayLithrwnQagb4B0=
-        enable = true;
-        lastOctect = 3;
+        feb-router = {
+          enable = true;
+          lastOctect = 3;
+        };
+        hera = {
+          enable = true;
+          lastOctect = 3;
+        };
       };
     };
     shell = {

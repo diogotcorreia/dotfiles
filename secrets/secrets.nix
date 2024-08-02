@@ -56,7 +56,7 @@ in
       "resticRcloneConfig"
       "resticPassword"
       "resticSshKey"
-      "wireguardClientHeraPrivateKey"
+      "wireguardClientPrivateKey"
     ])
 
     (mkSystem "bro" [broSystem] [
