@@ -9,6 +9,8 @@
 }: let
   hassDomain = "ha.feb.diogotc.com";
   hassPort = 8123;
+
+  mqttPort = 1883;
 in {
   age.secrets = {
     hassSecrets = {
@@ -32,7 +34,11 @@ in {
     enable = true;
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
-    extraComponents = ["default_config"];
+    extraComponents = [
+      "default_config"
+      "mqtt"
+      "tasmota"
+    ];
 
     config = {
       default_config = {};
@@ -71,6 +77,23 @@ in {
     "f ${config.services.home-assistant.configDir}/automations.yaml 0755 hass hass"
     "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
   ];
+
+  services.mosquitto = {
+    enable = true;
+    listeners = [
+      {
+        users.iot = {
+          acl = ["readwrite #"]; # allow read/write access to all topics
+          hashedPassword = "$7$101$nT82g1HieqPNbN82$7q44zrzOHaT9Clft/Vt6w4G957NW/rft9aX41UHQC4I3m0pqeq3KlGHfKaSzmPnyWV4YKLtqwyDo5pR6pEp3fQ==";
+        };
+        port = mqttPort;
+      }
+    ];
+  };
+
+  networking.firewall.extraCommands = ''
+    iptables -A nixos-fw -s 192.168.20.0/22 -p tcp --dport ${toString mqttPort} -j nixos-fw-accept
+  '';
 
   security.acme.certs = {${hassDomain} = {};};
 
