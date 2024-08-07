@@ -103,7 +103,7 @@
         attic = inputs.attic.packages.x86_64-linux.attic-nixpkgs.override {clientOnly = true;};
 
         # TODO this should be auto generated
-        inherit (pkgs.my) alt-urls-discord-bot flask-unsign githacker jwt-tool pycdc pyinstxtractor;
+        inherit (pkgs.my) alt-urls-discord-bot flask-unsign githacker jwt-tool pycdc pyinstxtractor pyxamstore;
       };
     };
 
