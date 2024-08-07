@@ -27,7 +27,7 @@ in
   mergeAliases [
     (defineAlias "apollo.diogotc.com" "192.168.1.2:8080" {})
     (defineAlias "external.apollo.diogotc.com" "192.168.1.2:1337" {})
-    (defineAlias "home.diogotc.com" "192.168.1.4:80" {})
+    (defineAlias "diskstation.hera.diogotc.com" "192.168.1.4:5000" {nebula = true;})
     (defineAlias "router.hera.diogotc.com" "192.168.1.1:80" {nebula = true;})
     (defineAlias "ap-livingroom.hera.diogotc.com" "https://192.168.1.64:65443" {
       nebula = true;
