@@ -22,9 +22,11 @@
   redisName = "immich";
 
   photosLocation = "/persist/immich";
+  photosLocationNfs = "/mnt/diskstation/immich";
 
   user = "immich";
   group = user;
+  # Ensure that the NFS server has the same UID/GID
   uid = 15015;
   gid = 15015;
 
@@ -85,6 +87,8 @@ in {
 
       volumes = [
         "${photosLocation}:/usr/src/app/upload"
+        "${photosLocationNfs}/library:/usr/src/app/upload/library"
+        "${photosLocationNfs}/encoded-video:/usr/src/app/upload/encoded-video"
         (mkMount "/run/postgresql")
         (mkMount "/run/redis-${redisName}")
       ];
@@ -151,7 +155,7 @@ in {
 
   # https://immich.app/docs/administration/backup-and-restore
   modules.services.restic.paths = [
-    "${photosLocation}/library"
+    "${photosLocationNfs}/library"
     "${photosLocation}/upload"
     "${photosLocation}/profile"
   ];
