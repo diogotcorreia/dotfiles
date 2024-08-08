@@ -121,6 +121,9 @@ in {
     # must match the restic module config
     # https://github.com/NixOS/nixpkgs/blob/660e7737851506374da39c0fa550c202c824a17c/nixos/modules/services/backup/restic.nix#L294
     systemdServiceName = "restic-backups-${resticName}";
+
+    # group by host,tags instead of host,paths
+    groupByOptions = ["--group-by=host,tags"];
   in {
     services.restic.backups.${resticName} = {
       repository = "rclone:backupserver:${cfg.repositoryPath}";
@@ -133,13 +136,16 @@ in {
 
       paths = cfg.paths;
       exclude = cfg.exclude;
-      pruneOpts = [
-        "--keep-last 20"
-        "--keep-daily 7"
-        "--keep-weekly 4"
-        "--keep-monthly 6"
-        "--keep-yearly 3"
-      ];
+      extraBackupArgs = groupByOptions;
+      pruneOpts =
+        [
+          "--keep-last 20"
+          "--keep-daily 7"
+          "--keep-weekly 4"
+          "--keep-monthly 6"
+          "--keep-yearly 3"
+        ]
+        ++ groupByOptions;
       timerConfig = cfg.timerConfig;
 
       # Healthchecks configuration
