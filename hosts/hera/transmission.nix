@@ -114,12 +114,4 @@ in {
   modules.impermanence.directories = [
     config.services.transmission.home
   ];
-
-  modules.services.restic = {
-    paths = ["${config.my.homeDirectory}/transmission-openvpn"];
-    exclude = [
-      "${config.my.homeDirectory}/transmission-openvpn/data/completed"
-      "${config.my.homeDirectory}/transmission-openvpn/data/incomplete"
-    ];
-  };
 }
