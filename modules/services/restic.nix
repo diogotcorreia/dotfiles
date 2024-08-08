@@ -146,6 +146,10 @@ in {
           "--keep-yearly 3"
         ]
         ++ groupByOptions;
+      checkOpts = [
+        # ensure data integrity
+        "--read-data-subset=2.5%"
+      ];
       timerConfig = cfg.timerConfig;
 
       # Healthchecks configuration
