@@ -60,7 +60,6 @@ in
     ])
 
     (mkSystem "bro" [broSystem] [
-      "acmeDnsCredentials"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "hassSecrets"
@@ -87,9 +86,9 @@ in
     ])
 
     (mkSystem "hera" [heraSystem] [
-      "acmeDnsCredentials"
       "altUrlsDiscordBotEnv"
       "autoUpgradeHealthchecksUrl"
+      "cloudflareToken"
       "diskstationSambaCredentials"
       "fireflyAutoDataImporterEnv"
       "fireflyAutoDataImporterHealthchecksUrl"
@@ -112,6 +111,7 @@ in
     (mkSystem "phobos" [phobosSystem] [
       "atticdEnvVariables"
       "autoUpgradeHealthchecksUrl"
+      "cloudflareToken"
       "healthchecksEnvVariables"
       "healthchecksSecretKey"
       "healthchecksUrl"

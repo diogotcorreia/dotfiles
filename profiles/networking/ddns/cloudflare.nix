@@ -18,7 +18,7 @@ in {
     startAt = "*:0/5";
     serviceConfig = {
       Type = "simple";
-      LoadCredential = "CLOUDFLARE_API_TOKEN_FILE:${config.age.secrets."cloudflareToken".path}";
+      LoadCredential = "CLOUDFLARE_API_TOKEN_FILE:${config.age.secrets.ddnsCloudflareToken.path}";
       DynamicUser = true;
     };
     script = ''
@@ -27,5 +27,5 @@ in {
     '';
   };
 
-  age.secrets."cloudflareToken".file = secrets.host.cloudflareToken;
+  age.secrets.ddnsCloudflareToken.file = secrets.host.cloudflareToken;
 }

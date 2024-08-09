@@ -10,6 +10,7 @@
     hardware.filesystem.zfs-impermanence
     hardware.zram
     networking.ddns.cloudflare
+    security.acme.cloudflare
     security.fail2ban
     services.caddy.common
     services.caddy.rproxy
@@ -30,10 +31,6 @@
   # Secret manager (agenix)
   age = {
     secrets = {
-      broAcmeDnsCredentials = {
-        file = secrets.host.acmeDnsCredentials;
-        group = config.security.acme.defaults.group;
-      };
       broAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
       broHealthchecksUrl.file = secrets.host.healthchecksUrl;
       broNebulaCert = {
@@ -51,18 +48,6 @@
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-  };
-
-  # ACME certificates
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = "bro-lets-encrypt@diogotc.com";
-      dnsProvider = "cloudflare";
-
-      # CLOUDFLARE_DNS_API_TOKEN=<token>
-      credentialsFile = config.age.secrets.broAcmeDnsCredentials.path;
-    };
   };
 
   my.networking.wiredInterface = "eno1";
@@ -125,9 +110,6 @@
       lf.enable = true;
       tmux.enable = true;
       zsh.enable = true;
-    };
-    impermanence = {
-      directories = ["/var/lib/acme"];
     };
   };
 

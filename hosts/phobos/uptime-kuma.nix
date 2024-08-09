@@ -1,5 +1,6 @@
 # Configuration for Uptime Kuma on Phobos
 {pkgs, ...}: let
+  domain = "uptime.diogotc.com";
   port = 8002;
 in {
   services.uptime-kuma = {
@@ -8,7 +9,10 @@ in {
     package = pkgs.unstable.uptime-kuma;
   };
 
-  services.caddy.virtualHosts."uptime.diogotc.com" = {
+  security.acme.certs.${domain} = {};
+
+  services.caddy.virtualHosts.${domain} = {
+    useACMEHost = domain;
     extraConfig = ''
       reverse_proxy localhost:${toString port}
     '';

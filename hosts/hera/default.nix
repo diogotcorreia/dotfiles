@@ -9,6 +9,7 @@
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.zram
+    security.acme.cloudflare
     security.fail2ban
     services.caddy.common
     services.discord-bots.alt-urls-discord-bot
@@ -50,10 +51,6 @@
   age = {
     secrets = {
       diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
-      heraAcmeDnsCredentials = {
-        file = secrets.host.acmeDnsCredentials;
-        group = config.security.acme.defaults.group;
-      };
       heraAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
       heraHealthchecksUrl.file = secrets.host.healthchecksUrl;
       heraNebulaCert = {
@@ -75,18 +72,6 @@
 
   # Keep laptop on when lid is closed
   services.logind.lidSwitch = "ignore";
-
-  # ACME certificates
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = "hera-lets-encrypt@diogotc.com";
-      dnsProvider = "cloudflare";
-
-      # CLOUDFLARE_DNS_API_TOKEN=<token>
-      credentialsFile = config.age.secrets.heraAcmeDnsCredentials.path;
-    };
-  };
 
   # PostgreSQL
   services.postgresql = {
@@ -163,7 +148,6 @@
     impermanence = {
       directories = [
         "/etc/NetworkManager/system-connections"
-        "/var/lib/acme"
       ];
     };
   };

@@ -6,6 +6,7 @@
   ...
 }: {
   imports = with profiles; [
+    security.acme.cloudflare
     security.fail2ban
     services.caddy.common
     services.ssh

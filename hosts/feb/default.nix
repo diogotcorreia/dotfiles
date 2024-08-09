@@ -9,6 +9,7 @@
     hardware.filesystem.zfs-impermanence
     hardware.zram
     networking.ddns.cloudflare
+    security.acme.cloudflare
     security.fail2ban
     services.caddy.common
     services.ssh
@@ -27,7 +28,6 @@
   age = {
     secrets = {
       autoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
-      cloudflareToken.file = secrets.host.cloudflareToken;
       healthchecksUrl.file = secrets.host.healthchecksUrl;
       nebulaCert = {
         file = secrets.host.nebulaCert;
@@ -44,18 +44,6 @@
     };
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-  };
-
-  # ACME certificates
-  security.acme = {
-    acceptTerms = true;
-    defaults = {
-      email = "feb-lets-encrypt@diogotc.com";
-      dnsProvider = "cloudflare";
-      credentialFiles = {
-        CLOUDFLARE_DNS_API_TOKEN_FILE = config.age.secrets.cloudflareToken.path;
-      };
-    };
   };
 
   my.networking.wiredInterface = "enp0s31f6";
@@ -117,9 +105,6 @@
       lf.enable = true;
       tmux.enable = true;
       zsh.enable = true;
-    };
-    impermanence = {
-      directories = ["/var/lib/acme"];
     };
   };
 
