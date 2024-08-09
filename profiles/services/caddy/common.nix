@@ -40,7 +40,6 @@
       }
     '';
   };
-  users.users.caddy.extraGroups = [config.security.acme.defaults.group];
 
   # Restrict caddy admin endpoint to the caddy user
   systemd.services.caddy = {
