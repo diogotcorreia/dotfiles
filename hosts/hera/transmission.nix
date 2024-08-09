@@ -98,11 +98,9 @@ in {
     wantedBy = ["sockets.target"];
   };
 
-  security.acme.certs.${domain} = {};
-
   services.caddy.virtualHosts = {
     ${domain} = {
-      useACMEHost = domain;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         import AUTHELIA

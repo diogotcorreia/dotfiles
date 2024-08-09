@@ -81,11 +81,9 @@ in {
     };
   };
 
-  security.acme.certs.${domain} = {};
-
   services.caddy.virtualHosts = {
     ${domain} = {
-      useACMEHost = domain;
+      enableACME = true;
       extraConfig = ''
         root * ${pkgs.unstable.grocy}/public
         php_fastcgi unix/${config.services.phpfpm.pools.grocy.socket}

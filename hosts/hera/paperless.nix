@@ -58,11 +58,9 @@ in {
     ensureDatabases = [dbUser];
   };
 
-  security.acme.certs.${domain} = {};
-
   services.caddy.virtualHosts = {
     ${domain} = {
-      useACMEHost = domain;
+      enableACME = true;
       extraConfig = ''
         reverse_proxy localhost:${toString port} {
           import CLOUDFLARE_PROXY

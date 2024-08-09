@@ -9,10 +9,8 @@ in {
     package = pkgs.unstable.uptime-kuma;
   };
 
-  security.acme.certs.${domain} = {};
-
   services.caddy.virtualHosts.${domain} = {
-    useACMEHost = domain;
+    enableACME = true;
     extraConfig = ''
       reverse_proxy localhost:${toString port}
     '';

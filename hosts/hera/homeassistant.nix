@@ -27,14 +27,9 @@ in {
     allowedTCPPorts = [8095 8097 hassPort];
   };
 
-  security.acme.certs = {
-    ${hassDomain} = {};
-    ${noderedDomain} = {};
-  };
-
   services.caddy.virtualHosts = {
     ${hassDomain} = {
-      useACMEHost = hassDomain;
+      enableACME = true;
       extraConfig = ''
         reverse_proxy localhost:${toString hassPort} {
           import CLOUDFLARE_PROXY
@@ -42,7 +37,7 @@ in {
       '';
     };
     ${noderedDomain} = {
-      useACMEHost = noderedDomain;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         import AUTHELIA

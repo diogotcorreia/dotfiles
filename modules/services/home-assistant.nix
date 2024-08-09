@@ -152,12 +152,9 @@ in {
     };
 
     # Configure Caddy
-    security.acme.certs = mkIf (cfg.externalDomain != null) {
-      ${cfg.externalDomain} = {};
-    };
     services.caddy.virtualHosts = mkIf (cfg.externalDomain != null) {
       ${cfg.externalDomain} = {
-        useACMEHost = cfg.externalDomain;
+        enableACME = true;
         extraConfig = ''
           reverse_proxy localhost:${toString cfg.config.http.server_port}
         '';

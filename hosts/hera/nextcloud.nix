@@ -71,11 +71,9 @@ in {
   };
   users.groups.nextcloud.members = [config.services.caddy.user];
 
-  security.acme.certs.${domain} = {};
-
   services.caddy.virtualHosts = {
     ${domain} = {
-      useACMEHost = domain;
+      enableACME = true;
       extraConfig = ''
         encode zstd gzip
         root * ${config.services.nextcloud.package}

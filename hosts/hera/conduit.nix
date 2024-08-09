@@ -7,14 +7,9 @@
 in {
   # TODO move docker containers to NixOS services
 
-  security.acme.certs = {
-    ${domainConduit} = {};
-    ${domainElement} = {};
-  };
-
   services.caddy.virtualHosts = {
     ${domainConduit} = {
-      useACMEHost = domainConduit;
+      enableACME = true;
       extraConfig = ''
         header /.well-known/matrix/* Content-Type application/json
         header /.well-known/matrix/* Access-Control-Allow-Origin *
@@ -29,7 +24,7 @@ in {
       '';
     };
     ${domainElement} = {
-      useACMEHost = domainElement;
+      enableACME = true;
       extraConfig = ''
         reverse_proxy localhost:${toString portElement} {
           import CLOUDFLARE_PROXY

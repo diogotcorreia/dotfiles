@@ -5,10 +5,8 @@
 in {
   # TODO get rid of this, it is unmaintained as of 2022-12-24
 
-  security.acme.certs.${domain} = {};
-
   services.caddy.virtualHosts.${domain} = {
-    useACMEHost = domain;
+    enableACME = true;
     extraConfig = ''
       route /static/* {
         uri strip_prefix /static

@@ -5,10 +5,8 @@
     nebula ? false,
     extraProxyConfig ? null,
   }: {
-    security.acme.certs.${domain} = {};
-
     services.caddy.virtualHosts.${domain} = {
-      useACMEHost = domain;
+      enableACME = true;
       extraConfig = ''
         ${optionalString nebula "import NEBULA"}
         reverse_proxy ${target} ${

@@ -72,23 +72,15 @@ in {
   # https://jellyfin.org/docs/general/networking/index.html
   networking.firewall.allowedUDPPorts = [1900 7359];
 
-  security.acme.certs = {
-    ${domainJellyfin} = {};
-    ${domainRadarr} = {};
-    ${domainSonarr} = {};
-    ${domainJackett} = {};
-    ${domainBazarr} = {};
-  };
-
   services.caddy.virtualHosts = {
     ${domainJellyfin} = {
-      useACMEHost = domainJellyfin;
+      enableACME = true;
       extraConfig = ''
         reverse_proxy localhost:${toString portJellyfin}
       '';
     };
     ${domainRadarr} = {
-      useACMEHost = domainRadarr;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         import AUTHELIA
@@ -96,7 +88,7 @@ in {
       '';
     };
     ${domainSonarr} = {
-      useACMEHost = domainSonarr;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         import AUTHELIA
@@ -104,7 +96,7 @@ in {
       '';
     };
     ${domainJackett} = {
-      useACMEHost = domainJackett;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         import AUTHELIA
@@ -112,7 +104,7 @@ in {
       '';
     };
     ${domainBazarr} = {
-      useACMEHost = domainBazarr;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         import AUTHELIA

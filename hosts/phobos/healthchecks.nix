@@ -94,10 +94,8 @@ in {
     healthchecks-sendreports = commonConfig;
   };
 
-  security.acme.certs.${host} = {};
-
   services.caddy.virtualHosts.${host} = {
-    useACMEHost = host;
+    enableACME = true;
     extraConfig = ''
       reverse_proxy localhost:${toString port}
     '';

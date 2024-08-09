@@ -74,21 +74,16 @@ in {
   }.checkUrlFile =
     config.age.secrets.fireflyAutoDataImporterHealthchecksUrl.path;
 
-  security.acme.certs = {
-    ${domainApp} = {};
-    ${domainDataImporter} = {};
-  };
-
   services.caddy.virtualHosts = {
     ${domainApp} = {
-      useACMEHost = domainApp;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         reverse_proxy localhost:${toString portApp}
       '';
     };
     ${domainDataImporter} = {
-      useACMEHost = domainDataImporter;
+      enableACME = true;
       extraConfig = ''
         import NEBULA
         reverse_proxy localhost:${toString portDataImporter}
