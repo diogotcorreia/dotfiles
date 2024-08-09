@@ -28,10 +28,6 @@
         }
       ];
     };
-    defaultGateway6 = {
-      address = "fe80::1";
-      interface = config.my.networking.wiredInterface;
-    };
   };
 
   my.networking.wiredInterface = "ens3";
