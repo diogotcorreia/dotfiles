@@ -1,16 +1,10 @@
 # Common configuration for caddy reverse proxy
-{
-  config,
-  lib,
-  ...
-}: {
+{lib, ...}: {
   # Open firewall ports
   networking.firewall.allowedTCPPorts = [80 443];
 
   services.caddy = {
     enable = true;
-    # TODO remove email once all servers have been migrated to lego (security.acme)
-    email = "${config.networking.hostName}-lets-encrypt@diogotc.com";
     extraConfig = ''
       # Rules for services behind Cloudflare proxy
       (CLOUDFLARE_PROXY) {
