@@ -43,6 +43,8 @@ in {
         options = {
           features = "decorations";
           line-numbers = true;
+          # Workaround for https://github.com/dandavison/delta/issues/1663
+          dark = true;
         };
       };
     };
