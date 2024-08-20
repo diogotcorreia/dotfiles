@@ -7,6 +7,7 @@ args @ {
   buildEnv, # unused, but has to be here because of the import of nixpkgs healthchecks module
   ...
 }: let
+  httpHost = "http.${host}";
   host = "healthchecks.diogotc.com";
   port = 8003;
   dbUser = config.services.healthchecks.user;
@@ -52,7 +53,7 @@ in {
 
     # Pass non-secret settings
     settings = {
-      ALLOWED_HOSTS = [host];
+      ALLOWED_HOSTS = [host httpHost];
       APPRISE_ENABLED = "False";
 
       # Database configuration (using peer authentication; no password needed)
@@ -94,11 +95,24 @@ in {
     healthchecks-sendreports = commonConfig;
   };
 
-  services.caddy.virtualHosts.${host} = {
-    enableACME = true;
-    extraConfig = ''
-      reverse_proxy localhost:${toString port}
-    '';
+  services.caddy.virtualHosts = {
+    ${host} = {
+      enableACME = true;
+      extraConfig = ''
+        reverse_proxy localhost:${toString port}
+      '';
+    };
+    # http-only route, used to receive pings from iot devices that can't use https
+    "http://${httpHost}" = {
+      extraConfig = ''
+        handle /ping/* {
+          reverse_proxy localhost:${toString port}
+        }
+        handle {
+          redir https://${host}{uri}
+        }
+      '';
+    };
   };
 
   modules.services.restic.paths = [config.services.healthchecks.dataDir];
