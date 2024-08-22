@@ -398,7 +398,7 @@
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-html-languageserver-bin # HTML LSP
       nil # Nix LSP
-      unstable.typst-lsp # Typst LSP
+      typst-lsp # Typst LSP
     ];
 in {
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
