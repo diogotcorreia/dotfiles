@@ -51,7 +51,8 @@
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
 
-  my.networking.wiredInterface = "eno1";
+  networking.bridges.br-wan.interfaces = ["eno1"];
+  my.networking.wiredInterface = "br-wan";
 
   # Modules
   modules = {
