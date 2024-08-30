@@ -16,6 +16,7 @@
     services.caddy.rproxy
     services.grocy
     services.ssh
+    virtualisation.virtual-machines
   ];
 
   networking.hostId = "29e7efc9";
