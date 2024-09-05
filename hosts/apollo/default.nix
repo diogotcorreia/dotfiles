@@ -11,6 +11,7 @@
     graphical.firefox
     graphical.firefox-proxied
     graphical.thunderbird
+    hardware.bluetooth
     hardware.filesystem.zfs-impermanence
     hardware.zram
     misc.cybersec
@@ -78,9 +79,6 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
   };
-
-  # Bluetooth
-  hardware.bluetooth.enable = true;
 
   # Don't shutdown when power button is short-pressed
   services.logind.extraConfig = ''
@@ -193,7 +191,6 @@
     impermanence = {
       directories = [
         "/etc/NetworkManager/system-connections"
-        "/var/lib/bluetooth"
       ];
     };
     personal.enable = true;

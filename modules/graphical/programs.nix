@@ -38,9 +38,6 @@ in {
     # Video player
     hm.programs.mpv.enable = true;
 
-    # Bluetooth device manager
-    services.blueman.enable = config.hardware.bluetooth.enable;
-
     # Discord configuration
     hm.xdg.configFile."discord/settings-override.json".text = builtins.toJSON {
       openasar = {

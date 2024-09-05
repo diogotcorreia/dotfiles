@@ -12,6 +12,7 @@
     graphical.firefox
     graphical.firefox-proxied
     graphical.thunderbird
+    hardware.bluetooth
     hardware.zram
     laptop.auto-timezone
     misc.cybersec
@@ -69,9 +70,6 @@
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
   };
-
-  # Bluetooth
-  hardware.bluetooth.enable = true;
 
   # Battery saver
   services.tlp.enable = true;
@@ -207,7 +205,6 @@
       enable = true;
       directories = [
         "/etc/NetworkManager/system-connections"
-        "/var/lib/bluetooth"
       ];
     };
     personal.enable = true;
