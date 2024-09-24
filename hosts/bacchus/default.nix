@@ -19,6 +19,7 @@
     misc.cybersec
     misc.geoclue
     misc.kth
+    misc.presentation
     networking.wireguard.ecsc
     services.ssh
     shell.gpg

@@ -1,0 +1,15 @@
+diff --git a/config.def.h b/config.def.h
+index 061ad66..2356e90 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -120,9 +120,10 @@ static const Key keys[] = {
+ 	{ 0,                            XF86XK_MonBrightnessUp,      spawn, {.v = incbrightcmd } },
+ 	{ 0,                            XF86XK_MonBrightnessDown,    spawn, {.v = decbrightcmd } },
+ 	/* OTHER ACTIONS */
+ 	{ MODKEY,                       XK_n,      spawn,          {.v = tgspdunstcmd } },
++	@extraDwmKeybinds@,
+ };
+ 
+ 
+ /* button definitions */
+ /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
