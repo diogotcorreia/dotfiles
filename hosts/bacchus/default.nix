@@ -11,6 +11,7 @@
     graphical.captive-portals-client
     graphical.firefox
     graphical.firefox-proxied
+    graphical.obs
     graphical.thunderbird
     hardware.bluetooth
     hardware.zram
