@@ -52,5 +52,6 @@ in {
   # Set light mode on various programs (better visibility on projectors)
   hm.programs.neovim.extraConfig = ''
     colorscheme base16-one-light
+    set nofoldenable
   '';
 }
