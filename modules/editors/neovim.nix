@@ -267,7 +267,7 @@
             config['on_attach'] = on_attach
             return config
           end
-          lsp_config.tsserver.setup(lsp_setup)
+          lsp_config.ts_ls.setup(lsp_setup)
           lsp_config.ccls.setup(lsp_setup)
           lsp_config.nil_ls.setup(with_config({
             settings = {
