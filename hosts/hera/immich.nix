@@ -8,13 +8,13 @@
   images = {
     server = {
       imageName = "ghcr.io/immich-app/immich-server";
-      imageDigest = "sha256:544fcfc41ce97833e33126e5041fb3b821e3db7bf405b54ac06689247a170a90"; # v1.115.0
-      sha256 = "sha256-L43M4Vsy+8jvHs0plG2rirUA14sG27bJGIQ7yzU0Cio=";
+      imageDigest = "sha256:548ad7547d3c79c35acb933c1b3e42b6d87d190f9c31442c0bfe12585153af33"; # v1.116.0
+      sha256 = "sha256-A4XJAky03bJOahstqabFilwxu+snvpoCZJ1HWeHCk5s=";
     };
     machineLearning = {
       imageName = "ghcr.io/immich-app/immich-machine-learning";
-      imageDigest = "sha256:66f13f7fb1af555f9f1767c3dd5d404b7e5f486a272dc73af9e6480f541463dc"; # v1.115.0
-      sha256 = "sha256-YwxZykvSAd/N5++gajDJAZtqBbtvE/ruFE8JZn1YV6M=";
+      imageDigest = "sha256:823cce72af5b56d08fe33171087dd8512be3f52107a3f0b307212f32329aef55"; # v1.116.0
+      sha256 = "sha256-oEivqcqhSdUjyqkdJHkzj1b6sTmxFLmG3LTgdiKDGQc=";
     };
   };
   dbUsername = user;
