@@ -51,6 +51,8 @@
     bookMetadataApi = 8004;
     calibreWeb = 8011;
     iHateToBudget = 8013;
+    grafana = 8032;
+    prometheus = 8033;
     immich = 8084;
     musicAssistantWeb = 8095;
     jellyfin = 8096;
@@ -62,6 +64,7 @@
     socksFirefox = 9000;
     authelia = 9091;
     transmission = 9091;
+    prometheus-node-exporter = 9100;
     jackett = 9117;
     collabora-online = 9980;
     stalwartMailHttp = 9988;

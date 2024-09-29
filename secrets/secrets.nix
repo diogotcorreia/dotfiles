@@ -200,6 +200,7 @@ mkSecrets [
       "atticdEnvVariables"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
+      "grafanaAdminPassword"
       "healthchecksEnvVariables"
       "healthchecksSecretKey"
       "healthchecksUrl"

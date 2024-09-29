@@ -203,6 +203,43 @@ let
         lib.nameValuePair hostname (mkHost hostname cfg)
       ))
     ];
+
+  /**
+    Synopsis: mkStaticConfigs hosts targets
+
+    Generate a set of static configurations to prometheus for the specified hosts.
+
+    Inputs:
+    - hosts: A set of nixosConfigurations hosts to generate static configurations for.
+    - targets: A list of functions that generate a list of targets for a given host config.
+
+    Output Format:
+    A list of attribute sets representing static configurations for the specified hosts.
+
+    Example input:
+    mkStaticConfigs
+      { example1 = <nixosConfiguration>; example2 = <nixosConfiguration>; }
+      [ (config: "${config.networking.fqdn}:${toString config.services.prometheus.exporters.node.port}") ]
+
+    Example output:
+    [
+      {
+        targets = [ "example1.example.com:9100" ];
+      }
+      {
+        targets = [ "example2.example.com:9100" ];
+      }
+    ]
+  */
+  mkStaticConfigs =
+    hosts: targets:
+    lib.mapAttrsToList (
+      _:
+      { config, ... }:
+      {
+        targets = lib.lists.flatten (builtins.map (target: target config) targets);
+      }
+    ) hosts;
 in
 {
   inherit
@@ -211,5 +248,6 @@ in
     mkProfiles
     mkSecrets
     mkHosts
+    mkStaticConfigs
     ;
 }
