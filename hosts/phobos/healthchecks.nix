@@ -49,7 +49,16 @@ in {
   services.healthchecks = {
     inherit port;
     enable = true;
-    package = pkgs.unstable.healthchecks;
+    package = pkgs.unstable.healthchecks.overrideAttrs (oldAttrs: {
+      patches = [
+        (assert (pkgs.unstable.healthchecks.version == "3.4");
+          pkgs.fetchpatch {
+            # Fix migrations in Django 5.1 (see https://github.com/NixOS/nixpkgs/issues/345264)
+            url = "https://github.com/healthchecks/healthchecks/commit/b5eced26cf9c0d527840220aeb7e414f247d1c1f.patch";
+            hash = "sha256-p+D1ulDu5Lfom1RFKAB91s+QTuWgNa4KbO4Y4EzOKYE=";
+          })
+      ];
+    });
 
     # Pass non-secret settings
     settings = {
