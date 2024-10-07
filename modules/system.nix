@@ -21,6 +21,9 @@
       substituters = ["https://nix-cache.diogotc.com/dtc"];
       trusted-public-keys = ["dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U="];
       netrc-file = config.age.secrets.nixCacheDiogotcReadTokenNetrc.path;
+
+      # https://jackson.dev/post/nix-reasonable-defaults/
+      fallback = true; # skip offline binary-caches (can end up building from source)
     };
 
     # Lock flake registry to keep it synced with the inputs
