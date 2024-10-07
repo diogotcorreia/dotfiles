@@ -37,11 +37,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1728173680,
-        "narHash": "sha256-HAWAgUCP8VZrxAXNClE1ghkNMCk3FUzDrqEbpi2Or5k=",
+        "lastModified": 1728241390,
+        "narHash": "sha256-icNt2T1obK3hFNgBOgiiyOoiScUfz9blmRbNp3aOUBE=",
         "owner": "zhaofengli",
         "repo": "attic",
-        "rev": "b4338a16706178caa8832f0c2937e6cffb0a809a",
+        "rev": "1b29816235b7573fca7f964709fd201e1a187024",
         "type": "github"
       },
       "original": {
