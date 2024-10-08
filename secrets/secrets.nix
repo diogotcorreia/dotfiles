@@ -36,7 +36,8 @@ in
     ])
 
     (mkSystem null personalSystems [
-      "ecscWireguardPrivateKey"
+      "ecscJeopardyWireguardPrivateKey"
+      "ecscAdWireguardPrivateKey"
       "heroisDoMarWireguardPrivateKey"
     ])
 
