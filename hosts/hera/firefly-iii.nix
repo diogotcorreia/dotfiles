@@ -1,15 +1,15 @@
 # Configuration for Firefly-III on Hera
 {
-  pkgs,
   config,
-  secrets,
+  inputs,
   lib,
+  pkgs,
+  secrets,
   ...
 }: let
   domainApp = "firefly3.hera.diogotc.com";
   portApp = 8005;
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
-  portDataImporter = 8006;
   versionDataImporter = "1.4.2";
 
   cronAutoDataImporter = "23:58";
@@ -19,11 +19,36 @@
 in {
   # TODO move docker containers to NixOS services
 
+  imports = [
+    # TODO: remove on nixos-24.11 (move to stable)
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/web-apps/firefly-iii-data-importer.nix")
+  ];
+
   age.secrets = {
     fireflyAutoDataImporterEnv.file = secrets.host.fireflyAutoDataImporterEnv;
     fireflyAutoDataImporterHealthchecksUrl.file = secrets.host.fireflyAutoDataImporterHealthchecksUrl;
     fireflyDataImporterEnv.file = secrets.host.fireflyDataImporterEnv;
   };
+
+  services.firefly-iii-data-importer = {
+    enable = true;
+    # TODO: use stable on nixos-24.11
+    package = pkgs.unstable.firefly-iii-data-importer;
+    group = config.services.caddy.group;
+    settings = {
+      FIREFLY_III_URL = "https://${domainApp}";
+      FIREFLY_III_CLIENT_ID = 7;
+      JSON_CONFIGURATION_DIR = configPathAutoDataImporter;
+    };
+  };
+
+  # The data-importer module does not allow for variables to be passed in bulk, so we do this little hack
+  systemd.services.firefly-iii-data-importer-setup.serviceConfig.EnvironmentFile = [
+    # Contains variables:
+    # - NORDIGEN_ID
+    # - NORDIGEN_KEY
+    config.age.secrets.fireflyDataImporterEnv.path
+  ];
 
   virtualisation.oci-containers.containers = {
     # Auto Importer task
@@ -86,10 +111,17 @@ in {
       enableACME = true;
       extraConfig = ''
         import NEBULA
-        reverse_proxy localhost:${toString portDataImporter}
+        encode zstd gzip
+        root * ${config.services.firefly-iii-data-importer.package}/public
+        php_fastcgi unix/${config.services.phpfpm.pools.firefly-iii-data-importer.socket}
+        file_server
       '';
     };
   };
+
+  modules.impermanence.directories = [
+    config.services.firefly-iii-data-importer.dataDir
+  ];
 
   modules.services.restic = {
     paths = [
