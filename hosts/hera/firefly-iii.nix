@@ -32,8 +32,7 @@ in {
 
   services.firefly-iii-data-importer = {
     enable = true;
-    # TODO: use stable on nixos-24.11
-    package = pkgs.unstable.firefly-iii-data-importer;
+    package = pkgs.firefly-iii-data-importer;
     group = config.services.caddy.group;
     settings = {
       FIREFLY_III_URL = "https://${domainApp}";
