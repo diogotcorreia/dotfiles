@@ -1,0 +1,13 @@
+diff --git a/app/Services/Nordigen/Conversion/RoutineManager.php b/app/Services/Nordigen/Conversion/RoutineManager.php
+index 7bde95d..10c3fbb 100644
+--- a/app/Services/Nordigen/Conversion/RoutineManager.php
++++ b/app/Services/Nordigen/Conversion/RoutineManager.php
+@@ -328,7 +328,7 @@ class RoutineManager implements RoutineManagerInterface
+         if (0 === $total) {
+             app('log')->warning('Downloaded nothing, will return nothing.');
+             // add error to current error thing:
+-            $this->addError(0, 'No transactions were downloaded from GoCardless. You may be rate limited or something else went wrong.');
++            $this->addWarning(0, 'No transactions were downloaded from GoCardless. You may be rate limited or something else went wrong.');
+             $this->mergeMessages(1);
+             $this->mergeWarnings(1);
+             $this->mergeErrors(1);
