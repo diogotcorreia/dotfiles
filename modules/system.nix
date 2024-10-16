@@ -35,8 +35,8 @@
     };
 
     nixPath = [
-      "nixpkgs=/etc/channels/nixpkgs"
-      "nixos-config=/etc/nixos/configuration.nix"
+      "nixpkgs=flake:pkgs"
+      "my=flake:my"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
