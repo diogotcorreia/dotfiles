@@ -101,8 +101,8 @@ jobs:
         package:
           - alt-urls-discord-bot
           - attic
-          - flask-unsign
-          - pycdc
+          - cybersec.flask-unsign
+          - cybersec.pycdc
 
     steps:
       - uses: actions/checkout@v4

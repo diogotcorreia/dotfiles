@@ -3,9 +3,17 @@
 let
   packagesDir = ../packages;
 in
-  {lib, ...}: final: prev: {
-    my = prev.lib.mapAttrs' (name: value:
-      prev.lib.nameValuePair (prev.lib.removeSuffix ".nix" name)
-      (prev.callPackage "${packagesDir}/${name}" {inherit lib;}))
-    (builtins.readDir packagesDir);
+  {lib, ...}: final: prev: let
+    callPackageFromAttrs = attrs:
+      builtins.mapAttrs (
+        name: value:
+          if builtins.isAttrs value
+          then (callPackageFromAttrs value)
+          else (prev.callPackage value {inherit lib;})
+      )
+      attrs;
+  in {
+    my =
+      callPackageFromAttrs
+      (lib.my.rakeLeaves packagesDir);
   }
