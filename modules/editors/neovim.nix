@@ -19,6 +19,7 @@
   ];
   personalGrammars = with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars;
     lists.optionals personal [
+      astro
       c
       cpp
       java
@@ -267,6 +268,7 @@
             config['on_attach'] = on_attach
             return config
           end
+          lsp_config.astro.setup(lsp_setup)
           lsp_config.ts_ls.setup(lsp_setup)
           lsp_config.ccls.setup(lsp_setup)
           lsp_config.nil_ls.setup(with_config({
@@ -393,6 +395,8 @@
     ];
   personalPackages = with pkgs;
     lists.optionals personal [
+      # TODO: move to stable on nixos 24.11
+      unstable.astro-language-server # Astro LSP
       python311Packages.jedi-language-server # Python LSP
       ccls # C/C++ LSP
       nodePackages.typescript-language-server # JS/TS LSP
