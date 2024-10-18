@@ -13,7 +13,6 @@
 
   cronAutoDataImporter = "23:58";
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
-
 in {
   # TODO move docker containers to NixOS services
 
