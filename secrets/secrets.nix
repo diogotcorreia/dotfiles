@@ -61,6 +61,7 @@ in
       "resticRcloneConfig"
       "resticPassword"
       "resticSshKey"
+      "umamiEnv"
     ])
 
     (mkSystem "bacchus" [bacchusSystem] [

@@ -12,6 +12,8 @@
     security.fail2ban
     services.caddy.common
     services.ssh
+    services.umami
+    virtualisation.docker
   ];
 
   networking.hostId = "4d44f5a9";
