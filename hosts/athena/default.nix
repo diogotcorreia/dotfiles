@@ -12,6 +12,7 @@
     security.fail2ban
     services.caddy.common
     services.ssh
+    services.stalwart-mail
     services.umami
     virtualisation.docker
   ];
