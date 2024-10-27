@@ -32,6 +32,9 @@
 
   my.networking.wiredInterface = "ens3";
 
+  # Time zone
+  time.timeZone = "UTC";
+
   # Secret manager (agenix)
   age = {
     secrets = {
