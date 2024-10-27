@@ -49,5 +49,5 @@ in {
     };
   };
 
-  modules.impermanence.files = ["${stateDirectory}/cookies.json"];
+  modules.impermanence.directories = [stateDirectory];
 }
