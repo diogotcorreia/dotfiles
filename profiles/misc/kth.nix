@@ -13,6 +13,8 @@
     devops = "https://canvas.kth.se/courses/48942";
     tamos = "https://canvas.kth.se/courses/49054";
     tamos-discussion = "https://canvas.kth.se/courses/32837";
+    forensics = "https://canvas.kth.se/courses/50595";
+    cybtamos = "https://canvas.kth.se/courses/50613";
   };
 in {
   # Course shortcuts
