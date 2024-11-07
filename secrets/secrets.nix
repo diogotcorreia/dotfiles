@@ -55,6 +55,7 @@ in
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "healthchecksUrl"
+      "meilisearchEnv"
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"

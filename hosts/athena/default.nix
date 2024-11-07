@@ -11,6 +11,7 @@
     security.acme.cloudflare
     security.fail2ban
     services.caddy.common
+    services.meilisearch
     services.ssh
     services.stalwart-mail
     services.umami
