@@ -18,7 +18,7 @@ in {
 
   services.nextcloud = {
     enable = true;
-    package = pkgs.nextcloud29;
+    package = pkgs.nextcloud30;
     hostName = domain;
     database.createLocally = true; # automatically uses pgsql through sockets
     configureRedis = true;
@@ -119,14 +119,14 @@ in {
 
         # Set cache for versioned static files (cache-busting)
         @immutable {
-          path *.css *.js *.mjs *.svg *.gif *.png *.jpg *.ico *.wasm *.tflite
+          path *.css *.js *.mjs *.svg *.gif *.ico *.jpg *.png *.webp *.wasm *.tflite *.map *.ogg *.flac
           query v=*
         }
         header @immutable Cache-Control "max-age=15778463, immutable"
 
         # Set cache for normal static files
         @static {
-          path *.css *.js *.mjs *.svg *.gif *.png *.jpg *.ico *.wasm *.tflite
+          path *.css *.js *.mjs *.svg *.gif *.ico *.jpg *.png *.webp *.wasm *.tflite *.map *.ogg *.flac
           not query v=*
         }
         header @static Cache-Control "max-age=15778463"
