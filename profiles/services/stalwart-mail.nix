@@ -17,7 +17,8 @@
 
   credPath = "/run/credentials/stalwart-mail.service";
 
-  rocksdb = pkgs.unstable.rocksdb_8_11; # TODO: this should come from somewhere more permanent...
+  # Use the same version of rocksdb for backups
+  rocksdb = config.services.stalwart-mail.package.rocksdb;
 in {
   # Use stalwart module from unstable
   # TODO: remove on nixos-24.11
