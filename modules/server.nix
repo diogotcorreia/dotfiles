@@ -30,9 +30,9 @@ in {
       };
       allowReboot = true;
       flags = [
-        # Only use one job to avoid running out of memory and disrupting operations
-        "--max-jobs"
-        "1"
+        # Only use one job/core to avoid running out of memory and disrupting operations
+        "--max-jobs=1"
+        "--cores=1"
       ];
 
       dates = "04:00";
