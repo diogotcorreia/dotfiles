@@ -1,7 +1,6 @@
 # Configuration for Paperless-ngx on Hera
 {
   config,
-  pkgs,
   secrets,
   ...
 }: let
@@ -20,8 +19,6 @@ in {
 
   services.paperless = {
     enable = true;
-
-    package = pkgs.paperless-ngx-cursed;
 
     settings = {
       PAPERLESS_OCR_LANGUAGE = "eng+por+swe";
