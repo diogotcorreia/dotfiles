@@ -38,7 +38,7 @@ in {
 
     fonts.packages = with pkgs; [
       fira-code
-      nerdfonts
+      dejavu_fonts
       noto-fonts
       noto-fonts-extra
       noto-fonts-emoji
