@@ -57,7 +57,13 @@ in {
       options = "-d"; # delete old generations
 
       dates = "weekly";
-      randomizedDelaySec = "15min";
+      randomizedDelaySec = "2h";
+    };
+    hm.nix.gc = {
+      automatic = true;
+      options = "-d"; # delete old generations
+
+      frequency = "weekly";
     };
   };
 }
