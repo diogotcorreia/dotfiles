@@ -402,7 +402,7 @@
       unstable.ruff # Python LSP
       ccls # C/C++ LSP
       nodePackages.typescript-language-server # JS/TS LSP
-      nodePackages.vscode-html-languageserver-bin # HTML LSP
+      nodePackages.vscode-langservers-extracted # HTML LSP
       nil # Nix LSP
       typst-lsp # Typst LSP
     ];
