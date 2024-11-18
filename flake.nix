@@ -25,11 +25,6 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    attic = {
-      url = "github:zhaofengli/attic";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
-    };
     lidl-to-grocy = {
       url = "github:diogotcorreia/lidl-to-grocy?ref=v1.3.0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -89,7 +84,6 @@
         inputs.impermanence.nixosModules.impermanence
         inputs.agenix.nixosModules.default
         inputs.lanzaboote.nixosModules.lanzaboote
-        inputs.attic.nixosModules.atticd
       ];
     };
     profiles = mkProfiles ./profiles;
@@ -102,7 +96,7 @@
       x86_64-linux =
         pkgs.my
         // {
-          attic = inputs.attic.packages.x86_64-linux.attic-nixpkgs.override {clientOnly = true;};
+          attic = pkgs.attic-client;
           # TODO: remove when fixed upstream
           # Apparently hydra failed to build this, and because it's cached it's not trying again
           # https://hydra.nixos.org/build/276260138

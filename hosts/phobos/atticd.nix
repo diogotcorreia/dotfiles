@@ -29,7 +29,7 @@ in {
   services.atticd = {
     enable = true;
     mode = "monolithic";
-    credentialsFile = config.age.secrets.phobosAtticdEnvVariables.path;
+    environmentFile = config.age.secrets.phobosAtticdEnvVariables.path;
     settings = {
       listen = "[::]:${toString port}";
       allowed-hosts = [host];
