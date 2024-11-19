@@ -14,7 +14,7 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = ["nix-command" "flakes" "repl-flake"];
+      experimental-features = ["nix-command" "flakes"];
       # Don't add @wheel here, since it allows for privilege escalation
       # https://github.com/NixOS/nix/issues/9649#issuecomment-1868001568
       trusted-users = ["root"];
