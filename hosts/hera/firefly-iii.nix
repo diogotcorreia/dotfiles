@@ -1,7 +1,6 @@
 # Configuration for Firefly-III on Hera
 {
   config,
-  inputs,
   lib,
   pkgs,
   secrets,
@@ -15,11 +14,6 @@
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
 in {
   # TODO move docker containers to NixOS services
-
-  imports = [
-    # TODO: remove on nixos-24.11 (move to stable)
-    (inputs.nixpkgs-unstable + "/nixos/modules/services/web-apps/firefly-iii-data-importer.nix")
-  ];
 
   age.secrets = {
     fireflyAutoDataImporterEnv.file = secrets.host.fireflyAutoDataImporterEnv;
