@@ -104,8 +104,6 @@ jobs:
           - alt-urls-discord-bot
           - cybersec.flask-unsign
           - cybersec.pycdc
-          - stalwart-mail
-          - stalwart-mail.webadmin
 
     steps:
       - uses: actions/checkout@v4

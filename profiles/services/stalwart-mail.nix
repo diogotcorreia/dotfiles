@@ -1,7 +1,6 @@
 # Stalwart mail server configuration
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -20,15 +19,6 @@
   # Use the same version of rocksdb for backups
   rocksdb = config.services.stalwart-mail.package.rocksdb;
 in {
-  # Use stalwart module from unstable
-  # TODO: remove on nixos-24.11
-  disabledModules = [
-    "services/mail/stalwart-mail.nix"
-  ];
-  imports = [
-    (inputs.nixpkgs-unstable + "/nixos/modules/services/mail/stalwart-mail.nix")
-  ];
-
   services.stalwart-mail = {
     enable = true;
     package = pkgs.unstable.stalwart-mail;

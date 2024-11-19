@@ -1,7 +1,6 @@
 # Apply patches to firefly-iii-data-importer
 {...}: final: prev: {
-  # TODO: use stable on nixos-24.11
-  firefly-iii-data-importer = prev.unstable.firefly-iii-data-importer.overrideAttrs (oldAttrs: {
+  firefly-iii-data-importer = prev.firefly-iii-data-importer.overrideAttrs (oldAttrs: {
     patches = [
       # Fix issue where too long external IDs in transactions break import
       # https://github.com/firefly-iii/firefly-iii/issues/9347

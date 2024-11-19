@@ -1,10 +1,8 @@
 # Configuration for Healthchecks.io on Phobos
-args @ {
+{
   pkgs,
-  inputs,
   config,
   secrets,
-  buildEnv, # unused, but has to be here because of the import of nixpkgs healthchecks module
   ...
 }: let
   httpHost = "http.${host}";
@@ -16,15 +14,6 @@ args @ {
     group = config.services.healthchecks.group;
   };
 in {
-  # Import unstable module, since it uses some python dependencies directly
-  # https://stackoverflow.com/questions/47650857/nixos-module-imports-with-arguments
-  disabledModules = ["services/web-apps/healthchecks.nix"];
-  imports = [
-    (import (inputs.nixpkgs-unstable
-      + "/nixos/modules/services/web-apps/healthchecks.nix")
-    (args // {pkgs = pkgs.unstable;}))
-  ];
-
   age.secrets = {
     phobosHealthchecksSecretKey =
       commonSecretSettings
@@ -49,8 +38,7 @@ in {
   services.healthchecks = {
     inherit port;
     enable = true;
-    # TODO nixos 24.11: use stable
-    package = pkgs.unstable.healthchecks;
+    package = pkgs.healthchecks;
 
     # Pass non-secret settings
     settings = {

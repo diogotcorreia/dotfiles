@@ -396,10 +396,8 @@
     ];
   personalPackages = with pkgs;
     lists.optionals personal [
-      # TODO: move to stable on nixos 24.11
-      unstable.astro-language-server # Astro LSP
-      # TODO: move to stable on nixos 24.11
-      unstable.ruff # Python LSP
+      astro-language-server # Astro LSP
+      ruff # Python LSP
       ccls # C/C++ LSP
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-langservers-extracted # HTML LSP

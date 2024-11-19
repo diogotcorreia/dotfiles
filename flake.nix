@@ -97,10 +97,6 @@
         pkgs.my
         // {
           attic = pkgs.attic-client;
-          # TODO: remove when fixed upstream
-          # Apparently hydra failed to build this, and because it's cached it's not trying again
-          # https://hydra.nixos.org/build/276260138
-          stalwart-mail = pkgs.unstable.stalwart-mail;
         };
     };
 
