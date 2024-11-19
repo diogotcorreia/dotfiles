@@ -46,6 +46,10 @@ in {
   };
 
   systemd.services.meilisearch = {
+    environment = {
+      # Remove when https://github.com/NixOS/nixpkgs/pull/356614 is merged
+      MEILI_NO_ANALYTICS = lib.mkForce (lib.boolToString config.services.meilisearch.noAnalytics);
+    };
     serviceConfig = {
       # Don't use dynamic user since it doesn't work correctly with impermanence
       User = user;
