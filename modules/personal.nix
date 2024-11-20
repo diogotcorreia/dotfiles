@@ -43,6 +43,9 @@ in {
     usr.extraGroups = ["adbusers"];
     programs.adb.enable = true;
 
+    # needed for GSSAPIAuthentication options for ssh
+    programs.ssh.package = pkgs.openssh_gssapi;
+
     # ssh client config
     hm.programs.ssh = {
       enable = true;
