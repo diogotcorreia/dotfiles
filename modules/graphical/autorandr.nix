@@ -16,9 +16,9 @@ in {
       defaultTarget = "laptop";
       profiles = {
         laptop = {
-          fingerprint = {"eDP1" = "*";};
+          fingerprint = {"eDP-1" = "*";};
           config = {
-            eDP1 = {
+            eDP-1 = {
               enable = true;
               primary = true;
               mode = "1920x1080";
@@ -31,18 +31,18 @@ in {
         # Dual monitor profile: HDMI on top of eDP
         laptop-dual = {
           fingerprint = {
-            "eDP1" = "*";
-            "HDMI1" = "*";
+            "eDP-1" = "*";
+            "HDMI-1" = "*";
           };
           config = {
-            HDMI1 = {
+            HDMI-1 = {
               enable = true;
               primary = false;
               mode = "1920x1080";
               position = "0x0";
               rotate = "normal";
             };
-            eDP1 = {
+            eDP-1 = {
               enable = true;
               primary = true;
               mode = "1920x1080";
@@ -55,11 +55,11 @@ in {
         # Dual monitor profile: HDMI on top of eDP (but 16:10 aspect ratio)
         alt-laptop-dual = {
           fingerprint = {
-            "eDP1" = "*";
-            "HDMI1" = "00ffffffffffff0010ac79a0554130331c1b010380342078eaee95a3544c99260f5054a1080081408180a940b300d1c0010101010101283c80a070b023403020360006442100001a000000ff005950505930373743333041550a000000fc0044454c4c2055323431324d0a20000000fd00323d1e5311000a2020202020200020";
+            "eDP-1" = "*";
+            "HDMI-1" = "00ffffffffffff0010ac79a0554130331c1b010380342078eaee95a3544c99260f5054a1080081408180a940b300d1c0010101010101283c80a070b023403020360006442100001a000000ff005950505930373743333041550a000000fc0044454c4c2055323431324d0a20000000fd00323d1e5311000a2020202020200020";
           };
           config = {
-            HDMI1 = {
+            HDMI-1 = {
               enable = true;
               primary = false;
               mode = "1920x1200";
@@ -67,7 +67,7 @@ in {
               rotate = "normal";
               dpi = 144;
             };
-            eDP1 = {
+            eDP-1 = {
               enable = true;
               primary = true;
               mode = "1920x1080";
