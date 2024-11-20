@@ -8,8 +8,7 @@
 
   hardware.nvidiaOptimus.disable = lib.mkDefault true;
   boot.blacklistedKernelModules = lib.mkDefault ["nouveau" "nvidia"];
-  services.xserver.videoDrivers = lib.mkDefault ["intel"];
-  hardware.opengl.extraPackages = with pkgs; [
+  hardware.graphics.extraPackages = with pkgs; [
     vaapiIntel
     vaapiVdpau
     libvdpau-va-gl
