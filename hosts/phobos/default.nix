@@ -9,6 +9,8 @@
     security.acme.cloudflare
     security.fail2ban
     services.caddy.common
+    services.grafana
+    services.prometheus
     services.ssh
   ];
 
