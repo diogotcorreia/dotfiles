@@ -16,6 +16,8 @@ in {
       dogdns
       # quick static file server
       httplz
+      # json manipulator
+      jq
       # qalc (CLI calculator)
       libqalculate
       # Nix Index (provides nix-locate to locate files in the Nix store)
