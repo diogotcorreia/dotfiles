@@ -7,9 +7,6 @@
     zip
     unzip
 
-    # Terminal multiplexers
-    tmux
-
     # Nix formatter
     alejandra
 

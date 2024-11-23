@@ -13,6 +13,7 @@
     security.fail2ban
     services.caddy.common
     services.ssh
+    shell.zellij
   ];
 
   networking.hostId = "1215a7f5";
@@ -103,7 +104,6 @@
     shell = {
       git.enable = true;
       lf.enable = true;
-      tmux.enable = true;
       zsh.enable = true;
     };
   };

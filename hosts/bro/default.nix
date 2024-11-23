@@ -16,6 +16,7 @@
     services.caddy.rproxy
     services.grocy
     services.ssh
+    shell.zellij
     virtualisation.virtual-machines
   ];
 
@@ -110,7 +111,6 @@
     shell = {
       git.enable = true;
       lf.enable = true;
-      tmux.enable = true;
       zsh.enable = true;
     };
   };

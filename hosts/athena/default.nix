@@ -15,6 +15,7 @@
     services.ssh
     services.stalwart-mail
     services.umami
+    shell.zellij
     virtualisation.docker
   ];
 
@@ -125,7 +126,6 @@
     shell = {
       git.enable = true;
       lf.enable = true;
-      tmux.enable = true;
       zsh.enable = true;
     };
   };

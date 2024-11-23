@@ -10,6 +10,7 @@
     security.fail2ban
     services.caddy.common
     services.ssh
+    shell.zellij
   ];
 
   # Boot
@@ -94,7 +95,6 @@
     shell = {
       git.enable = true;
       lf.enable = true;
-      tmux.enable = true;
       zsh.enable = true;
     };
   };
