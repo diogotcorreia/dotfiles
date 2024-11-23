@@ -114,6 +114,7 @@ jobs:
       matrix:
         package:
           - alt-urls-discord-bot
+          - attic
           - cybersec.flask-unsign
           - cybersec.pycdc
 
