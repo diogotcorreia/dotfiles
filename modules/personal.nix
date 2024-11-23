@@ -14,6 +14,8 @@ in {
     hm.home.packages = with pkgs; [
       # dog DNS CLI client (dig alternative)
       dogdns
+      # quick static file server
+      httplz
       # qalc (CLI calculator)
       libqalculate
       # Nix Index (provides nix-locate to locate files in the Nix store)
