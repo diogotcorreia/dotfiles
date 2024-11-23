@@ -22,6 +22,7 @@
     shell.gpg
     shell.zellij
     virtualisation.docker
+    virtualisation.virtual-machines
   ];
 
   networking.hostId = "30c1f688";
