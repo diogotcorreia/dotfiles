@@ -82,15 +82,27 @@ jobs:
             extra-platforms = i686-linux aarch64-linux
             substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
+            always-allow-substitutes = true
       - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      # We check if this system actually has anything to be built or if we're just going
+      # to be fetching from cache
+      - name: Check if build needed
+        id: build-needed
+        run: |
+          nix build .#nixosConfigurations.${{ matrix.machine.host }}.config.system.build.toplevel --dry-run 2> dry-run-output
+          echo "needs-build=$(cat dry-run-output | grep 'will be built' &> /dev/null && echo 1 || echo 0)" >> $GITHUB_OUTPUT
+        shell: bash
 
       # We build each system in a separate job, targeting the configuration using matrix.machine.host
       - name: Build system
+        if: steps.build-needed.outputs.needs-build == '1'
         run: |
           nix build .#nixosConfigurations.${{ matrix.machine.host }}.config.system.build.toplevel
 
       # Once built, we login to Attic and push the built system to our cache!
       - name: Push system
+        if: steps.build-needed.outputs.needs-build == '1'
         run: |
           nix run .#attic login phobos https://nix-cache.diogotc.com ${{ secrets.ATTIC_TOKEN }}
           nix run .#attic push dtc result -j 2
@@ -123,6 +135,7 @@ jobs:
             extra-platforms = i686-linux aarch64-linux
             substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
+            always-allow-substitutes = true
       - uses: DeterminateSystems/magic-nix-cache-action@main
 
       # We check if this package actually has anything to be built or if we're just going

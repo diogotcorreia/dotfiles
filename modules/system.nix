@@ -24,6 +24,9 @@
 
       # https://jackson.dev/post/nix-reasonable-defaults/
       fallback = true; # skip offline binary-caches (can end up building from source)
+
+      # Use substituters even for trivial derivations
+      always-allow-substitutes = true;
     };
 
     # Lock flake registry to keep it synced with the inputs
