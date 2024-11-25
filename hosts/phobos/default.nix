@@ -1,6 +1,7 @@
 # Configuration for phobos (VPS)
 {
   config,
+  pkgs,
   profiles,
   secrets,
   ...
@@ -59,7 +60,10 @@
   };
 
   # PostgreSQL
-  services.postgresql.enable = true;
+  services.postgresql = {
+    enable = true;
+    package = pkgs.postgresql_16;
+  };
 
   # Modules
   modules = {
