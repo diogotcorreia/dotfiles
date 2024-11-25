@@ -64,11 +64,10 @@ in {
     ];
     ensureDatabases = [dbUsername];
 
-    extraPlugins = [
-      (pkgs.postgresqlPackages.pgvecto-rs.override {
-        postgresql = config.services.postgresql.package;
-      })
-    ];
+    extensions = ps:
+      with ps; [
+        pgvecto-rs
+      ];
     settings = {shared_preload_libraries = "vectors.so";};
   };
 
