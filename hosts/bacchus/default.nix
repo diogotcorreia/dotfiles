@@ -34,7 +34,6 @@
 
   # ZFS
   boot.supportedFilesystems = ["zfs"];
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
   boot.kernelParams = ["nohibernate"];
   networking.hostId = "239be557";
   services.zfs.autoScrub.enable = true;

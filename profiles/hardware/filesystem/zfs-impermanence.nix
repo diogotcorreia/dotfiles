@@ -25,7 +25,6 @@ in {
 
   # Enable ZFS kernel packages/modules
   boot.supportedFilesystems = ["zfs"];
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # Enable services to maintain the ZFS pool
   services.zfs.autoScrub.enable = true;
