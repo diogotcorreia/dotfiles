@@ -26,6 +26,13 @@
     argsPkgs = {
       system = "x86_64-linux";
       config.allowUnfree = true;
+      config.permittedInsecurePackages = [
+        # needed for sonarr
+        "aspnetcore-runtime-wrapped-6.0.36"
+        "aspnetcore-runtime-6.0.36"
+        "dotnet-sdk-wrapped-6.0.428"
+        "dotnet-sdk-6.0.428"
+      ];
     };
   in
     import inputs.nixpkgs ({
