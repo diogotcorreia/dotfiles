@@ -17,7 +17,7 @@
     misc.cybersec
     misc.geoclue
     misc.kth
-    networking.wireguard.ecsc
+    networking.wireguard.ctf
     services.ssh
     shell.gpg
     shell.zellij
