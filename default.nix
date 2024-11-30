@@ -3,6 +3,9 @@
 {nixpkgs ? <nixpkgs>}: let
   pkgs = import nixpkgs {
     overlays = [(import ./overlays/packages.nix {inherit lib;})];
+    config = {
+      allowUnfree = true;
+    };
   };
 
   lib = pkgs.lib.extend (self: super: {
