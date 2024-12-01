@@ -8,7 +8,10 @@
     graphical.fonts
   ];
 
-  hm.home.packages = with pkgs; [niri];
+  hm.home.packages = with pkgs; [
+    niri
+    xwayland-satellite
+  ];
 
   hm.programs.zsh.initExtra = ''
     # Start graphical server on user's current tty if not already running.
@@ -69,6 +72,10 @@
 
       // Quit niri
       Mod+Ctrl+Q { quit; }
+    }
+
+    environment {
+      DISPLAY ":0"
     }
   '';
 }
