@@ -40,7 +40,6 @@
     nixPath = [
       "nixpkgs=flake:pkgs"
       "my=flake:my"
-      "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
   environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
