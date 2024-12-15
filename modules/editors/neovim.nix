@@ -29,7 +29,7 @@
       rust
       toml
       typescript
-      pkgs.unstable.tree-sitter-grammars.tree-sitter-typst
+      typst
       vim
       yaml
     ];
@@ -283,7 +283,7 @@
           }))
           lsp_config.html.setup(with_config({ cmd = { "html-languageserver", "--stdio" } }))
           -- don't let the LSP generate the PDF, otherwise it will collide with typst watch
-          lsp_config.typst_lsp.setup(with_config({ settings = { exportPdf = "never" } }))
+          lsp_config.tinymist.setup(with_config({ settings = { exportPdf = "never", formatterMode = "typstyle" } }))
         '';
       }
       rust-tools-nvim
@@ -402,7 +402,8 @@
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-langservers-extracted # HTML LSP
       nil # Nix LSP
-      typst-lsp # Typst LSP
+      tinymist # Typst LSP
+      typstyle # Typst Formatter
     ];
 in {
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
