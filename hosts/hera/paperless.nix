@@ -23,9 +23,12 @@ in {
     settings = {
       PAPERLESS_OCR_LANGUAGE = "eng+por+swe";
       PAPERLESS_DBHOST = "/run/postgresql";
-      PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
+      PAPERLESS_OCR_USER_ARGS = {
         optimize = 1;
         pdfa_image_compression = "lossless";
+        # Allow OCRmyPDF to modify signed PDFs, since original is also stored
+        # https://github.com/paperless-ngx/paperless-ngx/issues/7383
+        invalidate_digital_signatures = true;
       };
 
       PAPERLESS_URL = "https://${domain}";
