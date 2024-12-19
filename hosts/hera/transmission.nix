@@ -112,4 +112,9 @@ in {
   modules.impermanence.directories = [
     config.services.transmission.home
   ];
+
+  modules.services.restic.paths = [
+    # backup settings, stats and active torrents
+    "${config.services.transmission.home}/.config"
+  ];
 }
