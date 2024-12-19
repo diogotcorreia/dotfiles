@@ -8,6 +8,7 @@
 }: {
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
+    hardware.fwupd
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
