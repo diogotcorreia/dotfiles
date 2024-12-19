@@ -19,9 +19,9 @@
   ];
 
   # Host Id
-  networking.hostId = "9832f4c7";
+  networking.hostId = "93ae55de";
 
-  my.filesystem.mainDisk = "/dev/sda";
+  my.filesystem.mainDisk = "/dev/nvme0n1";
 
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;
@@ -46,7 +46,7 @@
     };
   };
 
-  my.networking.wiredInterface = "eno1";
+  my.networking.wiredInterface = "enp0s31f6";
 
   # Secret manager (agenix)
   age = {
@@ -70,9 +70,6 @@
 
     identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
   };
-
-  # Keep laptop on when lid is closed
-  services.logind.lidSwitch = "ignore";
 
   # PostgreSQL
   services.postgresql = {
