@@ -26,13 +26,9 @@ nix run github:numtide/nixos-anywhere -- --extra-files $TEMP --flake github:diog
 ### Nextcloud
 
 ```bash
-cat path/to/nextcloud_db.sql | _ dce -T db sh -c 'exec mysql --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
-```
-
-To access the MySQL CLI, run
-
-```bash
-_ dce db sh -c 'exec mysql --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE'
+zstd -d postgresql_db_nextcloud.sql.zstd
+chown nextcloud:nextcloud postgresql_db_nextcloud.sql
+sudo -u nextcloud pg_restore -d nextcloud -c --if-exists -1 postgresql_db_nextcloud.sql
 ```
 
 ### Firefly-III
@@ -51,5 +47,29 @@ _ dce fireflyiiidb sh -c 'exec mysql --host=fireflyiiidb --user=$MYSQL_USER --pa
 
 ```bash
 zstd -d postgresql_db_paperless.sql.zstd
-sudo -u paperless pg_restore -d paperless -c -1 postgresql_db_paperless.sql
+chown paperless:paperless postgresql_db_paperless.sql
+# might need to drop database and recreate it manually
+sudo -u paperless pg_restore -d paperless -c --if-exists -1 postgresql_db_paperless.sql
+```
+
+### Immich
+
+```bash
+zstd -d postgresql_db_immich.sql.zstd
+# user has to be postgres in order for vectors extension to be created properly
+chown postgres:postgres postgresql_db_immich.sql
+sudo -u postgres pg_restore -d immich -c --if-exists -1 postgresql_db_immich.sql
+```
+
+### Dawarich
+
+```bash
+zstd -d dawarich_db.sql.zstd
+cat dawarich_db.sql | _ dce -T dawarich_db sh -c 'exec pg_restore --username=$POSTGRES_USER -d dawarich_development -c --if-exists -1'
+```
+
+To access the PostgreSQL CLI, run
+
+```bash
+_ dce dawarich_db sh -c 'exec psql --username=$POSTGRES_USER'
 ```
