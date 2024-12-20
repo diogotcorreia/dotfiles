@@ -12,6 +12,7 @@
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
+    security.secureboot
     services.caddy.common
     services.discord-bots.alt-urls-discord-bot
     services.ssh
