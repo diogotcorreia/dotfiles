@@ -18,6 +18,7 @@
     misc.geoclue
     misc.kth
     networking.wireguard.ctf
+    security.secureboot
     services.ssh
     shell.gpg
     shell.zellij
@@ -194,7 +195,6 @@
       ];
     };
     personal.enable = true;
-    secureboot.enable = true;
     xdg.enable = true;
   };
 
