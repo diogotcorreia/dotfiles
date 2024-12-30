@@ -15,7 +15,7 @@ in {
   config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
       # Bruno REST Client
-      unstable.bruno
+      bruno
       # IntelliJ IDEA (Ultimate)
       unstable.jetbrains.idea-ultimate
     ];
