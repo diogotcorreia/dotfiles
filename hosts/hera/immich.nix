@@ -1,151 +1,77 @@
 # Configuration for Immich on Hera
-# Adapted from https://github.com/solomon-b/nixos-config/blob/87bd7ad355d8de2897f13a0f0e96739ff6d06196/config/machines/servers/sower/immich.nix
 {
-  pkgs,
   config,
+  lib,
   ...
 }: let
-  images = {
-    server = {
-      imageName = "ghcr.io/immich-app/immich-server";
-      imageDigest = "sha256:666ce77995230ff7327da5d285c861895576977237de08564e3c3ddf842877eb"; # v1.123.0
-      sha256 = "sha256-KMc3ULs0osdlRm1i3e9Z1AGsxWScx6Hpc06cn5Ma1rk=";
-    };
-    machineLearning = {
-      imageName = "ghcr.io/immich-app/immich-machine-learning";
-      imageDigest = "sha256:fca90362ff3081fc7762d731eb24de262181eaec28afc51eff1d3ca5348663cd"; # v1.123.0
-      sha256 = "sha256-gdEijD+mzvKtrbGvFwdAIG39jBAs6x/oQVgOV769DAY=";
-    };
-  };
-  dbUsername = user;
-
-  redisName = "immich";
+  cfg = config.services.immich;
 
   photosLocation = "/persist/immich";
   photosLocationNfs = "/mnt/diskstation/immich";
 
-  user = "immich";
-  group = user;
-  # Ensure that the NFS server has the same UID/GID
-  uid = 15015;
-  gid = 15015;
-
-  immichServerUrl = "http://immich_server:3001";
-  immichMachineLearningUrl = "http://immich_machine_learning:3003";
-
   domain = "photos.diogotc.com";
-  immichExternalPort = 8084;
-
-  environment = {
-    DB_URL = "socket://${dbUsername}:@/run/postgresql?db=${dbUsername}";
-
-    REDIS_SOCKET = config.services.redis.servers.${redisName}.unixSocket;
-
-    UPLOAD_LOCATION = photosLocation;
-
-    IMMICH_SERVER_URL = immichServerUrl;
-    IMMICH_MACHINE_LEARNING_URL = immichMachineLearningUrl;
-  };
-
-  mkMount = dir: "${dir}:${dir}";
+  port = 8084;
 in {
-  users.users.${user} = {
-    inherit group uid;
-    isSystemUser = true;
-  };
-  users.groups.${group} = {inherit gid;};
+  # Ensure that the NFS server has the same UID/GID
+  users.users.${cfg.user}.uid = 15015;
+  users.groups.${cfg.group}.gid = 15015;
 
-  services.postgresql = {
-    ensureUsers = [
-      {
-        name = dbUsername;
-        ensureDBOwnership = true;
-      }
-    ];
-    ensureDatabases = [dbUsername];
+  services.immich = {
+    inherit port;
 
-    extensions = ps:
-      with ps; [
-        pgvecto-rs
-      ];
-    settings = {shared_preload_libraries = "vectors.so";};
-  };
-
-  services.redis.servers.${redisName} = {
-    inherit user;
     enable = true;
-  };
+    mediaLocation = photosLocation;
 
-  systemd.tmpfiles.rules = ["d ${photosLocation} 0750 ${user} ${group}"];
+    settings = {
+      # disable built-in database backup; we already have our own
+      backup.database.enabled = false;
 
-  virtualisation.oci-containers.containers = {
-    immich_server = {
-      imageFile = pkgs.dockerTools.pullImage images.server;
-      image = "ghcr.io/immich-app/immich-server";
-      extraOptions = ["--network=immich-bridge" "--user=${toString uid}:${toString gid}"];
+      # domain for public share links
+      server.externalDomain = "https://${domain}";
 
-      volumes = [
-        "${photosLocation}:/usr/src/app/upload"
-        "${photosLocationNfs}/library:/usr/src/app/upload/library"
-        "${photosLocationNfs}/encoded-video:/usr/src/app/upload/encoded-video"
-        (mkMount "/run/postgresql")
-        (mkMount "/run/redis-${redisName}")
-      ];
+      # import faces from EXIF data
+      metadata.faces.import = true;
 
-      environment =
-        environment
-        // {
-          PUID = toString uid;
-          PGID = toString gid;
-        };
+      # move assets to the `library` directory after uploading
+      storageTemplate.enabled = true;
 
-      ports = ["${toString immichExternalPort}:2283"];
-
-      autoStart = true;
-    };
-
-    immich_machine_learning = {
-      imageFile = pkgs.dockerTools.pullImage images.machineLearning;
-      image = "ghcr.io/immich-app/immich-machine-learning";
-      extraOptions = ["--network=immich-bridge"];
-
-      environment = environment;
-
-      volumes = ["immich-model-cache:/cache"];
-
-      autoStart = true;
+      # disable update checker
+      newVersionCheck.enabled = false;
     };
   };
 
-  systemd.services = let
-    backend = config.virtualisation.oci-containers.backend;
-  in {
-    # Restart Immich container when postgresql restarts,
-    # otherwise it loses connection to the socket
-    "${backend}-immich_server".requires = ["postgresql.service"];
+  systemd.tmpfiles.rules = ["d ${photosLocation} 0750 ${cfg.user} ${cfg.group}"];
 
-    init-immich-network = {
-      description = "Create the network bridge for immich.";
-      after = ["network.target"];
-      wantedBy = ["multi-user.target"];
-      serviceConfig.Type = "oneshot";
-      script = ''
-        # Put a true at the end to prevent getting non-zero return code, which will
-        # crash the whole service.
-        check=$(${pkgs.docker}/bin/docker network ls | grep "immich-bridge" || true)
-        if [ -z "$check" ];
-          then ${pkgs.docker}/bin/docker network create immich-bridge
-          else echo "immich-bridge already exists in docker"
-        fi
-      '';
-    };
-  };
+  fileSystems = let
+    mkBindMount = dir:
+      lib.nameValuePair
+      "${photosLocation}/${dir}"
+      {
+        depends = [
+          "/mnt/diskstation"
+          "/persist"
+        ];
+        device = "${photosLocationNfs}/${dir}";
+        fsType = "none";
+        options = [
+          "bind"
+          # since /mnt/diskstation is an automount, this also has to be
+          # otherwise it won't remount when that network share is remounted
+          "x-systemd.automount"
+          "noauto"
+        ];
+      };
+  in
+    builtins.listToAttrs [
+      (mkBindMount "library")
+      (mkBindMount "encoded-video")
+    ];
 
   services.caddy.virtualHosts = {
     ${domain} = {
       enableACME = true;
       extraConfig = ''
-        reverse_proxy localhost:${toString immichExternalPort}
+        reverse_proxy localhost:${toString port}
       '';
     };
   };
