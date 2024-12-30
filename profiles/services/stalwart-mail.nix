@@ -21,7 +21,7 @@
 in {
   services.stalwart-mail = {
     enable = true;
-    package = pkgs.unstable.stalwart-mail;
+    package = pkgs.stalwart-mail;
     settings = {
       config.local-keys = [
         "authentication.fallback-admin.*"
