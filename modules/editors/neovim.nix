@@ -281,7 +281,7 @@
               },
             },
           }))
-          lsp_config.html.setup(with_config({ cmd = { "html-languageserver", "--stdio" } }))
+          lsp_config.html.setup(with_config({ cmd = { "vscode-html-language-server", "--stdio" } }))
           -- don't let the LSP generate the PDF, otherwise it will collide with typst watch
           lsp_config.tinymist.setup(with_config({ settings = { exportPdf = "never", formatterMode = "typstyle" } }))
         '';
