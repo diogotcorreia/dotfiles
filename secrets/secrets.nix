@@ -104,6 +104,7 @@ in
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "diskstationSambaCredentials"
+      "fireflyAppKey"
       "fireflyAutoDataImporterEnv"
       "fireflyAutoDataImporterHealthchecksUrl"
       "fireflyDataImporterEnv"

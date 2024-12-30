@@ -7,21 +7,37 @@
   ...
 }: let
   domainApp = "firefly3.hera.diogotc.com";
-  portApp = 8005;
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
 
   cronAutoDataImporter = "23:58";
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
-in {
-  # TODO move docker containers to NixOS services
 
+  dbUser = config.services.firefly-iii.user;
+in {
   age.secrets = {
+    fireflyAppKey = {
+      owner = config.services.firefly-iii.user;
+      file = secrets.host.fireflyAppKey;
+    };
     fireflyAutoDataImporterEnv.file = secrets.host.fireflyAutoDataImporterEnv;
     fireflyAutoDataImporterHealthchecksUrl = {
       owner = config.services.firefly-iii-data-importer.user;
       file = secrets.host.fireflyAutoDataImporterHealthchecksUrl;
     };
     fireflyDataImporterEnv.file = secrets.host.fireflyDataImporterEnv;
+  };
+
+  services.firefly-iii = {
+    enable = true;
+    package = pkgs.firefly-iii;
+    group = config.services.caddy.group;
+    virtualHost = domainApp;
+    settings = {
+      APP_ENV = "production";
+      APP_KEY_FILE = config.age.secrets.fireflyAppKey.path;
+      SITE_OWNER = "firefly-iii.${config.networking.hostName}@diogotc.com";
+      DB_CONNECTION = "pgsql";
+    };
   };
 
   services.firefly-iii-data-importer = {
@@ -33,6 +49,17 @@ in {
       FIREFLY_III_CLIENT_ID = 7;
       JSON_CONFIGURATION_DIR = configPathAutoDataImporter;
     };
+  };
+
+  services.postgresql = {
+    ensureUsers = [
+      {
+        name = dbUser;
+        ensureDBOwnership = true;
+        ensureClauses.login = true;
+      }
+    ];
+    ensureDatabases = [dbUser];
   };
 
   # The data-importer module does not allow for variables to be passed in bulk, so we do this little hack
@@ -148,7 +175,10 @@ in {
       enableACME = true;
       extraConfig = ''
         import NEBULA
-        reverse_proxy localhost:${toString portApp}
+        encode zstd gzip
+        root * ${config.services.firefly-iii.package}/public
+        php_fastcgi unix/${config.services.phpfpm.pools.firefly-iii.socket}
+        file_server
       '';
     };
     ${domainDataImporter} = {
@@ -164,22 +194,12 @@ in {
   };
 
   modules.impermanence.directories = [
+    config.services.firefly-iii.dataDir
     config.services.firefly-iii-data-importer.dataDir
   ];
 
-  modules.services.restic = {
-    paths = [
-      "/tmp/firefly_db.sql"
-      "${config.my.homeDirectory}/firefly-3"
-      configPathAutoDataImporter
-    ];
-
-    backupPrepareCommand = ''
-      ${pkgs.coreutils}/bin/install -b -m 600 /dev/null /tmp/firefly_db.sql
-      ${pkgs.docker}/bin/docker compose -f ${config.my.homeDirectory}/firefly-3/docker-compose.yml exec -T fireflyiiidb sh -c 'exec mysqldump --host=fireflyiiidb --user=$MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE' > /tmp/firefly_db.sql
-    '';
-    backupCleanupCommand = ''
-      ${pkgs.coreutils}/bin/rm /tmp/firefly_db.sql
-    '';
-  };
+  modules.services.restic.paths = [
+    "${config.services.firefly-iii.dataDir}/storage/upload"
+    configPathAutoDataImporter
+  ];
 }
