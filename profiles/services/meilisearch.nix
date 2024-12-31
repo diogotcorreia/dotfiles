@@ -26,14 +26,11 @@ in {
     masterKeyEnvironmentFile = config.age.secrets.meilisearchEnv.path;
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port} {
-          import CLOUDFLARE_PROXY
-        }
-      '';
+      enableCloudflareRealIp = true;
+      locations."/".proxyPass = "http://localhost:${toString port}";
     };
   };
 

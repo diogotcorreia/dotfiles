@@ -143,13 +143,13 @@ in {
     };
   };
 
-  services.caddy.virtualHosts =
+  services.nginx.virtualHosts = let
+    proxy = "http://localhost:${toString httpPort}";
+  in
     {
       ${stalwartDomain} = {
         enableACME = true;
-        extraConfig = ''
-          reverse_proxy localhost:${toString httpPort}
-        '';
+        locations."/".proxyPass = proxy;
       };
     }
     // lib.listToAttrs (
@@ -163,15 +163,11 @@ in {
               "autodiscovery.${d}"
             ];
             enableACME = true;
-            extraConfig = ''
-              @discovery path /mail/config-v1.1.xml /autodiscovery/autodiscovery.xml /.well-known/*
-              handle @discovery {
-                reverse_proxy localhost:${toString httpPort}
-              }
-              handle {
-                respond 404
-              }
-            '';
+            locations = {
+              "= /mail/config-v1.1.xml".proxyPass = proxy;
+              "= /autodiscovery/autodiscovery.xml".proxyPass = proxy;
+              "/.well-known".proxyPass = proxy;
+            };
           }
       )
       mailDomains

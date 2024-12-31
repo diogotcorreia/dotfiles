@@ -10,8 +10,8 @@
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
-    services.caddy.common
     services.meilisearch
+    services.nginx.common
     services.ssh
     services.stalwart-mail
     services.umami

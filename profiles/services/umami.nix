@@ -28,7 +28,7 @@
     DATABASE_TYPE = "postgresql";
 
     # Container doesn't work with a custom user and this.
-    # Set this in caddy instead.
+    # Set this in nginx instead.
     # TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScripts;
     # COLLECT_API_ENDPOINT = collectApiEndpoint;
 
@@ -112,23 +112,25 @@ in {
     "${backend}-umami".requires = ["postgresql.service"];
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
       serverAliases = ["umami.diogotc.com"];
-      extraConfig = ''
-        root * ${trackerScriptsDir}
 
-        @exists file
-        handle @exists {
-          file_server
-        }
+      root = trackerScriptsDir;
 
-        handle {
-          rewrite ${collectApiEndpoint} /api/send
-          reverse_proxy localhost:${toString umamiExternalPort}
-        }
-      '';
+      locations = {
+        "/" = {
+          tryFiles = "$uri @proxy";
+        };
+
+        "@proxy" = {
+          proxyPass = "http://localhost:${toString umamiExternalPort}";
+          extraConfig = ''
+            rewrite ^${collectApiEndpoint}$ /api/send last;
+          '';
+        };
+      };
     };
   };
 }
