@@ -10,6 +10,7 @@
 
   domain = "acme-bnss.pt"; # TODO: change this to diogotc.com after testing
   stalwartDomain = "mail.${domain}";
+  roundcubeDomain = "webmail.${domain}";
   mailDomains = [
     "acme-bnss.pt"
   ];
@@ -82,6 +83,11 @@ in {
           protocol = "imap";
           tls.implicit = true;
         };
+        sieve = {
+          bind = ["[::]:4190"];
+          protocol = "managesieve";
+          tls.implicit = true;
+        };
         http = {
           bind = ["[::]:${toString httpPort}"];
           protocol = "http";
@@ -126,6 +132,7 @@ in {
     465 # SMTP Submission Secure
     587 # SMTP Submission
     993 # IMAP Secure
+    4190 # Manage Sieve
   ];
 
   systemd.services.stalwart-mail = {
@@ -141,6 +148,29 @@ in {
         "key.pem:${config.security.acme.certs.${stalwartDomain}.directory}/key.pem"
       ];
     };
+  };
+
+  services.roundcube = {
+    enable = true;
+    package = pkgs.roundcube;
+    dicts = with pkgs.aspellDicts; [
+      en
+      pt_PT
+      sv
+    ];
+    hostName = roundcubeDomain;
+    plugins = [
+      "archive"
+      "zipdownload"
+      "managesieve"
+      "acl"
+    ];
+    extraConfig = ''
+      $config['imap_host'] = 'ssl://${stalwartDomain}:993';
+      $config['smtp_host'] = 'ssl://%h:465';
+      $config['managesieve_host'] = 'ssl://%h';
+      $config['mail_domain'] = '%z';
+    '';
   };
 
   services.nginx.virtualHosts = let
