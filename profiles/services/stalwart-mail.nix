@@ -203,6 +203,12 @@ in {
       mailDomains
     );
 
+  security.acme.certs.${stalwartDomain} = {
+    # keep a stable private key for TLSA records (DANE)
+    # https://community.letsencrypt.org/t/please-avoid-3-0-1-and-3-0-2-dane-tlsa-records-with-le-certificates/7022/14
+    extraLegoRenewFlags = ["--reuse-key"];
+  };
+
   modules.impermanence.directories = [dataDir];
   modules.services.restic = {
     backupPrepareCommand = ''
