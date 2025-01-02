@@ -14,6 +14,7 @@
     security.fail2ban
     security.secureboot
     services.caddy.common
+    services.dashy
     services.discord-bots.alt-urls-discord-bot
     services.ssh
     shell.zellij
