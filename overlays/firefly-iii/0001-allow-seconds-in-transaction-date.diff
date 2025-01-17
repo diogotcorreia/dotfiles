@@ -1,0 +1,13 @@
+diff --git a/resources/assets/v1/src/components/transactions/EditTransaction.vue b/resources/assets/v1/src/components/transactions/EditTransaction.vue
+index ed39dc47f0..edc6670930 100644
+--- a/resources/assets/v1/src/components/transactions/EditTransaction.vue
++++ b/resources/assets/v1/src/components/transactions/EditTransaction.vue
+@@ -454,7 +454,7 @@ export default {
+             let result = {
+                 transaction_journal_id: transaction.transaction_journal_id,
+                 description: transaction.description,
+-                date: transaction.date.substring(0, 16),
++                date: transaction.date.substring(0, 19),
+                 amount: this.roundNumber(this.positiveAmount(transaction.amount), transaction.currency_decimal_places),
+                 category: transaction.category_name,
+                 errors: {
