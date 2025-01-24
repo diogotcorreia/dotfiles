@@ -139,7 +139,7 @@
       qt.enable = true;
       wacom = {
         enable = true;
-        monitor = "eDP1";
+        monitor = "eDP-1";
       };
       xournalpp.enable = true;
     };
