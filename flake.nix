@@ -18,8 +18,12 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     lanzaboote = {
-      url = "github:nix-community/lanzaboote?ref=v0.4.1";
+      url = "github:nix-community/lanzaboote?ref=v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";
+      # only used for development, so we can get rid of it
+      inputs.pre-commit-hooks-nix.follows = "";
+      # only used for non-flake setups, so we can get rid of it
+      inputs.flake-compat.follows = "";
     };
     disko = {
       url = "github:nix-community/disko";
