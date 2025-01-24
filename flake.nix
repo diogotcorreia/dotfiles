@@ -101,6 +101,7 @@
         pkgs.my
         // {
           attic = pkgs.attic-client;
+          lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
         };
     };
 
