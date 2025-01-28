@@ -23,6 +23,7 @@
     security.secureboot
     services.ssh
     shell.gpg
+    shell.nix-index
     shell.zellij
     virtualisation.docker
     virtualisation.virtual-machines

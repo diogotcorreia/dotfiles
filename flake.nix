@@ -31,6 +31,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     lidl-to-grocy = {
       url = "github:diogotcorreia/lidl-to-grocy?ref=v1.3.0";
       inputs.nixpkgs.follows = "nixpkgs";

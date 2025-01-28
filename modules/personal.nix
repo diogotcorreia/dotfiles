@@ -20,8 +20,6 @@ in {
       jq
       # qalc (CLI calculator)
       libqalculate
-      # Nix Index (provides nix-locate to locate files in the Nix store)
-      nix-index
       # timewarrior (time tracker)
       timewarrior
       # typst (markup-based typesetting system)
