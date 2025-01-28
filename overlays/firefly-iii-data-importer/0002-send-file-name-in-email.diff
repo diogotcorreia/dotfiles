@@ -1,0 +1,99 @@
+diff --git a/app/Console/AutoImports.php b/app/Console/AutoImports.php
+index c45b296..01047d9 100644
+--- a/app/Console/AutoImports.php
++++ b/app/Console/AutoImports.php
+@@ -260,7 +260,8 @@ trait AutoImports
+                 new ImportedTransactions(
+                     array_merge($this->conversionMessages, $this->importMessages),
+                     array_merge($this->conversionWarnings, $this->importWarnings),
+-                    array_merge($this->conversionErrors, $this->importErrors)
++                    array_merge($this->conversionErrors, $this->importErrors),
++                    $file
+                 )
+             );
+ 
+@@ -278,7 +279,7 @@ trait AutoImports
+         $messages          = array_merge($this->importMessages, $this->conversionMessages);
+         $warnings          = array_merge($this->importWarnings, $this->conversionWarnings);
+         $errors            = array_merge($this->importErrors, $this->conversionErrors);
+-        event(new ImportedTransactions($messages, $warnings, $errors));
++        event(new ImportedTransactions($messages, $warnings, $errors, $file));
+ 
+         if (count($this->importErrors) > 0) {
+             return 1;
+@@ -633,7 +634,8 @@ trait AutoImports
+             new ImportedTransactions(
+                 array_merge($this->conversionMessages, $this->importMessages),
+                 array_merge($this->conversionWarnings, $this->importWarnings),
+-                array_merge($this->conversionErrors, $this->importErrors)
++                array_merge($this->conversionErrors, $this->importErrors),
++                $jsonFile
+             )
+         );
+     }
+diff --git a/app/Events/ImportedTransactions.php b/app/Events/ImportedTransactions.php
+index d0688f9..ec6f5be 100644
+--- a/app/Events/ImportedTransactions.php
++++ b/app/Events/ImportedTransactions.php
+@@ -39,8 +39,9 @@ class ImportedTransactions
+     public array $errors;
+     public array $messages;
+     public array $warnings;
++    public string $fileName;
+ 
+-    public function __construct(array $messages, array $warnings, array $errors)
++    public function __construct(array $messages, array $warnings, array $errors, string $fileName = null)
+     {
+         app('log')->debug('Created event ImportedTransactions with filtering (2)');
+ 
+@@ -48,6 +49,7 @@ class ImportedTransactions
+         $this->messages = $this->filterArray('message(s)', $messages);
+         $this->warnings = $this->filterArray('warning(s)', $warnings);
+         $this->errors   = $this->filterArray('error(s)', $errors);
++        $this->fileName = $fileName;
+     }
+ 
+     /**
+diff --git a/app/Handlers/Events/ImportedTransactionsEventHandler.php b/app/Handlers/Events/ImportedTransactionsEventHandler.php
+index ea1b918..b2ed846 100644
+--- a/app/Handlers/Events/ImportedTransactionsEventHandler.php
++++ b/app/Handlers/Events/ImportedTransactionsEventHandler.php
+@@ -58,6 +58,7 @@ class ImportedTransactionsEventHandler
+             'messages' => $event->messages,
+             'warnings' => $event->warnings,
+             'errors'   => $event->errors,
++            'fileName' => $event->fileName,
+         ];
+         if (count($event->messages) > 0 || count($event->warnings) > 0 || count($event->errors) > 0) {
+             app('log')->info('Will send report message.');
+diff --git a/app/Mail/ImportReportMail.php b/app/Mail/ImportReportMail.php
+index abd7591..bee8bed 100644
+--- a/app/Mail/ImportReportMail.php
++++ b/app/Mail/ImportReportMail.php
+@@ -42,6 +42,7 @@ class ImportReportMail extends Mailable
+     public string $url;
+     public string $version;
+     public array  $warnings;
++    public string $fileName;
+ 
+     /**
+      * Create a new message instance.
+@@ -57,6 +58,7 @@ class ImportReportMail extends Mailable
+         $this->errors   = $log['errors'] ?? [];
+         $this->warnings = $log['warnings'] ?? [];
+         $this->messages = $log['messages'] ?? [];
++        $this->fileName = $log['fileName'] ?? "";
+     }
+ 
+     /**
+diff --git a/resources/views/v2/emails/import/report.blade.php b/resources/views/v2/emails/import/report.blade.php
+index 048f786..da9bd73 100644
+--- a/resources/views/v2/emails/import/report.blade.php
++++ b/resources/views/v2/emails/import/report.blade.php
+@@ -48,5 +48,6 @@ Go to Firefly III
+ 
+ Enjoy!<br>
+ Firefly III Data Importer, @if(str_starts_with($version, 'develop')){{ $version }} @else v{{ $version }}@endif
++@if('' !== $fileName)<br>{{ $fileName }}@endif
+ 
+ @endcomponent
