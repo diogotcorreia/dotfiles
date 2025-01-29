@@ -130,6 +130,7 @@ in
       "healthchecksEnvVariables"
       "healthchecksSecretKey"
       "healthchecksUrl"
+      "infraKeyvalEnv"
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"

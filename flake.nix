@@ -39,6 +39,10 @@
       url = "github:diogotcorreia/lidl-to-grocy?ref=v1.3.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    infra-keyval = {
+      url = "github:diogotcorreia/infra-keyval";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {...}: let
@@ -107,6 +111,7 @@
         pkgs.my
         // {
           attic = pkgs.attic-client;
+          infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
           lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
         };
     };

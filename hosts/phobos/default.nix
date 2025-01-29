@@ -10,6 +10,7 @@
     security.acme.cloudflare
     security.fail2ban
     services.caddy.common
+    services.infra-keyval
     services.ssh
     shell.zellij
   ];

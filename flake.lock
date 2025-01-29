@@ -178,6 +178,26 @@
         "type": "github"
       }
     },
+    "infra-keyval": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738151318,
+        "narHash": "sha256-voqlz740RnekFq3uoXY/lvpYQN3bBzp21BbjBUxfGWY=",
+        "owner": "diogotcorreia",
+        "repo": "infra-keyval",
+        "rev": "4d86d83459b106108190f437c4d9605827dbb7c7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "diogotcorreia",
+        "repo": "infra-keyval",
+        "type": "github"
+      }
+    },
     "lanzaboote": {
       "inputs": {
         "crane": "crane",
@@ -284,6 +304,7 @@
         "disko": "disko",
         "home": "home",
         "impermanence": "impermanence",
+        "infra-keyval": "infra-keyval",
         "lanzaboote": "lanzaboote",
         "lidl-to-grocy": "lidl-to-grocy",
         "nix-index-database": "nix-index-database",
