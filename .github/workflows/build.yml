@@ -106,6 +106,15 @@ jobs:
         run: |
           nix run .#attic login phobos https://nix-cache.diogotc.com ${{ secrets.ATTIC_TOKEN }}
           nix run .#attic push dtc result -j 2
+
+      # Once cached (either in this run or before), we update infra-keyval with the store path of this configuration
+      # Only on 'nixos' branch
+      - name: Update infra-keyval
+        if: github.ref == 'refs/heads/nixos'
+        run: |
+          curl --url "https://infra-keyval.diogotc.com/nixos-system-${{ matrix.machine.host }}" \
+            --data "$(readlink ./result || nix eval --raw --read-only .#nixosConfigurations.${{ matrix.machine.host }}.config.system.build.toplevel)" \
+            -H "Authorization: ${{ secrets.INFRA_KEYVAL_TOKEN }}"
   build-packages:
     runs-on: ubuntu-latest
     strategy:
