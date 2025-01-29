@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  systemFlakePath,
   ...
 }: let
   inherit (lib) mkEnableOption mkIf mkOption optionalAttrs types;
@@ -19,9 +18,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    system.autoUpgrade = {
+    my.autoUpgrade = {
       enable = true;
-      flake = systemFlakePath;
       operation = "switch";
 
       rebootWindow = {
@@ -30,9 +28,9 @@ in {
       };
       allowReboot = true;
       flags = [
-        # Only use one job/core to avoid running out of memory and disrupting operations
+        # Prevent building on local machine (always fetch from cache)
         "--max-jobs"
-        "1"
+        "0"
         "--cores"
         "1"
       ];
@@ -43,7 +41,7 @@ in {
 
     modules.services.healthchecks.systemd-monitoring =
       optionalAttrs
-      (config.system.autoUpgrade.enable
+      (config.my.autoUpgrade.enable
         && cfg.autoUpgradeCheckUrlFile
         != null) {
         # must match service of system.autoUpgrade

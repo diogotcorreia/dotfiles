@@ -48,13 +48,11 @@
   outputs = inputs @ {...}: let
     inherit (lib.my) mkHosts mkOverlays mkPkgs mkProfiles mkSecrets;
 
-    systemFlakePath = "github:diogotcorreia/dotfiles/nixos";
     user = "dtc";
     userFullName = "Diogo Correia";
 
     extraArgs = {
       inherit
-        systemFlakePath # TODO move to profile
         user
         userFullName
         ;
