@@ -8,6 +8,7 @@
   ...
 }: {
   imports = with profiles; [
+    graphical.discord
     graphical.firefox
     graphical.firefox-proxied
     graphical.thunderbird
