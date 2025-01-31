@@ -9,6 +9,7 @@
 }: {
   imports = with profiles; [
     graphical.captive-portals-client
+    graphical.discord
     graphical.firefox
     graphical.firefox-proxied
     graphical.obs
@@ -56,6 +57,7 @@
   usr.extraGroups = ["networkmanager"];
 
   my.networking.wirelessInterface = "wlo1";
+  my.hardware.laptop = true;
 
   # Audio
   # TODO move to module
@@ -133,10 +135,7 @@
       autorandr.laptop.enable = true;
       development.enable = true;
       gtk.enable = true;
-      programs = {
-        enable = true;
-        laptop = true;
-      };
+      programs.enable = true;
       qt.enable = true;
       wacom = {
         enable = true;
