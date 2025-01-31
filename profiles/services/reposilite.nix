@@ -16,12 +16,13 @@
   flags = [
     "--working-directory=${stateDir}"
     "--port=${toString port}"
+    "--hostname=::1"
   ];
 in {
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
-      locations."/".proxyPass = "http://localhost:${toString port}";
+      locations."/".proxyPass = "http://[::1]:${toString port}";
     };
   };
 
