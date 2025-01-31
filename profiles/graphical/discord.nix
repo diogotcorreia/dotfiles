@@ -5,8 +5,8 @@
   ...
 }: let
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.20/uniform/nordic.theme.css";
-    hash = "sha256-k6RoG3aaqxfkicR6YbnVx1Iqb213pp7GJAGbma0X55s=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.21/uniform/nordic.theme.css";
+    hash = "sha256-tPbKvz2PfrE4nVrEndSTUnYykRbU9PMCU9VIknSgaCE=";
   };
 in {
   hm.home.packages = with pkgs; [
@@ -30,17 +30,6 @@ in {
           --background-primary: var(--primary-630);
           --background-secondary: var(--primary-600);
           --background-tertiary: var(--primary-700);
-        }
-
-        /* fix for broken background on server icon list */
-        .wrapper__216eb {
-          background-color: var(--background-primary);
-          border-right: 1px solid var(--background-secondary-alt);
-        }
-
-        /* fix for other's reactions being too light */
-        .reaction__4a43f {
-          background: var(--background-secondary) !important;
         }
       '';
     };
