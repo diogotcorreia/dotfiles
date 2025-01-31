@@ -10,6 +10,9 @@
 
   stateDir = "/var/lib/reposilite";
 
+  user = "reposilite";
+  group = user;
+
   flags = [
     "--working-directory=${stateDir}"
     "--port=${toString port}"
@@ -34,7 +37,8 @@ in {
       StateDirectoryMode = "0700";
       Restart = "on-failure";
       RestartSec = 10;
-      DynamicUser = true;
+      User = user;
+      Group = group;
 
       AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       LockPersonality = true;
@@ -53,6 +57,13 @@ in {
       SystemCallFilter = ["@system-service" "~@privileged @resources"];
     };
   };
+
+  users.users.${user} = {
+    inherit group;
+    home = stateDir;
+    isSystemUser = true;
+  };
+  users.groups.${group} = {};
 
   modules.impermanence.directories = [stateDir];
 
