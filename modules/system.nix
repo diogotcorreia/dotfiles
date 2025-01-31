@@ -31,10 +31,29 @@
 
     # Lock flake registry to keep it synced with the inputs
     # i.e. used by `nix run pkgs#<package>`
-    registry = {
-      pkgs.flake = inputs.nixpkgs; # alias to nixpkgs
-      unstable.flake = inputs.nixpkgs-unstable;
-      my.flake = inputs.self; # this flake itself
+    registry = rec {
+      # not using `input.<name>` here in order to not bloat the closure size
+      nixpkgs.to = pkgs.to;
+      # alias to nixpkgs
+      pkgs.to = {
+        type = "github";
+        owner = "NixOS";
+        repo = "nixpkgs";
+        inherit (inputs.nixpkgs.sourceInfo) lastModified narHash rev;
+      };
+      unstable.to = {
+        type = "github";
+        owner = "NixOS";
+        repo = "nixpkgs";
+        inherit (inputs.nixpkgs-unstable.sourceInfo) lastModified narHash rev;
+      };
+      # not using `input.self` here in order to avoid rebuilding every system on every update
+      my.to = {
+        type = "github";
+        owner = "diogotcorreia";
+        repo = "dotfiles";
+        ref = "refs/heads/nixos";
+      };
     };
 
     nixPath = [
