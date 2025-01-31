@@ -15,14 +15,10 @@
     "--port=${toString port}"
   ];
 in {
-  security.acme.certs.${domain} = {};
-
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domain} = {
-      useACMEHost = domain;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port}
-      '';
+      enableACME = true;
+      locations."/".proxyPass = "http://localhost:${toString port}";
     };
   };
 
