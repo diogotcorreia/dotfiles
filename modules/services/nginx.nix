@@ -27,7 +27,10 @@ in {
             enableCloudflareRealIp = mkEnableOption "getting IP address from CF-Connecting-IP header";
           };
           config = {
+            # sane default: redirect to HTTPS automatically
             forceSSL = mkDefault config.enableACME;
+            # sane default: use DNS-01 challenge instead of HTTP-01
+            acmeRoot = mkDefault null;
 
             extraConfig = mkIf config.enableCloudflareRealIp ''
               ${realIpsFromList cfipv4}
