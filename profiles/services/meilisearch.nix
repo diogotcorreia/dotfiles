@@ -19,6 +19,7 @@ in {
 
   services.meilisearch = {
     enable = true;
+    listenAddress = "[::1]";
     listenPort = port;
     environment = "production";
     # Contains:
@@ -30,7 +31,7 @@ in {
     ${domain} = {
       enableACME = true;
       enableCloudflareRealIp = true;
-      locations."/".proxyPass = "http://localhost:${toString port}";
+      locations."/".proxyPass = "http://[::1]:${toString port}";
     };
   };
 
