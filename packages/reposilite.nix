@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "reposilite-bin";
-  version = "3.5.14";
+  version = "3.5.20";
 
   jar = fetchurl {
     url = "https://maven.reposilite.com/releases/com/reposilite/reposilite/${version}/reposilite-${version}-all.jar";
-    hash = "sha256-qZXYpz6SBXDBj8c0IZkfVgxEFe/+DxMpdhLJsjks8cM=";
+    hash = "sha256-IdUHtulkSKvXatAs+BmzXgwv9oJz1XeRVtpEyIZ7BY4=";
   };
 
   dontUnpack = true;
