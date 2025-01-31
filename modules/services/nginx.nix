@@ -25,6 +25,17 @@ in {
         {config, ...}: {
           options = {
             enableCloudflareRealIp = mkEnableOption "getting IP address from CF-Connecting-IP header";
+
+            locations = mkOption {
+              type = types.attrsOf (types.submodule (
+                {config, ...}: {
+                  config = {
+                    # sane default: enable websockets support if reverse proxy
+                    proxyWebsockets = mkDefault (config.proxyPass != null);
+                  };
+                }
+              ));
+            };
           };
           config = {
             # sane default: redirect to HTTPS automatically
