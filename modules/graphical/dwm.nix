@@ -162,7 +162,7 @@ in {
     # Notification daemon
     hm.services.dunst = {
       enable = true;
-      configFile = configDir + "/dunstrc";
+      configFile = "${configDir}/dunstrc";
     };
     # Utility to quickly toggle notification mute
     hm.home.packages = [
