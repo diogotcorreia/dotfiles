@@ -12,6 +12,7 @@
     security.fail2ban
     services.meilisearch
     services.nginx.common
+    services.reposilite
     services.ssh
     services.stalwart-mail
     services.umami
