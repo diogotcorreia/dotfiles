@@ -1,0 +1,13 @@
+diff --git a/src/main.rs b/src/main.rs
+index fe86235..49e8cbf 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -884,7 +884,7 @@ fn new_dbus_proxies(
+         conn.with_proxy(
+             "org.freedesktop.systemd1",
+             "/org/freedesktop/systemd1",
+-            Duration::from_millis(5000),
++            Duration::from_millis(10000),
+         ),
+         conn.with_proxy(
+             "org.freedesktop.login1",
