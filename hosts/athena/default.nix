@@ -10,6 +10,7 @@
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
+    services.gpg-wkd
     services.meilisearch
     services.nginx.common
     services.reposilite
