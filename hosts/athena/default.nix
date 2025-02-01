@@ -14,6 +14,7 @@
     services.meilisearch
     services.nginx.common
     services.reposilite
+    services.resumos-legacy
     services.ssh
     services.stalwart-mail
     services.umami
