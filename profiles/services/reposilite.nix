@@ -22,6 +22,7 @@ in {
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
+      enableCloudflareRealIp = true;
       locations."/".proxyPass = "http://[::1]:${toString port}";
     };
   };
