@@ -13,6 +13,7 @@
     services.gpg-wkd
     services.meilisearch
     services.nginx.common
+    services.pairdrop
     services.reposilite
     services.resumos-legacy
     services.ssh
