@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  inherit (lib) types mkOption mkEnableOption mkIf;
+  inherit (lib) hasPrefix types mkOption mkEnableOption mkIf;
   cfg = config.modules.impermanence;
 in {
   options.modules.impermanence = {
@@ -34,9 +34,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.persistence.${cfg.persistDirectory} = {
+    environment.persistence.${cfg.persistDirectory} = let
+      parsedDirectories = map (dir:
+        if hasPrefix "/var/lib/private/" dir
+        then {
+          directory = dir;
+          mode = "0700";
+          # ensure parent dir has correct permissions
+          defaultPerms.mode = "0700";
+        }
+        else dir)
+      cfg.directories;
+    in {
       directories =
-        cfg.directories
+        parsedDirectories
         ++ [
           "/var/lib/systemd"
           "/var/lib/nixos" # contains user/group id map
