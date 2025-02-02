@@ -51,6 +51,7 @@ in
 
     (mkSystem "athena" [athenaSystem] [
       "autoUpgradeHealthchecksUrl"
+      "chhotoUrlEnv"
       "cloudflareToken"
       "healthchecksUrl"
       "meilisearchEnv"
