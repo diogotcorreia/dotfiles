@@ -18,6 +18,7 @@
     services.ssh
     services.stalwart-mail
     services.umami
+    services.wastebin
     shell.zellij
     virtualisation.docker
   ];

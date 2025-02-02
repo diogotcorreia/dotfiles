@@ -61,6 +61,7 @@ in
       "resticPassword"
       "resticSshKey"
       "umamiEnv"
+      "wastebinEnv"
     ])
 
     (mkSystem "bacchus" [bacchusSystem] [
