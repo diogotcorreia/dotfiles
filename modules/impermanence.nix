@@ -5,7 +5,7 @@
   lib,
   ...
 }: let
-  inherit (lib) hasPrefix types mkOption mkEnableOption mkIf;
+  inherit (lib) hasPrefix isString types mkOption mkEnableOption mkIf;
   cfg = config.modules.impermanence;
 in {
   options.modules.impermanence = {
@@ -25,7 +25,7 @@ in {
       '';
     };
     directories = mkOption {
-      type = types.listOf types.str;
+      type = types.listOf (types.oneOf [types.str (types.attrsOf types.anything)]);
       default = [];
       description = ''
         Directories to bind mount to persistent storage.
@@ -36,7 +36,7 @@ in {
   config = mkIf cfg.enable {
     environment.persistence.${cfg.persistDirectory} = let
       parsedDirectories = map (dir:
-        if hasPrefix "/var/lib/private/" dir
+        if isString dir && hasPrefix "/var/lib/private/" dir
         then {
           directory = dir;
           mode = "0700";
