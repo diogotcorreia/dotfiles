@@ -31,6 +31,12 @@
       description = "Manage books and send them to e-readers";
       url = mkUrl "calibre";
     };
+    chhoto-url = {
+      title = "Chhoto URL";
+      icon = ":link:";
+      description = "Link shortner";
+      url = mkUrl "s";
+    };
     dawarich = {
       title = "Dawarich";
       icon = ":world_map:";
@@ -60,12 +66,6 @@
       icon = "hl-grocy";
       description = "Fridge and cupboard stock manager";
       url = mkUrl "grocy";
-    };
-    hastebin = {
-      title = "Hastebin";
-      icon = ":page_with_curl:";
-      description = "Text paste service";
-      url = mkUrl "bin";
     };
     healthchecks-io = {
       title = "Healthchecks.io";
@@ -115,12 +115,6 @@
       description = "List of songs in my ultrastar-deluxe's collection";
       url = mkUrl "karaoke";
     };
-    kutt = {
-      title = "Kutt";
-      icon = "hl-kutt";
-      description = "Link shortner";
-      url = mkUrl "s";
-    };
     nextcloud = {
       title = "Nextcloud";
       icon = "hl-nextcloud";
@@ -132,6 +126,12 @@
       icon = "hl-node-red";
       description = "Flow-based automation";
       url = mkUrl "nodered.hera";
+    };
+    pairdrop = {
+      title = "PairDrop";
+      icon = "hl-snapdrop";
+      description = "Peer-to-peer file/text transfer";
+      url = mkUrl "drop";
     };
     paperless-ngx = {
       title = "Paperless-ngx";
@@ -150,12 +150,6 @@
       icon = "hl-java";
       description = "Maven repository";
       url = mkUrl "repo";
-    };
-    snapdrop = {
-      title = "Snapdrop";
-      icon = "hl-snapdrop";
-      description = "Peer-to-peer file/text transfer";
-      url = mkUrl "drop";
     };
     sonarr = {
       title = "Sonarr";
@@ -180,6 +174,12 @@
       icon = "hl-uptime-kuma";
       description = "Website uptime monitoring";
       url = mkUrl "uptime";
+    };
+    wastebin = {
+      title = "wastebin";
+      icon = ":page_with_curl:";
+      description = "Text paste service";
+      url = mkUrl "bin";
     };
   };
 in {
@@ -246,9 +246,9 @@ in {
           name = "Sharing";
           icon = ":envelope_with_arrow:";
           items = with items; [
-            hastebin
-            snapdrop
-            kutt
+            chhoto-url
+            pairdrop
+            wastebin
           ];
         }
         {
