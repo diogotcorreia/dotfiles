@@ -17,6 +17,7 @@
     services.pairdrop
     services.reposilite
     services.resumos-legacy
+    services.rex-cdn
     services.ssh
     services.stalwart-mail
     services.umami
