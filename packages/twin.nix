@@ -7,14 +7,14 @@
   nodejs,
   ...
 }: let
-  version = "unstable-2024-02-28";
+  version = "0-unstable-2025-02-03";
   commonSrc = fetchFromGitHub {
     owner = "tritonmc";
     repo = "twin";
-    rev = "02d89cf5cee86e206bc8255d0b688cea25f16287";
-    hash = "sha256-4jaJzGL2r2qnNsvfnDzyEDgnOFMjYr7+VERpxpI6sQA=";
+    rev = "29cdd28c0b329e26bdad0a5682c20df27ed07672";
+    hash = "sha256-gF/xcWIj0VRnsF9hRmlGgU76cd2+IuYCViwYF88WyhY=";
   };
-  meta = with lib; {
+  meta' = with lib; {
     description = "Web interface for TritonMC plugin";
     homepage = "https://github.com/tritonmc/twin";
     license = licenses.gpl3;
@@ -22,7 +22,7 @@
   };
 
   frontend = mkYarnPackage rec {
-    inherit meta version;
+    inherit version;
     pname = "twin-frontend";
     src = "${commonSrc}/frontend";
 
@@ -49,10 +49,12 @@
     passthru = {
       nodeAppDir = "libexec/twin/deps/twin";
     };
+
+    meta = meta';
   };
 
   backend = mkYarnPackage rec {
-    inherit meta version;
+    inherit version;
     pname = "twin-backend";
     src = "${commonSrc}/backend";
 
@@ -65,20 +67,15 @@
       cat <<EOF > config.js
       export default {
         disableDatabase: !!process.env.DISABLE_DATABASE,
-        database: {
-          host: process.env.DB_HOST ?? "localhost",
-          port: parseInt(process.env.DB_PORT ?? 3306, 10),
-          user: process.env.DB_USER ?? "root",
-          password: process.env.DB_PASSWORD ?? "",
-          database: process.env.DB_NAME ?? "triton",
-        },
+        database: process.env.DB_URL ?? "postgresql:///triton?host=/run/postgresql",
         fileExpiry: 24 * 60 * 60 * 1000, // 24h
         disabledModules: [],
       };
       EOF
 
       substituteInPlace src/storage.js \
-        --replace-fail "const __dirname = path.dirname(fileURLToPath(import.meta.url));" "const __dirname = process.env.STATE_DIR || '.';"
+        --replace-fail "const __dirname = path.dirname(fileURLToPath(import.meta.url));" "const __dirname = process.env.STATE_DIR || '.';" \
+        --replace-fail "../upload" "./upload"
 
       runHook postPatch
     '';
@@ -89,6 +86,9 @@
 
       makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
         --add-flags "$OUT_JS_DIR/src/index.js"
+
+      # delete unnecessary files
+      rm -rf "$out/${passthru.nodeAppDir}/"{config.def.js,migrations,upload,yarn.lock,.prettierrc.json}
     '';
 
     # there are no tests :/
@@ -99,6 +99,12 @@
     passthru = {
       nodeAppDir = "libexec/${pname}/deps/${pname}";
     };
+
+    meta =
+      meta'
+      // {
+        mainProgram = "twin-backend";
+      };
   };
 in {
   inherit backend frontend;

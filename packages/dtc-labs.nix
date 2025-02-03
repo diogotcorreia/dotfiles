@@ -9,12 +9,12 @@
 }:
 mkYarnPackage rec {
   pname = "dtc-labs";
-  version = "unstable-2023-05-06";
+  version = "0-unstable-2025-02-03";
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "dtc-labs";
-    rev = "d076b9b18aca840ea265382ae754e45c86ebf805";
-    hash = "sha256-MLt3JFsU+Y6VmOx7aXjKb52SAX/qCDwS4NUcPcBQCec=";
+    rev = "4deae8c1d25570dcd7f49088c277da65a2c8705f";
+    hash = "sha256-DKu/7feLmicEO9aMvFsghzMH7JlliU9DR3fr2HcwyVY=";
   };
 
   nativeBuildInputs = [makeWrapper];
@@ -33,6 +33,9 @@ mkYarnPackage rec {
 
     makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
       --add-flags "$OUT_JS_DIR/index.js"
+
+    # delete unnecessary files
+    rm -rf "$out/${passthru.nodeAppDir}/"{src,package.json,README.md,yarn.lock}
   '';
 
   # there are no tests :/

@@ -53,6 +53,9 @@ in
       "autoUpgradeHealthchecksUrl"
       "chhotoUrlEnv"
       "cloudflareToken"
+      "dtcLabsCredentialsJson"
+      "dtcLabsEnv"
+      "dtcLabsTokenJson"
       "healthchecksUrl"
       "meilisearchEnv"
       "nebulaCert"
@@ -61,6 +64,7 @@ in
       "resticRcloneConfig"
       "resticPassword"
       "resticSshKey"
+      "tritonBotEnv"
       "umamiEnv"
       "wastebinEnv"
     ])

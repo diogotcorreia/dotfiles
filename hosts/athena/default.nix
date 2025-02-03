@@ -11,6 +11,8 @@
     security.acme.cloudflare
     security.fail2ban
     services.chhoto-url
+    services.discord-bots.triton-bot
+    services.dtc-labs
     services.gpg-wkd
     services.meilisearch
     services.nginx.common
@@ -20,6 +22,7 @@
     services.rex-cdn
     services.ssh
     services.stalwart-mail
+    services.twin
     services.umami
     services.wastebin
     shell.zellij
