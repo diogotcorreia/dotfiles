@@ -12,6 +12,7 @@
   lighthouses = {
     "192.168.100.1" = ["zeus.diogotc.com:4242"];
     "192.168.100.7" = ["phobos.diogotc.com:4242"];
+    "192.168.100.10" = ["world.athena.diogotc.com:4242"];
   };
 in {
   options.modules.services.nebula = {

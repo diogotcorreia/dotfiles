@@ -97,6 +97,7 @@
       # Nebula (VPN)
       nebula = {
         enable = true;
+        isLighthouse = true;
         cert = config.age.secrets.nebulaCert.path;
         key = config.age.secrets.nebulaKey.path;
         firewall.inbound = [
