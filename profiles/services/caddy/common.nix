@@ -27,7 +27,7 @@
             remote_ip 192.168.100.7 # phobos
           }
         }
-        forward_auth @not_healthchecks 192.168.100.1:9091 {
+        forward_auth @not_healthchecks 192.168.100.10:9091 {
           uri /api/verify?rd=https://auth.diogotc.com/
           copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
         }
