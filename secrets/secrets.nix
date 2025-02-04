@@ -57,6 +57,7 @@ in
       "dtcLabsEnv"
       "dtcLabsTokenJson"
       "healthchecksUrl"
+      "lldapEnv"
       "meilisearchEnv"
       "nebulaCert"
       "nebulaKey"

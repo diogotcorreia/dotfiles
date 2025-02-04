@@ -14,6 +14,7 @@
     services.discord-bots.triton-bot
     services.dtc-labs
     services.gpg-wkd
+    services.lldap
     services.meilisearch
     services.nginx.common
     services.pairdrop
