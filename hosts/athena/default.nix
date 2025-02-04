@@ -10,6 +10,7 @@
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
+    services.authelia
     services.chhoto-url
     services.discord-bots.triton-bot
     services.dtc-labs

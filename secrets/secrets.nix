@@ -50,6 +50,13 @@ in
     ])
 
     (mkSystem "athena" [athenaSystem] [
+      "autheliaJwtSecret"
+      "autheliaLdapPassword"
+      "autheliaOidcHmacSecret"
+      "autheliaOidcIssuerPrivateKey"
+      "autheliaSessionSecret"
+      "autheliaSmtpPassword"
+      "autheliaStorageEncryptionKey"
       "autoUpgradeHealthchecksUrl"
       "chhotoUrlEnv"
       "cloudflareToken"
