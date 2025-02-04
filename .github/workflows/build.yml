@@ -15,18 +15,25 @@ jobs:
         machine:
           - host: apollo
             platform: x86-64-linux
+            large: true
           - host: athena
             platform: x86-64-linux
+            large: false
           - host: bacchus
             platform: x86-64-linux
+            large: true
           - host: bro
             platform: x86-64-linux
+            large: false
           - host: feb
             platform: x86-64-linux
+            large: false
           - host: hera
             platform: x86-64-linux
+            large: false
           - host: phobos
             platform: x86-64-linux
+            large: false
 
     needs: ["build-packages"]
     steps:
@@ -35,6 +42,7 @@ jobs:
         run: |
           sudo mkdir /nix
       - name: "Maximize Disk Space"
+        if: matrix.machine.large == true
         run: |
           sudo rm -rf $AGENT_TOOLSDIRECTORY
           sudo rm -rf /usr/local/.ghcup
@@ -46,6 +54,7 @@ jobs:
           sudo rm -rf /home/linuxbrew
           sudo rm -rf /home/runner/.rustup
       - name: "Maximize Disk Space 2"
+        if: matrix.machine.large == true
         uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
         with:
           # Save some space on root for /tmp (where packages are built)
