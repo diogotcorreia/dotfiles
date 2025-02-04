@@ -141,6 +141,16 @@ in {
     };
   };
 
+  # allow other servers to connect
+  modules.services.nebula.firewall.inbound = [
+    # TODO: derive this from other hosts' config
+    {
+      port = port;
+      proto = "tcp";
+      host = "hera";
+    }
+  ];
+
   services.postgresql = {
     enable = lib.mkDefault true;
     ensureUsers = [
