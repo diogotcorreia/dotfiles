@@ -15,8 +15,7 @@ in {
 
     hm.programs.spicetify = {
       enable = true;
-      spotifyPackage = pkgs.unstable.spotify;
-      spicetifyPackage = pkgs.unstable.spicetify-cli;
+      spotifyPackage = pkgs.spotify;
 
       theme = pkgs.spicetify.themes.comfy;
 
