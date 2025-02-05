@@ -55,6 +55,12 @@ in {
     };
   };
 
+  # bypass cloudflare for localhost
+  networking.hosts = {
+    "127.0.0.1" = [host];
+    "::1" = [host];
+  };
+
   # The service above is supposed to detect this based on the database string,
   # but since we're using the shorthand, it doesn't.
   systemd.services.atticd.after = ["postgresql.service" "nss-lookup.target"];
