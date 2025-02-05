@@ -150,14 +150,17 @@ in {
   };
 
   # allow other servers to connect
-  modules.services.nebula.firewall.inbound = [
-    # TODO: derive this from other hosts' config
-    {
+  modules.services.nebula.firewall.inbound = let
+    hostsWithAccessRules = lib.attrNames (
+      lib.filterAttrs (_: {config, ...}: config.my.services.authelia.accessRules != []) nixosConfigurations
+    );
+  in
+    map (host: {
       port = port;
       proto = "tcp";
-      host = "hera";
-    }
-  ];
+      inherit host;
+    })
+    hostsWithAccessRules;
 
   services.postgresql = {
     enable = lib.mkDefault true;
