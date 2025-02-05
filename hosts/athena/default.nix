@@ -11,6 +11,7 @@
     security.acme.cloudflare
     security.fail2ban
     services.authelia
+    services.battleship-js
     services.chhoto-url
     services.discord-bots.triton-bot
     services.dtc-labs
