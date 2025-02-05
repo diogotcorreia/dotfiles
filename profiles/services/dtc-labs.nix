@@ -54,8 +54,9 @@ in {
 
       PAYPAL_MODE = "live";
 
-      GSHEETS_TOKEN_PATH = config.age.secrets.dtcLabsTokenJson.path;
-      GSHEETS_CREDENTIALS_PATH = config.age.secrets.dtcLabsCredentialsJson.path;
+      # use systemd credentials to load these without chown
+      GSHEETS_TOKEN_PATH = "%d/token.json";
+      GSHEETS_CREDENTIALS_PATH = "%d/credentials.json";
     };
 
     description = "Experimental code snippets for dtc";
@@ -68,6 +69,11 @@ in {
       Restart = "on-failure";
       RestartSec = 3;
       DynamicUser = true;
+
+      LoadCredential = [
+        "token.json:${config.age.secrets.dtcLabsTokenJson.path}"
+        "credentials.json:${config.age.secrets.dtcLabsCredentialsJson.path}"
+      ];
 
       # Hardening
       CapabilityBoundingSet = "";
