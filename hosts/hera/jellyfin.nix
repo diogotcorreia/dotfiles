@@ -113,6 +113,13 @@ in {
     };
   };
 
+  my.services.authelia.accessRules = [
+    {
+      domain = [domainBazarr domainRadarr domainSonarr domainJackett];
+      subject = "group:arrs";
+    }
+  ];
+
   users.groups.${mediaGroup} = {};
   users.users = {
     ${config.services.radarr.user}.extraGroups = [mediaGroup transmissionGroup];

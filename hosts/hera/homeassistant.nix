@@ -46,5 +46,12 @@ in {
     };
   };
 
+  my.services.authelia.accessRules = [
+    {
+      domain = noderedDomain;
+      subject = "group:nodered-hera";
+    }
+  ];
+
   modules.services.restic.paths = ["${config.my.homeDirectory}/homeassistant"];
 }

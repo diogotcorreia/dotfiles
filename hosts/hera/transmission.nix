@@ -109,6 +109,13 @@ in {
     };
   };
 
+  my.services.authelia.accessRules = [
+    {
+      inherit domain;
+      subject = "group:torrents";
+    }
+  ];
+
   modules.impermanence.directories = [
     config.services.transmission.home
   ];

@@ -36,6 +36,13 @@ in {
     '';
   };
 
+  my.services.authelia.accessRules = [
+    {
+      inherit domain;
+      subject = "group:location";
+    }
+  ];
+
   modules.services.restic = {
     paths = [
       "/tmp/dawarich_db.sql.zstd"

@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  nixosConfigurations,
   secrets,
   ...
 }: let
@@ -13,6 +14,12 @@
   port = 9091;
 
   dbUser = cfg.user;
+
+  accessControlRules = lib.pipe nixosConfigurations [
+    builtins.attrValues
+    (map (cfg: cfg.config.my.services.authelia.accessRules))
+    builtins.concatLists
+  ];
 
   # TODO
   oidcClients = [];
@@ -73,13 +80,14 @@ in {
 
       access_control = {
         default_policy = "deny";
-        rules = [
-          {
-            domain = [domain];
-            policy = "bypass";
-          }
-          # TODO
-        ];
+        rules =
+          [
+            {
+              domain = [domain];
+              policy = "bypass";
+            }
+          ]
+          ++ accessControlRules;
       };
 
       session = {
