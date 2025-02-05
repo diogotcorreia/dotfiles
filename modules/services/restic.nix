@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  secrets,
   utils,
   ...
 }: let
@@ -13,57 +14,12 @@ in {
   options.modules.services.restic = {
     enable = mkEnableOption "restic";
 
-    checkUrlFile = mkOption {
-      type = types.path;
-      default = "/dev/null";
-      example = "config.age.secrets.resticHealthchecksUrl.path";
-      description = lib.mdDoc ''
-        A file containing the URL to ping on start, failure and finish.
-        It's recommended to keep this secret to avoid others pinging the URL.
-      '';
-    };
-
     repositoryPath = mkOption {
       type = types.str;
       default = "./restic";
       example = "./restic";
       description = lib.mdDoc ''
         Path to the restic repository inside the SFTP server.
-      '';
-    };
-
-    passwordFile = mkOption {
-      type = types.path;
-      description = lib.mdDoc ''
-        Read the repository password from a file.
-      '';
-      example = "config.age.secrets.resticPassword.path";
-    };
-
-    sshKeyFile = mkOption {
-      type = types.path;
-      description = lib.mdDoc ''
-        Read the private ssh key for SFTP from a file.
-      '';
-      example = "config.age.secrets.resticSshKey.path";
-    };
-
-    rcloneConfigFile = mkOption {
-      type = with types; nullOr path;
-      default = null;
-      description = lib.mdDoc ''
-        Path to the file containing rclone configuration. This file
-        must contain configuration for the remote "backupserver"
-        and also must be readable by root.
-
-        Example file:
-
-        ```
-        [backupserver]
-        user = <username>
-        host = <hostname>
-        port = <port>
-        ```
       '';
     };
 
@@ -125,14 +81,21 @@ in {
     # group by host,tags instead of host,paths
     groupByOptions = ["--group-by=host,tags"];
   in {
+    age.secrets = {
+      resticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
+      resticRcloneConfig.file = secrets.host.resticRcloneConfig;
+      resticPassword.file = secrets.host.resticPassword;
+      resticSshKey.file = secrets.host.resticSshKey;
+    };
+
     services.restic.backups.${resticName} = {
       repository = "rclone:backupserver:${cfg.repositoryPath}";
-      rcloneConfigFile = cfg.rcloneConfigFile;
+      rcloneConfigFile = config.age.secrets.resticRcloneConfig.path;
       rcloneConfig = {
         type = "sftp";
-        key_file = cfg.sshKeyFile;
+        key_file = config.age.secrets.resticSshKey.path;
       };
-      passwordFile = cfg.passwordFile;
+      passwordFile = config.age.secrets.resticPassword.path;
 
       paths =
         cfg.paths
@@ -181,6 +144,6 @@ in {
       };
 
     modules.services.healthchecks.systemd-monitoring.${systemdServiceName}.checkUrlFile =
-      cfg.checkUrlFile;
+      config.age.secrets.resticHealthchecksUrl.path;
   });
 }

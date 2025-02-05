@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  secrets,
   pkgs,
   profiles,
   ...
@@ -90,24 +89,7 @@
   '';
 
   # Secret manager (agenix)
-  age = {
-    secrets = {
-      apolloNebulaCert = {
-        file = secrets.host.nebulaCert;
-        owner = "nebula-nebula0";
-      };
-      apolloNebulaKey = {
-        file = secrets.host.nebulaKey;
-        owner = "nebula-nebula0";
-      };
-      apolloResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      apolloResticRcloneConfig.file = secrets.host.resticRcloneConfig;
-      apolloResticPassword.file = secrets.host.resticPassword;
-      apolloResticSshKey.file = secrets.host.resticSshKey;
-    };
-
-    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-  };
+  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   # GnuPG (GPG)
   hm.programs.git.signing.key = "12B4F3AC9C065D08";
@@ -149,8 +131,6 @@
       # Nebula (VPN)
       nebula = {
         enable = true;
-        cert = config.age.secrets.apolloNebulaCert.path;
-        key = config.age.secrets.apolloNebulaKey.path;
         firewall.inbound = [
           {
             port = 22;
@@ -161,10 +141,6 @@
       };
       restic = {
         enable = true;
-        checkUrlFile = config.age.secrets.apolloResticHealthchecksUrl.path;
-        rcloneConfigFile = config.age.secrets.apolloResticRcloneConfig.path;
-        passwordFile = config.age.secrets.apolloResticPassword.path;
-        sshKeyFile = config.age.secrets.apolloResticSshKey.path;
 
         paths = [
           "${config.my.homeDirectory}/.ultrastardx"

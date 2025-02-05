@@ -1,9 +1,7 @@
 # Configuration for bro (home server)
 {
-  config,
   lib,
   profiles,
-  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -31,26 +29,7 @@
   time.timeZone = "Europe/Stockholm";
 
   # Secret manager (agenix)
-  age = {
-    secrets = {
-      broAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
-      broHealthchecksUrl.file = secrets.host.healthchecksUrl;
-      broNebulaCert = {
-        file = secrets.host.nebulaCert;
-        owner = "nebula-nebula0";
-      };
-      broNebulaKey = {
-        file = secrets.host.nebulaKey;
-        owner = "nebula-nebula0";
-      };
-      broResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      broResticRcloneConfig.file = secrets.host.resticRcloneConfig;
-      broResticPassword.file = secrets.host.resticPassword;
-      broResticSshKey.file = secrets.host.resticSshKey;
-    };
-
-    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-  };
+  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   networking.bridges.br-wan.interfaces = ["eno1"];
   my.networking.wiredInterface = "br-wan";
@@ -60,20 +39,15 @@
     editors.neovim.enable = true;
     server = {
       enable = true;
-      autoUpgradeCheckUrlFile =
-        config.age.secrets.broAutoUpgradeHealthchecksUrl.path;
     };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
-        checkUrlFile = config.age.secrets.broHealthchecksUrl.path;
       };
       # Nebula (VPN)
       nebula = {
         enable = true;
-        cert = config.age.secrets.broNebulaCert.path;
-        key = config.age.secrets.broNebulaKey.path;
         firewall.inbound = [
           {
             port = 22;
@@ -100,10 +74,6 @@
       };
       restic = {
         enable = true;
-        checkUrlFile = config.age.secrets.broResticHealthchecksUrl.path;
-        rcloneConfigFile = config.age.secrets.broResticRcloneConfig.path;
-        passwordFile = config.age.secrets.broResticPassword.path;
-        sshKeyFile = config.age.secrets.broResticSshKey.path;
 
         timerConfig = {OnCalendar = "12:20";};
       };

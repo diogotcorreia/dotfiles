@@ -2,7 +2,6 @@
 {
   config,
   profiles,
-  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -63,46 +62,23 @@
   time.timeZone = "UTC";
 
   # Secret manager (agenix)
-  age = {
-    secrets = {
-      autoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
-      healthchecksUrl.file = secrets.host.healthchecksUrl;
-      nebulaCert = {
-        file = secrets.host.nebulaCert;
-        owner = "nebula-nebula0";
-      };
-      nebulaKey = {
-        file = secrets.host.nebulaKey;
-        owner = "nebula-nebula0";
-      };
-      resticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      resticRcloneConfig.file = secrets.host.resticRcloneConfig;
-      resticPassword.file = secrets.host.resticPassword;
-      resticSshKey.file = secrets.host.resticSshKey;
-    };
-
-    identityPaths = ["${config.modules.impermanence.persistDirectory}/etc/ssh/ssh_host_ed25519_key"];
-  };
+  age.identityPaths = ["${config.modules.impermanence.persistDirectory}/etc/ssh/ssh_host_ed25519_key"];
 
   # Modules
   modules = {
     editors.neovim.enable = true;
     server = {
       enable = true;
-      autoUpgradeCheckUrlFile = config.age.secrets.autoUpgradeHealthchecksUrl.path;
     };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
-        checkUrlFile = config.age.secrets.healthchecksUrl.path;
       };
       # Nebula (VPN)
       nebula = {
         enable = true;
         isLighthouse = true;
-        cert = config.age.secrets.nebulaCert.path;
-        key = config.age.secrets.nebulaKey.path;
         firewall.inbound = [
           {
             port = 22;
@@ -129,10 +105,6 @@
       };
       restic = {
         enable = true;
-        checkUrlFile = config.age.secrets.resticHealthchecksUrl.path;
-        rcloneConfigFile = config.age.secrets.resticRcloneConfig.path;
-        passwordFile = config.age.secrets.resticPassword.path;
-        sshKeyFile = config.age.secrets.resticSshKey.path;
 
         timerConfig = {OnCalendar = "04:00";};
       };

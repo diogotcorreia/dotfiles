@@ -4,7 +4,6 @@
   lib,
   pkgs,
   profiles,
-  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -86,24 +85,7 @@
   services.logind.lidSwitchDocked = "suspend";
 
   # Secret manager (agenix)
-  age = {
-    secrets = {
-      bacchusNebulaCert = {
-        file = secrets.host.nebulaCert;
-        owner = "nebula-nebula0";
-      };
-      bacchusNebulaKey = {
-        file = secrets.host.nebulaKey;
-        owner = "nebula-nebula0";
-      };
-      bacchusResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      bacchusResticRcloneConfig.file = secrets.host.resticRcloneConfig;
-      bacchusResticPassword.file = secrets.host.resticPassword;
-      bacchusResticSshKey.file = secrets.host.resticSshKey;
-    };
-
-    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-  };
+  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   # GnuPG (GPG)
   hm.programs.git.signing.key = "7B5273B10C4495CF";
@@ -148,8 +130,6 @@
       # Nebula (VPN)
       nebula = {
         enable = true;
-        cert = config.age.secrets.bacchusNebulaCert.path;
-        key = config.age.secrets.bacchusNebulaKey.path;
         firewall.inbound = [
           {
             port = 22;
@@ -160,10 +140,6 @@
       };
       restic = {
         enable = true;
-        checkUrlFile = config.age.secrets.bacchusResticHealthchecksUrl.path;
-        rcloneConfigFile = config.age.secrets.bacchusResticRcloneConfig.path;
-        passwordFile = config.age.secrets.bacchusResticPassword.path;
-        sshKeyFile = config.age.secrets.bacchusResticSshKey.path;
 
         paths = [
           "${config.my.homeDirectory}/.ultrastardx"

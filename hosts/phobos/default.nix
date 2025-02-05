@@ -3,7 +3,6 @@
   config,
   pkgs,
   profiles,
-  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -39,26 +38,7 @@
   time.timeZone = "UTC";
 
   # Secret manager (agenix)
-  age = {
-    secrets = {
-      phobosAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
-      phobosHealthchecksUrl.file = secrets.host.healthchecksUrl;
-      phobosNebulaCert = {
-        file = secrets.host.nebulaCert;
-        owner = "nebula-nebula0";
-      };
-      phobosNebulaKey = {
-        file = secrets.host.nebulaKey;
-        owner = "nebula-nebula0";
-      };
-      phobosResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      phobosResticRcloneConfig.file = secrets.host.resticRcloneConfig;
-      phobosResticPassword.file = secrets.host.resticPassword;
-      phobosResticSshKey.file = secrets.host.resticSshKey;
-    };
-
-    identityPaths = ["/root/.ssh/id_ed25519"];
-  };
+  age.identityPaths = ["/root/.ssh/id_ed25519"];
 
   # PostgreSQL
   services.postgresql = {
@@ -71,28 +51,19 @@
     editors.neovim.enable = true;
     server = {
       enable = true;
-      autoUpgradeCheckUrlFile =
-        config.age.secrets.phobosAutoUpgradeHealthchecksUrl.path;
     };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
-        checkUrlFile = config.age.secrets.phobosHealthchecksUrl.path;
       };
       # Nebula (VPN)
       nebula = {
         enable = true;
-        cert = config.age.secrets.phobosNebulaCert.path;
-        key = config.age.secrets.phobosNebulaKey.path;
         isLighthouse = true;
       };
       restic = {
         enable = true;
-        checkUrlFile = config.age.secrets.phobosResticHealthchecksUrl.path;
-        rcloneConfigFile = config.age.secrets.phobosResticRcloneConfig.path;
-        passwordFile = config.age.secrets.phobosResticPassword.path;
-        sshKeyFile = config.age.secrets.phobosResticSshKey.path;
 
         timerConfig = {OnCalendar = "03:10";};
       };

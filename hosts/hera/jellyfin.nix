@@ -2,6 +2,7 @@
 {
   pkgs,
   config,
+  secrets,
   ...
 }: let
   domainJellyfin = "jellyfin.diogotc.com";
@@ -53,6 +54,8 @@ in {
     package = pkgs.unstable.jackett;
   };
   services.bazarr.enable = true;
+
+  age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
 
   # NAS mounts
   fileSystems."/media/diskstation" = {

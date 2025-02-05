@@ -2,22 +2,19 @@
 {
   config,
   lib,
+  secrets,
   ...
 }: let
-  inherit (lib) mkEnableOption mkIf mkOption optionalAttrs types;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.server;
 in {
   options.modules.server = {
     enable = mkEnableOption "server common configuration";
-    autoUpgradeCheckUrlFile = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      example = "config.age.secrets.autoUpgradeHealthchecksUrl.path";
-      description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
-    };
   };
 
   config = mkIf cfg.enable {
+    age.secrets.autoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
+
     my.autoUpgrade = {
       enable = true;
       operation = "switch";
@@ -39,15 +36,10 @@ in {
       randomizedDelaySec = "1h";
     };
 
-    modules.services.healthchecks.systemd-monitoring =
-      optionalAttrs
-      (config.my.autoUpgrade.enable
-        && cfg.autoUpgradeCheckUrlFile
-        != null) {
-        # must match service of system.autoUpgrade
-        # https://github.com/NixOS/nixpkgs/blob/9dd7699928e26c3c00d5d46811f1358524081062/nixos/modules/tasks/auto-upgrade.nix#L175
-        nixos-upgrade.checkUrlFile = cfg.autoUpgradeCheckUrlFile;
-      };
+    modules.services.healthchecks.systemd-monitoring = {
+      # must match service of my.autoUpgrade
+      nixos-upgrade.checkUrlFile = config.age.secrets.autoUpgradeHealthchecksUrl.path;
+    };
 
     nix.optimise.automatic = true;
     nix.gc = {

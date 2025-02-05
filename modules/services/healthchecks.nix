@@ -3,14 +3,17 @@
   pkgs,
   config,
   lib,
+  secrets,
   ...
 }: let
   inherit
     (lib)
     mkEnableOption
+    mkIf
     mkOption
     types
     mapAttrs'
+    optionalAttrs
     optionalString
     mkBefore
     mkAfter
@@ -20,12 +23,6 @@
 in {
   options.modules.services.healthchecks = {
     enable = mkEnableOption "healthchecks";
-    checkUrlFile = mkOption {
-      type = types.path;
-      default = "/dev/null";
-      example = "config.age.secrets.healthchecksUrl.path";
-      description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
-    };
     timerExpression = mkOption {
       type = types.str;
       default = "*-*-* *:*:00"; # every minute
@@ -77,19 +74,23 @@ in {
       })
     cfg.systemd-monitoring;
   in {
+    age.secrets = mkIf cfg.enable {
+      healthchecksUrl.file = secrets.host.healthchecksUrl;
+    };
+
     systemd.services =
       (
-        if cfg.enable
-        then {
+        optionalAttrs
+        cfg.enable
+        {
           ping-healthchecks = {
             restartIfChanged = false;
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = getHealthchecksCmd cfg.checkUrlFile null false;
+              ExecStart = getHealthchecksCmd config.age.secrets.healthchecksUrl.path null false;
             };
           };
         }
-        else {}
       )
       // systemd-services;
 

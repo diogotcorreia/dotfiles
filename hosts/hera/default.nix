@@ -3,7 +3,6 @@
   config,
   pkgs,
   profiles,
-  secrets,
   ...
 }: {
   imports = with profiles; [
@@ -52,27 +51,7 @@
   my.networking.wiredInterface = "enp0s31f6";
 
   # Secret manager (agenix)
-  age = {
-    secrets = {
-      diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
-      heraAutoUpgradeHealthchecksUrl.file = secrets.host.autoUpgradeHealthchecksUrl;
-      heraHealthchecksUrl.file = secrets.host.healthchecksUrl;
-      heraNebulaCert = {
-        file = secrets.host.nebulaCert;
-        owner = "nebula-nebula0";
-      };
-      heraNebulaKey = {
-        file = secrets.host.nebulaKey;
-        owner = "nebula-nebula0";
-      };
-      heraResticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      heraResticRcloneConfig.file = secrets.host.resticRcloneConfig;
-      heraResticPassword.file = secrets.host.resticPassword;
-      heraResticSshKey.file = secrets.host.resticSshKey;
-    };
-
-    identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-  };
+  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   # PostgreSQL
   services.postgresql = {
@@ -85,20 +64,15 @@
     editors.neovim.enable = true;
     server = {
       enable = true;
-      autoUpgradeCheckUrlFile =
-        config.age.secrets.heraAutoUpgradeHealthchecksUrl.path;
     };
     services = {
       dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
-        checkUrlFile = config.age.secrets.heraHealthchecksUrl.path;
       };
       # Nebula (VPN)
       nebula = {
         enable = true;
-        cert = config.age.secrets.heraNebulaCert.path;
-        key = config.age.secrets.heraNebulaKey.path;
         firewall.inbound = [
           {
             port = 22;
@@ -125,10 +99,6 @@
       };
       restic = {
         enable = true;
-        checkUrlFile = config.age.secrets.heraResticHealthchecksUrl.path;
-        rcloneConfigFile = config.age.secrets.heraResticRcloneConfig.path;
-        passwordFile = config.age.secrets.heraResticPassword.path;
-        sshKeyFile = config.age.secrets.heraResticSshKey.path;
 
         # TODO each service should define its own paths
         paths = [

@@ -17,18 +17,6 @@
 in {
   options.modules.services.nebula = {
     enable = mkEnableOption "nebula";
-    cert = mkOption {
-      # Required
-      type = types.path;
-      example = "/etc/nebula/host.crt";
-      description = "Path to the host certificate.";
-    };
-    key = mkOption {
-      # Required
-      type = types.path;
-      example = "/etc/nebula/host.key";
-      description = "Path to the host key.";
-    };
     isLighthouse = mkOption {
       type = types.bool;
       default = false;
@@ -67,17 +55,25 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # Automatically get nebulaCA from agenix
+    # Automatically get nebula CA/cert/key from agenix
     age.secrets.nebulaCA = {
       file = secrets.nebulaCA;
+      owner = "nebula-nebula0";
+    };
+    age.secrets.nebulaCert = {
+      file = secrets.host.nebulaCert;
+      owner = "nebula-nebula0";
+    };
+    age.secrets.nebulaKey = {
+      file = secrets.host.nebulaKey;
       owner = "nebula-nebula0";
     };
 
     services.nebula.networks.nebula0 = {
       enable = true;
       ca = config.age.secrets.nebulaCA.path;
-      cert = cfg.cert;
-      key = cfg.key;
+      cert = config.age.secrets.nebulaCert.path;
+      key = config.age.secrets.nebulaKey.path;
       isLighthouse = cfg.isLighthouse;
       isRelay = cfg.isLighthouse; # assume all lighthouses are relays as well
       lighthouses = lib.lists.optionals (!cfg.isLighthouse) (attrNames lighthouses);
