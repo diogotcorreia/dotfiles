@@ -134,7 +134,11 @@ in {
       };
       passwordFile = cfg.passwordFile;
 
-      paths = cfg.paths;
+      paths =
+        cfg.paths
+        ++ [
+          "/var/lib/nixos" # contains uid/gid map, required for restoring
+        ];
       exclude = cfg.exclude;
       extraBackupArgs = groupByOptions;
       pruneOpts =
