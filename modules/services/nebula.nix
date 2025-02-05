@@ -84,6 +84,8 @@ in {
       # listen on both ipv4 and ipv6
       listen.host = "[::]";
 
+      tun.device = "nebula.nebula0";
+
       firewall.outbound =
         [
           {
@@ -130,6 +132,32 @@ in {
           use_relays = !cfg.isLighthouse;
         };
       };
+    };
+
+    # nebula can't accept connections if it's blocked by iptables
+    # therefore, for all port that isn't open on the firewall, open it for the nebula interface
+    networking.firewall.interfaces.${config.services.nebula.networks.nebula0.tun.device} = let
+      tcpPorts =
+        builtins.filter (
+          rule:
+            (rule.proto or null == "tcp")
+            && (builtins.isInt rule.port or null)
+            && !(builtins.elem rule.port config.networking.firewall.allowedTCPPorts)
+        )
+        cfg.firewall.inbound;
+      udpPorts =
+        builtins.filter (
+          rule:
+            (rule.proto or null == "udp")
+            && (builtins.isInt rule.port or null)
+            && !(builtins.elem rule.port config.networking.firewall.allowedUDPPorts)
+        )
+        cfg.firewall.inbound;
+
+      getPorts = map (rule: rule.port);
+    in {
+      allowedTCPPorts = getPorts tcpPorts;
+      allowedUDPPorts = getPorts udpPorts;
     };
   };
 }
