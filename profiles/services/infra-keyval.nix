@@ -2,11 +2,12 @@
 {
   config,
   inputs,
+  lib,
   secrets,
   ...
 }: let
   domain = "infra-keyval.diogotc.com";
-  port = 6442;
+  port = lib.my.ports.infraKeyval;
 in {
   imports = [
     inputs.infra-keyval.nixosModules.infra-keyval

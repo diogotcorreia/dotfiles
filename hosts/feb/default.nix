@@ -1,5 +1,9 @@
 # Configuration for feb (home server)
-{profiles, ...}: {
+{
+  lib,
+  profiles,
+  ...
+}: {
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.zram
@@ -41,23 +45,23 @@
         enable = true;
         firewall.inbound = [
           {
-            port = 22;
+            port = lib.my.ports.ssh;
             proto = "tcp";
             group = "dtc";
           }
           {
-            port = 80;
+            port = lib.my.ports.http;
             proto = "tcp";
             group = "dtc";
           }
           {
-            port = 443;
+            port = lib.my.ports.https;
             proto = "tcp";
             group = "dtc";
           }
           {
             # allow uptime server to ping services
-            port = 443;
+            port = lib.my.ports.https;
             proto = "tcp";
             group = "uptime";
           }

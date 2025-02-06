@@ -11,7 +11,7 @@
 
   baseDomain = "diogotc.com";
   domain = "auth.${baseDomain}";
-  port = 9091;
+  port = lib.my.ports.authelia;
 
   dbUser = cfg.user;
 

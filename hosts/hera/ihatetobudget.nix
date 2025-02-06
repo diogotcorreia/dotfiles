@@ -1,7 +1,11 @@
 # Configuration for IHateToBudget on Hera
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   domain = "budget-joao.diogotc.com";
-  port = 8013;
+  port = lib.my.ports.iHateToBudget;
 in {
   # TODO get rid of this, it is unmaintained as of 2022-12-24
 

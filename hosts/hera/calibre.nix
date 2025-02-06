@@ -1,7 +1,11 @@
 # Configuration for Calibre Web on Hera
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   domain = "calibre.diogotc.com";
-  port = 8011;
+  port = lib.my.ports.calibreWeb;
 
   statePath = "/var/lib/${config.services.calibre-web.dataDir}";
   libraryPath = "/persist/calibre-library";

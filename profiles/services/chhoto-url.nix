@@ -7,7 +7,7 @@
   ...
 }: let
   domain = "s.diogotc.com";
-  port = 7542;
+  port = lib.my.ports.chhotoUrl;
 
   stateDir = "/var/lib/private/chhoto-url";
 in {

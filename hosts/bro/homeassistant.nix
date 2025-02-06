@@ -1,14 +1,15 @@
 # Configuration for Home Assistant (and related programs) on Bro
 # Inspired by https://github.com/Mic92/dotfiles/tree/2580420b65b20196b72ab58d4541b2d972dec668/nixos/eve/modules/home-assistant
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }: let
   hassDomain = "ha.bro.diogotc.com";
   hassPort = hassCfg.config.http.server_port;
 
-  mqttPort = 1883;
+  mqttPort = lib.my.ports.mqtt;
 
   hassCfg = config.services.home-assistant;
 in {
@@ -61,7 +62,7 @@ in {
   networking.firewall.interfaces = {
     vlan-private = {
       # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
-      allowedUDPPorts = [5353];
+      allowedUDPPorts = [lib.my.ports.mdnsGoogleCast];
 
       allowedTCPPorts = [hassPort];
     };

@@ -6,7 +6,7 @@
   ...
 }: let
   domain = "location.diogotc.com";
-  port = 3000;
+  port = lib.my.ports.dawarich;
 in {
   # TODO move docker containers to NixOS services
 

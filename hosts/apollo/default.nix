@@ -133,7 +133,7 @@
         enable = true;
         firewall.inbound = [
           {
-            port = 22;
+            port = lib.my.ports.ssh;
             proto = "tcp";
             group = "dtc";
           }

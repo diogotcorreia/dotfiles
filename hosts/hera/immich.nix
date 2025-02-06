@@ -10,7 +10,7 @@
   photosLocationNfs = "/mnt/diskstation/immich";
 
   domain = "photos.diogotc.com";
-  port = 8084;
+  port = lib.my.ports.immich;
 in {
   # Ensure that the NFS server has the same UID/GID
   users.users.${cfg.user}.uid = 15015;

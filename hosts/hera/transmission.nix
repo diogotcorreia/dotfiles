@@ -7,7 +7,7 @@
   ...
 }: let
   domain = "transmission.hera.diogotc.com";
-  port = 9091;
+  port = lib.my.ports.transmission;
 
   socksSocket = "/run/${socketDirectory}/transmission-socks-proxy";
   socketDirectory = "transmission-proxy";
@@ -29,6 +29,7 @@ in {
     webHome = pkgs.unstable.flood-for-transmission;
 
     settings = {
+      rpc-port = port;
       rpc-host-whitelist = domain;
     };
   };

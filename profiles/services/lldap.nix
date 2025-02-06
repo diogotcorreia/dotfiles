@@ -6,7 +6,7 @@
   ...
 }: let
   domain = "ldap.diogotc.com";
-  port = 17170;
+  port = lib.my.ports.lldapHttp;
 
   dbUser = "lldap";
 in {
@@ -25,6 +25,7 @@ in {
 
       ldap_base_dn = "dc=diogotc,dc=com";
       ldap_host = "::1";
+      ldap_port = lib.my.ports.lldapLdap;
 
       http_url = "https://${domain}";
       http_host = "::1";

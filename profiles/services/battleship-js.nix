@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  port = 7643;
+  port = lib.my.ports.battleships;
   domain = "battleships.diogotc.com";
 in {
   services.nginx.virtualHosts = {

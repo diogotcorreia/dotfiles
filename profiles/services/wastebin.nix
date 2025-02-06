@@ -1,12 +1,13 @@
 # Pastebin server
 {
   config,
+  lib,
   pkgs,
   secrets,
   ...
 }: let
   domain = "bin.diogotc.com";
-  port = 5435;
+  port = lib.my.ports.wastebin;
 
   stateDir = "/var/lib/private/wastebin";
 in {

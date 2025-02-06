@@ -6,7 +6,7 @@
   ...
 }: let
   dataDir = "/var/lib/stalwart-mail";
-  httpPort = 9988;
+  httpPort = lib.my.ports.stalwartMailHttp;
 
   domain = "acme-bnss.pt"; # TODO: change this to diogotc.com after testing
   stalwartDomain = "mail.${domain}";
@@ -62,29 +62,29 @@ in {
 
       server.listener = {
         smtp = {
-          bind = ["[::]:25"];
+          bind = ["[::]:${toString lib.my.ports.smtp}"];
           protocol = "smtp";
         };
         submission = {
-          bind = ["[::]:587"];
+          bind = ["[::]:${toString lib.my.ports.emailSubmission}"];
           protocol = "smtp";
         };
         submmissions = {
-          bind = ["[::]:465"];
+          bind = ["[::]:${toString lib.my.ports.emailSubmissionTls}"];
           protocol = "smtp";
           tls.implicit = true;
         };
         imap = {
-          bind = ["[::]:143"];
+          bind = ["[::]:${toString lib.my.ports.imap}"];
           protocol = "imap";
         };
         imaps = {
-          bind = ["[::]:993"];
+          bind = ["[::]:${toString lib.my.ports.imaps}"];
           protocol = "imap";
           tls.implicit = true;
         };
         sieve = {
-          bind = ["[::]:4190"];
+          bind = ["[::]:${toString lib.my.ports.manageSieve}"];
           protocol = "managesieve";
           tls.implicit = true;
         };
@@ -126,13 +126,13 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [
-    25 # SMTP
-    143 # IMAP
-    465 # SMTP Submission Secure
-    587 # SMTP Submission
-    993 # IMAP Secure
-    4190 # Manage Sieve
+  networking.firewall.allowedTCPPorts = with lib.my.ports; [
+    smtp
+    imap
+    emailSubmissionTls
+    emailSubmission
+    imaps
+    manageSieve
   ];
 
   systemd.services.stalwart-mail = {

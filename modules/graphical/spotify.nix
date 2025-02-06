@@ -11,7 +11,7 @@ in {
   # Follow graphical.programs.enabled
   config = mkIf cfg.enable {
     # Allow mDNS discovery of Google Cast devices
-    networking.firewall.allowedUDPPorts = [5353];
+    networking.firewall.allowedUDPPorts = [lib.my.ports.mdnsGoogleCast];
 
     hm.programs.spicetify = {
       enable = true;

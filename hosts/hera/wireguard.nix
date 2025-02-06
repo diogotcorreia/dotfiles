@@ -1,11 +1,12 @@
 # Wireguard server on Hera
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   secrets,
   ...
 }: let
-  listenPort = 51820;
+  listenPort = lib.my.ports.wireguard;
 
   outInterface = config.networking.nat.externalInterface;
 

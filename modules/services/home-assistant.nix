@@ -124,6 +124,7 @@ in {
           };
 
           http = {
+            server_port = lib.my.ports.homeAssistant;
             ip_ban_enabled = mkDefault true;
             login_attempts_threshold = mkDefault 3;
             use_x_forwarded_for = mkDefault true;

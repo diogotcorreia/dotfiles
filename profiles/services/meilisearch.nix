@@ -6,7 +6,7 @@
   ...
 }: let
   dataDir = "/var/lib/meilisearch";
-  port = 3449;
+  port = lib.my.ports.meilisearch;
 
   domain = "meilisearch.diogotc.com";
 

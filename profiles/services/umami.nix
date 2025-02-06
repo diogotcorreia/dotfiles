@@ -21,7 +21,7 @@
   gid = 35394;
 
   domain = "analytics.diogotc.com";
-  umamiExternalPort = 8380;
+  umamiExternalPort = lib.my.ports.umami;
 
   environment = {
     DATABASE_URL = "postgresql://${dbUsername}@localhost/${dbUsername}?host=/run/postgresql";

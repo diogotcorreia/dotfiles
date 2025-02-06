@@ -3,10 +3,10 @@
 {lib, ...}: let
   inherit (lib) mapAttrs' nameValuePair;
 
-  ports = {
-    "0" = 44380;
-    "1" = 44381;
-    "2" = 44382;
+  ports = with lib.my.ports; {
+    "0" = rproxy0;
+    "1" = rproxy1;
+    "2" = rproxy2;
   };
 
   domainSuffix = ".rproxy.diogotc.com";

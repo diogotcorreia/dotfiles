@@ -1,11 +1,12 @@
 # Configuration for Paperless-ngx on Hera
 {
   config,
+  lib,
   secrets,
   ...
 }: let
   domain = "paperless.diogotc.com";
-  port = config.services.paperless.port;
+  port = lib.my.ports.paperless;
 
   dataDir = config.services.paperless.dataDir;
 
@@ -19,6 +20,7 @@ in {
 
   services.paperless = {
     enable = true;
+    inherit port;
 
     settings = {
       PAPERLESS_OCR_LANGUAGE = "eng+por+swe";

@@ -1,13 +1,14 @@
 # Configuration for Home Assistant (and related programs) on Feb
 # Inspired by https://github.com/Mic92/dotfiles/tree/2580420b65b20196b72ab58d4541b2d972dec668/nixos/eve/modules/home-assistant
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   ...
 }: let
   hassDomain = "ha.feb.diogotc.com";
 
-  mqttPort = 1883;
+  mqttPort = lib.my.ports.mqtt;
 in {
   services.home-assistant = {
     enable = true;

@@ -1,7 +1,11 @@
 # Configuration for Uptime Kuma on Phobos
-{pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   domain = "uptime.diogotc.com";
-  port = 8002;
+  port = lib.my.ports.uptimeKuma;
 in {
   services.uptime-kuma = {
     enable = true;

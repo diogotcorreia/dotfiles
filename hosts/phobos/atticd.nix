@@ -1,11 +1,12 @@
 # Configuration for atticd (Nix Binary Cache) on Phobos
 {
   config,
+  lib,
   secrets,
   ...
 }: let
   host = "nix-cache.diogotc.com";
-  port = 8004;
+  port = lib.my.ports.atticd;
   dbUser = config.services.atticd.user;
 in {
   age.secrets = {

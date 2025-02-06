@@ -13,6 +13,7 @@ in {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
     };
+    ports = [lib.my.ports.ssh];
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
 }

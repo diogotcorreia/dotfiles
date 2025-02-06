@@ -6,7 +6,7 @@
   secrets,
   ...
 }: let
-  port = 7649;
+  port = lib.my.ports.dtcLabs;
   domain = "labs.diogotc.com";
 
   dbUsername = "dtc-labs";

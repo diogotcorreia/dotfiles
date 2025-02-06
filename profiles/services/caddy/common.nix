@@ -1,7 +1,7 @@
 # Common configuration for caddy reverse proxy
 {lib, ...}: {
   # Open firewall ports
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = with lib.my.ports; [http https];
 
   services.caddy = {
     enable = true;

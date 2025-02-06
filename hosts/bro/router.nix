@@ -1,5 +1,9 @@
 # Router configuration on Bro
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   wanInterface = config.my.networking.wiredInterface;
   lanInterface = "enp0s20f0u4";
 
@@ -52,30 +56,24 @@ in {
     trustedInterfaces = ["vlan-private"];
     interfaces = {
       vlan-iot-cloud = {
-        allowedUDPPorts = [
-          # DNS
-          53
-          # DHCP
-          67
-          68
+        allowedUDPPorts = with lib.my.ports; [
+          dns
+          dhcpServer
+          dhcpClient
         ];
       };
       vlan-iot-local = {
-        allowedUDPPorts = [
-          # DNS
-          53
-          # DHCP
-          67
-          68
+        allowedUDPPorts = with lib.my.ports; [
+          dns
+          dhcpServer
+          dhcpClient
         ];
       };
       vlan-guest = {
-        allowedUDPPorts = [
-          # DNS
-          53
-          # DHCP
-          67
-          68
+        allowedUDPPorts = with lib.my.ports; [
+          dns
+          dhcpServer
+          dhcpClient
         ];
       };
     };

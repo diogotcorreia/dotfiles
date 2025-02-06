@@ -6,7 +6,7 @@
   ...
 }: let
   domain = "repo.diogotc.com";
-  port = 5100;
+  port = lib.my.ports.reposilite;
 
   stateDir = "/var/lib/reposilite";
 

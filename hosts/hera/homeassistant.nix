@@ -1,9 +1,13 @@
 # Configuration for Home Assistant (and related programs) on Hera
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   hassDomain = "hass.diogotc.com";
-  hassPort = 8123;
+  hassPort = lib.my.ports.homeAssistant;
   noderedDomain = "nodered.hera.diogotc.com";
-  noderedPort = 1880;
+  noderedPort = lib.my.ports.nodered;
 in {
   # TODO move docker containers to NixOS services
 
@@ -19,12 +23,18 @@ in {
   };
 
   networking.firewall = {
-    # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
-    # UDP Port 5683 for CoIoT (Shelly push)
-    allowedUDPPorts = [5353 5683];
+    # UDP Port for mDNS discovery of Google Cast devices (Spotify)
+    # UDP Port for CoIoT (Shelly push)
+    allowedUDPPorts = with lib.my.ports; [
+      mdnsGoogleCast
+      coiot
+    ];
 
-    # TCP Ports 8095 and 8097 for Music Assistant
-    allowedTCPPorts = [8095 8097 hassPort];
+    allowedTCPPorts = with lib.my.ports; [
+      musicAssistantWeb
+      musicAssistantAudioStream
+      hassPort
+    ];
   };
 
   services.caddy.virtualHosts = {

@@ -1,13 +1,14 @@
 # Configuration for Healthchecks.io on Phobos
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   secrets,
   ...
 }: let
   httpHost = "http.${host}";
   host = "healthchecks.diogotc.com";
-  port = 8003;
+  port = lib.my.ports.healthchecks;
   dbUser = config.services.healthchecks.user;
   commonSecretSettings = {
     owner = config.services.healthchecks.user;

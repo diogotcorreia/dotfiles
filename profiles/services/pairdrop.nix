@@ -1,7 +1,11 @@
 # Peer-to-peer file transfers web app
-{pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   domain = "drop.diogotc.com";
-  port = 2326;
+  port = lib.my.ports.pairdrop;
 in {
   services.pairdrop = {
     enable = true;

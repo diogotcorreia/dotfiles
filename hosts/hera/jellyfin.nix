@@ -1,20 +1,21 @@
 # Configuration for Jellyfin on Hera
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   secrets,
   ...
 }: let
   domainJellyfin = "jellyfin.diogotc.com";
-  portJellyfin = 8096;
+  portJellyfin = lib.my.ports.jellyfin;
   domainRadarr = "radarr.hera.diogotc.com";
-  portRadarr = 7878;
+  portRadarr = lib.my.ports.radarr;
   domainSonarr = "sonarr.hera.diogotc.com";
-  portSonarr = 8989;
+  portSonarr = lib.my.ports.sonarr;
   domainJackett = "jackett.hera.diogotc.com";
-  portJackett = 9117;
+  portJackett = lib.my.ports.jackett;
   domainBazarr = "bazarr.hera.diogotc.com";
-  portBazarr = config.services.bazarr.listenPort; # 6767
+  portBazarr = lib.my.ports.bazarr;
 
   bazarrDirectory = "/var/lib/bazarr";
 
@@ -53,7 +54,10 @@ in {
     enable = true;
     package = pkgs.unstable.jackett;
   };
-  services.bazarr.enable = true;
+  services.bazarr = {
+    enable = true;
+    listenPort = portBazarr;
+  };
 
   age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
 
@@ -73,7 +77,10 @@ in {
 
   # Open Jellyfin local discovery ports
   # https://jellyfin.org/docs/general/networking/index.html
-  networking.firewall.allowedUDPPorts = [1900 7359];
+  networking.firewall.allowedUDPPorts = with lib.my.ports; [
+    jellyfinAutoDiscoveryDlna
+    jellyfinAutoDiscoveryClients
+  ];
 
   services.caddy.virtualHosts = {
     ${domainJellyfin} = {

@@ -1,7 +1,11 @@
 # Configuration for Book Metadata API on Hera
-{pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   domain = "book-api.diogotc.com";
-  port = 8004;
+  port = lib.my.ports.bookMetadataApi;
 
   user = "book-metadata-api";
   group = "book-metadata-api";

@@ -7,7 +7,7 @@
   ...
 }: let
   socksBindAddr = "localhost";
-  socksPort = 1666;
+  socksPort = lib.my.ports.socksCaptivePortalsClient;
 in {
   imports = with profiles; [
     # Requires firefox profile
