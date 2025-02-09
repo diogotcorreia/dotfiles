@@ -10,8 +10,8 @@
 }: let
   image = {
     imageName = "ghcr.io/umami-software/umami";
-    imageDigest = "sha256:611cacc80f53fe289f7e7bfe301032a117fb57e790c37272ee05f3b0eba690a3"; # postgresql-v2.13.2
-    sha256 = "sha256-Zfjha/J0l5c61u3TqeBclns3ZnWs8IssQh7d8TWbBn0=";
+    imageDigest = "sha256:b96ff776b0e1dfafb3c366a92119b1a72a656c9c20006d47e07df9dbbffe9331"; # postgresql-v2.15.1
+    sha256 = "sha256-gR7CrKz0ahW2/HA/mkK+dn11dVxQ05kCwGfBfPgS6Nc=";
   };
   dbUsername = user;
 
@@ -42,8 +42,8 @@
 
   # Hack: update endpoint in tracker script
   trackerScript = pkgs.fetchurl {
-    url = "https://github.com/umami-software/umami/raw/refs/tags/v2.13.2/src/tracker/index.js";
-    hash = "sha256-N+iraFgl0vwIqn7irjUyZfAbEPUDGh7P/C2fgRZYnMM=";
+    url = "https://github.com/umami-software/umami/raw/refs/tags/v2.15.1/src/tracker/index.js";
+    hash = "sha256-XNopnbKt2MhFSYcMdduml9C9tz3EoohLQ6ok43ZrCv4=";
   };
   trackerScriptsDir =
     pkgs.runCommand "umami-trackers-dir" {
