@@ -29,7 +29,6 @@
     services.umami
     services.wastebin
     shell.zellij
-    virtualisation.docker
   ];
 
   networking.hostId = "4d44f5a9";
