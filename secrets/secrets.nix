@@ -73,7 +73,7 @@ in
       "resticPassword"
       "resticSshKey"
       "tritonBotEnv"
-      "umamiEnv"
+      "umamiAppSecret"
       "wastebinEnv"
     ])
 
