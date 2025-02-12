@@ -6,6 +6,7 @@
 
   mkUrl = subdomain: "https://${subdomain}.diogotc.com";
 
+  # Icons from: https://github.com/homarr-labs/dashboard-icons
   items = {
     authelia = {
       title = "Authelia";
@@ -108,6 +109,12 @@
       icon = "hl-jellyfin";
       description = "Movies, TV shows and live TV player";
       url = mkUrl "jellyfin";
+    };
+    jellyseerr = {
+      title = "Jellyseerr";
+      icon = "hl-jellyseerr";
+      description = "Media request and discovery manager for Jellyfin";
+      url = mkUrl "jellyseerr";
     };
     karaoke = {
       title = "Karaoke Song List";
@@ -213,6 +220,7 @@ in {
             immich
             nextcloud
             jellyfin
+            jellyseerr
             calibre-web
             paperless-ngx
           ];
@@ -222,6 +230,7 @@ in {
           icon = ":tv:";
           items = with items; [
             jellyfin
+            jellyseerr
             immich
             calibre-web
             radarr

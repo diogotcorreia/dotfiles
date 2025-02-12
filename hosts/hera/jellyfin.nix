@@ -1,6 +1,7 @@
 # Configuration for Jellyfin on Hera
 {
   config,
+  inputs,
   lib,
   pkgs,
   secrets,
@@ -8,6 +9,8 @@
 }: let
   domainJellyfin = "jellyfin.diogotc.com";
   portJellyfin = lib.my.ports.jellyfin;
+  domainJellyseerr = "jellyseerr.diogotc.com";
+  portJellyseerr = lib.my.ports.jellyseerr;
   domainRadarr = "radarr.hera.diogotc.com";
   portRadarr = lib.my.ports.radarr;
   domainSonarr = "sonarr.hera.diogotc.com";
@@ -17,6 +20,8 @@
   domainBazarr = "bazarr.hera.diogotc.com";
   portBazarr = lib.my.ports.bazarr;
 
+  jellyseerrDb = "jellyseerr";
+
   bazarrDirectory = "/var/lib/bazarr";
 
   diskstationAddress = "192.168.1.4";
@@ -24,6 +29,14 @@
 
   transmissionGroup = config.services.transmission.group;
 in {
+  # TODO 25.05: use stable
+  disabledModules = [
+    "services/misc/jellyseerr.nix"
+  ];
+  imports = [
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/jellyseerr.nix")
+  ];
+
   # https://nixos.wiki/wiki/Accelerated_Video_Playback
   nixpkgs.overlays = [
     (final: prev: {
@@ -42,6 +55,15 @@ in {
   };
 
   services.jellyfin.enable = true;
+  services.jellyseerr = {
+    enable = true;
+    # TODO 25.05: use stable
+    package = pkgs.unstable.jellyseerr;
+    port = portJellyseerr;
+    # This might change, so pin it to make sure it doesn't break
+    # https://github.com/NixOS/nixpkgs/pull/373533
+    configDir = "/var/lib/jellyseerr";
+  };
   services.radarr = {
     enable = true;
     package = pkgs.unstable.radarr;
@@ -57,6 +79,27 @@ in {
   services.bazarr = {
     enable = true;
     listenPort = portBazarr;
+  };
+
+  # Setup PostgreSQL for Jellyseerr
+  # https://docs.jellyseerr.dev/extending-jellyseerr/database-config
+  services.postgresql = {
+    ensureDatabases = [jellyseerrDb];
+    ensureUsers = [
+      {
+        name = jellyseerrDb;
+        ensureDBOwnership = true;
+        ensureClauses.login = true;
+      }
+    ];
+  };
+  systemd.services.jellyseerr = {
+    environment = {
+      DB_TYPE = "postgres";
+      DB_SOCKET_PATH = "/run/postgresql";
+      DB_USER = jellyseerrDb;
+      DB_NAME = jellyseerrDb;
+    };
   };
 
   age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
@@ -87,6 +130,12 @@ in {
       enableACME = true;
       extraConfig = ''
         reverse_proxy localhost:${toString portJellyfin}
+      '';
+    };
+    ${domainJellyseerr} = {
+      enableACME = true;
+      extraConfig = ''
+        reverse_proxy localhost:${toString portJellyseerr}
       '';
     };
     ${domainRadarr} = {
@@ -138,10 +187,11 @@ in {
   };
 
   modules.impermanence.directories = [
-    "/var/lib/jellyfin"
+    config.services.jellyfin.dataDir
     # also persist cache so we don't have to fetch metadata on every reboot
-    "/var/cache/jellyfin"
+    config.services.jellyfin.cacheDir
 
+    "/var/lib/private/jellyseerr" # can't use configDir from module because dynamic user
     config.services.radarr.dataDir
     config.services.sonarr.dataDir
     config.services.jackett.dataDir
@@ -149,7 +199,8 @@ in {
   ];
 
   modules.services.restic.paths = [
-    "/var/lib/jellyfin"
+    config.services.jellyfin.dataDir
+    "/var/lib/private/jellyseerr" # can't use configDir from module because dynamic user
     config.services.radarr.dataDir
     config.services.sonarr.dataDir
     config.services.jackett.dataDir

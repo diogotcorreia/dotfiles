@@ -30,6 +30,7 @@
     reposilite = 5100;
     mdnsGoogleCast = 5353;
     wastebin = 5435;
+    jellyseerr = 5055;
     coiot = 5683; # CoIoT (Shelly Push)
 
     conduit = 6167;
