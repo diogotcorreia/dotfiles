@@ -44,6 +44,7 @@ in {
         "report.analysis.*"
         "server.*"
         "!server.blocked-ip.*"
+        "session.mta-sts.*"
         "session.rcpt.rewrite"
         "session.rcpt.catch-all"
         "storage.blob"
@@ -68,6 +69,9 @@ in {
         # Enable catch-all addresses
         catch-all = true;
       };
+
+      # We have DANE and don't want to have a certificate for each domain we serve.
+      session.mta-sts.mode = "none";
 
       report.analysis = {
         # https://github.com/stalwartlabs/mail-server/discussions/877
@@ -201,10 +205,9 @@ in {
       map (
         d:
           lib.nameValuePair
-          "mta-sts.${d}"
+          "autoconfig.${d}"
           {
             serverAliases = [
-              "autoconfig.${d}"
               "autodiscovery.${d}"
             ];
             enableACME = true;
