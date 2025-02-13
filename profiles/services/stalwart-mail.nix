@@ -9,16 +9,26 @@
   httpPort = lib.my.ports.stalwartMailHttp;
 
   domain = "acme-bnss.pt"; # TODO: change this to diogotc.com after testing
+  robotsDomain = "robots.${domain}"; # emails from services from from this subdomain
   stalwartDomain = "mail.${domain}";
   roundcubeDomain = "webmail.${domain}";
   mailDomains = [
     "acme-bnss.pt"
   ];
 
+  mkEmail = name: "${name}@${domain}";
+
   credPath = "/run/credentials/stalwart-mail.service";
 
   # Use the same version of rocksdb for backups
   rocksdb = config.services.stalwart-mail.package.rocksdb;
+
+  # utils for config
+  ifthen = field: data: {
+    "if" = field;
+    "then" = data;
+  };
+  otherwise = value: {"else" = value;};
 in {
   services.stalwart-mail = {
     enable = true;
@@ -34,6 +44,7 @@ in {
         "report.analysis.*"
         "server.*"
         "!server.blocked-ip.*"
+        "session.rcpt.rewrite"
         "session.rcpt.catch-all"
         "storage.blob"
         "storage.data"
@@ -50,6 +61,10 @@ in {
       storage.blob = "db";
 
       session.rcpt = {
+        rewrite = [
+          (ifthen "rcpt_domain == '${robotsDomain}'" "'${mkEmail "robots"}'")
+          (otherwise false)
+        ];
         # Enable catch-all addresses
         catch-all = true;
       };
