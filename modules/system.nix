@@ -61,7 +61,6 @@
       "my=flake:my"
     ];
   };
-  environment.etc."channels/nixpkgs".source = inputs.nixpkgs.outPath;
 
   security.sudo.extraConfig = ''
     Defaults lecture=never
