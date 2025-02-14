@@ -55,8 +55,13 @@ in {
       # WebAuthn domain
       RP_ID = host;
 
-      DEFAULT_FROM_EMAIL = "healthchecks@diogotc.com";
-      # EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD are defined as secrets
+      DEFAULT_FROM_EMAIL = lib.my.mkRobotsEmail "healthchecks";
+      EMAIL_HOST = "mail.diogotc.com";
+      EMAIL_HOST_USER = lib.my.mkRobotsEmail "healthchecks";
+      EMAIL_PORT = "465";
+      EMAIL_USE_TLS = "False";
+      EMAIL_USE_SSL = "True";
+      # EMAIL_HOST_PASSWORD is defined as secret
       SECRET_KEY_FILE = config.age.secrets.phobosHealthchecksSecretKey.path;
 
       PING_BODY_LIMIT = "10000";

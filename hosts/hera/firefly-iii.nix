@@ -80,6 +80,15 @@ in {
       IGNORE_DUPLICATE_ERRORS = "true";
       # Don't show warnings about transactions immediately deleted by a rule
       IGNORE_NOT_FOUND_TRANSACTIONS = "true";
+
+      # Email configuration
+      MAIL_DESTINATION = lib.my.mkDtcEmail "firefly-iii";
+      MAIL_MAILER = "smtp";
+      MAIL_HOST = "mail.diogotc.com";
+      MAIL_PORT = "465";
+      MAIL_ENCRYPTION = "tls";
+      MAIL_USERNAME = lib.my.mkRobotsEmail "firefly-iii";
+      MAIL_FROM_ADDRESS = lib.my.mkRobotsEmail "firefly-iii";
     };
     # Inherit the config from the data importer
     serviceConfig = let
@@ -107,14 +116,7 @@ in {
           config.age.secrets.fireflyDataImporterEnv.path
           # Contains variables:
           # - FIREFLY_III_ACCESS_TOKEN
-          # - MAIL_DESTINATION
-          # - MAIL_MAILER
-          # - MAIL_HOST
-          # - MAIL_PORT
-          # - MAIL_ENCRYPTION
-          # - MAIL_USERNAME
           # - MAIL_PASSWORD
-          # - MAIL_FROM_ADDRESS
           config.age.secrets.fireflyAutoDataImporterEnv.path
         ];
       };

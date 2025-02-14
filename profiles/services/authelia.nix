@@ -120,10 +120,10 @@ in {
       notifier = {
         disable_startup_check = false;
         smtp = {
-          address = "submission://mail.diogotc.com:587";
-          username = "authelia@diogotc.com";
+          address = "submissions://mail.diogotc.com:465";
+          username = lib.my.mkRobotsEmail "authelia";
           # password through env variables
-          sender = "Authelia <authelia@diogotc.com>";
+          sender = "Authelia <${lib.my.mkRobotsEmail "authelia"}>";
         };
       };
 

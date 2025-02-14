@@ -1,7 +1,8 @@
 # Configuration for Nextcloud on Hera
 {
-  pkgs,
   config,
+  lib,
+  pkgs,
   secrets,
   ...
 }: let
@@ -46,18 +47,20 @@ in {
       "overwrite.cli.url" = "https://${domain}/";
       "upgrade.disable-web" = true;
       maintenance_window_start = 2;
+
+      mail_from_address = "nextcloud";
+      mail_smtpmode = "smtp";
+      mail_sendmailmode = "smtp";
+      mail_domain = "robots.diogotc.com";
+      mail_smtpauthtype = "LOGIN";
+      mail_smtpauth = 1;
+      mail_smtphost = "mail.diogotc.com";
+      mail_smtpport = "465";
+      mail_smtpsecure = "ssl";
+      mail_smtpname = lib.my.mkRobotsEmail "nextcloud";
+      # mail_smtppassword as secret
     };
     # Has:
-    # mail_from_address
-    # mail_smtpmode
-    # mail_sendmailmode
-    # mail_domain
-    # mail_smtpauthtype
-    # mail_smtpauth
-    # mail_smtphost
-    # mail_smtpport
-    # mail_smtpsecure
-    # mail_smtpname
     # mail_smtppassword
     # instanceid
     # passwordsalt
