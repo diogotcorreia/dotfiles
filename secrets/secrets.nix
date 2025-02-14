@@ -6,9 +6,10 @@ let
   febSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBVtyO4NZ3FNrffEJOGLzkVgtgpkMV1ouRkk34GslroU";
   heraSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
+  zeusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKv9y2DlGhcZRBxiqo3bmTs2U7LX7y/KC3Dwo07Ywugr";
 
   personalSystems = [apolloSystem bacchusSystem];
-  serverSystems = [athenaSystem broSystem febSystem heraSystem phobosSystem];
+  serverSystems = [athenaSystem broSystem febSystem heraSystem phobosSystem zeusSystem];
   allSystems = personalSystems ++ serverSystems;
 
   mkSystem = dir: publicKeys: files:
@@ -146,6 +147,18 @@ in
       "healthchecksSecretKey"
       "healthchecksUrl"
       "infraKeyvalEnv"
+      "nebulaCert"
+      "nebulaKey"
+      "resticHealthchecksUrl"
+      "resticRcloneConfig"
+      "resticPassword"
+      "resticSshKey"
+    ])
+
+    (mkSystem "zeus" [zeusSystem] [
+      "autoUpgradeHealthchecksUrl"
+      "cloudflareToken"
+      "healthchecksUrl"
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"

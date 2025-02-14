@@ -96,7 +96,7 @@ in {
           user = "dtc";
         };
         zeus = {
-          hostname = "mail.diogotc.com";
+          hostname = "world.zeus.diogotc.com";
           user = "dtc";
         };
 

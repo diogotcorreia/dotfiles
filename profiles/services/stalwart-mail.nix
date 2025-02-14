@@ -8,12 +8,12 @@
   dataDir = "/var/lib/stalwart-mail";
   httpPort = lib.my.ports.stalwartMailHttp;
 
-  domain = "acme-bnss.pt"; # TODO: change this to diogotc.com after testing
-  robotsDomain = "robots.${domain}"; # emails from services from from this subdomain
+  domain = "diogotc.com";
+  robotsDomain = "robots.${domain}"; # emails from services come from this subdomain
   stalwartDomain = "mail.${domain}";
   roundcubeDomain = "webmail.${domain}";
   mailDomains = [
-    "acme-bnss.pt"
+    domain
   ];
 
   mkEmail = name: "${name}@${domain}";
@@ -55,11 +55,6 @@ in {
         "store.*"
         "tracer.*"
       ];
-
-      # Since system.stateVersion is lower than 24.11, we have to set some fields to use RocksDB instead of SQLite.
-      store.db.type = "rocksdb";
-      store.db.path = "${dataDir}/db";
-      storage.blob = "db";
 
       session.rcpt = {
         rewrite = [

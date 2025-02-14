@@ -34,6 +34,9 @@ jobs:
           - host: phobos
             platform: x86-64-linux
             large: false
+          - host: zeus
+            platform: x86-64-linux
+            large: false
 
     needs: ["build-packages"]
     steps:

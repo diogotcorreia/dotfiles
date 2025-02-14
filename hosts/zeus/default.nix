@@ -1,4 +1,4 @@
-# Configuration for athena (VPS)
+# Configuration for zeus (VPS)
 {
   config,
   lib,
@@ -10,27 +10,13 @@
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
-    services.authelia
-    services.battleship-js
-    services.chhoto-url
-    services.discord-bots.triton-bot
-    services.dtc-labs
-    services.gpg-wkd
-    services.lldap
-    services.meilisearch
     services.nginx.common
-    services.pairdrop
-    services.reposilite
-    services.resumos-legacy
-    services.rex-cdn
     services.ssh
-    services.twin
-    services.umami
-    services.wastebin
+    services.stalwart-mail
     shell.zellij
   ];
 
-  networking.hostId = "4d44f5a9";
+  networking.hostId = "b6bd9436";
   my.filesystem.mainDisk = "/dev/sda";
   my.filesystem.espSize = "128M";
   my.filesystem.useEfi = false; # OVH does not support UEFI
@@ -44,7 +30,7 @@
     interfaces = {
       ${config.my.networking.wiredInterface}.ipv6.addresses = [
         {
-          address = "2001:41d0:304:200::34e7";
+          address = "2001:41d0:304:200::c76d";
           prefixLength = 64;
         }
       ];
@@ -66,14 +52,10 @@
   # Modules
   modules = {
     editors.neovim.enable = true;
-    server = {
-      enable = true;
-    };
+    server.enable = true;
     services = {
       dnsoverhttps.enable = true;
-      healthchecks = {
-        enable = true;
-      };
+      healthchecks.enable = true;
       # Nebula (VPN)
       nebula = {
         enable = true;
@@ -116,5 +98,5 @@
   };
 
   # System state version
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
 }
