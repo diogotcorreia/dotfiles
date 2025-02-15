@@ -2,6 +2,8 @@
 {
   config,
   lib,
+  pkgs,
+  secrets,
   ...
 }: let
   cfg = config.services.immich;
@@ -11,10 +13,15 @@
 
   domain = "photos.diogotc.com";
   port = lib.my.ports.immich;
+
+  oauthClientId = "geTzW3w4Q7ifXZTkNRPqk7sb.PL8yd1OD7mpORuqk8wFTM0mvITg-095msLn4_jWcxhRYm8O";
+  oauthScopes = ["openid" "email" "profile"];
 in {
   # Ensure that the NFS server has the same UID/GID
   users.users.${cfg.user}.uid = 15015;
   users.groups.${cfg.group}.gid = 15015;
+
+  age.secrets.immichEnv.file = secrets.host.immichEnv;
 
   services.immich = {
     inherit port;
@@ -37,7 +44,45 @@ in {
 
       # disable update checker
       newVersionCheck.enabled = false;
+
+      oauth = {
+        autoLaunch = true;
+        autoRegister = true; # we limit who can register in authelia
+        buttonText = "Login with Authelia";
+        clientId = oauthClientId;
+        # clientSecret is passed using env variables (see below)
+        enabled = true;
+        issuerUrl = "https://auth.diogotc.com/.well-known/openid-configuration";
+        scope = lib.concatStringsSep " " oauthScopes;
+        signingAlgorithm = "RS256";
+        profileSigningAlgorithm = "none";
+        storageLabelClaim = "preferred_username";
+        storageQuotaClaim = "immich_quota";
+      };
     };
+
+    # Contains:
+    # - IMMICH_OAUTH_CLIENT_SECRET (custom, see below)
+    secretsFile = config.age.secrets.immichEnv.path;
+  };
+
+  # Since the Immich people don't give us proper env variables for secrets,
+  # we'll have to do it ourselves.
+  # https://github.com/immich-app/immich/discussions/14815
+  systemd.services.immich-server = let
+    unpatchedConfigFile = config.services.immich.environment.IMMICH_CONFIG_FILE;
+    patchedConfigFile = "/run/immich/config.json";
+  in {
+    environment = {
+      IMMICH_CONFIG_FILE = lib.mkForce patchedConfigFile;
+    };
+    preStart = ''
+      install -m 600 /dev/null ${patchedConfigFile}
+      ${lib.getExe pkgs.jq} -c \
+        --arg oauthClientSecret "$IMMICH_OAUTH_CLIENT_SECRET" \
+        '.oauth.clientSecret += $oauthClientSecret' \
+        ${unpatchedConfigFile} > ${patchedConfigFile}
+    '';
   };
 
   systemd.tmpfiles.rules = ["d ${photosLocation} 0750 ${cfg.user} ${cfg.group}"];
@@ -75,6 +120,22 @@ in {
       '';
     };
   };
+
+  my.services.authelia.oauthClients = [
+    {
+      client_id = oauthClientId;
+      client_name = "Immich";
+      client_secret = "$pbkdf2-sha512$310000$Z336P2rugr/JOEiMIvRU/w$H9YnpqQhXB8qrG3L8NnndYoBunQCxj/9cNffZ5IIgmqQXwL/06bVgUFogCuLkPZrvEUqlFs48.TCOjDqkmH/WA";
+      redirect_uris = [
+        "https://${domain}/auth/login"
+        "https://${domain}/user-settings"
+        "app.immich:///oauth-callback"
+      ];
+      scopes = oauthScopes;
+      policy = "two_factor";
+      subject = "group:immich";
+    }
+  ];
 
   # https://immich.app/docs/administration/backup-and-restore
   modules.services.restic.paths = [

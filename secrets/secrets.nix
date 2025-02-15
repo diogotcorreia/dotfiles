@@ -123,6 +123,7 @@ in
       "fireflyAutoDataImporterHealthchecksUrl"
       "fireflyDataImporterEnv"
       "healthchecksUrl"
+      "immichEnv"
       "istDelegateElectionFenixSecret"
       "nebulaCert"
       "nebulaKey"
