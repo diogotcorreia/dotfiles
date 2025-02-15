@@ -1,10 +1,15 @@
 # Triton Web Interface
 {
   fetchFromGitHub,
+  fetchYarnDeps,
   lib,
   makeWrapper,
   mkYarnPackage,
   nodejs,
+  stdenv,
+  yarnBuildHook,
+  yarnConfigHook,
+  yarnInstallHook,
   ...
 }: let
   version = "0-unstable-2025-02-03";
@@ -21,44 +26,49 @@
     platforms = platforms.all;
   };
 
-  frontend = mkYarnPackage rec {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "twin-frontend";
     src = "${commonSrc}/frontend";
 
-    buildPhase = ''
-      runHook preBuild
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/yarn.lock";
+      sha256 = "sha256-sp3dbg0M/yWSgce1Sb8Ju6xHz6MUZVuEwLxyGicvDaM=";
+    };
 
-      yarn --offline build
-
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     # get rid of everything except for build result
     postInstall = ''
-      cp -r $out/${passthru.nodeAppDir}/build $out
-      rm -rf $out/bin $out/libexec
+      mkdir -p $out
+      cp -r build $out
     '';
 
     # error:0308010C:digital envelope routines::unsupported
-    NODE_OPTIONS = "--openssl-legacy-provider";
-
-    # don't generate the dist tarball
-    doDist = false;
-
-    passthru = {
-      nodeAppDir = "libexec/twin/deps/twin";
-    };
+    env.NODE_OPTIONS = "--openssl-legacy-provider";
 
     meta = meta';
-  };
+  });
 
-  backend = mkYarnPackage rec {
+  backend = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "twin-backend";
     src = "${commonSrc}/backend";
 
-    nativeBuildInputs = [makeWrapper];
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/yarn.lock";
+      sha256 = "sha256-4Hqsyq5tUIW6Swe5pq9ELLrHA8wViKO5NkCqKUQgqVQ=";
+    };
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnInstallHook
+      makeWrapper
+    ];
 
     # Setup config and patch upload folder to be outside the nix store
     patchPhase = ''
@@ -82,30 +92,21 @@
 
     # generate binary
     postInstall = ''
-      OUT_JS_DIR="$out/${passthru.nodeAppDir}"
+      OUT_JS_DIR="$out/lib/node_modules/${finalAttrs.pname}"
 
-      makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
+      makeWrapper '${lib.getExe nodejs}' "$out/bin/${finalAttrs.pname}" \
         --add-flags "$OUT_JS_DIR/src/index.js"
 
       # delete unnecessary files
-      rm -rf "$out/${passthru.nodeAppDir}/"{config.def.js,migrations,upload,yarn.lock,.prettierrc.json}
+      rm -r "$OUT_JS_DIR"/{config.def.js,migrations,upload,.prettierrc.json}
     '';
-
-    # there are no tests :/
-    doCheck = false;
-    # don't generate the dist tarball
-    doDist = false;
-
-    passthru = {
-      nodeAppDir = "libexec/${pname}/deps/${pname}";
-    };
 
     meta =
       meta'
       // {
         mainProgram = "twin-backend";
       };
-  };
+  });
 in {
   inherit backend frontend;
 }
