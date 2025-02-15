@@ -1,13 +1,17 @@
 # Bot for Triton's Discord server
 {
   fetchFromGitHub,
+  fetchYarnDeps,
   lib,
   makeWrapper,
-  mkYarnPackage,
   nodejs,
+  stdenv,
+  yarnBuildHook,
+  yarnConfigHook,
+  yarnInstallHook,
   ...
 }:
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "triton-bot";
   version = "0-unstable-2025-02-03";
   src = fetchFromGitHub {
@@ -17,35 +21,31 @@ mkYarnPackage rec {
     hash = "sha256-J5KMhrQWFoCOCNRr+LJ7VGry5ljGcR7ZkSuzVo6RMDU=";
   };
 
-  nativeBuildInputs = [makeWrapper];
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = "sha256-zKMsilmfUM9HhweGhXFn0bpAhITA6Tnmovl13uohZ3I=";
+  };
 
-  buildPhase = ''
-    runHook preBuild
-
-    yarn --offline build
-
-    runHook postBuild
-  '';
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    makeWrapper
+    nodejs
+  ];
 
   # generate binary
   postInstall = ''
-    OUT_JS_DIR="$out/${passthru.nodeAppDir}/dist"
+    OUT_JS_DIR="$out/lib/node_modules/${finalAttrs.pname}"
 
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
-      --add-flags "$OUT_JS_DIR/index.js"
+    cp -r dist "$OUT_JS_DIR"
+
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/${finalAttrs.pname}" \
+      --add-flags "$OUT_JS_DIR/dist/index.js"
 
     # delete unnecessary files
-    rm -rf "$out/${passthru.nodeAppDir}/"{knexfile.js,migrations,package.json,README.md,src,yarn.lock}
+    rm -r "$OUT_JS_DIR"/{knexfile.js,migrations,package.json,README.md,src,.husky,.prettierrc,.babelrc}
   '';
-
-  # there are no tests :/
-  doCheck = false;
-  # don't generate the dist tarball
-  doDist = false;
-
-  passthru = {
-    nodeAppDir = "libexec/${pname}/deps/${pname}";
-  };
 
   meta = with lib; {
     description = "Bot for TritonMC's Discord server";
@@ -54,4 +54,4 @@ mkYarnPackage rec {
     mainProgram = "triton-bot";
     platforms = platforms.all;
   };
-}
+})
