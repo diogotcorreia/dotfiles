@@ -1,10 +1,14 @@
 # Battleships game
 {
   fetchFromGitHub,
+  fetchYarnDeps,
   lib,
   makeWrapper,
-  mkYarnPackage,
   nodejs,
+  stdenv,
+  yarnBuildHook,
+  yarnConfigHook,
+  yarnInstallHook,
   ...
 }: let
   version = "0-unstable-2025-02-02";
@@ -21,46 +25,50 @@
     platforms = platforms.all;
   };
 
-  client = mkYarnPackage rec {
+  client = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "battleship-js-client";
     src = "${commonSrc}/client";
 
-    buildPhase = ''
-      runHook preBuild
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/yarn.lock";
+      sha256 = "sha256-iMhM1vzRGxO+0EpLXj87yeUUz1W8Yj6utT+Exalu/f0=";
+    };
 
-      yarn --offline build
-
-      runHook postBuild
-    '';
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
 
     # get rid of everything except for build result
     postInstall = ''
-      cp -r $out/${passthru.nodeAppDir}/build $out
-      rm -rf $out/bin $out/libexec
+      mkdir -p $out
+      cp -r build $out
     '';
 
     # error:0308010C:digital envelope routines::unsupported
-    NODE_OPTIONS = "--openssl-legacy-provider";
-
-    # don't generate the dist tarball
-    doDist = false;
-
+    env.NODE_OPTIONS = "--openssl-legacy-provider";
     env.REACT_APP_SOCKET_URL = "/";
 
-    passthru = {
-      nodeAppDir = "libexec/${pname}/deps/${pname}";
-    };
-
     meta = meta';
-  };
+  });
 
-  server = mkYarnPackage rec {
+  server = stdenv.mkDerivation (finalAttrs: {
     inherit version;
     pname = "battleship-js";
     src = commonSrc;
 
-    nativeBuildInputs = [makeWrapper];
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = finalAttrs.src + "/yarn.lock";
+      sha256 = "sha256-DVaocTy3WOmkJm9fKfSgcqCN/y7+hhUXfGpi0HXsCeU=";
+    };
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnInstallHook
+      makeWrapper
+    ];
 
     prePatch = ''
       rm -rf client
@@ -78,31 +86,22 @@
 
     # generate binary
     postInstall = ''
-      OUT_JS_DIR="$out/${passthru.nodeAppDir}"
+      OUT_JS_DIR="$out/lib/node_modules/battleship-js"
 
-      makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
+      makeWrapper '${lib.getExe nodejs}' "$out/bin/${finalAttrs.pname}" \
         --set NODE_ENV production \
         --add-flags "$OUT_JS_DIR/src/server.js"
 
       # delete unnecessary files
-      rm -rf "$out/${passthru.nodeAppDir}/"{.gitignore,.prettierrc,README.md,default.env,yarn.lock}
+      rm "$OUT_JS_DIR"/{.prettierrc,README.md,default.env}
     '';
-
-    # there are no tests :/
-    doCheck = false;
-    # don't generate the dist tarball
-    doDist = false;
-
-    passthru = {
-      nodeAppDir = "libexec/${pname}/deps/${pname}";
-    };
 
     meta =
       meta'
       // {
-        mainProgram = pname;
+        mainProgram = finalAttrs.pname;
       };
-  };
+  });
 in {
   inherit client server;
 }
