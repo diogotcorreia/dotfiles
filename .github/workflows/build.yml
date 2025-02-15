@@ -92,6 +92,7 @@ jobs:
             substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
             always-allow-substitutes = true
+            allow-import-from-derivation = false
 
       # We check if this system actually has anything to be built or if we're just going
       # to be fetching from cache
@@ -156,6 +157,7 @@ jobs:
             substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
             always-allow-substitutes = true
+            allow-import-from-derivation = false
 
       # We check if this package actually has anything to be built or if we're just going
       # to be fetching from cache
