@@ -1,51 +1,51 @@
 # Miscellaneous web services by me
 {
   fetchFromGitHub,
+  fetchYarnDeps,
   lib,
   makeWrapper,
-  mkYarnPackage,
   nodejs,
+  stdenv,
+  yarnBuildHook,
+  yarnConfigHook,
+  yarnInstallHook,
   ...
 }:
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtc-labs";
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2025-02-15";
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "dtc-labs";
-    rev = "4deae8c1d25570dcd7f49088c277da65a2c8705f";
-    hash = "sha256-DKu/7feLmicEO9aMvFsghzMH7JlliU9DR3fr2HcwyVY=";
+    rev = "c31d6b5538d040bc79c420a2ea2ce0e9df6a93f6";
+    hash = "sha256-OyyjzjsZ0KgljSqZxkMJEc8qD1FrDsWoFmRf2nwR+QE=";
   };
 
-  nativeBuildInputs = [makeWrapper];
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = "sha256-A3HDyDqJh3RBSgABaC4sl0RHWmcujLaU6i7ML4RAPdc=";
+  };
 
-  buildPhase = ''
-    runHook preBuild
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    makeWrapper
+    nodejs
+  ];
 
-    yarn --offline build
-
-    runHook postBuild
-  '';
-
-  # generate binary
   postInstall = ''
-    OUT_JS_DIR="$out/${passthru.nodeAppDir}/dist"
+    OUT_JS_DIR="$out/lib/node_modules/${finalAttrs.pname}"
 
-    makeWrapper '${lib.getExe nodejs}' "$out/bin/${pname}" \
-      --add-flags "$OUT_JS_DIR/index.js"
+    cp -r dist "$OUT_JS_DIR"
+
+    # generate binary
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/${finalAttrs.pname}" \
+      --add-flags "$OUT_JS_DIR/dist/index.js"
 
     # delete unnecessary files
-    rm -rf "$out/${passthru.nodeAppDir}/"{src,package.json,README.md,yarn.lock}
+    rm -r "$OUT_JS_DIR"/{src,package.json,README.md,.babelrc,.prettierrc}
   '';
-
-  # there are no tests :/
-  doCheck = false;
-  # don't generate the dist tarball
-  doDist = false;
-
-  passthru = {
-    nodeAppDir = "libexec/${pname}/deps/${pname}";
-  };
 
   meta = with lib; {
     description = "Experimental code snippets for DTC";
@@ -54,4 +54,4 @@ mkYarnPackage rec {
     mainProgram = "dtc-labs";
     platforms = platforms.all;
   };
-}
+})
