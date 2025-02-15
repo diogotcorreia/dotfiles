@@ -21,8 +21,11 @@
     builtins.concatLists
   ];
 
-  # TODO
-  oidcClients = [];
+  oidcClients = lib.pipe nixosConfigurations [
+    builtins.attrValues
+    (map (cfg: cfg.config.my.services.authelia.oauthClients))
+    builtins.concatLists
+  ];
   hasOidcClients = oidcClients != [];
 in {
   # https://www.authelia.com/reference/guides/generating-secure-values/
@@ -135,8 +138,38 @@ in {
       };
 
       identity_providers = lib.mkIf hasOidcClients {
-        oidc = {
-          clients = oidcClients;
+        oidc = let
+          # policy name can't contain dots and needs to be lowercase
+          mkPolicyName = client_id: "policy_${lib.toLower (lib.replaceChars ["."] ["_"] client_id)}";
+          customAuthorizationPolicies = lib.pipe oidcClients [
+            (lib.filter (client: client.subject != []))
+            (map (client:
+              lib.nameValuePair (mkPolicyName client.client_id) {
+                default_policy = "deny";
+                rules = [
+                  {
+                    policy = client.policy;
+                    subject = client.subject;
+                  }
+                ];
+              }))
+            lib.listToAttrs
+          ];
+          clients =
+            map (client: {
+              inherit (client) client_id client_name client_secret redirect_uris;
+              scopes = lib.mkIf (client.scopes != []) client.scopes;
+              authorization_policy =
+                if client.subject == []
+                then client.policy
+                else mkPolicyName client.client_id;
+              # save consent for 1 year
+              pre_configured_consent_duration = "1y";
+            })
+            oidcClients;
+        in {
+          authorization_policies = lib.mkIf (customAuthorizationPolicies != {}) customAuthorizationPolicies;
+          inherit clients;
         };
       };
     };
