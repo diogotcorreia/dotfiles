@@ -140,7 +140,7 @@ in {
       identity_providers = lib.mkIf hasOidcClients {
         oidc = let
           # policy name can't contain dots and needs to be lowercase
-          mkPolicyName = client_id: "policy_${lib.toLower (lib.replaceChars ["."] ["_"] client_id)}";
+          mkPolicyName = client_id: "policy_${lib.toLower (lib.replaceStrings ["."] ["_"] client_id)}";
           customAuthorizationPolicies = lib.pipe oidcClients [
             (lib.filter (client: client.subject != []))
             (map (client:
