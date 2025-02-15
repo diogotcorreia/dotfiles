@@ -23,6 +23,7 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/9B79-E291";
     fsType = "vfat";
+    options = ["umask=0077"];
   };
 
   fileSystems."/nix" = {
