@@ -70,7 +70,7 @@ in {
 
       report.analysis = {
         # https://github.com/stalwartlabs/mail-server/discussions/877
-        addresses = ["dmarc-reports@*" "spf-reports@*"];
+        addresses = ["dmarc-reports@*" "spf-reports@*" "tls-reports@*"];
         forward = false;
       };
 
