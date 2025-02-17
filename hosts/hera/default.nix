@@ -16,6 +16,7 @@
     services.caddy.common
     services.dashy
     services.discord-bots.alt-urls-discord-bot
+    services.esphome
     services.ssh
     shell.zellij
     virtualisation.docker
