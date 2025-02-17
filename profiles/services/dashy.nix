@@ -102,7 +102,7 @@
       title = "Jackett";
       icon = "hl-jackett";
       description = "Torrent tracker";
-      url = mkUrl "jackett";
+      url = mkUrl "jackett.hera";
     };
     jellyfin = {
       title = "Jellyfin";
