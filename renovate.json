@@ -8,5 +8,12 @@
   ],
   "lockFileMaintenance": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["nix"],
+      "matchDepNames": ["nixpkgs", "nixpkgs-unstable", "home"],
+      "versioning": "nixpkgs"
+    }
+  ]
 }
