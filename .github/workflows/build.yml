@@ -73,11 +73,11 @@ jobs:
         run: |
           sudo chown root:root /nix
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       # We only run this if we are building an aarch64-linux system
       - if: matrix.machine.platform == 'aarch64-linux'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3
 
       # We make our netrc file that is used to make authorized requests to Attic
       - run: |
@@ -142,7 +142,7 @@ jobs:
           - lzbt
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       # We make our netrc file that is used to make authorized requests to Attic
       - run: |
