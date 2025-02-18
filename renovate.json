@@ -12,7 +12,7 @@
   "packageRules": [
     {
       "matchManagers": ["nix"],
-      "matchUpdateType": ["!lockFileMaintenance"],
+      "matchUpdateTypes": ["!lockFileMaintenance"],
       "enabled": false
     }
   ]
