@@ -16,8 +16,6 @@
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
-      # only used for non-flake setups, so we can get rid of it
-      inputs.flake-compat.follows = "";
     };
     lanzaboote = {
       url = "github:nix-community/lanzaboote?ref=v0.4.2";
