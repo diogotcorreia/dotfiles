@@ -10,6 +10,7 @@
     hardware.zram
     security.acme.cloudflare
     security.fail2ban
+    server.minimal
     services.authelia
     services.battleship-js
     services.chhoto-url

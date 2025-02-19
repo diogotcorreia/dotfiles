@@ -8,6 +8,7 @@
   imports = with profiles; [
     security.acme.cloudflare
     security.fail2ban
+    server.minimal
     services.caddy.common
     services.infra-keyval
     services.ssh

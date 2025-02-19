@@ -10,6 +10,7 @@
     networking.ddns.cloudflare
     security.acme.cloudflare
     security.fail2ban
+    server.minimal
     services.caddy.common
     services.ssh
     shell.zellij
