@@ -1,96 +1,96 @@
 diff --git a/app/Console/AutoImports.php b/app/Console/AutoImports.php
-index c45b296..01047d9 100644
+index 8e9438a..77720ff 100644
 --- a/app/Console/AutoImports.php
 +++ b/app/Console/AutoImports.php
-@@ -260,7 +260,8 @@ trait AutoImports
-                 new ImportedTransactions(
+@@ -279,7 +279,8 @@ trait AutoImports
                      array_merge($this->conversionMessages, $this->importMessages),
                      array_merge($this->conversionWarnings, $this->importWarnings),
--                    array_merge($this->conversionErrors, $this->importErrors)
-+                    array_merge($this->conversionErrors, $this->importErrors),
+                     array_merge($this->conversionErrors, $this->importErrors),
+-                    $this->conversionRateLimits
++                    $this->conversionRateLimits,
 +                    $file
                  )
              );
  
-@@ -278,7 +279,7 @@ trait AutoImports
+@@ -297,7 +298,7 @@ trait AutoImports
          $messages          = array_merge($this->importMessages, $this->conversionMessages);
          $warnings          = array_merge($this->importWarnings, $this->conversionWarnings);
          $errors            = array_merge($this->importErrors, $this->conversionErrors);
--        event(new ImportedTransactions($messages, $warnings, $errors));
-+        event(new ImportedTransactions($messages, $warnings, $errors, $file));
+-        event(new ImportedTransactions($messages, $warnings, $errors, $this->conversionRateLimits));
++        event(new ImportedTransactions($messages, $warnings, $errors, $this->conversionRateLimits, $file));
  
-         if (count($this->importErrors) > 0) {
-             return 1;
-@@ -633,7 +634,8 @@ trait AutoImports
-             new ImportedTransactions(
+         if (count($this->importErrors) > 0 || count($this->conversionRateLimits) > 0) {
+             app('log')->error(sprintf('Exit code is %s.', ExitCode::GENERAL_ERROR->name));
+@@ -666,7 +667,8 @@ trait AutoImports
                  array_merge($this->conversionMessages, $this->importMessages),
                  array_merge($this->conversionWarnings, $this->importWarnings),
--                array_merge($this->conversionErrors, $this->importErrors)
-+                array_merge($this->conversionErrors, $this->importErrors),
+                 array_merge($this->conversionErrors, $this->importErrors),
+-                $this->conversionRateLimits
++                $this->conversionRateLimits,
 +                $jsonFile
              )
          );
      }
 diff --git a/app/Events/ImportedTransactions.php b/app/Events/ImportedTransactions.php
-index d0688f9..ec6f5be 100644
+index 6e1dbb8..f8bef42 100644
 --- a/app/Events/ImportedTransactions.php
 +++ b/app/Events/ImportedTransactions.php
-@@ -39,8 +39,9 @@ class ImportedTransactions
-     public array $errors;
+@@ -40,8 +40,9 @@ class ImportedTransactions
      public array $messages;
      public array $warnings;
+     public array $rateLimits;
 +    public string $fileName;
  
--    public function __construct(array $messages, array $warnings, array $errors)
-+    public function __construct(array $messages, array $warnings, array $errors, string $fileName = null)
+-    public function __construct(array $messages, array $warnings, array $errors, array $rateLimits)
++    public function __construct(array $messages, array $warnings, array $errors, array $rateLimits, string $fileName = null)
      {
          app('log')->debug('Created event ImportedTransactions with filtering (2)');
  
-@@ -48,6 +49,7 @@ class ImportedTransactions
-         $this->messages = $this->filterArray('message(s)', $messages);
-         $this->warnings = $this->filterArray('warning(s)', $warnings);
-         $this->errors   = $this->filterArray('error(s)', $errors);
-+        $this->fileName = $fileName;
+@@ -50,6 +51,7 @@ class ImportedTransactions
+         $this->warnings   = $this->filterArray('warning(s)', $warnings);
+         $this->errors     = $this->filterArray('error(s)', $errors);
+         $this->rateLimits = $this->filterArray('rate limit message(s)', $rateLimits);
++        $this->fileName   = $fileName;
      }
  
      /**
 diff --git a/app/Handlers/Events/ImportedTransactionsEventHandler.php b/app/Handlers/Events/ImportedTransactionsEventHandler.php
-index ea1b918..b2ed846 100644
+index b4205c8..d943090 100644
 --- a/app/Handlers/Events/ImportedTransactionsEventHandler.php
 +++ b/app/Handlers/Events/ImportedTransactionsEventHandler.php
-@@ -58,6 +58,7 @@ class ImportedTransactionsEventHandler
-             'messages' => $event->messages,
-             'warnings' => $event->warnings,
-             'errors'   => $event->errors,
-+            'fileName' => $event->fileName,
+@@ -59,6 +59,7 @@ class ImportedTransactionsEventHandler
+             'warnings'    => $event->warnings,
+             'errors'      => $event->errors,
+             'rate_limits' => $event->rateLimits,
++            'fileName'    => $event->fileName,
          ];
          if (count($event->messages) > 0 || count($event->warnings) > 0 || count($event->errors) > 0) {
              app('log')->info('Will send report message.');
 diff --git a/app/Mail/ImportReportMail.php b/app/Mail/ImportReportMail.php
-index abd7591..bee8bed 100644
+index a0e1dcf..3db9333 100644
 --- a/app/Mail/ImportReportMail.php
 +++ b/app/Mail/ImportReportMail.php
-@@ -42,6 +42,7 @@ class ImportReportMail extends Mailable
-     public string $url;
+@@ -44,6 +44,7 @@ class ImportReportMail extends Mailable
      public string $version;
      public array  $warnings;
+     public array  $rateLimits;
 +    public string $fileName;
  
      /**
       * Create a new message instance.
-@@ -57,6 +58,7 @@ class ImportReportMail extends Mailable
-         $this->errors   = $log['errors'] ?? [];
-         $this->warnings = $log['warnings'] ?? [];
-         $this->messages = $log['messages'] ?? [];
-+        $this->fileName = $log['fileName'] ?? "";
+@@ -60,6 +61,7 @@ class ImportReportMail extends Mailable
+         $this->warnings   = $log['warnings'] ?? [];
+         $this->messages   = $log['messages'] ?? [];
+         $this->rateLimits = $log['rate_limits'] ?? [];
++        $this->fileName   = $log['fileName'] ?? [];
      }
  
      /**
 diff --git a/resources/views/v2/emails/import/report.blade.php b/resources/views/v2/emails/import/report.blade.php
-index 048f786..da9bd73 100644
+index 4d0128d..fc4f86b 100644
 --- a/resources/views/v2/emails/import/report.blade.php
 +++ b/resources/views/v2/emails/import/report.blade.php
-@@ -48,5 +48,6 @@ Go to Firefly III
+@@ -58,5 +58,6 @@ Go to Firefly III
  
  Enjoy!<br>
  Firefly III Data Importer, @if(str_starts_with($version, 'develop')){{ $version }} @else v{{ $version }}@endif
