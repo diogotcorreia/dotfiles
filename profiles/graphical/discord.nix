@@ -6,8 +6,8 @@
   ...
 }: let
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.22/uniform/nordic.theme.css";
-    hash = "sha256-CyGBS5kzMCUieWSfzgwjYPlKHnKGRw0NY+AMBrV2aao=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.23/uniform/nordic.theme.css";
+    hash = "sha256-jiibjz7Z1+StWvqhXMHb3CnIjaGxNKvDQu2cjQ5VEO0=";
   };
   extraCss = ''
     .theme-dark {
