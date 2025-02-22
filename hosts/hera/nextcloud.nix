@@ -7,6 +7,10 @@
   ...
 }: let
   domain = "cloud.diogotc.com";
+  collaboraDomain = "office.diogotc.com";
+
+  collaboraPort = lib.my.ports.collabora-online;
+  collaboraDataDir = "/var/lib/cool";
 
   dbUsername = "nextcloud";
   dbDatabaseName = "nextcloud";
@@ -66,6 +70,14 @@ in {
     # passwordsalt
     # secret
     secretFile = config.age.secrets.nextcloudSecrets.path;
+
+    appstoreEnable = true;
+    extraAppsEnable = true;
+    extraApps = with config.services.nextcloud.package.packages.apps; {
+      inherit
+        richdocuments # Collabora Online for Nextcloud - https://apps.nextcloud.com/apps/richdocuments
+        ;
+    };
   };
   # Use caddy instead of nginx
   services.phpfpm.pools.nextcloud.settings = {
@@ -74,21 +86,69 @@ in {
   };
   users.groups.nextcloud.members = [config.services.caddy.user];
 
+  services.collabora-online = {
+    enable = true;
+    port = collaboraPort;
+    settings = {
+      # Rely on reverse proxy for SSL
+      ssl = {
+        enable = false;
+        termination = true;
+      };
+
+      net = {
+        listen = "loopback";
+        post_allow.host = ["::1"];
+      };
+      storage.wopi = {
+        "@allow" = true;
+        host = [domain];
+      };
+      server_name = collaboraDomain;
+    };
+  };
+
+  systemd.services.nextcloud-config-collabora = let
+    inherit (config.services.nextcloud) occ;
+
+    wopi_url = "http://[::1]:${toString collaboraPort}";
+    public_wopi_url = "https://${collaboraDomain}";
+    wopi_allowlist = lib.concatStringsSep "," [
+      "127.0.0.1"
+      "::1"
+    ];
+  in {
+    wantedBy = ["multi-user.target"];
+    after = ["nextcloud-setup.service" "coolwsd.service"];
+    requires = ["coolwsd.service"];
+    script = ''
+      ${occ}/bin/nextcloud-occ config:app:set richdocuments wopi_url --value ${lib.escapeShellArg wopi_url}
+      ${occ}/bin/nextcloud-occ config:app:set richdocuments public_wopi_url --value ${lib.escapeShellArg public_wopi_url}
+      ${occ}/bin/nextcloud-occ config:app:set richdocuments wopi_allowlist --value ${lib.escapeShellArg wopi_allowlist}
+      ${occ}/bin/nextcloud-occ richdocuments:setup
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "nextcloud";
+    };
+  };
+
+  networking.hosts = {
+    "127.0.0.1" = [domain collaboraDomain];
+    "::1" = [domain collaboraDomain];
+  };
+
   services.caddy.virtualHosts = {
-    ${domain} = {
+    ${domain} = let
+      # The webroot created by the module contains links to the various app store locations
+      webroot = config.services.nginx.virtualHosts.${domain}.root;
+    in {
       enableACME = true;
       extraConfig = ''
         encode zstd gzip
-        root * ${config.services.nextcloud.package}
+        root * ${webroot}
         php_fastcgi unix/${config.services.phpfpm.pools.nextcloud.socket} {
-          import CLOUDFLARE_PROXY
           env front_controller_active true # remove index.php from urls
-        }
-        handle /store-apps/* {
-          root * ${config.services.nextcloud.home}
-        }
-        handle /nix-apps/* {
-          root * ${config.services.nextcloud.home}
         }
         redir /.well-known/caldav /remote.php/dav 301
         redir /.well-known/carddav /remote.php/dav 301
@@ -154,6 +214,12 @@ in {
         request_body {
           max_size 2GB
         }
+      '';
+    };
+    ${collaboraDomain} = {
+      enableACME = true;
+      extraConfig = ''
+        reverse_proxy [::1]:${toString collaboraPort}
       '';
     };
   };

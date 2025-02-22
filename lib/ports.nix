@@ -62,6 +62,7 @@
     authelia = 9091;
     transmission = 9091;
     jackett = 9117;
+    collabora-online = 9980;
     stalwartMailHttp = 9988;
 
     lldapHttp = 17170;
