@@ -12,6 +12,7 @@
     security.fail2ban
     server.minimal
     services.caddy.common
+    services.esphome
     services.ssh
     shell.zellij
   ];
