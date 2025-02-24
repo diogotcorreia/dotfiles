@@ -218,7 +218,7 @@ in {
         if cfg.allowReboot
         then ''
           config_store_path="$(${curl} --url ${lib.escapeShellArg cfg.storePathUrl})"
-          if [[ ! "$config_store_path" =~ ^\/nix\/store/[^\/]+$ ]]; then
+          if [[ ! "$config_store_path" =~ ^\/nix\/store\/[a-z0-9]{32}-nixos-system-${config.networking.hostName}-[0-9]{2}\.[0-9]{2}\.[0-9]{8}\.[a-z0-9]{7,}$ ]]; then
             echo "fetched store path does not match expected format: $config_store_path"
             exit 1
           fi
