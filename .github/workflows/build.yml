@@ -77,7 +77,7 @@ jobs:
 
       # We only run this if we are building an aarch64-linux system
       - if: matrix.machine.platform == 'aarch64-linux'
-        uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3
+        uses: docker/setup-qemu-action@5964de0df58d5ad28b04d8fe2e6b80ad47105b91 # v3
 
       # We make our netrc file that is used to make authorized requests to Attic
       - run: |
