@@ -48,6 +48,9 @@
         "breakpad.reportURL" = "";
         "browser.tabs.crashReporting.sendReport" = false;
         "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
+
+        # disable pocket
+        "extensions.pocket.enabled" = false;
       };
     };
   };
