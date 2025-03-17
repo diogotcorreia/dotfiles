@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "evercape";
   domain = "resol";
-  version = "2024.04.1";
+  version = "2024.11.0";
 
   src = fetchFromGitHub {
     owner = "evercape";
     repo = "hass-resol-KM2";
-    rev = version;
-    hash = "sha256-mieJXhjjsyh7qtS863wUJqKwsaaKszJLadxx5yDKZJw=";
+    tag = version;
+    hash = "sha256-fyObGaIIusXztiBNBsIuyPrkERTpAIWJGmx5MSNfQWI=";
   };
 
   meta = with lib; {
