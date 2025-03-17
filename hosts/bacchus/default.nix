@@ -105,6 +105,8 @@
     steam-run
     # Karaoke Game
     ultrastardx
+    # Reference Manager
+    zotero
   ];
 
   hardware.flipperzero.enable = true;
