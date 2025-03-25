@@ -10,7 +10,6 @@
   collaboraDomain = "office.diogotc.com";
 
   collaboraPort = lib.my.ports.collabora-online;
-  collaboraDataDir = "/var/lib/cool";
 
   dbUsername = "nextcloud";
   dbDatabaseName = "nextcloud";
@@ -71,12 +70,31 @@ in {
     # secret
     secretFile = config.age.secrets.nextcloudSecrets.path;
 
-    appstoreEnable = true;
+    appstoreEnable = false;
     extraAppsEnable = true;
     extraApps = with config.services.nextcloud.package.packages.apps; {
       inherit
+        calendar
+        contacts
+        cookbook
+        cospend
+        deck
+        gpoddersync # podcasts sync service
+        # nextpod (see below)
+        notes
         richdocuments # Collabora Online for Nextcloud - https://apps.nextcloud.com/apps/richdocuments
+        tasks
+        twofactor_webauthn
         ;
+
+      # https://apps.nextcloud.com/apps/nextpod
+      nextpod = pkgs.fetchNextcloudApp rec {
+        appName = "nextpod";
+        appVersion = "0.7.7";
+        url = "https://github.com/pbek/nextcloud-nextpod/releases/download/v${appVersion}/nextpod-nc.tar.gz";
+        hash = "sha256-yQD4e5R6ZfBQkEsPVpddGMLDVOlV6HSVZjttgUjEdro=";
+        license = "agpl3Only";
+      };
     };
   };
   # Use caddy instead of nginx
