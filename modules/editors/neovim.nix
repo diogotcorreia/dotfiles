@@ -366,7 +366,17 @@
         plugin = typst-vim;
         type = "lua";
         config = ''
-          vim.keymap.set('n', '<leader>tw', function() vim.fn['typst#TypstWatch']() end, { silent = true })
+          vim.keymap.set(
+            'n',
+            '<leader>tw',
+            function()
+              vim.fn['typst#TypstWatch']()
+              -- Pin the current buffer as the main file for tinymist (LSP),
+              -- which fixes unknown labels in included files
+              vim.lsp.buf.execute_command({ command = 'tinymist.pinMain', arguments = { vim.api.nvim_buf_get_name(0) } })
+            end,
+            { silent = true }
+          )
         '';
       }
     ];
