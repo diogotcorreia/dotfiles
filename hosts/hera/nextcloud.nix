@@ -45,6 +45,9 @@ in {
       trusted_proxies = ["127.0.0.1" "::1"];
       overwriteprotocol = "https";
 
+      # NixOS handles updates for us, no need to check for it
+      updatechecker = false;
+
       default_phone_region = "PT";
 
       "overwrite.cli.url" = "https://${domain}/";
