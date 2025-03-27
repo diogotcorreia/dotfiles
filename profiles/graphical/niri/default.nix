@@ -120,23 +120,29 @@ in {
 
     binds = {
       # Show available hotkeys (equals to Mod + ?)
-      "Mod+Shift+Slash" = {
-        show-hotkey-overlay = {};
-      };
+      "Mod+Shift+Slash" = {show-hotkey-overlay = {};};
 
       # Spawn programs
-      "Mod+Return" = {
-        spawn = "alacritty";
-      };
+      "Mod+Return" = {spawn = "alacritty";};
       "Mod+E" = {spawn = "fuzzel";};
-      "Mod+O" = {
-        spawn = "swaylock";
-      };
+      "Mod+O" = {spawn = "swaylock";};
+
+      # Window actions
+      "Mod+Q" = {close-window = {};};
+      "Mod+R" = {switch-preset-column-width = {};};
+      "Mod+Shift+R" = {reset-window-height = {};};
+      "Mod+F" = {maximize-column = {};};
+      "Mod+Shift+F" = {fullscreen-window = {};};
+      "Mod+C" = {center-column = {};};
+
+      # Monitor actions
+      "Mod+Comma" = {focus-monitor-previous = {};};
+      "Mod+Shift+Comma" = {move-window-to-monitor-previous = {};};
+      "Mod+Period" = {focus-monitor-next = {};};
+      "Mod+Shift+Period" = {move-window-to-monitor-next = {};};
 
       # Quit niri
-      "Mod+Ctrl+Q" = {
-        quit = {};
-      };
+      "Mod+Ctrl+Q" = {quit = {};};
     };
 
     environment = {
