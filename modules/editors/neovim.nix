@@ -412,7 +412,7 @@
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-langservers-extracted # HTML LSP
       nil # Nix LSP
-      tinymist # Typst LSP
+      unstable.tinymist # Typst LSP
       typstyle # Typst Formatter
     ];
 in {
