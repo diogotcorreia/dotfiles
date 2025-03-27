@@ -32,6 +32,7 @@
 in {
   imports = with profiles; [
     graphical.fonts
+    graphical.fuzzel
     graphical.swaylock
   ];
 
@@ -127,6 +128,7 @@ in {
       "Mod+Return" = {
         spawn = "alacritty";
       };
+      "Mod+E" = {spawn = "fuzzel";};
       "Mod+O" = {
         spawn = "swaylock";
       };
