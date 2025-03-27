@@ -32,6 +32,7 @@
 in {
   imports = with profiles; [
     graphical.fonts
+    graphical.swaylock
   ];
 
   hm.home.packages = with pkgs; [
@@ -125,6 +126,9 @@ in {
       # Spawn programs
       "Mod+Return" = {
         spawn = "alacritty";
+      };
+      "Mod+O" = {
+        spawn = "swaylock";
       };
 
       # Quit niri
