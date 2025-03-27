@@ -139,6 +139,7 @@ jobs:
           - cybersec.flask-unsign
           - cybersec.pycdc
           - infra-keyval
+          - ironbar
           - lzbt
 
     steps:
