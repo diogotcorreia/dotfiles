@@ -14,10 +14,11 @@ in {
   # Home manager module
   config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
-      # Bruno REST Client
-      bruno
       # IntelliJ IDEA (Ultimate)
       unstable.jetbrains.idea-ultimate
+      # TODO: use stable on nixos-25.05
+      # REST Client
+      unstable.yaak
     ];
 
     programs.chromium = {
