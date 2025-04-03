@@ -51,6 +51,9 @@
 
         # disable pocket
         "extensions.pocket.enabled" = false;
+
+        # disable AI chat bot
+        "browser.ml.chat.enabled" = false;
       };
     };
   };
