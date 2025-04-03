@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    graphical.caido
     graphical.discord
     graphical.firefox
     graphical.firefox-proxied

@@ -38,6 +38,7 @@ in
     ])
 
     (mkSystem null personalSystems [
+      "caidoCaPrivateKey"
       "heroisDoMarWireguardPrivateKey"
     ])
 

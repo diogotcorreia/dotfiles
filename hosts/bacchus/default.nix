@@ -7,6 +7,7 @@
   ...
 }: {
   imports = with profiles; [
+    graphical.caido
     graphical.captive-portals-client
     graphical.discord
     graphical.firefox
