@@ -6,14 +6,32 @@
   ...
 }: let
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.10.24/uniform/nordic.theme.css";
-    hash = "sha256-DyuPgsPQRZw5xz5u08ivJIQh584XaP4LETb3z+weIbY=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.11.0/nordic.theme.css";
+    hash = "sha256-RKCBp/n3vWHLi2/hF/quUO1FKa06zC7vlhah+7Cpg5Q=";
   };
   extraCss = ''
-    .theme-dark {
-      --background-primary: var(--primary-630);
-      --background-secondary: var(--primary-600);
-      --background-tertiary: var(--primary-700);
+    .visual-refresh.theme-dark {
+      /* change background color of chat pane */
+      --neutral-69: var(--nord-dark1) !important;
+      /* change background color of left pane */
+      --neutral-83: var(--nord-dark1) !important;
+      /* change background of action buttons */
+      --background-secondary: var(--nord-dark2) !important;
+      /* change background of "active now" pane */
+      --bg-overlay-2: var(--nord-dark1) !important;
+    }
+    .visual-refresh .sidebarList_c48ade {
+      /* add missing border since background is the same now */
+      border-right: 1px solid var(--app-border-frame);
+    }
+    .bar_c38106 {
+      /* hide top bar */
+      /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
+      overflow: hidden;
+    }
+    .visual-refresh {
+      /* hide top bar */
+      --custom-app-top-bar-height: 0;
     }
   '';
 
