@@ -41,6 +41,18 @@ in {
     };
     hm.programs.git.ignores = [".envrc" ".direnv"];
 
+    # Locale
+    # This keeps the system language as US English, but uses
+    # European standards for everything else, namely dates,
+    # currency, number formatting and paper sizes.
+    # https://unix.stackexchange.com/questions/62316/why-is-there-no-euro-english-locale
+    i18n = {
+      defaultLocale = "en_IE.UTF-8";
+      extraLocaleSettings = {
+        LANGUAGE = "en_US";
+      };
+    };
+
     # Android Debug Bridge
     usr.extraGroups = ["adbusers"];
     programs.adb.enable = true;
