@@ -122,6 +122,9 @@ in {
           default_config = {};
           frontend = {};
 
+          # https://github.com/NixOS/nixpkgs/issues/330377
+          isal = {};
+
           homeassistant = {
             name = mkDefault "Home";
             latitude = mkDefault "!secret latitude";
