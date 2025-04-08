@@ -32,7 +32,9 @@ in {
     ];
 
     config = {
-      zha.zigpy_config.ota.ikea_provider = true;
+      zha.zigpy_config.ota.extra_providers = [
+        {type = "ikea";}
+      ];
     };
 
     customComponents = [
