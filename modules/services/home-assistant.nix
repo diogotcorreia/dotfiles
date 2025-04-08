@@ -40,6 +40,14 @@ in {
         - Configure backups
       '';
     };
+    usePostgresql = mkOption {
+      type = types.bool;
+      default = false;
+      description = mdDoc ''
+        Whether to setup the recorder to use a local PostgreSQL database
+        through unix sockets.
+      '';
+    };
     externalDomain = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -135,7 +143,20 @@ in {
           "automation ui" = "!include automations.yaml";
           "scene manual" = [];
           "scene ui" = "!include scenes.yaml";
+        })
+        // (optionalAttrs cfg.usePostgresql {
+          recorder = {
+            db_url = "postgresql://@/hass";
+            purge_keep_days = 90; # we have a bit more capacity if we are using postgresql
+          };
         });
+
+      extraPackages = mkIf cfg.usePostgresql (
+        python3Packages:
+          with python3Packages; [
+            psycopg2
+          ]
+      );
     };
 
     # https://nixos.wiki/wiki/Home_Assistant#Combine_declarative_and_UI_defined_automations
@@ -143,6 +164,18 @@ in {
       "f ${config.services.home-assistant.configDir}/automations.yaml 0755 hass hass"
       "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
     ];
+
+    services.postgresql = mkIf cfg.usePostgresql {
+      enable = mkDefault true;
+      ensureUsers = [
+        {
+          name = "hass";
+          ensureDBOwnership = true;
+          ensureClauses.login = true;
+        }
+      ];
+      ensureDatabases = ["hass"];
+    };
 
     modules.impermanence.directories = mkIf cfg.useSensibleDefaults [
       config.services.home-assistant.configDir
