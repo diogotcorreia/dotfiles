@@ -1,6 +1,7 @@
 # Stalwart mail server configuration
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -30,9 +31,18 @@
   };
   otherwise = value: {"else" = value;};
 in {
+  # Use module from nixos-unstable
+  # TODO: move to stable on NixOS 25.05
+  disabledModules = [
+    "services/mail/stalwart-mail.nix"
+  ];
+  imports = [
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/mail/stalwart-mail.nix")
+  ];
+
   services.stalwart-mail = {
     enable = true;
-    package = pkgs.stalwart-mail;
+    package = pkgs.unstable.stalwart-mail;
     settings = {
       config.local-keys = [
         "authentication.fallback-admin.*"
