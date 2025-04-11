@@ -112,12 +112,10 @@ in {
       (mkBindMount "encoded-video")
     ];
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port}
-      '';
+      locations."/".proxyPass = "http://[::1]:${toString port}";
     };
   };
 

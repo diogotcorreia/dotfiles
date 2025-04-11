@@ -24,6 +24,7 @@ in {
     enable = true;
     package = pkgs.nextcloud30;
     hostName = domain;
+    https = true;
     database.createLocally = true; # automatically uses pgsql through sockets
     configureRedis = true;
     maxUploadSize = "2G";
@@ -100,12 +101,6 @@ in {
       };
     };
   };
-  # Use caddy instead of nginx
-  services.phpfpm.pools.nextcloud.settings = {
-    "listen.owner" = config.services.caddy.user;
-    "listen.group" = config.services.caddy.group;
-  };
-  users.groups.nextcloud.members = [config.services.caddy.user];
 
   services.collabora-online = {
     enable = true;
@@ -159,89 +154,13 @@ in {
     "::1" = [domain collaboraDomain];
   };
 
-  services.caddy.virtualHosts = {
-    ${domain} = let
-      # The webroot created by the module contains links to the various app store locations
-      webroot = config.services.nginx.virtualHosts.${domain}.root;
-    in {
+  services.nginx.virtualHosts = {
+    ${domain} = {
       enableACME = true;
-      extraConfig = ''
-        encode zstd gzip
-        root * ${webroot}
-        php_fastcgi unix/${config.services.phpfpm.pools.nextcloud.socket} {
-          env front_controller_active true # remove index.php from urls
-        }
-        redir /.well-known/caldav /remote.php/dav 301
-        redir /.well-known/carddav /remote.php/dav 301
-        redir /.well-known/* /index.php{uri} 301 # Nextcloud front-controller handles routes to /.well-known
-        redir /remote/* /remote.php{uri} 301
-
-        # Required for legacy
-        @notlegacy {
-          path *.php
-          not path /index*
-          not path /remote*
-          not path /public*
-          not path /cron*
-          not path /core/ajax/update*
-          not path /status*
-          not path /ocs/v1*
-          not path /ocs/v2*
-          not path /updater/*
-          not path /ocs-provider/*
-          not path */richdocumentscode/proxy*
-        }
-        rewrite @notlegacy /index.php{uri}
-
-        # Deny access to sensible files and directories
-        @forbidden {
-          path /build/* /tests/* /config/* /lib/* /3rdparty/* /templates/* /data/*
-          path /.* /autotest* /occ* /issue* /indie* /db_* /console*
-          not path /.well-known/*
-        }
-        error @forbidden 404
-
-        # Set cache for versioned static files (cache-busting)
-        @immutable {
-          path *.css *.js *.mjs *.svg *.gif *.ico *.jpg *.png *.webp *.wasm *.tflite *.map *.ogg *.flac
-          query v=*
-        }
-        header @immutable Cache-Control "max-age=15778463, immutable"
-
-        # Set cache for normal static files
-        @static {
-          path *.css *.js *.mjs *.svg *.gif *.ico *.jpg *.png *.webp *.wasm *.tflite *.map *.ogg *.flac
-          not query v=*
-        }
-        header @static Cache-Control "max-age=15778463"
-
-        # Cache fonts for 1 week
-        @woff2 path *.woff2
-        header @woff2 Cache-Control "max-age=604800"
-
-        header ?X-Content-Type-Options nosniff;
-        header ?X-XSS-Protection "1; mode=block"
-        header ?X-Robots-Tag "noindex, nofollow"
-        header ?X-Download-Options noopen
-        header ?X-Permitted-Cross-Domain-Policies none
-        header ?X-Frame-Options sameorigin
-        header ?Referrer-Policy no-referrer
-        header ?Strict-Transport-Security "max-age=15768000;"
-        header ?Permissions-Policy interest-cohort=()
-        header -X-Powered-By
-
-        file_server
-
-        request_body {
-          max_size 2GB
-        }
-      '';
     };
     ${collaboraDomain} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy [::1]:${toString collaboraPort}
-      '';
+      locations."/".proxyPass = "http://[::1]:${toString collaboraPort}";
     };
   };
 

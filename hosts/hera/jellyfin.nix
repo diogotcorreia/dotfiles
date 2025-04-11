@@ -125,59 +125,58 @@ in {
     jellyfinAutoDiscoveryClients
   ];
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = let
+    autheliaRules = "group:arrs";
+  in {
     ${domainJellyfin} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString portJellyfin}
-      '';
+      locations."/".proxyPass = "http://127.0.0.1:${toString portJellyfin}";
     };
     ${domainJellyseerr} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString portJellyseerr}
-      '';
+      locations."/".proxyPass = "http://[::1]:${toString portJellyseerr}";
     };
     ${domainRadarr} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy localhost:${toString portRadarr}
-      '';
+      inherit autheliaRules;
+      restrictToNebula = true;
+      autheliaHealthchecksPath = "/api/v3/health";
+      locations."/" = {
+        enableAuthelia = true;
+        proxyPass = "http://[::1]:${toString portRadarr}";
+      };
     };
     ${domainSonarr} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy localhost:${toString portSonarr}
-      '';
+      inherit autheliaRules;
+      restrictToNebula = true;
+      autheliaHealthchecksPath = "/api/v3/health";
+      locations."/" = {
+        enableAuthelia = true;
+        proxyPass = "http://[::1]:${toString portSonarr}";
+      };
     };
     ${domainJackett} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy localhost:${toString portJackett}
-      '';
+      inherit autheliaRules;
+      restrictToNebula = true;
+      autheliaHealthchecksPath = "/health";
+      locations."/" = {
+        enableAuthelia = true;
+        proxyPass = "http://127.0.0.1:${toString portJackett}";
+      };
     };
     ${domainBazarr} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy localhost:${toString portBazarr}
-      '';
+      inherit autheliaRules;
+      restrictToNebula = true;
+      autheliaHealthchecksPath = "/api/system/health";
+      locations."/" = {
+        enableAuthelia = true;
+        proxyPass = "http://127.0.0.1:${toString portBazarr}";
+      };
     };
   };
-
-  my.services.authelia.accessRules = [
-    {
-      domain = [domainBazarr domainRadarr domainSonarr domainJackett];
-      subject = "group:arrs";
-    }
-  ];
 
   users.groups.${mediaGroup} = {};
   users.users = {

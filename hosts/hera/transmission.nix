@@ -110,12 +110,18 @@ in {
     };
   };
 
-  my.services.authelia.accessRules = [
-    {
-      inherit domain;
-      subject = "group:torrents";
-    }
-  ];
+  services.nginx.virtualHosts = {
+    ${domain} = {
+      enableACME = true;
+      autheliaHealthchecksPath = "/transmission/web/";
+      autheliaRules = "group:torrents";
+      restrictToNebula = true;
+      locations."/" = {
+        enableAuthelia = true;
+        proxyPass = "http://localhost:${toString port}";
+      };
+    };
+  };
 
   modules.impermanence.directories = [
     config.services.transmission.home

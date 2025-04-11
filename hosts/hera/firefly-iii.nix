@@ -30,8 +30,8 @@ in {
   services.firefly-iii = {
     enable = true;
     package = pkgs.firefly-iii;
-    group = config.services.caddy.group;
     virtualHost = domainApp;
+    enableNginx = true;
     settings = {
       APP_ENV = "production";
       APP_KEY_FILE = config.age.secrets.fireflyAppKey.path;
@@ -43,7 +43,8 @@ in {
   services.firefly-iii-data-importer = {
     enable = true;
     package = pkgs.firefly-iii-data-importer;
-    group = config.services.caddy.group;
+    virtualHost = domainDataImporter;
+    enableNginx = true;
     settings = {
       FIREFLY_III_URL = "https://${domainApp}";
       FIREFLY_III_CLIENT_ID = 7;
@@ -172,26 +173,14 @@ in {
     checkUrlFile = config.age.secrets.fireflyAutoDataImporterHealthchecksUrl.path;
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domainApp} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        encode zstd gzip
-        root * ${config.services.firefly-iii.package}/public
-        php_fastcgi unix/${config.services.phpfpm.pools.firefly-iii.socket}
-        file_server
-      '';
+      restrictToNebula = true;
     };
     ${domainDataImporter} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        encode zstd gzip
-        root * ${config.services.firefly-iii-data-importer.package}/public
-        php_fastcgi unix/${config.services.phpfpm.pools.firefly-iii-data-importer.socket}
-        file_server
-      '';
+      restrictToNebula = true;
     };
   };
 

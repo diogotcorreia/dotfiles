@@ -37,31 +37,23 @@ in {
     ];
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${hassDomain} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString hassPort} {
-          import CLOUDFLARE_PROXY
-        }
-      '';
+      enableCloudflareRealIp = true;
+      locations."/".proxyPass = "http://[::1]:${toString hassPort}";
     };
     ${noderedDomain} = {
       enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy localhost:${toString noderedPort}
-      '';
+      restrictToNebula = true;
+      autheliaRules = "group:nodered-hera";
+      autheliaHealthchecksPath = "/settings";
+      locations."/" = {
+        enableAuthelia = true;
+        proxyPass = "http://127.0.0.1:${toString noderedPort}";
+      };
     };
   };
-
-  my.services.authelia.accessRules = [
-    {
-      domain = noderedDomain;
-      subject = "group:nodered-hera";
-    }
-  ];
 
   modules.services.restic.paths = ["${config.my.homeDirectory}/homeassistant"];
 }

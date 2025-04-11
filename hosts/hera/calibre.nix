@@ -13,7 +13,7 @@ in {
   services.calibre-web = {
     enable = true;
     listen = {
-      ip = "127.0.0.1";
+      ip = "::1";
       inherit port;
     };
     options = {
@@ -23,14 +23,11 @@ in {
     };
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port} {
-          import CLOUDFLARE_PROXY
-        }
-      '';
+      enableCloudflareRealIp = true;
+      locations."/".proxyPass = "http://[::1]:${toString port}";
     };
   };
 

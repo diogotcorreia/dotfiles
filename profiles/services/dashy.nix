@@ -193,6 +193,11 @@ in {
   services.dashy = {
     enable = true;
 
+    virtualHost = {
+      enableNginx = true;
+      inherit domain;
+    };
+
     settings = {
       appConfig = {
         theme = "nord-frost";
@@ -312,11 +317,5 @@ in {
     };
   };
 
-  services.caddy.virtualHosts.${domain} = {
-    enableACME = true;
-    extraConfig = ''
-      root ${cfg.finalDrv}
-      file_server
-    '';
-  };
+  services.nginx.virtualHosts.${domain}.enableACME = true;
 }

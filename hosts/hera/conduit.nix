@@ -54,21 +54,23 @@
 in {
   # TODO move docker containers to NixOS services
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domainConduit} = {
       enableACME = true;
-      extraConfig = ''
-        header /.well-known/matrix/* Content-Type application/json
-        header /.well-known/matrix/* Access-Control-Allow-Origin *
-        respond /.well-known/matrix/server `{"m.server": "m.diogotc.com:443"}`
-        respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://m.diogotc.com"}, "org.matrix.msc3575.proxy": {"url": "https://m.diogotc.com"}}`
-        reverse_proxy /_matrix/* localhost:${toString portConduit} {
-          import CLOUDFLARE_PROXY
-        }
-        reverse_proxy /_synapse/client/* localhost:${toString portConduit} {
-          import CLOUDFLARE_PROXY
-        }
-      '';
+      enableCloudflareRealIp = true;
+      locations = {
+        "/".proxyPass = "http://127.0.0.1:${toString portConduit}";
+        "= /.well-known/matrix/server".extraConfig = ''
+          default_type application/json;
+          add_header 'Access-Control-Allow-Origin' '*';
+          return 200 '{"m.server": "m.diogotc.com:443"}';
+        '';
+        "= /.well-known/matrix/client".extraConfig = ''
+          default_type application/json;
+          add_header 'Access-Control-Allow-Origin' '*';
+          return 200 '{"m.homeserver": {"base_url": "https://m.diogotc.com"}, "org.matrix.msc3575.proxy": {"url": "https://m.diogotc.com"}}';
+        '';
+      };
     };
     ${domainElement} = let
       elementPkg = pkgs.element-web.override {
@@ -76,10 +78,7 @@ in {
       };
     in {
       enableACME = true;
-      extraConfig = ''
-        root ${elementPkg}
-        file_server
-      '';
+      root = elementPkg;
     };
   };
 

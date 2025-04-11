@@ -20,6 +20,7 @@ in {
 
   services.paperless = {
     enable = true;
+    address = "[::1]";
     inherit port;
 
     settings = {
@@ -63,14 +64,11 @@ in {
     ensureDatabases = [dbUser];
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port} {
-          import CLOUDFLARE_PROXY
-        }
-      '';
+      enableCloudflareRealIp = true;
+      locations."/".proxyPass = "http://[::1]:${toString port}";
     };
   };
 

@@ -13,10 +13,10 @@
     security.acme.cloudflare
     security.fail2ban
     security.secureboot
-    services.caddy.common
     services.dashy
     services.discord-bots.alt-urls-discord-bot
     services.esphome
+    services.nginx.common
     services.ssh
     shell.zellij
     virtualisation.docker
