@@ -20,4 +20,13 @@
     # https://github.com/NixOS/nixpkgs/issues/349604
     enableReload = true;
   };
+
+  # reject connections to unknown virtual hosts
+  services.nginx.virtualHosts."_" = {
+    default = true;
+    rejectSSL = true;
+    locations."/" = {
+      return = "444";
+    };
+  };
 }
