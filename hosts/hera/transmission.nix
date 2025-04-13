@@ -99,17 +99,6 @@ in {
     wantedBy = ["sockets.target"];
   };
 
-  services.caddy.virtualHosts = {
-    ${domain} = {
-      enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy localhost:${toString port}
-      '';
-    };
-  };
-
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
@@ -118,7 +107,7 @@ in {
       restrictToNebula = true;
       locations."/" = {
         enableAuthelia = true;
-        proxyPass = "http://localhost:${toString port}";
+        proxyPass = "http://127.0.0.1:${toString port}";
       };
     };
   };
