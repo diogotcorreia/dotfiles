@@ -17,6 +17,8 @@
     "--working-directory=${stateDir}"
     "--port=${toString port}"
     "--hostname=::1"
+    # use unix sockets (requires custom package)
+    "--database=postgresql localhost ${user}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432 ${user} password"
   ];
 in {
   services.nginx.virtualHosts = {
@@ -27,12 +29,22 @@ in {
     };
   };
 
+  services.postgresql = {
+    ensureUsers = [
+      {
+        name = user;
+        ensureDBOwnership = true;
+      }
+    ];
+    ensureDatabases = [user];
+  };
+
   systemd.services."reposilite" = {
     description = "Reposilite - Maven repository";
 
     wantedBy = ["multi-user.target"];
 
-    script = "${lib.getExe pkgs.reposilite} ${lib.escapeShellArgs flags}";
+    script = "${lib.getExe pkgs.my.reposilite-junixsocket} ${lib.escapeShellArgs flags}";
 
     serviceConfig = {
       StateDirectory = "reposilite";
@@ -50,7 +62,7 @@ in {
       ProtectHostname = true;
       ProtectKernelLogs = true;
       RemoveIPC = true;
-      RestrictAddressFamilies = ["AF_INET" "AF_INET6"];
+      RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
       RestrictNamespaces = true;
       RestrictRealtime = true;
       RestrictSUIDSGID = true;
