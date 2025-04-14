@@ -32,7 +32,7 @@ in {
 
     wantedBy = ["multi-user.target"];
 
-    script = "${lib.getExe pkgs.my.reposilite} ${lib.escapeShellArgs flags}";
+    script = "${lib.getExe pkgs.reposilite} ${lib.escapeShellArgs flags}";
 
     serviceConfig = {
       StateDirectory = "reposilite";
