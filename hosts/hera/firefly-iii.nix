@@ -9,7 +9,7 @@
   domainApp = "firefly3.hera.diogotc.com";
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
 
-  cronAutoDataImporter = "10:00";
+  cronAutoDataImporter = "09:13"; # avoid o'clock because it results in errors at banks
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
 
   dbUser = config.services.firefly-iii.user;
