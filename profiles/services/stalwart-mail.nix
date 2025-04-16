@@ -220,6 +220,8 @@ in {
     # keep a stable private key for TLSA records (DANE)
     # https://community.letsencrypt.org/t/please-avoid-3-0-1-and-3-0-2-dane-tlsa-records-with-le-certificates/7022/14
     extraLegoRenewFlags = ["--reuse-key"];
+    # Restart stalwart to apply new certificates
+    reloadServices = ["stalwart-mail.service"];
   };
 
   modules.impermanence.directories = [dataDir];
