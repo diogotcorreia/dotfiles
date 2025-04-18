@@ -168,6 +168,20 @@ in {
   users.users.nextcloud.uid = 900;
   users.groups.nextcloud.gid = 900;
 
+  # Due to PHP's realpath cache, every time the activation scripts run,
+  # Nextcloud stops working for a brief moment.
+  # This happens because the secrets handled by agenix change their path,
+  # and PHP does not follow the new destination of the symlink until the cache expires.
+  # This reloads php-fpm after agenix has updated secrets, so that it clears the cache.
+  system.activationScripts.nextcloud-reload = {
+    text = ''
+      if [ "$NIXOS_ACTION" == "switch" ]; then
+        echo phpfpm-nextcloud.service > /run/nixos/activation-reload-list
+      fi
+    '';
+    deps = ["agenix"];
+  };
+
   modules.impermanence.directories = [config.services.nextcloud.home];
   modules.services.restic.paths = [config.services.nextcloud.home];
 }
