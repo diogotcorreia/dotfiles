@@ -94,7 +94,6 @@
           };
         }
         inputs.impermanence.nixosModules.impermanence
-        inputs.agenix.nixosModules.default
         inputs.lanzaboote.nixosModules.lanzaboote
       ];
     };

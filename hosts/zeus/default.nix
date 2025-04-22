@@ -47,9 +47,6 @@
   # Time zone
   time.timeZone = "UTC";
 
-  # Secret manager (agenix)
-  age.identityPaths = ["${config.modules.impermanence.persistDirectory}/etc/ssh/ssh_host_ed25519_key"];
-
   # Modules
   modules = {
     editors.neovim.enable = true;

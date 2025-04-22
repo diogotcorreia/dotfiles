@@ -89,9 +89,6 @@
     HandlePowerKey=ignore
   '';
 
-  # Secret manager (agenix)
-  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-
   # GnuPG (GPG)
   hm.programs.git.signing.key = "12B4F3AC9C065D08";
 

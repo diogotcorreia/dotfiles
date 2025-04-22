@@ -29,9 +29,6 @@
   # Time zone
   time.timeZone = "Europe/Stockholm";
 
-  # Secret manager (agenix)
-  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-
   networking.bridges.br-wan.interfaces = ["eno1"];
   my.networking.wiredInterface = "br-wan";
 

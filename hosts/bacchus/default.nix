@@ -85,9 +85,6 @@
   # Suspend even if plugged in to external monitor
   services.logind.lidSwitchDocked = "suspend";
 
-  # Secret manager (agenix)
-  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-
   # GnuPG (GPG)
   hm.programs.git.signing.key = "7B5273B10C4495CF";
 

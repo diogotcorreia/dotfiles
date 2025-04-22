@@ -26,9 +26,6 @@
   # Time zone
   time.timeZone = "Europe/Lisbon";
 
-  # Secret manager (agenix)
-  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
-
   my.networking.wiredInterface = "enp0s31f6";
 
   # Modules
