@@ -15,12 +15,12 @@
     hardware.bluetooth
     hardware.filesystem.zfs-impermanence
     hardware.zram
+    meta.personal
     misc.cybersec
     misc.geoclue
     misc.kth
     networking.wireguard.ctf
     security.secureboot
-    services.ssh
     shell.gpg
     shell.nix-index
     shell.zellij

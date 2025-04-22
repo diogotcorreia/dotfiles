@@ -10,6 +10,7 @@
     hardware.filesystem.zfs-impermanence
     hardware.fwupd
     hardware.zram
+    meta.server
     security.acme.cloudflare
     security.fail2ban
     security.secureboot
@@ -17,7 +18,6 @@
     services.discord-bots.alt-urls-discord-bot
     services.esphome
     services.nginx.common
-    services.ssh
     shell.zellij
     virtualisation.docker
   ];

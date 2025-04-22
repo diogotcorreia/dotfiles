@@ -8,11 +8,11 @@
   imports = with profiles; [
     hardware.filesystem.ext4-impermanence
     hardware.zram
+    meta.server
     security.acme.cloudflare
     security.fail2ban
     server.minimal
     services.nginx.common
-    services.ssh
     services.stalwart-mail
     shell.zellij
   ];

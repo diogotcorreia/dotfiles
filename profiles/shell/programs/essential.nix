@@ -7,30 +7,12 @@
     zip
     unzip
 
-    # Nix formatter
-    alejandra
-
-    # System monitor
+    # System monitoring
     htop
     procps
-    gdu
-    duf
-
-    # Neofetch
-    neofetch
-
-    # Man pages
-    man-pages
 
     # Find and search files
-    fzf
     ripgrep
-
-    # perl-rename (much better than the one from util-linux)
-    rename
-
-    # Other utilities
-    wget
 
     # Agenix
     agenix

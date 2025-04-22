@@ -6,12 +6,12 @@
   ...
 }: {
   imports = with profiles; [
+    meta.server
     security.acme.cloudflare
     security.fail2ban
     server.minimal
     services.caddy.common
     services.infra-keyval
-    services.ssh
     shell.zellij
   ];
 

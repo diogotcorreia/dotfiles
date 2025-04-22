@@ -17,12 +17,12 @@
     hardware.bluetooth
     hardware.zram
     laptop.auto-timezone
+    meta.personal
     misc.cybersec
     misc.geoclue
     misc.kth
     networking.wireguard.ctf
     security.secureboot
-    services.ssh
     shell.gpg
     shell.nix-index
     shell.zellij

@@ -7,13 +7,13 @@
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.zram
+    meta.server
     networking.ddns.cloudflare
     security.acme.cloudflare
     security.fail2ban
     server.minimal
     services.caddy.common
     services.esphome
-    services.ssh
     shell.zellij
   ];
 

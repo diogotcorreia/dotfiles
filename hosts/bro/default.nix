@@ -7,6 +7,7 @@
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.zram
+    meta.server
     networking.ddns.cloudflare
     security.acme.cloudflare
     security.fail2ban
@@ -14,7 +15,6 @@
     services.caddy.common
     services.caddy.rproxy
     services.grocy
-    services.ssh
     shell.zellij
     virtualisation.virtual-machines
   ];
