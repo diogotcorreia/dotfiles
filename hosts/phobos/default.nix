@@ -38,9 +38,6 @@
   # Time zone
   time.timeZone = "UTC";
 
-  # Secret manager (agenix)
-  age.identityPaths = ["/root/.ssh/id_ed25519"];
-
   # PostgreSQL
   services.postgresql = {
     enable = true;

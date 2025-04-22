@@ -5,7 +5,7 @@ let
   broSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ4GODzTdoSU1RS/1RU+EDZN1TxDYxqRct2q+OeWgv0f";
   febSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBVtyO4NZ3FNrffEJOGLzkVgtgpkMV1ouRkk34GslroU";
   heraSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
-  phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMDvcqB4ljQ4EvoiL6WS+8BqhtoMv/quzqExd3juqRU";
+  phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPMXN8lpc/JVPwgV9s46o8DbOI0VMd3/x/CbcUdi5XsL";
   zeusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKv9y2DlGhcZRBxiqo3bmTs2U7LX7y/KC3Dwo07Ywugr";
 
   personalSystems = [apolloSystem bacchusSystem];
