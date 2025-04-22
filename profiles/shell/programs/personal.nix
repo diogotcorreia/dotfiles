@@ -9,8 +9,8 @@
     gdu
     duf
 
-    # Neofetch
-    neofetch
+    # Neofetch alternative
+    fastfetch
 
     # Man pages
     man-pages
@@ -28,5 +28,8 @@
     # Agenix
     agenix
   ];
-}
 
+  environment.shellAliases = {
+    neofetch = "fastfetch";
+  };
+}
