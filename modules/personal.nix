@@ -25,8 +25,6 @@ in {
       # typst (markup-based typesetting system)
       unstable.typst
       unstable.typstfmt
-      # Rust
-      rustup
 
       # lidl-to-grocy (custom program to import lidl receipts into grocy)
       lidl-to-grocy
