@@ -2,7 +2,6 @@
 {profiles, ...}: {
   imports = with profiles; [
     security.agenix
-    security.hotfix-cve-2025-32438
     services.ssh
     shell.programs.essential
   ];
