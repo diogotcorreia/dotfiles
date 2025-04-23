@@ -6,13 +6,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "jwt-tool";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "ticarpi";
     repo = "jwt_tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PqeEOn0F6xcHpgtkK+p6K8SoiGhjonnbAW0zzWq3laY=";
+    hash = "sha256-byLw1ppvRdppADufsxcRRxW0uyDT6Y0EDTCrw5hxK0Y=";
   };
 
   propagatedBuildInputs = with python3Packages; [
