@@ -17,6 +17,7 @@
     spotifyPackage = pkgs.spotify;
 
     theme = pkgs.spicetify.themes.comfy;
+    colorScheme = "Comfy";
 
     enabledExtensions = with pkgs.spicetify.extensions; [
       fullAppDisplay
