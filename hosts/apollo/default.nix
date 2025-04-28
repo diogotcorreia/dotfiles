@@ -11,6 +11,7 @@
     graphical.discord
     graphical.firefox
     graphical.firefox-proxied
+    graphical.spotify
     graphical.thunderbird
     hardware.bluetooth
     hardware.filesystem.zfs-impermanence

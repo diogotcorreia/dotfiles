@@ -90,7 +90,6 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            sharedModules = [inputs.spicetify-nix.homeManagerModules.default];
           };
         }
         inputs.impermanence.nixosModules.impermanence

@@ -13,6 +13,7 @@
     graphical.firefox
     graphical.firefox-proxied
     graphical.obs
+    graphical.spotify
     graphical.thunderbird
     hardware.bluetooth
     hardware.zram
