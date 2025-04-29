@@ -86,6 +86,9 @@
   # Suspend even if plugged in to external monitor
   services.logind.lidSwitchDocked = "suspend";
 
+  # Disable Docker on boot
+  virtualisation.docker.enableOnBoot = false;
+
   # GnuPG (GPG)
   hm.programs.git.signing.key = "7B5273B10C4495CF";
 

@@ -90,6 +90,9 @@
     HandlePowerKey=ignore
   '';
 
+  # Disable Docker on boot
+  virtualisation.docker.enableOnBoot = false;
+
   # GnuPG (GPG)
   hm.programs.git.signing.key = "12B4F3AC9C065D08";
 
