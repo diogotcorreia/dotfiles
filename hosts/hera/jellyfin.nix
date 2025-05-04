@@ -178,6 +178,21 @@ in {
     };
   };
 
+  my.services.authelia.oauthClients = [
+    # See https://www.authelia.com/integration/openid-connect/jellyfin/ for Jellyfin configuration
+    {
+      client_id = "nHnUxwHb5eNaT8g4N0mn3puk_cJqXUFivkjbpmoPY5wAd39bX.o7Q~wyRCOft5xWrcXDhuz6";
+      client_name = "Jellyfin";
+      client_secret = "$pbkdf2-sha512$310000$st30Kt4h4p.GYEOGo5Ez3A$/VWY8uCeQAXNWYpej6CEvm4WLhNorwo45Mou7u21mfsePIwxPYDMnHrobnviVTBl512plGxmsGenomJk.cT2tQ";
+      redirect_uris = [
+        "https://${domainJellyfin}/sso/OID/redirect/authelia"
+      ];
+      scopes = ["openid" "profile" "groups"];
+      policy = "one_factor";
+      subject = "group:jellyfin";
+    }
+  ];
+
   users.groups.${mediaGroup} = {};
   users.users = {
     ${config.services.radarr.user}.extraGroups = [mediaGroup transmissionGroup];
