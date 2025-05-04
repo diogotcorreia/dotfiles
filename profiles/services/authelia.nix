@@ -139,8 +139,9 @@ in {
 
       identity_providers = lib.mkIf hasOidcClients {
         oidc = let
-          # policy name can't contain dots and needs to be lowercase
-          mkPolicyName = client_id: "policy_${lib.toLower (lib.replaceStrings ["."] ["_"] client_id)}";
+          # policy name can't contain dots or tildes and needs to be lowercase
+          # https://datatracker.ietf.org/doc/html/rfc3986#section-2.3
+          mkPolicyName = client_id: "policy_${lib.toLower (lib.replaceStrings ["." "~"] ["_" "_"] client_id)}";
           customAuthorizationPolicies = lib.pipe oidcClients [
             (lib.filter (client: client.subject != []))
             (map (client:
