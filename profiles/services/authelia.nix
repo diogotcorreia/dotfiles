@@ -156,9 +156,8 @@ in {
               }))
             lib.listToAttrs
           ];
-          clients =
-            map (client: {
-              inherit (client) client_id client_name client_secret redirect_uris;
+          clients = map (client:
+            {
               scopes = lib.mkIf (client.scopes != []) client.scopes;
               authorization_policy =
                 if client.subject == []
@@ -166,8 +165,9 @@ in {
                 else mkPolicyName client.client_id;
               # save consent for 1 year
               pre_configured_consent_duration = "1y";
-            })
-            oidcClients;
+            }
+            // (removeAttrs client ["scopes" "policy" "subject"]))
+          oidcClients;
         in {
           authorization_policies = lib.mkIf (customAuthorizationPolicies != {}) customAuthorizationPolicies;
           inherit clients;

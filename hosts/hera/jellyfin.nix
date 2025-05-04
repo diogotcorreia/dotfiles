@@ -190,6 +190,10 @@ in {
       scopes = ["openid" "profile" "groups"];
       policy = "one_factor";
       subject = "group:jellyfin";
+
+      require_pkce = true;
+      pkce_challenge_method = "S256";
+      token_endpoint_auth_method = "client_secret_post";
     }
   ];
 

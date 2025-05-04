@@ -91,6 +91,7 @@ in {
           config,
           ...
         }: {
+          freeformType = types.attrsOf types.anything;
           options = {
             client_id = mkOption {
               type = types.str;
