@@ -421,7 +421,15 @@ in {
   # Home manager module
   config.hm = mkIf cfg.enable {
     programs.neovim = {
-      package = pkgs.unstable.neovim-unwrapped;
+      # https://github.com/NixOS/nixpkgs/issues/402998
+      # TODO: remove workaround on nixpkgs 25.05
+      package = pkgs.unstable.neovim-unwrapped.overrideAttrs (old: {
+        meta =
+          (old.meta or {})
+          // {
+            maintainers = old.maintainers or [];
+          };
+      });
       enable = true;
       viAlias = true;
       vimAlias = true;
