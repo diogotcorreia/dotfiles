@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+SX4mLW8Dl0m5PPsWRETHziqgvNDvKzbOHEskK2ja7w=";
   };
 
-  cargoHash = "sha256-YpIPZby8vIKoTG3ZeREw8iO2tbGtt9+hGKdi7vrIIRY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lQtwm6G/hcsw3xgpvJMC00OFaTCX26PE9if+FqbLfuE=";
 
   meta = with lib; {
     description = "Discord bot that provides alternative links to various social media services ";

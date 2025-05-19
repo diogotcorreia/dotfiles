@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "pycdc";
-  version = "unstable-2024-03-12";
+  version = "unstable-2024-10-13";
 
   src = fetchFromGitHub {
     owner = "zrax";
     repo = "pycdc";
-    rev = "6467c2cc52aa714876e131a1b6c6cf25f129460f";
-    hash = "sha256-V3vl/waOPf7H3mXd2LdWPMbbhfyDmddrp2HiYIud5qo=";
+    rev = "5e1c4037a96b966e4e6728c55b2d7ee8076a13c3";
+    hash = "sha256-c/mfM2I8Rw136aQ3IAQOkkrOEtZ5LC/xKuWXzCItW2w=";
   };
 
   nativeBuildInputs = [cmake];

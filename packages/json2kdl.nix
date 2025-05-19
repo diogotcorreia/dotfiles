@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NVpIHbv7vbppe+g7YK9OY2oL7axmqG8Kmuv4kO8Jyjs=";
   };
 
-  cargoHash = "sha256-xlG8p25VBLwUWnyr9JNzSrI0KmwdRpAgL5eckbC/3nk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PK/DduEy0BfHt0asEUR41lvUl++w/UTqZ0HFSuO2OVI=";
 
   meta = {
     description = "Program that converts JSON files to KDL";

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     export SEQUOIA_CERT_STORE="$(mktemp -d)"
-    sq network wkd publish --create advanced --file "$src" --domain diogotc.com "$out"
+    sq network wkd publish --create --method advanced --cert-file "$src" --domain diogotc.com "$out"
     rm -rf "$SEQUOIA_CERT_STORE"
     cp "$src" "$out/diogo.gpg.asc"
   '';
