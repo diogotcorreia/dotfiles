@@ -42,7 +42,7 @@ in {
     xwayland-satellite
   ];
 
-  hm.programs.zsh.initExtra = ''
+  hm.programs.zsh.initContent = ''
     # Start graphical server on user's current tty if not already running.
     [ "$(tty)" = "/dev/tty1" ] && ! pidof -s niri >/dev/null 2>&1 && exec niri-session &> /dev/null
   '';

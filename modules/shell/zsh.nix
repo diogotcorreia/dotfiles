@@ -49,7 +49,7 @@ in {
           }
         ];
         # FIXME this isn't working correctly on neovim.nix
-        initExtra = ''
+        initContent = ''
           export EDITOR=nvim
         '';
       };
