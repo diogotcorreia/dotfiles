@@ -16,9 +16,8 @@ in {
     home.packages = with pkgs; [
       # IntelliJ IDEA (Ultimate)
       unstable.jetbrains.idea-ultimate
-      # TODO: use stable on nixos-25.05
       # REST Client
-      unstable.yaak
+      yaak
     ];
 
     programs.chromium = {

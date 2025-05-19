@@ -1,7 +1,6 @@
 # Configuration for Jellyfin on Hera
 {
   config,
-  inputs,
   lib,
   pkgs,
   secrets,
@@ -29,14 +28,6 @@
 
   transmissionGroup = config.services.transmission.group;
 in {
-  # TODO 25.05: use stable
-  disabledModules = [
-    "services/misc/jellyseerr.nix"
-  ];
-  imports = [
-    (inputs.nixpkgs-unstable + "/nixos/modules/services/misc/jellyseerr.nix")
-  ];
-
   # https://nixos.wiki/wiki/Accelerated_Video_Playback
   nixpkgs.overlays = [
     (final: prev: {
@@ -57,8 +48,6 @@ in {
   services.jellyfin.enable = true;
   services.jellyseerr = {
     enable = true;
-    # TODO 25.05: use stable
-    package = pkgs.unstable.jellyseerr;
     port = portJellyseerr;
     # This might change, so pin it to make sure it doesn't break
     # https://github.com/NixOS/nixpkgs/pull/373533

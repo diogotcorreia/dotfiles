@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  pkgs,
   secrets,
   ...
 }: let
@@ -15,8 +14,6 @@ in {
 
   services.wastebin = {
     enable = true;
-    # TODO 25.05: change to stable
-    package = pkgs.unstable.wastebin;
 
     settings = {
       WASTEBIN_TITLE = "dtc's wastebin";

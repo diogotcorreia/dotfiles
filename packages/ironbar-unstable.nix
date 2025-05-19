@@ -1,5 +1,5 @@
 # Use nightly version of ironbar because it supports niri workspaces
-# TODO: remove on NixOS 25.05 (hopefully they will have made a release by then)
+# TODO: remove on NixOS 25.11 (hopefully they will have made a release by then)
 {
   gtk3,
   gdk-pixbuf,

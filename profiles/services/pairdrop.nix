@@ -1,16 +1,10 @@
 # Peer-to-peer file transfers web app
-{
-  lib,
-  pkgs,
-  ...
-}: let
+{lib, ...}: let
   domain = "drop.diogotc.com";
   port = lib.my.ports.pairdrop;
 in {
   services.pairdrop = {
     enable = true;
-    # TODO 25.05: use stable package
-    package = pkgs.my.pairdrop;
 
     inherit port;
 

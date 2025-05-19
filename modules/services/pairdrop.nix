@@ -1,5 +1,5 @@
 # Peer-to-peer file transfers web app
-# TODO 25.05: use nixpkgs module & package
+# TODO 25.11: use nixpkgs module
 {
   config,
   lib,

@@ -1,5 +1,5 @@
 # Umami analytics
-# TODO 25.05: use nixpkgs module & package
+# TODO 25.11: use nixpkgs module & package
 {
   config,
   lib,

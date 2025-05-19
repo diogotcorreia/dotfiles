@@ -22,7 +22,7 @@
     rename
 
     # Other utilities
-    # TODO 25.05: replace with wcurl when it releases
+    # TODO 25.11: replace with wcurl when it releases (curl 8.14.0)
     wget
 
     # Agenix
