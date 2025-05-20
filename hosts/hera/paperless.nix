@@ -20,7 +20,7 @@ in {
 
   services.paperless = {
     enable = true;
-    address = "[::1]";
+    address = "::1";
     inherit port;
 
     settings = {
