@@ -114,7 +114,15 @@
     };
 
     formatter = {
-      x86_64-linux = inputs.nixpkgs.legacyPackages.x86_64-linux.alejandra;
+      # https://github.com/NixOS/nix/pull/11438#issuecomment-2343378813
+      x86_64-linux = pkgs.writeShellScriptBin "formatter" ''
+        # If no arguments are passed, default to formatting the whole project
+        if [[ $# = 0 ]]; then
+          prj_root=$(git rev-parse --show-toplevel 2>/dev/null || echo .)
+          set -- "$prj_root"
+        fi
+        exec "${lib.getExe pkgs.alejandra}" "$@"
+      '';
     };
   };
 }
