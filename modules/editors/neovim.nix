@@ -118,7 +118,7 @@
     {
       plugin =
         nvim-treesitter.withPlugins
-        (plugins: commonGrammars ++ personalGrammars);
+        (_plugins: commonGrammars ++ personalGrammars);
       type = "lua";
       config = ''
         -- enable highlighting

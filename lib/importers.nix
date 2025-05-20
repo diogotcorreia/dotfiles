@@ -52,7 +52,7 @@
 
       files = lib.filterAttrs seive (builtins.readDir dirPath);
     in
-      lib.filterAttrs (n: v: v != {}) (lib.mapAttrs' collect files);
+      lib.filterAttrs (_n: v: v != {}) (lib.mapAttrs' collect files);
 in {
   inherit rakeLeaves rakeLeavesWithSuffix;
 }

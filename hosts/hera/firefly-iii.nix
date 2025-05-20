@@ -94,7 +94,7 @@ in {
     # Inherit the config from the data importer
     serviceConfig = let
       stateDir = "firefly-iii-auto-importer";
-      dataImporterPackage = pkgs.firefly-iii-data-importer.override (prev: {
+      dataImporterPackage = pkgs.firefly-iii-data-importer.override (_prev: {
         dataDir = "/var/lib/${stateDir}";
       });
       artisan = "${dataImporterPackage}/artisan";
@@ -147,7 +147,7 @@ in {
       "${dataDir}/storage/uploads"
       "${dataDir}/cache"
     ]
-    (n: {
+    (_n: {
       d = {
         group = group;
         mode = "0710";

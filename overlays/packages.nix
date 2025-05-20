@@ -3,10 +3,10 @@
 let
   packagesDir = ../packages;
 in
-  {lib, ...}: final: prev: let
+  {lib, ...}: _final: prev: let
     callPackageFromAttrs = attrs:
       builtins.mapAttrs (
-        name: value:
+        _name: value:
           if builtins.isAttrs value
           then (callPackageFromAttrs value)
           else (prev.callPackage value {inherit lib;})

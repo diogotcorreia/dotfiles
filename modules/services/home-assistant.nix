@@ -109,7 +109,7 @@ in {
 
     services.home-assistant = {
       # Use package from nixos-unstable
-      package = pkgs.unstable.home-assistant.overrideAttrs (old: {doInstallCheck = false;});
+      package = pkgs.unstable.home-assistant.overrideAttrs (_old: {doInstallCheck = false;});
 
       config =
         {

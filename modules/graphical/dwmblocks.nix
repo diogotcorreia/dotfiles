@@ -211,7 +211,7 @@ in {
     sbPath =
       lib.strings.concatMapStringsSep ":" (x: "${x}/bin") statusbarModules;
 
-    pkg = pkgs.dwmblocks.overrideAttrs (old: {
+    pkg = pkgs.dwmblocks.overrideAttrs (_old: {
       src = pkgs.fetchFromGitHub {
         owner = "LukeSmithxyz";
         repo = "dwmblocks";

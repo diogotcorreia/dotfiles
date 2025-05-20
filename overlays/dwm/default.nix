@@ -1,6 +1,6 @@
 # Apply patches to DWM
-{...}: final: prev: {
-  dwm = prev.dwm.overrideAttrs (oldAttrs: {
+{...}: _final: prev: {
+  dwm = prev.dwm.overrideAttrs (_oldAttrs: {
     patches = [
       (prev.fetchpatch {
         url = "https://dwm.suckless.org/patches/status2d/dwm-status2d-6.3.diff";

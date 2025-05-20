@@ -8,7 +8,7 @@
     };
   };
 
-  lib = pkgs.lib.extend (self: super: {
+  lib = pkgs.lib.extend (self: _super: {
     my = import ./lib/importers.nix {
       lib = self;
     };

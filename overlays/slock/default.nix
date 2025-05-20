@@ -1,6 +1,6 @@
 # Apply patches to slock
-{...}: final: prev: {
-  slock = prev.slock.overrideAttrs (oldAttrs: {
+{...}: _final: prev: {
+  slock = prev.slock.overrideAttrs (_oldAttrs: {
     patches = [
       (prev.fetchpatch {
         url = "https://tools.suckless.org/slock/patches/dpms/slock-dpms-1.4.diff";

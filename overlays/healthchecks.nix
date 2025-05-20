@@ -39,7 +39,7 @@
         );
       };
     python = let
-      packageOverrides = pyfinal: pyprev: {
+      packageOverrides = _pyfinal: pyprev: {
         pydantic = pyprev.pydantic.overridePythonAttrs rec {
           version = "2.11.4";
           src = prev.fetchFromGitHub {
@@ -49,7 +49,7 @@
             hash = "sha256-/LMemrO01KnhDrqKbH1qBVyO/uAiqTh5+FHnrxE8BUo=";
           };
         };
-        pydantic-core = pyprev.pydantic-core.overridePythonAttrs (old: rec {
+        pydantic-core = pyprev.pydantic-core.overridePythonAttrs (_old: rec {
           version = "2.33.2";
           src = prev.fetchFromGitHub {
             owner = "pydantic";

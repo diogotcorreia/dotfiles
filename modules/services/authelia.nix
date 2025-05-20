@@ -6,11 +6,7 @@ in {
   options.my.services.authelia = {
     accessRules = mkOption {
       type = types.listOf (types.submodule (
-        {
-          name,
-          config,
-          ...
-        }: {
+        {...}: {
           options = {
             domain = mkOption {
               type = types.either types.str (types.listOf types.str);
@@ -86,11 +82,7 @@ in {
     };
     oauthClients = mkOption {
       type = types.listOf (types.submodule (
-        {
-          name,
-          config,
-          ...
-        }: {
+        {...}: {
           freeformType = types.attrsOf types.anything;
           options = {
             client_id = mkOption {

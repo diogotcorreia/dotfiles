@@ -37,7 +37,7 @@
         dd of=./caido-cli bs=1 seek="$offset" conv=notrunc
     '';
 
-    patchedCaidoCli = caidoCli.overrideAttrs (prev: {
+    patchedCaidoCli = caidoCli.overrideAttrs (_prev: {
       postPatch = patchCliBin;
     });
 

@@ -1,7 +1,5 @@
 # Dashy dashboard configuration
-{config, ...}: let
-  cfg = config.services.dashy;
-
+{...}: let
   domain = "dash.diogotc.com";
 
   mkUrl = subdomain: "https://${subdomain}.diogotc.com";

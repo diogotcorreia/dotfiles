@@ -4,7 +4,6 @@
   fetchYarnDeps,
   lib,
   makeWrapper,
-  mkYarnPackage,
   nodejs,
   stdenv,
   yarnBuildHook,

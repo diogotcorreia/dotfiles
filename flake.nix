@@ -59,7 +59,7 @@
       configDir = ./config;
     };
 
-    lib = inputs.nixpkgs.lib.extend (self: super:
+    lib = inputs.nixpkgs.lib.extend (self: _super:
       import ./lib ({
           inherit inputs nixosConfigurations profiles pkgs secrets;
           lib = self;
@@ -75,7 +75,7 @@
     overlays =
       (mkOverlays ./overlays)
       // {
-        extraPkgs = self: super: (extraPackages {system = "x86_64-linux";});
+        extraPkgs = _self: _super: (extraPackages {system = "x86_64-linux";});
       };
     pkgs = mkPkgs overlays;
     nixosConfigurations = mkHosts ./hosts {

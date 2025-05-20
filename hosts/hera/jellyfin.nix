@@ -30,7 +30,7 @@
 in {
   # https://nixos.wiki/wiki/Accelerated_Video_Playback
   nixpkgs.overlays = [
-    (final: prev: {
+    (_final: prev: {
       intel-vaapi-driver =
         prev.intel-vaapi-driver.override {enableHybridCodec = true;};
     })

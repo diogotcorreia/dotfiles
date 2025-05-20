@@ -23,7 +23,6 @@
   luajit,
   luajitPackages,
   libpulseaudio,
-  libudev-zero,
   libevdev,
   libinput,
   unstable,

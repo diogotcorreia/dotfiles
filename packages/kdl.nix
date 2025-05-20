@@ -62,7 +62,7 @@
             type = listOf (node
               // {
                 # Prevent Nix from trying to recurse into suboptions or submodules, as this leads to a stack overflow
-                getSubOptions = prefix: {};
+                getSubOptions = _prefix: {};
                 getSubModules = null;
               });
             default = [];
