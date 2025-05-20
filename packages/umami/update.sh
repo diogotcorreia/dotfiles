@@ -1,10 +1,13 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq prefetch-yarn-deps nix-prefetch-github coreutils
+#!nix-shell -i bash -p curl jq prefetch-yarn-deps nix-prefetch-github coreutils nix-update
+# shellcheck shell=bash
+
+# This script exists to update geocities version and pin prisma-engines version
 
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
-old_version=$(jq -r ".version" sources.json || echo -n "0.0.1")
+old_version=$(nix-instantiate --eval -A 'umami.version' default.nix | tr -d '"' || echo "0.0.1")
 version=$(curl -s "https://api.github.com/repos/umami-software/umami/releases/latest" | jq -r ".tag_name")
 version="${version#v}"
 
@@ -15,16 +18,9 @@ if [[ "$old_version" == "$version" ]]; then
     exit 0
 fi
 
-echo "Fetching src"
-src_hash=$(nix-prefetch-github umami-software umami --rev "v${version}" | jq -r .hash)
-upstream_src="https://raw.githubusercontent.com/umami-software/umami/v$version"
+nix-update --version "$version" umami
 
-lock=$(mktemp)
-curl -s -o "$lock" "$upstream_src/yarn.lock"
-yarn_hash=$(prefetch-yarn-deps "$lock")
-yarn_hash_sri=$(nix-hash --to-sri --type sha256 "$yarn_hash")
-rm "$lock"
-
+echo "Fetching geolite"
 geocities_rev_date=$(curl https://api.github.com/repos/GitSquared/node-geolite2-redist/branches/master | jq -r ".commit.sha, .commit.commit.author.date")
 geocities_rev=$(echo "$geocities_rev_date" | head -1)
 geocities_date=$(echo "$geocities_rev_date" | tail -1 | sed 's/T.*//')
@@ -33,11 +29,8 @@ geocities_date=$(echo "$geocities_rev_date" | tail -1 | sed 's/T.*//')
 geocities_hash=$(curl -s "https://raw.githubusercontent.com/GitSquared/node-geolite2-redist/$geocities_rev/redist/GeoLite2-City.tar.gz.sha256")
 geocities_hash_sri=$(nix-hash --to-sri --type sha256 "$geocities_hash")
 
-cat <<EOF > sources.json
+cat <<EOF > "$SCRIPT_DIR/sources.json"
 {
-  "version": "$version",
-  "hash": "$src_hash",
-  "yarnHash": "$yarn_hash_sri",
   "geocities": {
     "rev": "$geocities_rev",
     "date": "$geocities_date",
@@ -45,3 +38,13 @@ cat <<EOF > sources.json
   }
 }
 EOF
+
+echo "Pinning Prisma version"
+upstream_src="https://raw.githubusercontent.com/umami-software/umami/v$version"
+
+lock=$(mktemp)
+curl -s -o "$lock" "$upstream_src/pnpm-lock.yaml"
+prisma_version=$(grep "@prisma/engines@" "$lock" | head -n1 |  awk -F"[@']" '{print $4}')
+rm "$lock"
+
+nix-update --version "$prisma_version" umami.prisma-engines

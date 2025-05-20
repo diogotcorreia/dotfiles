@@ -2,26 +2,24 @@
 # See: https://github.com/NixOS/nixpkgs/pull/380249
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  postgresql,
-  prisma,
-  prisma-engines,
   makeWrapper,
+  nodejs,
+  pnpm_10,
+  prisma-engines,
   openssl,
+  rustPlatform,
   # build variables
   databaseType ? "postgresql",
   collectApiEndpoint ? "",
   trackerScriptNames ? [],
 }: let
   sources = lib.importJSON ./sources.json;
+  pnpm = pnpm_10;
 
-  geocities = stdenv.mkDerivation {
+  geocities = stdenvNoCC.mkDerivation {
     pname = "umami-geocities";
     version = sources.geocities.date;
     src = fetchurl {
@@ -38,29 +36,55 @@
 
     meta.license = lib.licenses.cc-by-40;
   };
+
+  # Pin the specific version of prisma to the one used by upstream
+  # to guarantee compatibility.
+  prisma-engines' = prisma-engines.overrideAttrs (old: rec {
+    version = "6.7.0";
+    src = fetchFromGitHub {
+      owner = "prisma";
+      repo = "prisma-engines";
+      tag = version;
+      hash = "sha256-Ty8BqWjZluU6a5xhSAVb2VoTVY91UUj6zoVXMKeLO4o=";
+    };
+    cargoHash = "sha256-HjDoWa/JE6izUd+hmWVI1Yy3cTBlMcvD9ANsvqAoHBI=";
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (old) pname;
+      inherit src version;
+      hash = cargoHash;
+    };
+  });
 in
-  stdenv.mkDerivation (finalAttrs: {
+  stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "umami";
-    inherit (sources) version;
+    version = "2.18.1";
 
     nativeBuildInputs = [
-      yarnConfigHook
-      yarnBuildHook
-      nodejs
-      prisma
       makeWrapper
+      nodejs
+      pnpm.configHook
     ];
 
     src = fetchFromGitHub {
       owner = "umami-software";
       repo = "umami";
       tag = "v${finalAttrs.version}";
-      inherit (sources) hash;
+      hash = "sha256-gUcP7Bk62vZfAcYhiHMY8Et8mLBd6dn0dH4frOfzekY=";
     };
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = sources.yarnHash;
+    # install dev dependencies as well, for rollup
+    pnpmInstallFlags = ["--prod=false"];
+
+    pnpmDeps = pnpm.fetchDeps {
+      inherit
+        (finalAttrs)
+        pname
+        pnpmInstallFlags
+        version
+        src
+        ;
+      hash = "sha256-WkSMA18QapbpYe2FMabD4yNmbg0WRdnymZHfv1VOjSk=";
     };
 
     env.CYPRESS_INSTALL_BINARY = "0";
@@ -73,14 +97,18 @@ in
     env.COLLECT_API_ENDPOINT = collectApiEndpoint;
     env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
 
+    # Allow prisma-cli to find prisma-engines without having to download them
+    env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
+    env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
+
     buildPhase = ''
       runHook preBuild
 
-      yarn --offline copy-db-files
-      prisma generate # yarn --offline build-db-client, but using prisma from nixpkgs
+      pnpm copy-db-files
+      pnpm build-db-client # prisma generate
 
-      yarn --offline build-tracker
-      yarn --offline build-app
+      pnpm build-tracker
+      pnpm build-app
 
       runHook postBuild
     '';
@@ -88,7 +116,7 @@ in
     checkPhase = ''
       runHook preCheck
 
-      yarn --offline test
+      pnpm test
 
       runHook postCheck
     '';
@@ -100,6 +128,22 @@ in
 
       mv .next/standalone $out
       mv .next/static $out/.next/static
+
+      # Include prisma cli in next standalone build.
+      # This is preferred to using the prisma in nixpkgs because it guarantees
+      # the version matches.
+      # See https://nextjs-forum.com/post/1280550687998083198
+      # and https://nextjs.org/docs/pages/api-reference/config/next-config-js/output#caveats
+      # Unfortunately, using outputFileTracingIncludes doesn't work because of pnpm's symlink structure,
+      # so we just copy the files manually.
+      mkdir -p $out/node_modules/.bin
+      cp node_modules/.bin/prisma $out/node_modules/.bin
+      cp -a node_modules/prisma $out/node_modules
+      cp -a node_modules/.pnpm/@prisma* $out/node_modules/.pnpm
+      cp -a node_modules/.pnpm/prisma* $out/node_modules/.pnpm
+      # remove broken symlinks (some dependencies that are not relevant for running migrations)
+      find $out/node_modules/.pnpm/@prisma* -xtype l -exec rm {} \;
+      find $out/node_modules/.pnpm/prisma* -xtype l -exec rm {} \;
 
       cp -R public $out/public
       cp -R prisma $out/prisma
@@ -113,10 +157,16 @@ in
       makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
         --set NODE_ENV production \
         --set NEXT_TELEMETRY_DISABLED 1 \
-        --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines}/lib/libquery_engine.node" \
-        --prefix PATH : ${lib.makeBinPath [openssl]} \
+        --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines'}/lib/libquery_engine.node" \
+        --set PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines'}/bin/schema-engine" \
+        --prefix PATH : ${
+        lib.makeBinPath [
+          openssl
+          nodejs
+        ]
+      } \
         --chdir $out \
-        --run "${prisma}/bin/prisma migrate deploy" \
+        --run "$out/node_modules/.bin/prisma migrate deploy" \
         --add-flags "$out/server.js"
 
       runHook postInstall
@@ -127,6 +177,7 @@ in
         sources
         geocities
         ;
+      prisma-engines = prisma-engines';
       updateScript = ./update.sh;
     };
 
