@@ -121,7 +121,9 @@
           prj_root=$(git rev-parse --show-toplevel 2>/dev/null || echo .)
           set -- "$prj_root"
         fi
-        exec "${lib.getExe pkgs.alejandra}" "$@"
+
+        "${lib.getExe pkgs.deadnix}" --hidden --edit "$@"
+        "${lib.getExe pkgs.alejandra}" "$@"
       '';
     };
   };
