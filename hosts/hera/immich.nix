@@ -139,6 +139,7 @@ in {
       scopes = oauthScopes;
       policy = "two_factor";
       subject = "group:immich";
+      token_endpoint_auth_method = "client_secret_post";
     }
   ];
 
