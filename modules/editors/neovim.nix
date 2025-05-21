@@ -543,6 +543,10 @@ in {
         vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
         vim.keymap.set("v", "<leader>s", [["hy:%s/\<<C-r>h\>/<C-r>h/gI<Left><Left><Left>]])
 
+        -- keeps selection when changing indentation
+        vim.keymap.set('v', '<', '<gv')
+        vim.keymap.set('v', '>', '>gv')
+
         -- don't include character under cursor in selection
         vim.opt.selection = 'exclusive'
         -- enable mouse functionality
