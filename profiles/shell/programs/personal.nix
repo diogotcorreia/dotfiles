@@ -25,6 +25,9 @@
     # TODO 25.11: replace with wcurl when it releases (curl 8.14.0)
     wget
 
+    # CLI HTTP client
+    xh
+
     # Agenix
     agenix
   ];
