@@ -12,6 +12,7 @@
     security.acme.cloudflare
     security.fail2ban
     server.minimal
+    services.frp.server
     services.nginx.common
     services.grocy
     shell.zellij

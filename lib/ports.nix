@@ -33,6 +33,8 @@
     jellyseerr = 5055;
     coiot = 5683; # CoIoT (Shelly Push)
 
+    frpServer = 6000;
+    frpHttp = 6080;
     conduit = 6167;
     infraKeyval = 6442;
     bazarr = 6767;

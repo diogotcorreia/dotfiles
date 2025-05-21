@@ -42,6 +42,10 @@ in
       "heroisDoMarWireguardPrivateKey"
     ])
 
+    (mkSystem null (personalSystems ++ [broSystem]) [
+      "frpAuthEnv"
+    ])
+
     (mkSystem "apollo" [apolloSystem] [
       "nebulaCert"
       "nebulaKey"
