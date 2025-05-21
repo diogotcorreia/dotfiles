@@ -12,8 +12,7 @@
     security.acme.cloudflare
     security.fail2ban
     server.minimal
-    services.caddy.common
-    services.caddy.rproxy
+    services.nginx.common
     services.grocy
     shell.zellij
     virtualisation.virtual-machines
