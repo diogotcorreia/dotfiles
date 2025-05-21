@@ -5,6 +5,7 @@
 
     settings = {
       theme = "nord";
+      show_startup_tips = false;
     };
   };
 }
