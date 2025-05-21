@@ -547,6 +547,10 @@ in {
         vim.keymap.set('v', '<', '<gv')
         vim.keymap.set('v', '>', '>gv')
 
+        -- repeat macro
+        -- https://vi.stackexchange.com/questions/11210/can-i-repeat-a-macro-with-the-dot-operator
+        vim.keymap.set('n', '<leader>.', '@@')
+
         -- don't include character under cursor in selection
         vim.opt.selection = 'exclusive'
         -- enable mouse functionality
