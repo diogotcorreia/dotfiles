@@ -3,6 +3,7 @@
   config,
   lib,
   secrets,
+  pkgs,
   ...
 }: let
   dataDir = "/var/lib/meilisearch";
@@ -19,6 +20,7 @@ in {
 
   services.meilisearch = {
     enable = true;
+    package = pkgs.meilisearch; # pin due to system.stateVersion
     listenAddress = "[::1]";
     listenPort = port;
     environment = "production";
