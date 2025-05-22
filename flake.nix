@@ -50,6 +50,7 @@
       url = "github:diogotcorreia/infra-keyval";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-compat.url = "github:edolstra/flake-compat";
   };
 
   outputs = inputs @ {...}: let
