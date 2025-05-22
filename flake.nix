@@ -35,6 +35,13 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # pwndbg has been removed from nixpkgs, so we use it here to
+    # allow it to be cached and re-exported for my ctf flake
+    # https://github.com/NixOS/nixpkgs/pull/380600
+    pwndbg = {
+      url = "github:pwndbg/pwndbg?ref=2025.04.18";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     lidl-to-grocy = {
       url = "github:diogotcorreia/lidl-to-grocy?ref=v1.3.0";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -110,6 +117,7 @@
           infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
           ironbar = pkgs.my.ironbar-unstable;
           lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
+          pwndbg = inputs.pwndbg.packages.x86_64-linux.pwndbg;
         };
     };
 
