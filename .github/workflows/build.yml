@@ -137,6 +137,7 @@ jobs:
           - alt-urls-discord-bot
           - attic
           - cybersec.flask-unsign
+          - cybersec.libdebug
           - cybersec.pycdc
           - infra-keyval
           - ironbar
