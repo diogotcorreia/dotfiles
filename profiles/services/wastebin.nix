@@ -8,7 +8,8 @@
   domain = "bin.diogotc.com";
   port = lib.my.ports.wastebin;
 
-  stateDir = "/var/lib/private/wastebin";
+  cfg = config.services.wastebin;
+  stateDir = lib.my.toPrivateStateDirectory cfg.stateDir;
 in {
   age.secrets.wastebinEnv.file = secrets.host.wastebinEnv;
 

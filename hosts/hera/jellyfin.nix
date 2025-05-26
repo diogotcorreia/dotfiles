@@ -198,7 +198,7 @@ in {
     # also persist cache so we don't have to fetch metadata on every reboot
     config.services.jellyfin.cacheDir
 
-    "/var/lib/private/jellyseerr" # can't use configDir from module because dynamic user
+    (lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir)
     config.services.radarr.dataDir
     config.services.sonarr.dataDir
     config.services.jackett.dataDir
@@ -207,7 +207,7 @@ in {
 
   modules.services.restic.paths = [
     config.services.jellyfin.dataDir
-    "/var/lib/private/jellyseerr" # can't use configDir from module because dynamic user
+    (lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir)
     config.services.radarr.dataDir
     config.services.sonarr.dataDir
     config.services.jackett.dataDir
