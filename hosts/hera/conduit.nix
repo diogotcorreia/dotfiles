@@ -5,18 +5,21 @@
   pkgs,
   ...
 }: let
+  cfg = config.services.matrix-continuwuity;
+  conduitDir = lib.my.toPrivateStateDirectory cfg.settings.global.database_path;
+
+  serverName = "diogotc.com";
   domainConduit = "m.diogotc.com";
-  portConduit = lib.my.ports.conduit;
   domainElement = "chat.diogotc.com";
 
   # https://web-docs.element.dev/Element%20Web/config.html
   elementConfig = {
-    default_server_name = "diogotc.com";
+    default_server_name = serverName;
     disable_custom_urls = true;
     disable_guests = true;
     disable_login_language_selector = false;
     disable_3pid = true;
-    brand = "DTC Element";
+    brand = "DTC's Element";
 
     integrations_ui_url = "https://scalar.vector.im/";
     integrations_rest_url = "https://scalar.vector.im/api";
@@ -52,24 +55,39 @@
     map_style_url = "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx";
   };
 in {
-  # TODO move docker containers to NixOS services
+  services.matrix-continuwuity = {
+    enable = true;
+    group = config.services.nginx.group;
+    settings = {
+      global = {
+        server_name = serverName;
+        unix_socket_path = "/run/continuwuity/continuwuity.sock";
+        new_user_displayname_suffix = "";
+
+        # hardcoded because of infinite recursion...
+        database_backup_path = "/var/lib/continuwuity/backups";
+        database_backups_to_keep = 1;
+        admin_signal_execute = ["server backup-database"];
+
+        well_known = {
+          client = "https://${domainConduit}";
+          server = "${domainConduit}:443";
+        };
+      };
+    };
+  };
 
   services.nginx.virtualHosts = {
     ${domainConduit} = {
       enableACME = true;
       enableCloudflareRealIp = true;
       locations = {
-        "/".proxyPass = "http://127.0.0.1:${toString portConduit}";
-        "= /.well-known/matrix/server".extraConfig = ''
-          default_type application/json;
-          add_header 'Access-Control-Allow-Origin' '*';
-          return 200 '{"m.server": "m.diogotc.com:443"}';
-        '';
-        "= /.well-known/matrix/client".extraConfig = ''
-          default_type application/json;
-          add_header 'Access-Control-Allow-Origin' '*';
-          return 200 '{"m.homeserver": {"base_url": "https://m.diogotc.com"}, "org.matrix.msc3575.proxy": {"url": "https://m.diogotc.com"}}';
-        '';
+        "/" = {
+          proxyPass = "http://unix:${cfg.settings.global.unix_socket_path}";
+          extraConfig = ''
+            client_max_body_size ${toString cfg.settings.global.max_request_size};
+          '';
+        };
       };
     };
     ${domainElement} = let
@@ -82,5 +100,20 @@ in {
     };
   };
 
-  modules.services.restic.paths = ["${config.my.homeDirectory}/conduit"];
+  modules.impermanence.directories = [
+    conduitDir
+  ];
+
+  modules.services.restic = {
+    # trigger backup using signal
+    # unfortunately there's no way to know when the backup is done, but 5 seconds should be more than enough
+    backupPrepareCommand = ''
+      ${config.systemd.package}/bin/systemctl kill continuwuity.service --signal=SIGUSR2
+      ${pkgs.coreutils}/bin/sleep 5
+    '';
+    paths = [
+      "${conduitDir}/media"
+      "${conduitDir}/backups"
+    ];
+  };
 }
