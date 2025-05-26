@@ -7,7 +7,7 @@
   ...
 }: let
   fetchFromCache = ''
-    nix build -- "$config_store_path"
+    nix build --refresh --no-link -- "$config_store_path"
   '';
   setProfile = ''
     sudo nix-env -p /nix/var/nix/profiles/system --set "$config_store_path"
