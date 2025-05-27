@@ -118,7 +118,8 @@ in {
       };
 
       notifier = {
-        disable_startup_check = false;
+        # don't check that smtp is working: reduces downtime impact if mailserver is down
+        disable_startup_check = true;
         smtp = {
           address = "submissions://mail.diogotc.com:465";
           username = lib.my.mkRobotsEmail "authelia";
