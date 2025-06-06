@@ -42,5 +42,20 @@
         }
       ];
     };
+    cscpt = {
+      autostart = false;
+      address = ["10.120.16.27/32"];
+      mtu = 1320;
+      privateKeyFile = config.age.secrets.wireguardClientHeroisDoMarPrivateKey.path;
+
+      peers = [
+        {
+          publicKey = "rgD6c4oOZcOed8UOhjXXcHkuzPvOXp88HHep++XUUX0=";
+          endpoint = "ctf.cybersecuritychallenge.pt:42410";
+          allowedIPs = ["10.120.16.1/32"];
+          persistentKeepalive = 25;
+        }
+      ];
+    };
   };
 }
