@@ -14,6 +14,7 @@ in {
   config.hm = mkIf cfg.enable {
     programs.git = {
       enable = true;
+      lfs.enable = true;
       userName = "Diogo Correia";
       userEmail = "me@diogotc.com";
       extraConfig = {

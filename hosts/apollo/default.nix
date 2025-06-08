@@ -101,6 +101,8 @@
   hm.home.packages = with pkgs; [
     # Arrange external displays
     arandr
+    # Git LFS pure SSH server implementation
+    git-lfs-transfer
     # Heroic Games Launcher (FOSS Epic Games Launcher)
     heroic
     # Office Suite
