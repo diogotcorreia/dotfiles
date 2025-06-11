@@ -55,6 +55,15 @@ in {
         "tracer.*"
       ];
 
+      # Store blobs in the file system for easier backups.
+      # Since the database is backed up to /tmp, it would not fit in RAM
+      # with all the blobs.
+      store.fs = {
+        type = "fs";
+        path = "${dataDir}/blobs";
+      };
+      storage.blob = "fs";
+
       session.rcpt = {
         rewrite = [
           (ifthen "rcpt_domain == '${robotsDomain}'" "'${mkEmail "robots"}'")
@@ -236,6 +245,9 @@ in {
       rm -rf /tmp/stalwart-db-secondary
       rm -rf /tmp/stalwart-db-backup
     '';
-    paths = ["/tmp/stalwart-db-backup"];
+    paths = [
+      "/tmp/stalwart-db-backup"
+      "${dataDir}/blobs"
+    ];
   };
 }
