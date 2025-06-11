@@ -140,9 +140,6 @@ in {
         };
       };
 
-      # TODO: remove when https://github.com/NixOS/nixpkgs/pull/412054 is merged
-      webadmin.resource = "file://${config.services.stalwart-mail.package.webadmin}/webadmin.zip";
-
       # Just for initial setup - comment immediately!
       # authentication.fallback-admin = {
       # user = "admin";
