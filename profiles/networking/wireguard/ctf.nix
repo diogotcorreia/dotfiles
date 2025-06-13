@@ -29,14 +29,14 @@
     };
     teameurope = {
       autostart = false;
-      address = ["10.128.24.112/32"];
+      address = ["10.128.24.10/32"];
       mtu = 1320;
       privateKeyFile = config.age.secrets.wireguardClientHeroisDoMarPrivateKey.path;
 
       peers = [
         {
           publicKey = "3wf/CxDlNXO/x6yE3Tud31QS+fbQNG6s3UwW+TjL9WA=";
-          endpoint = "teameurope.duckdns.org:42434";
+          endpoint = "teameurope.pedroadao.me:42434";
           allowedIPs = ["10.128.16.1/20"];
           persistentKeepalive = 25;
         }
