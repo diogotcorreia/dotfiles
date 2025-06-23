@@ -8,7 +8,7 @@ index 3c82494f..7581dfc7 100644
                      array_merge($this->conversionErrors, $this->importErrors),
 -                    $this->conversionRateLimits
 +                    $this->conversionRateLimits,
-+                    $file
++                    basename($jsonFile)
                  )
              );
  
