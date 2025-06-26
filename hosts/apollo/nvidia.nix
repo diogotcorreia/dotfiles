@@ -20,5 +20,5 @@
   # Fixes not being able to boot into TTY
   # https://github.com/NixOS/nixpkgs/issues/328972
   hardware.nvidia.modesetting.enable = false;
-  boot.kernelParams = ["nvidia-drm.modeset=1"];
+  boot.kernelParams = ["nvidia-drm.modeset=1" "nvidia_drm.fbdev=0"];
 }
