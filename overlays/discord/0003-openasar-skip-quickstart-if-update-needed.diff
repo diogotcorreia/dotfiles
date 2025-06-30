@@ -1,0 +1,21 @@
+diff --git a/src/splash/index.js b/src/splash/index.js
+index 81d5f2f..04f7439 100644
+--- a/src/splash/index.js
++++ b/src/splash/index.js
+@@ -13,8 +13,15 @@ exports.initSplash = (startMin) => {
+ 
+   launchSplash(startMin);
+ 
++  let forceUpdate = false;
++  try {
++    require.resolve('discord_desktop_core');
++  } catch (ignore) {
++    forceUpdate = true;
++    log('Splash', "Ignoring quickstart");
++  }
+ 
+-  if (process.env.OPENASAR_QUICKSTART ?? oaConfig.quickstart) setTimeout(() => {
++  if (!forceUpdate && (process.env.OPENASAR_QUICKSTART ?? oaConfig.quickstart)) setTimeout(() => {
+     destroySplash();
+ 
+     launchMain();

@@ -8,6 +8,8 @@
     patches = [
       ./0001-openasar-override-settings-file.diff
       ./0002-openasar-allow-skip-quickstart.diff
+      # ignore quickstart if discord can't start without updating
+      ./0003-openasar-skip-quickstart-if-update-needed.diff
     ];
   });
 }
