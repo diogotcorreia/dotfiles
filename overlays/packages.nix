@@ -1,19 +1,14 @@
 # Import packages from ../packages directory
-# Adapted from https://github.com/luishfonseca/dotfiles/blob/6193dff46ad05eca77dedba9afbc50443a8b3dd1/overlays/packages.nix
 let
   packagesDir = ../packages;
 in
   {lib, ...}: _final: prev: let
-    callPackageFromAttrs = attrs:
-      builtins.mapAttrs (
-        _name: value:
-          if builtins.isAttrs value
-          then (callPackageFromAttrs value)
-          else (prev.callPackage value {inherit lib;})
-      )
-      attrs;
+    scope = lib.makeScope prev.newScope (_self: {
+      inherit lib;
+    });
   in {
-    my =
-      callPackageFromAttrs
-      (lib.my.rakeLeaves packagesDir);
+    my = lib.packagesFromDirectoryRecursive {
+      inherit (scope) newScope callPackage;
+      directory = packagesDir;
+    };
   }
