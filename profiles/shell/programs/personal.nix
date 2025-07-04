@@ -21,10 +21,6 @@
     # perl-rename (much better than the one from util-linux)
     rename
 
-    # Other utilities
-    # TODO 25.11: replace with wcurl when it releases (curl 8.14.0)
-    wget
-
     # CLI HTTP client
     xh
 
@@ -34,5 +30,6 @@
 
   environment.shellAliases = {
     neofetch = "fastfetch";
+    wget = "wcurl";
   };
 }
