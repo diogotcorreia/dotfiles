@@ -70,6 +70,32 @@
 
   my.networking.wiredInterface = "enp9s0";
 
+  my.graphical.monitorDirection = "horizontally";
+  my.graphical.monitors = [
+    {
+      name = "HDMI-A-1";
+      position = {
+        x = 0;
+        y = 0;
+      };
+    }
+    {
+      name = "DVI-D-1";
+      primary = true;
+      position = {
+        x = 1280;
+        y = 0;
+      };
+    }
+    {
+      name = "DP-1";
+      position = {
+        x = 3200;
+        y = 0;
+      };
+    }
+  ];
+
   # Audio
   # TODO move to module
   security.rtkit.enable = true;

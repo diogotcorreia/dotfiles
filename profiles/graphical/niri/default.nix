@@ -1,5 +1,6 @@
 # Niri window manager (wayland)
 {
+  config,
   lib,
   pkgs,
   profiles,
@@ -29,6 +30,16 @@
   mkProps = props: {_props = props;};
 
   generate = settings: format.generate "config.kdl" (flatten (mapAttrsToList toNode settings));
+
+  monitorsHorizontally = config.my.graphical.monitorDirection == "horizontally";
+  monitorPrevious =
+    if monitorsHorizontally
+    then "left"
+    else "up";
+  monitorNext =
+    if monitorsHorizontally
+    then "right"
+    else "down";
 in {
   imports = with profiles; [
     graphical.fonts
@@ -49,7 +60,7 @@ in {
 
   # The generator exposed by home-manager is semi-broken and can't represent
   # certain needed options for the config (e.g. input.touchpad.tap).
-  # For the time being, write the config manually using KDL.
+  # For the time being, write the config using a custom KDL generator.
   # https://github.com/nix-community/home-manager/pull/3399#issuecomment-1936575067
   hm.xdg.configFile."niri/config.kdl".source = generate {
     input = {
@@ -99,22 +110,17 @@ in {
       };
     };
 
-    output = [
+    output = map (monitor:
       {
-        _args = ["HDMI-A-1"];
-        position = mkProps {
-          x = 0;
-          y = 0;
-        };
+        _args = [monitor.name];
       }
-      {
-        _args = ["eDP-1"];
-        position = mkProps {
-          x = 0;
-          y = 1200;
-        };
-      }
-    ];
+      // (lib.optionalAttrs (monitor.position != null) {
+        position = mkProps {inherit (monitor.position) x y;};
+      })
+      // (lib.optionalAttrs monitor.primary {
+        focus-at-startup = {};
+      }))
+    config.my.graphical.monitors;
 
     # Disable saving screenshots to disk
     screenshot-path = null;
@@ -137,10 +143,10 @@ in {
       "Mod+C" = {center-column = {};};
 
       # Monitor actions
-      "Mod+Comma" = {focus-monitor-previous = {};};
-      "Mod+Shift+Comma" = {move-window-to-monitor-previous = {};};
-      "Mod+Period" = {focus-monitor-next = {};};
-      "Mod+Shift+Period" = {move-window-to-monitor-next = {};};
+      "Mod+Comma" = {"focus-monitor-${monitorPrevious}" = {};};
+      "Mod+Shift+Comma" = {"move-window-to-monitor-${monitorPrevious}" = {};};
+      "Mod+Period" = {"focus-monitor-${monitorNext}" = {};};
+      "Mod+Shift+Period" = {"move-window-to-monitor-${monitorNext}" = {};};
 
       # Quit niri
       "Mod+Ctrl+Q" = {quit = {};};

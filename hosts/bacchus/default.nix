@@ -61,6 +61,25 @@
   my.networking.wirelessInterface = "wlo1";
   my.hardware.laptop = true;
 
+  my.graphical.monitorDirection = "vertically";
+  my.graphical.monitors = [
+    {
+      name = "HDMI-A-1";
+      position = {
+        x = 0;
+        y = 0;
+      };
+    }
+    {
+      name = "eDP-1";
+      primary = true;
+      position = {
+        x = 0;
+        y = 1200;
+      };
+    }
+  ];
+
   # Audio
   # TODO move to module
   security.rtkit.enable = true;
