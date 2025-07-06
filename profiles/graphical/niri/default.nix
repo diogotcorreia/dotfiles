@@ -4,6 +4,7 @@
   lib,
   pkgs,
   profiles,
+  user,
   ...
 }: let
   inherit (lib) flatten isAttrs isList mapAttrsToList removeAttrs;
@@ -78,6 +79,11 @@ in {
       xdg-desktop-portal-gnome
     ];
   };
+
+  # Avoid typing the username on TTY and only prompt for the password
+  # https://wiki.archlinux.org/title/Getty#Prompt_only_the_password_for_a_default_user_in_virtual_console_login
+  services.getty.loginOptions = "-p -- ${user}";
+  services.getty.extraArgs = ["--noclear" "--skip-login"];
 
   # The generator exposed by home-manager is semi-broken and can't represent
   # certain needed options for the config (e.g. input.touchpad.tap).
