@@ -66,12 +66,18 @@ in {
   # TODO: probably remove in NixOS 25.11 due to the move to gcr-ssh-agent
   hm.systemd.user.services.gnome-keyring.Service.ExecStartPost = "-${config.systemd.package}/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/keyring/ssh";
 
-  # Extra portals recommended by upstream
-  hm.xdg.portal.extraPortals = with pkgs; [
-    gnome-keyring
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-gnome
-  ];
+  # The HM module is broken: https://github.com/nix-community/home-manager/issues/6770
+  xdg.portal = {
+    enable = true;
+    configPackages = with pkgs; [niri];
+    xdgOpenUsePortal = true;
+    # Extra portals recommended by upstream
+    extraPortals = with pkgs; [
+      gnome-keyring
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+    ];
+  };
 
   # The generator exposed by home-manager is semi-broken and can't represent
   # certain needed options for the config (e.g. input.touchpad.tap).
