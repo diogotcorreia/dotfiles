@@ -116,7 +116,6 @@
         // {
           attic = pkgs.attic-client;
           infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
-          ironbar = pkgs.my.ironbar-unstable;
           lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
           pwndbg = inputs.pwndbg.packages.x86_64-linux.pwndbg;
         };

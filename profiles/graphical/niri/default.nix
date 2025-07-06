@@ -45,8 +45,8 @@ in {
   imports = with profiles; [
     graphical.fonts
     graphical.fuzzel
-    graphical.ironbar
     graphical.swaylock
+    graphical.waybar
   ];
 
   hm.home.packages = with pkgs; [

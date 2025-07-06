@@ -140,7 +140,6 @@ jobs:
           - cybersec.libdebug
           - cybersec.pycdc
           - infra-keyval
-          - ironbar
           - lzbt
           - pwndbg
 
