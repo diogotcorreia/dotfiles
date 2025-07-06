@@ -58,6 +58,21 @@ in {
     [ "$(tty)" = "/dev/tty1" ] && ! pidof -s niri >/dev/null 2>&1 && exec niri-session &> /dev/null
   '';
 
+  # Unlock keyring on login
+  # System-wide option is needed for unlocking with PAM, while the HM option deals with starting the daemon
+  # with the graphical session.
+  services.gnome.gnome-keyring.enable = true;
+  hm.services.gnome-keyring.enable = true;
+  # TODO: probably remove in NixOS 25.11 due to the move to gcr-ssh-agent
+  hm.systemd.user.services.gnome-keyring.Service.ExecStartPost = "-${config.systemd.package}/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/keyring/ssh";
+
+  # Extra portals recommended by upstream
+  hm.xdg.portal.extraPortals = with pkgs; [
+    gnome-keyring
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
+  ];
+
   # The generator exposed by home-manager is semi-broken and can't represent
   # certain needed options for the config (e.g. input.touchpad.tap).
   # For the time being, write the config using a custom KDL generator.
