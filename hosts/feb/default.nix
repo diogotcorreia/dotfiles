@@ -12,8 +12,8 @@
     security.acme.cloudflare
     security.fail2ban
     server.minimal
-    services.caddy.common
     services.esphome
+    services.nginx.common
     shell.zellij
   ];
 

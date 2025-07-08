@@ -53,7 +53,7 @@ in {
       default = null;
       description = mdDoc ''
         The external domain of this Home Assistant instance.
-        If not null, Caddy/Nginx is configured automatically.
+        If not null, Nginx is configured automatically.
       '';
     };
     customZhaQuirks = mkOption {
@@ -186,16 +186,6 @@ in {
     modules.services.restic = mkIf cfg.useSensibleDefaults {
       paths = [config.services.home-assistant.configDir];
       exclude = ["${config.services.home-assistant.configDir}/secrets.yaml"];
-    };
-
-    # Configure Caddy
-    services.caddy.virtualHosts = mkIf (cfg.externalDomain != null) {
-      ${cfg.externalDomain} = {
-        enableACME = true;
-        extraConfig = ''
-          reverse_proxy localhost:${toString cfg.config.http.server_port}
-        '';
-      };
     };
 
     # Configure Nginx

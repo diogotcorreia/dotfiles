@@ -32,26 +32,4 @@ in {
   users.groups.esphome = lib.mkIf (config.services.nginx.enable) {
     members = ["nginx"];
   };
-
-  services.caddy.virtualHosts = {
-    ${domain} = {
-      enableACME = true;
-      extraConfig = ''
-        import NEBULA
-        import AUTHELIA
-        reverse_proxy unix//run/esphome/esphome.sock
-      '';
-    };
-  };
-  # allow access to socket
-  systemd.services.caddy = lib.mkIf config.services.caddy.enable {
-    serviceConfig.SupplementaryGroups = ["esphome"];
-  };
-
-  my.services.authelia.accessRules = lib.mkIf config.services.caddy.enable [
-    {
-      inherit domain;
-      subject = "group:esphome-${config.networking.hostName}";
-    }
-  ];
 }
