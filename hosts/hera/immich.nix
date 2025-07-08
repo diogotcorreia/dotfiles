@@ -149,4 +149,10 @@ in {
     "${photosLocation}/upload"
     "${photosLocation}/profile"
   ];
+
+  # Unfortunately, CAP_DAC_READ_SEARCH does not work over NFS,
+  # so we need to give read permissions to the restic user/group.
+  # Ensure that the NFS server has the same UID/GID
+  users.users.restic.uid = 15016;
+  users.groups.restic.gid = 15016;
 }
