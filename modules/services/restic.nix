@@ -6,7 +6,7 @@
   utils,
   ...
 }: let
-  inherit (lib) mkEnableOption mkOption types mkIf optionalAttrs;
+  inherit (lib) mkBefore mkEnableOption mkOption types mkIf optionalAttrs;
   inherit (lib.strings) optionalString;
   inherit (utils.systemdUtils.unitOptions) unitOption;
   cfg = config.modules.services.restic;
@@ -70,6 +70,32 @@ in {
         A script that must run after finishing the backup process.
       '';
     };
+
+    stdinFromCommand = mkOption {
+      description = "A list of commands whose output should be backed up";
+      default = [];
+      type = types.listOf (types.submodule {
+        options = {
+          fileName = mkOption {
+            type = types.nullOr types.str;
+            description = "The name of the file the output is stored as in the backup";
+            default = null;
+            example = "backup.sql";
+          };
+          tags = mkOption {
+            type = types.listOf types.str;
+            description = "The tags to assign to this backup";
+            default = [];
+            example = ["postgresql"];
+          };
+          command = mkOption {
+            type = types.listOf types.str;
+            description = "A command and its arguments";
+            example = ["pg_dumpall"];
+          };
+        };
+      });
+    };
   };
 
   config = mkIf cfg.enable (let
@@ -80,6 +106,8 @@ in {
 
     # group by host,tags instead of host,paths
     groupByOptions = ["--group-by=host,tags"];
+
+    resticCfg = config.services.restic.backups.${resticName};
   in {
     age.secrets = {
       resticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
@@ -134,6 +162,20 @@ in {
         # Only run when network is up
         wants = ["network-online.target"];
         after = ["network-online.target"];
+
+        # Execute additional backups from stdin
+        serviceConfig.ExecStart = mkBefore (map (
+            stdinCmd: let
+              tagsArgs = lib.concatMapStrings (arg: " --tag ${lib.escapeShellArg arg}") stdinCmd.tags;
+              filenameArg = optionalString (stdinCmd.fileName != null) " --stdin-filename ${lib.escapeShellArg stdinCmd.fileName}";
+              stdinArg = " --stdin-from-command -- ${lib.escapeShellArgs stdinCmd.command}";
+
+              backupArgs = lib.concatStringsSep " " (resticCfg.extraBackupArgs);
+              extraOptions = lib.concatMapStrings (arg: " -o ${arg}") resticCfg.extraOptions;
+              resticCmd = "${lib.getExe resticCfg.package}${extraOptions}";
+            in "${resticCmd} backup ${backupArgs}${tagsArgs}${filenameArg}${stdinArg}"
+          )
+          cfg.stdinFromCommand);
       }
       // optionalAttrs (config.modules.personal.enable) {
         # Configure backups for personal machines
@@ -145,5 +187,11 @@ in {
 
     modules.services.healthchecks.systemd-monitoring.${systemdServiceName}.checkUrlFile =
       config.age.secrets.resticHealthchecksUrl.path;
+
+    users.users.restic = {
+      group = "restic";
+      isSystemUser = true;
+    };
+    users.groups.restic = {};
   });
 }

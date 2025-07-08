@@ -5,38 +5,36 @@
   lib,
   ...
 }: let
-  inherit (builtins) concatStringsSep;
-  inherit (lib) mkIf escapeShellArg;
+  inherit (lib) mkIf;
 
+  resticCfg = config.modules.services.restic;
   postgresqlCfg = config.services.postgresql;
-
-  postgresqlUser = "postgres";
-  compressSuffix = ".zstd";
-  compressCmd = "${pkgs.zstd}/bin/zstd -c --adapt";
-
-  getFilePath = databaseName: "/tmp/postgresql_db_${databaseName}.sql${compressSuffix}";
-
-  getPrepareCommand = databaseName: ''
-    ${pkgs.coreutils}/bin/install -b -m 600 /dev/null ${
-      getFilePath databaseName
-    }
-    ${pkgs.sudo}/bin/sudo -u ${postgresqlUser} ${postgresqlCfg.package}/bin/pg_dump --format=custom ${
-      escapeShellArg databaseName
-    } | ${compressCmd} > ${getFilePath databaseName}
-  '';
-  getCleanupCommand = databaseName: "${pkgs.coreutils}/bin/rm ${getFilePath databaseName}";
 in {
   config = mkIf postgresqlCfg.enable {
     # Handle backup of PostgreSQL databases
     modules.services.restic = {
-      paths = map getFilePath postgresqlCfg.ensureDatabases;
-      backupPrepareCommand =
-        concatStringsSep "\n"
-        (map getPrepareCommand postgresqlCfg.ensureDatabases);
-      backupCleanupCommand =
-        concatStringsSep "\n"
-        (map getCleanupCommand postgresqlCfg.ensureDatabases);
+      stdinFromCommand = [
+        {
+          fileName = "postgresql_dumpall.sql";
+          tags = ["postgresql"];
+          command = [(lib.getExe pkgs.sudo) "-u" "restic" (lib.getExe' postgresqlCfg.package "pg_dumpall") "--no-role-passwords"];
+        }
+      ];
     };
+
+    # Setup restic user on postgresql
+    services.postgresql.ensureUsers = mkIf resticCfg.enable [
+      {
+        name = "restic";
+      }
+    ];
+    systemd.services.postgresql.serviceConfig.ExecStartPost =
+      mkIf resticCfg.enable
+      [
+        ''
+          ${lib.getExe' postgresqlCfg.package "psql"} -c "GRANT pg_read_all_data TO restic;"
+        ''
+      ];
 
     # Persist databases when using tmpfs
     modules.impermanence.directories = ["/var/lib/postgresql"];
