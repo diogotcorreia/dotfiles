@@ -116,4 +116,17 @@ in {
       "${conduitDir}/backups"
     ];
   };
+
+  # Allow the backup service to call systemctl kill on the continuwuity service
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (subject.user === "restic" && action.id === "org.freedesktop.systemd1.manage-units") {
+        if (action.lookup("unit") === "continuwuity.service") {
+          if (action.lookup("verb") === "kill") {
+            return polkit.Result.YES;
+          }
+        }
+      }
+    });
+  '';
 }

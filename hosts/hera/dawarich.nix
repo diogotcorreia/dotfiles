@@ -55,4 +55,8 @@ in {
       ${pkgs.coreutils}/bin/rm /tmp/dawarich_db.sql.zstd
     '';
   };
+
+  # TODO: remove when dawarich is migrated to a NixOS module.
+  # Required for dumping the database inside the docker container
+  systemd.services."restic-backups-systemBackup".serviceConfig.SupplementaryGroups = ["docker"];
 }
