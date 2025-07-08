@@ -1,6 +1,5 @@
 # Postgresql configuration
 {
-  pkgs,
   config,
   lib,
   ...
@@ -17,7 +16,7 @@ in {
         {
           fileName = "postgresql_dumpall.sql";
           tags = ["postgresql"];
-          command = [(lib.getExe pkgs.sudo) "-u" "restic" (lib.getExe' postgresqlCfg.package "pg_dumpall") "--no-role-passwords"];
+          command = [(lib.getExe' postgresqlCfg.package "pg_dumpall") "--no-role-passwords"];
         }
       ];
     };

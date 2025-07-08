@@ -125,6 +125,8 @@ in {
       };
       passwordFile = config.age.secrets.resticPassword.path;
 
+      user = "restic";
+
       paths =
         cfg.paths
         ++ [
@@ -176,6 +178,9 @@ in {
             in "${resticCmd} backup ${backupArgs}${tagsArgs}${filenameArg}${stdinArg}"
           )
           cfg.stdinFromCommand);
+
+        # Allow unit to read all files in the system
+        serviceConfig.AmbientCapabilities = ["CAP_DAC_READ_SEARCH"];
       }
       // optionalAttrs (config.modules.personal.enable) {
         # Configure backups for personal machines
