@@ -10,8 +10,8 @@
     security.acme.cloudflare
     security.fail2ban
     server.minimal
-    services.caddy.common
     services.infra-keyval
+    services.nginx.common
     shell.zellij
   ];
 

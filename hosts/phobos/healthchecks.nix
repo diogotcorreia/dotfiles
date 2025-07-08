@@ -38,6 +38,7 @@ in {
 
   services.healthchecks = {
     inherit port;
+    listenAddress = "[::1]";
     enable = true;
     package = pkgs.healthchecks;
 
@@ -90,23 +91,15 @@ in {
     healthchecks-sendreports = commonConfig;
   };
 
-  services.caddy.virtualHosts = {
+  services.nginx.virtualHosts = {
     ${host} = {
       enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port}
-      '';
+      locations."/".proxyPass = "http://[::1]:${toString port}";
     };
     # http-only route, used to receive pings from iot devices that can't use https
-    "http://${httpHost}" = {
-      extraConfig = ''
-        handle /ping/* {
-          reverse_proxy localhost:${toString port}
-        }
-        handle {
-          redir https://${host}{uri}
-        }
-      '';
+    ${httpHost} = {
+      locations."/ping/".proxyPass = "http://[::1]:${toString port}";
+      locations."/".return = "301 https://${host}$request_uri";
     };
   };
 

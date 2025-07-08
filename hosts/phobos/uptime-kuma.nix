@@ -11,15 +11,16 @@
 in {
   services.uptime-kuma = {
     enable = true;
-    settings = {PORT = toString port;};
+    settings = {
+      HOST = "::1";
+      PORT = toString port;
+    };
     package = pkgs.unstable.uptime-kuma;
   };
 
-  services.caddy.virtualHosts.${domain} = {
+  services.nginx.virtualHosts.${domain} = {
     enableACME = true;
-    extraConfig = ''
-      reverse_proxy localhost:${toString port}
-    '';
+    locations."/".proxyPass = "http://[::1]:${toString port}";
   };
 
   modules.services.restic.paths = [stateDir];

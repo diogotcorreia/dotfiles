@@ -32,7 +32,7 @@ in {
     mode = "monolithic";
     environmentFile = config.age.secrets.phobosAtticdEnvVariables.path;
     settings = {
-      listen = "[::]:${toString port}";
+      listen = "[::1]:${toString port}";
       allowed-hosts = [host];
       api-endpoint = "https://${host}/";
       soft-delete-caches = false;
@@ -66,9 +66,8 @@ in {
   # but since we're using the shorthand, it doesn't.
   systemd.services.atticd.after = ["postgresql.service" "nss-lookup.target"];
 
-  services.caddy.virtualHosts.${host} = {
-    extraConfig = ''
-      reverse_proxy localhost:${toString port}
-    '';
+  services.nginx.virtualHosts.${host} = {
+    enableACME = true;
+    locations."/".proxyPass = "http://[::1]:${toString port}";
   };
 }

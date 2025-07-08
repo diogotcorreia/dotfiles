@@ -25,12 +25,8 @@ in {
     settingsFile = config.age.secrets.infraKeyvalEnv.path;
   };
 
-  services.caddy.virtualHosts = {
-    ${domain} = {
-      enableACME = true;
-      extraConfig = ''
-        reverse_proxy localhost:${toString port}
-      '';
-    };
+  services.nginx.virtualHosts.${domain} = {
+    enableACME = true;
+    locations."/".proxyPass = "http://[::1]:${toString port}";
   };
 }
