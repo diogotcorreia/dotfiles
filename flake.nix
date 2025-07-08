@@ -114,6 +114,7 @@
       x86_64-linux =
         pkgs.my
         // {
+          inherit (pkgs) restic-without-rclone;
           attic = pkgs.attic-client;
           infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
           lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;

@@ -1,7 +1,8 @@
-# restic backups configuration with healthchecks ping.
+# append-only restic backups configuration with healthchecks ping.
 {
   config,
   lib,
+  pkgs,
   secrets,
   utils,
   ...
@@ -13,15 +14,6 @@
 in {
   options.modules.services.restic = {
     enable = mkEnableOption "restic";
-
-    repositoryPath = mkOption {
-      type = types.str;
-      default = "./restic";
-      example = "./restic";
-      description = lib.mdDoc ''
-        Path to the restic repository inside the SFTP server.
-      '';
-    };
 
     paths = mkOption {
       type = types.nullOr (types.listOf types.str);
@@ -111,21 +103,31 @@ in {
   in {
     age.secrets = {
       resticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
-      resticRcloneConfig.file = secrets.host.resticRcloneConfig;
       resticPassword.file = secrets.host.resticPassword;
+      resticSshConfig.file = secrets.host.resticSshConfig;
       resticSshKey.file = secrets.host.resticSshKey;
     };
 
     services.restic.backups.${resticName} = {
-      repository = "rclone:backupserver:${cfg.repositoryPath}";
-      rcloneConfigFile = config.age.secrets.resticRcloneConfig.path;
-      rcloneConfig = {
-        type = "sftp";
-        key_file = config.age.secrets.resticSshKey.path;
-      };
+      repository = "rclone:";
+      extraOptions = let
+        configOpt = "-F ${config.age.secrets.resticSshConfig.path}";
+        keyOpt = "-i ${config.age.secrets.resticSshKey.path}";
+        otherOpt = "-o VerifyHostKeyDNS=yes";
+      in [
+        # The remote has an authorized_keys file with the following format:
+        # command="rclone serve restic --stdio --append-only ./restic" ssh-ed25519 ...
+        # The SSH config should have the following format:
+        # Host backupserver
+        #   HostName <...>
+        #   Port <...>
+        #   User <...>
+        "rclone.program=${lib.escapeShellArg "ssh ${configOpt} ${keyOpt} ${otherOpt} backupserver forced-command"}"
+      ];
       passwordFile = config.age.secrets.resticPassword.path;
 
       user = "restic";
+      package = pkgs.restic-without-rclone;
 
       paths =
         cfg.paths
@@ -134,15 +136,6 @@ in {
         ];
       exclude = cfg.exclude;
       extraBackupArgs = groupByOptions;
-      pruneOpts =
-        [
-          "--keep-last 20"
-          "--keep-daily 7"
-          "--keep-weekly 4"
-          "--keep-monthly 6"
-          "--keep-yearly 3"
-        ]
-        ++ groupByOptions;
       checkOpts = [
         # ensure data integrity
         "--read-data-subset=2.5%"

@@ -142,6 +142,7 @@ jobs:
           - infra-keyval
           - lzbt
           - pwndbg
+          - restic-without-rclone
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4

@@ -50,8 +50,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
     ])
 
@@ -75,8 +75,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
       "tritonBotEnv"
       "umamiAppSecret"
@@ -87,8 +87,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
       "wireguardClientPrivateKey"
     ])
@@ -101,8 +101,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
     ])
 
@@ -114,8 +114,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
     ])
 
@@ -136,8 +136,8 @@ in
       "nextcloudSecrets"
       "paperlessEnvVariables"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
       "transmissionProxySshConfig"
       "transmissionProxySshPassword"
@@ -155,8 +155,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
     ])
 
@@ -167,8 +167,8 @@ in
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
-      "resticRcloneConfig"
       "resticPassword"
+      "resticSshConfig"
       "resticSshKey"
     ])
   ]
