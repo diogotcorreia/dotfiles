@@ -1,4 +1,4 @@
-# Caddy configuration for device domain aliases (i.e. access local devices from outside the network)
+# Nginx configuration for device domain aliases (i.e. access local devices from outside the network)
 {lib, ...}: let
   inherit (lib) fold recursiveUpdate;
   defineAlias = domain: target: {
