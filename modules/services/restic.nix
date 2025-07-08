@@ -100,6 +100,8 @@ in {
     groupByOptions = ["--group-by=host,tags"];
 
     resticCfg = config.services.restic.backups.${resticName};
+
+    commonBackupArgs = groupByOptions;
   in {
     age.secrets = {
       resticHealthchecksUrl.file = secrets.host.resticHealthchecksUrl;
@@ -135,7 +137,7 @@ in {
           "/var/lib/nixos" # contains uid/gid map, required for restoring
         ];
       exclude = cfg.exclude;
-      extraBackupArgs = groupByOptions;
+      extraBackupArgs = commonBackupArgs ++ ["--tag=files"];
       checkOpts = [
         # ensure data integrity
         "--read-data-subset=2.5%"
@@ -165,7 +167,7 @@ in {
               filenameArg = optionalString (stdinCmd.fileName != null) " --stdin-filename ${lib.escapeShellArg stdinCmd.fileName}";
               stdinArg = " --stdin-from-command -- ${lib.escapeShellArgs stdinCmd.command}";
 
-              backupArgs = lib.concatStringsSep " " (resticCfg.extraBackupArgs);
+              backupArgs = lib.concatStringsSep " " commonBackupArgs;
               extraOptions = lib.concatMapStrings (arg: " -o ${arg}") resticCfg.extraOptions;
               resticCmd = "${lib.getExe resticCfg.package}${extraOptions}";
             in "${resticCmd} backup ${backupArgs}${tagsArgs}${filenameArg}${stdinArg}"
