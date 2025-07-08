@@ -110,5 +110,5 @@ in {
     };
   };
 
-  modules.services.restic.paths = [config.services.healthchecks.dataDir];
+  modules.impermanence.directories = [config.services.healthchecks.dataDir];
 }

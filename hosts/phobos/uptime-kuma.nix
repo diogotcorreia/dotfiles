@@ -6,6 +6,8 @@
 }: let
   domain = "uptime.diogotc.com";
   port = lib.my.ports.uptimeKuma;
+
+  stateDir = lib.my.toPrivateStateDirectory "/var/lib/uptime-kuma";
 in {
   services.uptime-kuma = {
     enable = true;
@@ -20,7 +22,6 @@ in {
     '';
   };
 
-  # FIXME: hardcoded directory because restic doesn't follow symlinks
-  # See https://github.com/restic/restic/pull/3863
-  modules.services.restic.paths = ["/var/lib/private/uptime-kuma"];
+  modules.services.restic.paths = [stateDir];
+  modules.impermanence.directories = [stateDir];
 }
