@@ -83,6 +83,9 @@ in {
         '.oauth.clientSecret += $oauthClientSecret' \
         ${unpatchedConfigFile} > ${patchedConfigFile}
     '';
+    # We must set the UMask of the Immich service, so new files can be read by the group as well,
+    # in order for restic backups to work properly across NFS.
+    serviceConfig.UMask = lib.mkForce "0027"; # default is 0077
   };
 
   systemd.tmpfiles.rules = ["d ${photosLocation} 0750 ${cfg.user} ${cfg.group}"];
@@ -155,4 +158,6 @@ in {
   # Ensure that the NFS server has the same UID/GID
   users.users.restic.uid = 15016;
   users.groups.restic.gid = 15016;
+  # Additionally, the service must be in the immich group to read files and list directories
+  systemd.services."restic-backups-systemBackup".serviceConfig.SupplementaryGroups = ["immich"];
 }
