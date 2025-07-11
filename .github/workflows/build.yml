@@ -40,35 +40,13 @@ jobs:
 
     needs: ["build-packages"]
     steps:
-      # Inspired by https://github.com/workflow/dotfiles/blob/c5ff98fc2ef05cefdca3b663d46dc517696e418e/.github/workflows/nixos.yml
       - name: "Create Directory for Nix Store"
+        if: matrix.machine.large != true
         run: |
           sudo mkdir /nix
       - name: "Maximize Disk Space"
         if: matrix.machine.large == true
-        run: |
-          sudo rm -rf $AGENT_TOOLSDIRECTORY
-          sudo rm -rf /usr/local/.ghcup
-          sudo rm -rf /usr/local/share/powershell
-          sudo rm -rf /usr/local/share/chromium
-          sudo rm -rf /usr/local/lib/node_modules
-          sudo rm -rf /usr/local/lib/heroku
-          sudo rm -rf /var/lib/docker/overlay2
-          sudo rm -rf /home/linuxbrew
-          sudo rm -rf /home/runner/.rustup
-      - name: "Maximize Disk Space 2"
-        if: matrix.machine.large == true
-        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
-        with:
-          # Save some space on root for /tmp (where packages are built)
-          root-reserve-mb: 16384 # 16 GiB
-          swap-size-mb: 1024
-          build-mount-path: /nix
-          remove-dotnet: "true"
-          remove-android: "true"
-          remove-haskell: "true"
-          remove-codeql: "true"
-          remove-docker-images: "true"
+        uses: wimpysworld/nothing-but-nix@6af122a9403f936ef689e44cc013ae3f3e2f1c3b # v6
       - name: Assert Correct Ownership on /nix
         run: |
           sudo chown root:root /nix
