@@ -68,6 +68,11 @@ in {
 
   services.nginx.virtualHosts.${host} = {
     enableACME = true;
-    locations."/".proxyPass = "http://[::1]:${toString port}";
+    locations."/" = {
+      proxyPass = "http://[::1]:${toString port}";
+      extraConfig = ''
+        client_max_body_size 5G;
+      '';
+    };
   };
 }
