@@ -7,7 +7,7 @@ index 1ab510d..8e9438a 100644
              return ExitCode::GENERAL_ERROR->value;
          }
 -        if (0 === count($messages) && 0 === count($warnings) && 0 === count($errors)) {
--            app('log')->error(sprintf('Exit code is %s.', ExitCode::NOTHING_WAS_IMPORTED->name));
+-            Log::error(sprintf('Exit code is %s.', ExitCode::NOTHING_WAS_IMPORTED->name));
 -
 -            return ExitCode::NOTHING_WAS_IMPORTED->value;
 -        }
@@ -20,14 +20,14 @@ index b7eddbd..854cf54 100644
 +++ b/app/Console/Commands/Import.php
 @@ -175,10 +175,6 @@ final class Import extends Command
              $exitCode = ExitCode::GENERAL_ERROR->value;
-             app('log')->error(sprintf('Exit code is %s.', ExitCode::GENERAL_ERROR->name));
+             Log::error(sprintf('Exit code is %s.', ExitCode::GENERAL_ERROR->name));
          }
 -        if (0 === count($messages) && 0 === count($warnings) && 0 === count($errors)) {
 -            $exitCode = ExitCode::NOTHING_WAS_IMPORTED->value;
--            app('log')->error(sprintf('Exit code is %s.', ExitCode::NOTHING_WAS_IMPORTED->name));
+-            Log::error(sprintf('Exit code is %s.', ExitCode::NOTHING_WAS_IMPORTED->name));
 -        }
          if ($exitCode === ExitCode::SUCCESS->value) {
-             app('log')->debug(sprintf('Exit code is %s.', ExitCode::SUCCESS->name));
+             Log::debug(sprintf('Exit code is %s.', ExitCode::SUCCESS->name));
          }
 diff --git a/app/Services/Nordigen/Conversion/RoutineManager.php b/app/Services/Nordigen/Conversion/RoutineManager.php
 index 4f8069f..d252b5d 100644
