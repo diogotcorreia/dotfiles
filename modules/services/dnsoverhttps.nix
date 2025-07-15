@@ -8,12 +8,14 @@
   cfg = config.modules.services.dnsoverhttps;
 
   # https://dnscrypt.info/stamps/
-  upstreams = [
+  upstream = [
     # cloudflare
     "sdns://AgcAAAAAAAAABzEuMS4xLjEAEmRucy5jbG91ZGZsYXJlLmNvbQovZG5zLXF1ZXJ5" # 1.1.1.1
     "sdns://AgcAAAAAAAAABzEuMC4wLjEAEmRucy5jbG91ZGZsYXJlLmNvbQovZG5zLXF1ZXJ5" # 1.0.0.1
     "sdns://AgcAAAAAAAAAFlsyNjA2OjQ3MDA6NDcwMDo6MTExMV0AIDFkb3QxZG90MWRvdDEuY2xvdWRmbGFyZS1kbnMuY29tCi9kbnMtcXVlcnk" # [2606:4700:4700::1111]
     "sdns://AgcAAAAAAAAAFlsyNjA2OjQ3MDA6NDcwMDo6MTAwMV0AIDFkb3QxZG90MWRvdDEuY2xvdWRmbGFyZS1kbnMuY29tCi9kbnMtcXVlcnk" # [2606:4700:4700::1001]
+  ];
+  fallback = [
     # quad9
     "sdns://AgcAAAAAAAAABzkuOS45LjkADWRucy5xdWFkOS5uZXQKL2Rucy1xdWVyeQ" # 9.9.9.9
     "sdns://AgcAAAAAAAAADzE0OS4xMTIuMTEyLjExMgANZG5zLnF1YWQ5Lm5ldAovZG5zLXF1ZXJ5" # 149.112.112.112
@@ -43,7 +45,7 @@ in {
     services.dnsproxy = {
       enable = true;
       settings = {
-        upstream = upstreams;
+        inherit fallback upstream;
         listen-addrs = [
           (
             if cfg.all-interfaces
