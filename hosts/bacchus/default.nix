@@ -8,6 +8,7 @@
 }:
 {
   imports = with profiles; [
+    editors.neovim.base
     graphical.caido
     graphical.captive-portals-client
     graphical.discord
@@ -136,7 +137,6 @@
 
   # Modules
   modules = {
-    editors.neovim.enable = true;
     graphical = {
       enable = true;
       autorandr.laptop.enable = true;

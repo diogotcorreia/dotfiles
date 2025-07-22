@@ -8,6 +8,7 @@
 }:
 {
   imports = with profiles; [
+    editors.neovim.base
     graphical.caido
     graphical.discord
     graphical.firefox
@@ -145,7 +146,6 @@
 
   # Modules
   modules = {
-    editors.neovim.enable = true;
     graphical = {
       enable = true;
       development.enable = true;
