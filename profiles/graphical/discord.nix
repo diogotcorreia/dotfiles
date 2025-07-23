@@ -6,8 +6,8 @@
   ...
 }: let
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.11.2/nordic.theme.css";
-    hash = "sha256-RCKIcrTN5hvIx9BTOYekJIRz3QOBZJS9U5GpHlFrtI8=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.11.6/nordic.theme.css";
+    hash = "sha256-zfUTnkGEsSomsLosgoN2l3DbhL9ocumckCs9gUdrufI=";
   };
   extraCss = ''
     .visual-refresh.theme-dark {
@@ -18,7 +18,7 @@
       /* change background of action buttons */
       --background-secondary: var(--nord-dark2) !important;
       /* change background of "active now" pane */
-      --bg-overlay-2: var(--nord-dark1) !important;
+      --background-base-low: var(--nord-dark1) !important;
     }
     .visual-refresh .sidebarList_c48ade {
       /* add missing border since background is the same now */
