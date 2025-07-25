@@ -8,7 +8,7 @@
 }:
 {
   imports = with profiles; [
-    editors.neovim.base
+    editors.neovim.personal
     graphical.caido
     graphical.captive-portals-client
     graphical.discord
