@@ -13,12 +13,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc-labs";
-  version = "0-unstable-2025-02-15";
+  version = "0-unstable-2025-07-28";
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "dtc-labs";
-    rev = "c31d6b5538d040bc79c420a2ea2ce0e9df6a93f6";
-    hash = "sha256-OyyjzjsZ0KgljSqZxkMJEc8qD1FrDsWoFmRf2nwR+QE=";
+    rev = "aa623809d638757bb6b1f04ca5b561f626c46c27";
+    hash = "sha256-pbEqEjm2ZIyFSE6qH/VjH5hMfWhIwSu5Lnt1JxVAtss=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
