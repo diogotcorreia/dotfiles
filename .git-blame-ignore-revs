@@ -1,2 +1,4 @@
 # Format everything with alejandra (previously using nixfmt)
 f760b0630c9c59b2d71edcf2c2b18aeeed175264
+# Format everything with nixfmt-rfc-style (previously using alejandra)
+c60b58be6594ac93a41a256eba0d59b24815133b
