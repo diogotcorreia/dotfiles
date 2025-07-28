@@ -3,7 +3,8 @@
   # Non-essential packages (for personal systems)
   environment.systemPackages = with pkgs; [
     # Nix formatter
-    alejandra
+    nixfmt-rfc-style
+    nixfmt-tree
 
     # System monitoring
     gdu

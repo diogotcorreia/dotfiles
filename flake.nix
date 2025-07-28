@@ -132,7 +132,7 @@
         fi
 
         "${lib.getExe pkgs.deadnix}" --hidden --edit "$@"
-        "${lib.getExe pkgs.alejandra}" "$@"
+        "${lib.getExe pkgs.nixfmt-tree}" "$@"
       '';
     };
   };

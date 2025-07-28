@@ -276,7 +276,7 @@
             settings = {
               ['nil'] = {
                 formatting = {
-                  command = { "${lib.getExe pkgs.alejandra}" }
+                  command = { "${lib.getExe pkgs.nixfmt-rfc-style}" }
                 },
               },
             },
