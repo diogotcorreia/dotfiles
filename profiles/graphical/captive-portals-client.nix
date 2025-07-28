@@ -5,10 +5,12 @@
   pkgs,
   profiles,
   ...
-}: let
+}:
+let
   socksBindAddr = "localhost";
   socksPort = lib.my.ports.socksCaptivePortalsClient;
-in {
+in
+{
   imports = with profiles; [
     # Requires firefox profile
     graphical.firefox

@@ -5,13 +5,15 @@
   secrets,
   user,
   ...
-}: let
+}:
+let
   domain = "rproxy.diogotc.com";
   server = {
     host = "bro.diogotc.com";
     port = lib.my.ports.frpServer;
   };
-in {
+in
+{
   age.secrets.frpAuthEnv = {
     file = secrets.frpAuthEnv;
     owner = user;

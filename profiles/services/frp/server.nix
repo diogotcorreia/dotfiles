@@ -5,11 +5,13 @@
   lib,
   secrets,
   ...
-}: let
+}:
+let
   domain = "rproxy.diogotc.com";
   serverPort = lib.my.ports.frpServer;
   vhostPort = lib.my.ports.frpHttp;
-in {
+in
+{
   age.secrets.frpAuthEnv.file = secrets.frpAuthEnv;
 
   systemd.services.frp.serviceConfig.EnvironmentFile = [
@@ -45,7 +47,7 @@ in {
   ];
 
   services.nginx.virtualHosts.${domain} = {
-    serverAliases = ["*.${domain}"];
+    serverAliases = [ "*.${domain}" ];
     enableACME = true;
     forceSSL = false;
     addSSL = true;

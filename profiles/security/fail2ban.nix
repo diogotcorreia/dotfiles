@@ -1,5 +1,6 @@
 # Fail2ban configuration
-{...}: {
+{ ... }:
+{
   services.fail2ban = {
     enable = true;
     ignoreIP = [

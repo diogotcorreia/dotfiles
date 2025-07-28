@@ -4,10 +4,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.personal;
-in {
+in
+{
   options.modules.personal.enable = mkEnableOption "personal";
 
   config = mkIf cfg.enable {
@@ -29,7 +31,7 @@ in {
       # lidl-to-grocy (custom program to import lidl receipts into grocy)
       lidl-to-grocy
     ];
-    modules.services.restic.paths = ["${config.my.homeDirectory}/.timewarrior"];
+    modules.services.restic.paths = [ "${config.my.homeDirectory}/.timewarrior" ];
 
     hm.programs.zsh.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
 
@@ -37,7 +39,10 @@ in {
       enable = true;
       nix-direnv.enable = true;
     };
-    hm.programs.git.ignores = [".envrc" ".direnv"];
+    hm.programs.git.ignores = [
+      ".envrc"
+      ".direnv"
+    ];
 
     # Locale
     # This keeps the system language as US English, but uses
@@ -52,7 +57,7 @@ in {
     };
 
     # Android Debug Bridge
-    usr.extraGroups = ["adbusers"];
+    usr.extraGroups = [ "adbusers" ];
     programs.adb.enable = true;
 
     # needed for GSSAPIAuthentication options for ssh
@@ -62,7 +67,9 @@ in {
     hm.programs.ssh = {
       enable = true;
       matchBlocks = {
-        "* !apollo !bacchus".setEnv = {TERM = "xterm-256color";};
+        "* !apollo !bacchus".setEnv = {
+          TERM = "xterm-256color";
+        };
 
         apollo = {
           hostname = "192.168.100.2";

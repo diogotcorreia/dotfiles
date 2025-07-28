@@ -5,7 +5,8 @@
   pkgs,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     graphical.caido
     graphical.captive-portals-client
@@ -38,8 +39,8 @@
   boot.loader.timeout = 1;
 
   # ZFS
-  boot.supportedFilesystems = ["zfs"];
-  boot.kernelParams = ["nohibernate"];
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.kernelParams = [ "nohibernate" ];
   networking.hostId = "239be557";
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;
@@ -56,7 +57,7 @@
     ethernet.macAddress = "stable";
     wifi.macAddress = "stable";
   };
-  usr.extraGroups = ["networkmanager"];
+  usr.extraGroups = [ "networkmanager" ];
 
   my.networking.wirelessInterface = "wlo1";
   my.hardware.laptop = true;

@@ -53,87 +53,104 @@
     flake-compat.url = "github:edolstra/flake-compat";
   };
 
-  outputs = inputs @ {...}: let
-    inherit (lib.my) mkHosts mkOverlays mkPkgs mkProfiles mkSecrets;
-
-    user = "dtc";
-    userFullName = "Diogo Correia";
-
-    extraArgs = {
-      inherit
-        user
-        userFullName
+  outputs =
+    inputs@{ ... }:
+    let
+      inherit (lib.my)
+        mkHosts
+        mkOverlays
+        mkPkgs
+        mkProfiles
+        mkSecrets
         ;
-      configDir = ./config;
-    };
 
-    lib = inputs.nixpkgs.lib.extend (self: _super:
-      import ./lib ({
-          inherit inputs nixosConfigurations profiles pkgs secrets;
-          lib = self;
-        }
-        // extraArgs));
+      user = "dtc";
+      userFullName = "Diogo Correia";
 
-    extraPackages = {system, ...}: {
-      agenix = inputs.agenix.packages.${system}.default;
-      lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
-      spicetify = inputs.spicetify-nix.legacyPackages.${system};
-    };
-
-    overlays =
-      (mkOverlays ./overlays)
-      // {
-        extraPkgs = _self: _super: (extraPackages {system = "x86_64-linux";});
+      extraArgs = {
+        inherit
+          user
+          userFullName
+          ;
+        configDir = ./config;
       };
-    pkgs = mkPkgs overlays;
-    nixosConfigurations = mkHosts ./hosts {
-      inherit extraArgs;
-      # TODO move to profiles
-      extraModules = [
-        {
-          hardware.enableRedistributableFirmware = true;
-        }
-        inputs.home.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-          };
-        }
-        inputs.impermanence.nixosModules.impermanence
-        inputs.lanzaboote.nixosModules.lanzaboote
-      ];
-    };
-    profiles = mkProfiles ./profiles;
-    secrets = mkSecrets ./secrets;
-  in {
-    inherit nixosConfigurations lib overlays;
 
-    # Packages are here so they are built by CI and cached
-    packages = {
-      x86_64-linux =
-        pkgs.my
-        // {
+      lib = inputs.nixpkgs.lib.extend (
+        self: _super:
+        import ./lib (
+          {
+            inherit
+              inputs
+              nixosConfigurations
+              profiles
+              pkgs
+              secrets
+              ;
+            lib = self;
+          }
+          // extraArgs
+        )
+      );
+
+      extraPackages =
+        { system, ... }:
+        {
+          agenix = inputs.agenix.packages.${system}.default;
+          lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
+          spicetify = inputs.spicetify-nix.legacyPackages.${system};
+        };
+
+      overlays = (mkOverlays ./overlays) // {
+        extraPkgs = _self: _super: (extraPackages { system = "x86_64-linux"; });
+      };
+      pkgs = mkPkgs overlays;
+      nixosConfigurations = mkHosts ./hosts {
+        inherit extraArgs;
+        # TODO move to profiles
+        extraModules = [
+          {
+            hardware.enableRedistributableFirmware = true;
+          }
+          inputs.home.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+            };
+          }
+          inputs.impermanence.nixosModules.impermanence
+          inputs.lanzaboote.nixosModules.lanzaboote
+        ];
+      };
+      profiles = mkProfiles ./profiles;
+      secrets = mkSecrets ./secrets;
+    in
+    {
+      inherit nixosConfigurations lib overlays;
+
+      # Packages are here so they are built by CI and cached
+      packages = {
+        x86_64-linux = pkgs.my // {
           inherit (pkgs) restic-without-rclone;
           attic = pkgs.attic-client;
           infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
           lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
           pwndbg = inputs.pwndbg.packages.x86_64-linux.pwndbg;
         };
-    };
+      };
 
-    formatter = {
-      # https://github.com/NixOS/nix/pull/11438#issuecomment-2343378813
-      x86_64-linux = pkgs.writeShellScriptBin "formatter" ''
-        # If no arguments are passed, default to formatting the whole project
-        if [[ $# = 0 ]]; then
-          prj_root=$(git rev-parse --show-toplevel 2>/dev/null || echo .)
-          set -- "$prj_root"
-        fi
+      formatter = {
+        # https://github.com/NixOS/nix/pull/11438#issuecomment-2343378813
+        x86_64-linux = pkgs.writeShellScriptBin "formatter" ''
+          # If no arguments are passed, default to formatting the whole project
+          if [[ $# = 0 ]]; then
+            prj_root=$(git rev-parse --show-toplevel 2>/dev/null || echo .)
+            set -- "$prj_root"
+          fi
 
-        "${lib.getExe pkgs.deadnix}" --hidden --edit "$@"
-        "${lib.getExe pkgs.nixfmt-tree}" "$@"
-      '';
+          "${lib.getExe pkgs.deadnix}" --hidden --edit "$@"
+          "${lib.getExe pkgs.nixfmt-tree}" "$@"
+        '';
+      };
     };
-  };
 }

@@ -3,11 +3,15 @@
   lib,
   pkgs,
   ...
-}: {
-  boot.initrd.kernelModules = ["i915"];
+}:
+{
+  boot.initrd.kernelModules = [ "i915" ];
 
   hardware.nvidiaOptimus.disable = lib.mkDefault true;
-  boot.blacklistedKernelModules = lib.mkDefault ["nouveau" "nvidia"];
+  boot.blacklistedKernelModules = lib.mkDefault [
+    "nouveau"
+    "nvidia"
+  ];
   hardware.graphics.extraPackages = with pkgs; [
     vaapiIntel
     vaapiVdpau

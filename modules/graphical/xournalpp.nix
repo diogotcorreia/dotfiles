@@ -4,7 +4,8 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf strings;
   inherit (strings) concatStringsSep;
   cfg = config.modules.graphical.xournalpp;
@@ -85,12 +86,12 @@
       "FULLSCREEN"
     ];
   };
-in {
-  options.modules.graphical.xournalpp.enable =
-    mkEnableOption "xournal++ with custom toolbar";
+in
+{
+  options.modules.graphical.xournalpp.enable = mkEnableOption "xournal++ with custom toolbar";
 
   config = mkIf cfg.enable {
-    hm.home.packages = [pkgs.unstable.xournalpp];
+    hm.home.packages = [ pkgs.unstable.xournalpp ];
 
     hm.xdg.configFile."xournalpp/colornames.ini" = {
       text = ''

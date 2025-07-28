@@ -5,7 +5,8 @@
   nixosConfigurations,
   secrets,
   ...
-}: let
+}:
+let
   redisCfg = config.services.redis.servers.authelia;
   cfg = config.services.authelia.instances.dtc;
 
@@ -26,23 +27,30 @@
     (map (cfg: cfg.config.my.services.authelia.oauthClients))
     builtins.concatLists
   ];
-  hasOidcClients = oidcClients != [];
-in {
+  hasOidcClients = oidcClients != [ ];
+in
+{
   # https://www.authelia.com/reference/guides/generating-secure-values/
-  age.secrets = builtins.listToAttrs (map (name:
-    lib.nameValuePair name {
-      inherit (cfg) group;
-      owner = cfg.user;
-      file = secrets.host.${name};
-    }) [
-    "autheliaJwtSecret"
-    "autheliaLdapPassword"
-    "autheliaOidcHmacSecret"
-    "autheliaOidcIssuerPrivateKey"
-    "autheliaSessionSecret"
-    "autheliaSmtpPassword"
-    "autheliaStorageEncryptionKey"
-  ]);
+  age.secrets = builtins.listToAttrs (
+    map
+      (
+        name:
+        lib.nameValuePair name {
+          inherit (cfg) group;
+          owner = cfg.user;
+          file = secrets.host.${name};
+        }
+      )
+      [
+        "autheliaJwtSecret"
+        "autheliaLdapPassword"
+        "autheliaOidcHmacSecret"
+        "autheliaOidcIssuerPrivateKey"
+        "autheliaSessionSecret"
+        "autheliaSmtpPassword"
+        "autheliaStorageEncryptionKey"
+      ]
+  );
 
   services.authelia.instances.dtc = {
     enable = true;
@@ -69,28 +77,29 @@ in {
       };
 
       authentication_backend = {
-        ldap = let
-          baseDn = "dc=diogotc,dc=com";
-        in {
-          implementation = "lldap";
-          address = "ldap://[::1]:${toString config.services.lldap.settings.ldap_port}";
-          base_dn = baseDn;
+        ldap =
+          let
+            baseDn = "dc=diogotc,dc=com";
+          in
+          {
+            implementation = "lldap";
+            address = "ldap://[::1]:${toString config.services.lldap.settings.ldap_port}";
+            base_dn = baseDn;
 
-          user = "uid=authelia,ou=people,${baseDn}";
-          # password is passed as env variable
-        };
+            user = "uid=authelia,ou=people,${baseDn}";
+            # password is passed as env variable
+          };
       };
 
       access_control = {
         default_policy = "deny";
-        rules =
-          [
-            {
-              domain = [domain];
-              policy = "bypass";
-            }
-          ]
-          ++ accessControlRules;
+        rules = [
+          {
+            domain = [ domain ];
+            policy = "bypass";
+          }
+        ]
+        ++ accessControlRules;
       };
 
       session = {
@@ -139,40 +148,48 @@ in {
       };
 
       identity_providers = lib.mkIf hasOidcClients {
-        oidc = let
-          # policy name can't contain dots or tildes and needs to be lowercase
-          # https://datatracker.ietf.org/doc/html/rfc3986#section-2.3
-          mkPolicyName = client_id: "policy_${lib.toLower (lib.replaceStrings ["." "~"] ["_" "_"] client_id)}";
-          customAuthorizationPolicies = lib.pipe oidcClients [
-            (lib.filter (client: client.subject != []))
-            (map (client:
-              lib.nameValuePair (mkPolicyName client.client_id) {
-                default_policy = "deny";
-                rules = [
-                  {
-                    policy = client.policy;
-                    subject = client.subject;
-                  }
-                ];
-              }))
-            lib.listToAttrs
-          ];
-          clients = map (client:
-            {
-              scopes = lib.mkIf (client.scopes != []) client.scopes;
-              authorization_policy =
-                if client.subject == []
-                then client.policy
-                else mkPolicyName client.client_id;
-              # save consent for 1 year
-              pre_configured_consent_duration = "1y";
-            }
-            // (removeAttrs client ["scopes" "policy" "subject"]))
-          oidcClients;
-        in {
-          authorization_policies = lib.mkIf (customAuthorizationPolicies != {}) customAuthorizationPolicies;
-          inherit clients;
-        };
+        oidc =
+          let
+            # policy name can't contain dots or tildes and needs to be lowercase
+            # https://datatracker.ietf.org/doc/html/rfc3986#section-2.3
+            mkPolicyName =
+              client_id: "policy_${lib.toLower (lib.replaceStrings [ "." "~" ] [ "_" "_" ] client_id)}";
+            customAuthorizationPolicies = lib.pipe oidcClients [
+              (lib.filter (client: client.subject != [ ]))
+              (map (
+                client:
+                lib.nameValuePair (mkPolicyName client.client_id) {
+                  default_policy = "deny";
+                  rules = [
+                    {
+                      policy = client.policy;
+                      subject = client.subject;
+                    }
+                  ];
+                }
+              ))
+              lib.listToAttrs
+            ];
+            clients = map (
+              client:
+              {
+                scopes = lib.mkIf (client.scopes != [ ]) client.scopes;
+                authorization_policy =
+                  if client.subject == [ ] then client.policy else mkPolicyName client.client_id;
+                # save consent for 1 year
+                pre_configured_consent_duration = "1y";
+              }
+              // (removeAttrs client [
+                "scopes"
+                "policy"
+                "subject"
+              ])
+            ) oidcClients;
+          in
+          {
+            authorization_policies = lib.mkIf (customAuthorizationPolicies != { }) customAuthorizationPolicies;
+            inherit clients;
+          };
       };
     };
   };
@@ -185,17 +202,19 @@ in {
   };
 
   # allow other servers to connect
-  modules.services.nebula.firewall.inbound = let
-    hostsWithAccessRules = lib.attrNames (
-      lib.filterAttrs (_: {config, ...}: config.my.services.authelia.accessRules != []) nixosConfigurations
-    );
-  in
+  modules.services.nebula.firewall.inbound =
+    let
+      hostsWithAccessRules = lib.attrNames (
+        lib.filterAttrs (
+          _: { config, ... }: config.my.services.authelia.accessRules != [ ]
+        ) nixosConfigurations
+      );
+    in
     map (host: {
       port = port;
       proto = "tcp";
       inherit host;
-    })
-    hostsWithAccessRules;
+    }) hostsWithAccessRules;
 
   services.postgresql = {
     enable = lib.mkDefault true;
@@ -205,7 +224,7 @@ in {
         ensureDBOwnership = true;
       }
     ];
-    ensureDatabases = [dbUser];
+    ensureDatabases = [ dbUser ];
   };
 
   # use redis to persist sessions across reboots
@@ -216,8 +235,8 @@ in {
   };
 
   # give authelia perms to access redis socket
-  users.users."authelia-${cfg.name}".extraGroups = [redisCfg.group];
+  users.users."authelia-${cfg.name}".extraGroups = [ redisCfg.group ];
 
   # persist redis directory across reboots
-  modules.impermanence.directories = ["/var/lib/redis-authelia"];
+  modules.impermanence.directories = [ "/var/lib/redis-authelia" ];
 }

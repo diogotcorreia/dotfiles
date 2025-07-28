@@ -3,10 +3,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.qt;
-in {
+in
+{
   options.modules.graphical.qt.enable = mkEnableOption "qt";
 
   config = mkIf cfg.enable {

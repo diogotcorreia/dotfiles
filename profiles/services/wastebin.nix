@@ -4,13 +4,15 @@
   lib,
   secrets,
   ...
-}: let
+}:
+let
   domain = "bin.diogotc.com";
   port = lib.my.ports.wastebin;
 
   cfg = config.services.wastebin;
   stateDir = lib.my.toPrivateStateDirectory cfg.stateDir;
-in {
+in
+{
   age.secrets.wastebinEnv.file = secrets.host.wastebinEnv;
 
   services.wastebin = {
@@ -35,7 +37,7 @@ in {
     };
   };
 
-  modules.impermanence.directories = [stateDir];
+  modules.impermanence.directories = [ stateDir ];
 
-  modules.services.restic.paths = [stateDir];
+  modules.services.restic.paths = [ stateDir ];
 }

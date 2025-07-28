@@ -1,5 +1,6 @@
-{...}: {
-  security.pam.services.swaylock = {};
+{ ... }:
+{
+  security.pam.services.swaylock = { };
   hm.programs.swaylock = {
     enable = true;
     # TODO: play around with settings

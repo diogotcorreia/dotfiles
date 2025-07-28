@@ -5,7 +5,8 @@
   pkgs,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.fwupd
@@ -104,9 +105,14 @@
           "${config.my.homeDirectory}/dailytxt"
           "${config.my.homeDirectory}/grafana"
         ];
-        exclude = ["**/node_modules" "**/.npm"];
+        exclude = [
+          "**/node_modules"
+          "**/.npm"
+        ];
 
-        timerConfig = {OnCalendar = "03:05";};
+        timerConfig = {
+          OnCalendar = "03:05";
+        };
       };
     };
     shell = {

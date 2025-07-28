@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   domain = "repo.diogotc.com";
   port = lib.my.ports.reposilite;
 
@@ -20,7 +21,8 @@
     # use unix sockets (requires custom package)
     "--database=postgresql localhost ${user}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432 ${user} password"
   ];
-in {
+in
+{
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
@@ -36,13 +38,13 @@ in {
         ensureDBOwnership = true;
       }
     ];
-    ensureDatabases = [user];
+    ensureDatabases = [ user ];
   };
 
   systemd.services."reposilite" = {
     description = "Reposilite - Maven repository";
 
-    wantedBy = ["multi-user.target"];
+    wantedBy = [ "multi-user.target" ];
 
     script = "${lib.getExe pkgs.my.reposilite-junixsocket} ${lib.escapeShellArgs flags}";
 
@@ -62,13 +64,20 @@ in {
       ProtectHostname = true;
       ProtectKernelLogs = true;
       RemoveIPC = true;
-      RestrictAddressFamilies = ["AF_INET" "AF_INET6" "AF_UNIX"];
+      RestrictAddressFamilies = [
+        "AF_INET"
+        "AF_INET6"
+        "AF_UNIX"
+      ];
       RestrictNamespaces = true;
       RestrictRealtime = true;
       RestrictSUIDSGID = true;
       SystemCallArchitectures = "native";
       SystemCallErrorNumber = "EPERM";
-      SystemCallFilter = ["@system-service" "~@privileged @resources"];
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged @resources"
+      ];
     };
   };
 
@@ -77,9 +86,9 @@ in {
     home = stateDir;
     isSystemUser = true;
   };
-  users.groups.${group} = {};
+  users.groups.${group} = { };
 
-  modules.impermanence.directories = [stateDir];
+  modules.impermanence.directories = [ stateDir ];
 
-  modules.services.restic.paths = [stateDir];
+  modules.services.restic.paths = [ stateDir ];
 }

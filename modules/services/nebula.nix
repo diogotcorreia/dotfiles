@@ -4,17 +4,24 @@
   lib,
   secrets,
   ...
-}: let
+}:
+let
   inherit (builtins) attrNames;
-  inherit (lib) mkEnableOption mkOption types mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkIf
+    ;
   cfg = config.modules.services.nebula;
 
   lighthouses = {
-    "192.168.100.1" = ["zeus.diogotc.com:4242"];
-    "192.168.100.7" = ["phobos.diogotc.com:4242"];
-    "192.168.100.10" = ["world.athena.diogotc.com:4242"];
+    "192.168.100.1" = [ "zeus.diogotc.com:4242" ];
+    "192.168.100.7" = [ "phobos.diogotc.com:4242" ];
+    "192.168.100.10" = [ "world.athena.diogotc.com:4242" ];
   };
-in {
+in
+{
   options.modules.services.nebula = {
     enable = mkEnableOption "nebula";
     isLighthouse = mkOption {
@@ -25,7 +32,7 @@ in {
 
     firewall.outbound = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       description = lib.mdDoc "Firewall rules for outbound traffic.";
       example = [
         {
@@ -37,7 +44,7 @@ in {
     };
     firewall.inbound = mkOption {
       type = types.listOf types.attrs;
-      default = [];
+      default = [ ];
       description = lib.mdDoc "Firewall rules for inbound traffic.";
       example = [
         {
@@ -82,15 +89,14 @@ in {
 
       tun.device = "nebula.nebula0";
 
-      firewall.outbound =
-        [
-          {
-            port = "any";
-            proto = "any";
-            host = "any";
-          }
-        ]
-        ++ cfg.firewall.outbound;
+      firewall.outbound = [
+        {
+          port = "any";
+          proto = "any";
+          host = "any";
+        }
+      ]
+      ++ cfg.firewall.outbound;
       firewall.inbound =
         (lib.lists.optional cfg.firewall.allowPinging {
           port = "any";
@@ -132,28 +138,26 @@ in {
 
     # nebula can't accept connections if it's blocked by iptables
     # therefore, for all port that isn't open on the firewall, open it for the nebula interface
-    networking.firewall.interfaces.${config.services.nebula.networks.nebula0.tun.device} = let
-      tcpPorts =
-        builtins.filter (
+    networking.firewall.interfaces.${config.services.nebula.networks.nebula0.tun.device} =
+      let
+        tcpPorts = builtins.filter (
           rule:
-            (rule.proto or null == "tcp")
-            && (builtins.isInt rule.port or null)
-            && !(builtins.elem rule.port config.networking.firewall.allowedTCPPorts)
-        )
-        cfg.firewall.inbound;
-      udpPorts =
-        builtins.filter (
+          (rule.proto or null == "tcp")
+          && (builtins.isInt rule.port or null)
+          && !(builtins.elem rule.port config.networking.firewall.allowedTCPPorts)
+        ) cfg.firewall.inbound;
+        udpPorts = builtins.filter (
           rule:
-            (rule.proto or null == "udp")
-            && (builtins.isInt rule.port or null)
-            && !(builtins.elem rule.port config.networking.firewall.allowedUDPPorts)
-        )
-        cfg.firewall.inbound;
+          (rule.proto or null == "udp")
+          && (builtins.isInt rule.port or null)
+          && !(builtins.elem rule.port config.networking.firewall.allowedUDPPorts)
+        ) cfg.firewall.inbound;
 
-      getPorts = map (rule: rule.port);
-    in {
-      allowedTCPPorts = getPorts tcpPorts;
-      allowedUDPPorts = getPorts udpPorts;
-    };
+        getPorts = map (rule: rule.port);
+      in
+      {
+        allowedTCPPorts = getPorts tcpPorts;
+        allowedUDPPorts = getPorts udpPorts;
+      };
   };
 }

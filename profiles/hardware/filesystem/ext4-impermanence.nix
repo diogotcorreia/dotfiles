@@ -7,9 +7,11 @@
   inputs,
   lib,
   ...
-}: let
+}:
+let
   inherit (config.my.filesystem) espSize;
-in {
+in
+{
   imports = [
     inputs.disko.nixosModules.disko
   ];
@@ -54,7 +56,7 @@ in {
                 content = {
                   type = "filesystem";
                   format = "vfat";
-                  mountOptions = ["umask=0077"];
+                  mountOptions = [ "umask=0077" ];
                   mountpoint = "/boot";
                 };
               };

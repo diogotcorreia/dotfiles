@@ -1,5 +1,6 @@
 # Common configuration for lego
-{config, ...}: {
+{ config, ... }:
+{
   security.acme = {
     acceptTerms = true;
     defaults = {

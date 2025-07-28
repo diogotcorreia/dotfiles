@@ -4,7 +4,8 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) escapeShellArg getAttr attrNames;
 
   courseUrls = {
@@ -16,14 +17,15 @@
     forensics = "https://canvas.kth.se/courses/50595";
     cybtamos = "https://canvas.kth.se/courses/50613";
   };
-in {
+in
+{
   # Course shortcuts
-  hm.home.packages = map (courseName:
+  hm.home.packages = map (
+    courseName:
     pkgs.writeScriptBin courseName ''
-      ${pkgs.xdg-utils}/bin/xdg-open ${
-        escapeShellArg (getAttr courseName courseUrls)
-      }
-    '') (attrNames courseUrls);
+      ${pkgs.xdg-utils}/bin/xdg-open ${escapeShellArg (getAttr courseName courseUrls)}
+    ''
+  ) (attrNames courseUrls);
 
   hm.programs.git.includes = [
     {

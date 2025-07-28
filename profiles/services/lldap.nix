@@ -4,12 +4,14 @@
   lib,
   secrets,
   ...
-}: let
+}:
+let
   domain = "ldap.diogotc.com";
   port = lib.my.ports.lldapHttp;
 
   dbUser = "lldap";
-in {
+in
+{
   age.secrets.lldapEnv.file = secrets.host.lldapEnv;
 
   services.lldap = {
@@ -43,7 +45,7 @@ in {
         ensureDBOwnership = true;
       }
     ];
-    ensureDatabases = [dbUser];
+    ensureDatabases = [ dbUser ];
   };
 
   services.nginx.virtualHosts = {

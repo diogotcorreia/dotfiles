@@ -5,14 +5,16 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   hassDomain = "ha.bro.diogotc.com";
   hassPort = hassCfg.config.http.server_port;
 
   mqttPort = lib.my.ports.mqtt;
 
   hassCfg = config.services.home-assistant;
-in {
+in
+{
   services.home-assistant = {
     enable = true;
 
@@ -33,7 +35,7 @@ in {
 
     config = {
       zha.zigpy_config.ota.extra_providers = [
-        {type = "ikea";}
+        { type = "ikea"; }
       ];
     };
 
@@ -54,7 +56,7 @@ in {
     listeners = [
       {
         users.iot = {
-          acl = ["readwrite #"]; # allow read/write access to all topics
+          acl = [ "readwrite #" ]; # allow read/write access to all topics
           hashedPassword = "$7$101$zKBywp7+zF4mY2Ob$Nnka6+eUPvskhwcgsuUWR5fgwuOKj1YA5TsZ1biJjfJDLkIJFtHnm0zEdqQ6x8PVUfGmuc50HXCN17KHbTQNIw==";
         };
         port = mqttPort;
@@ -65,11 +67,13 @@ in {
   networking.firewall.interfaces = {
     vlan-private = {
       # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
-      allowedUDPPorts = [lib.my.ports.mdnsGoogleCast];
+      allowedUDPPorts = [ lib.my.ports.mdnsGoogleCast ];
 
-      allowedTCPPorts = [hassPort];
+      allowedTCPPorts = [ hassPort ];
     };
-    vlan-iot-local = {allowedTCPPorts = [mqttPort];};
+    vlan-iot-local = {
+      allowedTCPPorts = [ mqttPort ];
+    };
   };
 
   modules.impermanence.directories = [

@@ -1,5 +1,6 @@
 # Configuration that should be applied to all systems
-{profiles, ...}: {
+{ profiles, ... }:
+{
   imports = with profiles; [
     security.agenix
     services.ssh

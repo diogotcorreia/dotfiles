@@ -4,7 +4,8 @@
   pkgs,
   user,
   ...
-}: {
+}:
+{
   hm.programs.zellij = {
     enable = true;
 

@@ -6,7 +6,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   time.timeZone = null; # Not managed by Nix
   services.automatic-timezoned.enable = true;
 
@@ -50,5 +51,5 @@
     '';
   };
 
-  modules.impermanence.directories = ["/var/lib/automatic-timezoned"];
+  modules.impermanence.directories = [ "/var/lib/automatic-timezoned" ];
 }

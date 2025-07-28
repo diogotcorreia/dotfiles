@@ -5,12 +5,14 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   domain = "s.diogotc.com";
   port = lib.my.ports.chhotoUrl;
 
   stateDir = "/var/lib/private/chhoto-url";
-in {
+in
+{
   age.secrets.chhotoUrlEnv.file = secrets.host.chhotoUrlEnv;
 
   services.nginx.virtualHosts = {
@@ -22,8 +24,8 @@ in {
   };
 
   systemd.services.chhoto-url = {
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
     environment = {
       port = toString port;
       site_url = "https://${domain}";
@@ -49,8 +51,8 @@ in {
       ];
       RestrictNamespaces = true;
       RestrictRealtime = true;
-      SystemCallArchitectures = ["native"];
-      SystemCallFilter = ["@system-service"];
+      SystemCallArchitectures = [ "native" ];
+      SystemCallFilter = [ "@system-service" ];
       StateDirectory = baseNameOf stateDir;
       ReadWritePaths = "/var/lib/${baseNameOf stateDir}";
       WorkingDirectory = "/var/lib/${baseNameOf stateDir}";
@@ -60,7 +62,7 @@ in {
     };
   };
 
-  modules.impermanence.directories = [stateDir];
+  modules.impermanence.directories = [ stateDir ];
 
-  modules.services.restic.paths = [stateDir];
+  modules.services.restic.paths = [ stateDir ];
 }

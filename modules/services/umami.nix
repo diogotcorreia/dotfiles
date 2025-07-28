@@ -5,9 +5,9 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     concatStringsSep
     filterAttrs
     getExe
@@ -29,20 +29,22 @@
   cfg = config.services.umami;
 
   nonFileSettings = filterAttrs (k: _: !hasSuffix "_FILE" k) cfg.settings;
-in {
+in
+{
   options.services.umami = {
     enable = mkEnableOption "umami";
 
-    package =
-      mkPackageOption pkgs "umami" {}
-      // {
-        apply = pkg:
-          pkg.override {
-            databaseType = cfg.settings.DATABASE_TYPE;
-            collectApiEndpoint = optionalString (cfg.settings.COLLECT_API_ENDPOINT != null) cfg.settings.COLLECT_API_ENDPOINT;
-            trackerScriptNames = cfg.settings.TRACKER_SCRIPT_NAME;
-          };
-      };
+    package = mkPackageOption pkgs "umami" { } // {
+      apply =
+        pkg:
+        pkg.override {
+          databaseType = cfg.settings.DATABASE_TYPE;
+          collectApiEndpoint = optionalString (
+            cfg.settings.COLLECT_API_ENDPOINT != null
+          ) cfg.settings.COLLECT_API_ENDPOINT;
+          trackerScriptNames = cfg.settings.TRACKER_SCRIPT_NAME;
+        };
+    };
 
     createPostgresqlDatabase =
       mkEnableOption "the automatic creation of the database for Umami using PostgreSQL"
@@ -57,7 +59,8 @@ in {
       '';
 
       type = types.submodule {
-        freeformType = with types;
+        freeformType =
+          with types;
           attrsOf (oneOf [
             bool
             int
@@ -88,21 +91,19 @@ in {
             type = types.nullOr (
               types.str
               // {
-                check = it:
+                check =
+                  it:
                   isString it
-                  && (
-                    (hasPrefix "postgresql://" it)
-                    || (hasPrefix "postgres://" it)
-                    || (hasPrefix "mysql://" it)
-                  );
+                  && ((hasPrefix "postgresql://" it) || (hasPrefix "postgres://" it) || (hasPrefix "mysql://" it));
               }
             );
             # For some reason, Prisma requires the username in the connection string
             # and can't derive it from the current user.
             default =
-              if cfg.createPostgresqlDatabase
-              then "postgresql://umami@localhost/umami?host=/run/postgresql"
-              else null;
+              if cfg.createPostgresqlDatabase then
+                "postgresql://umami@localhost/umami?host=/run/postgresql"
+              else
+                null;
             defaultText = literalExpression ''if config.services.umami.createPostgresqlDatabase then "postgresql://umami@localhost/umami?host=/run/postgresql" else null'';
             example = "postgresql://root:root@localhost/umami";
             description = ''
@@ -130,11 +131,17 @@ in {
             '';
           };
           DATABASE_TYPE = mkOption {
-            type = types.nullOr (types.enum ["postgresql" "mysql"]);
+            type = types.nullOr (
+              types.enum [
+                "postgresql"
+                "mysql"
+              ]
+            );
             default =
-              if cfg.settings.DATABASE_URL != null && hasPrefix "mysql://" cfg.settings.DATABASE_URL
-              then "mysql"
-              else "postgresql";
+              if cfg.settings.DATABASE_URL != null && hasPrefix "mysql://" cfg.settings.DATABASE_URL then
+                "mysql"
+              else
+                "postgresql";
             defaultText = literalExpression ''if config.services.umami.settings.DATABASE_URL != null && hasPrefix "mysql://" config.services.umami.settings.DATABASE_URL then "mysql" else "postgresql"'';
             example = "mysql";
             description = ''
@@ -152,7 +159,7 @@ in {
           };
           TRACKER_SCRIPT_NAME = mkOption {
             type = types.listOf types.str;
-            default = [];
+            default = [ ];
             example = "/api/alternate-send";
             description = ''
               Allows you to send metrics to a location different than the default `/api/send`.
@@ -194,7 +201,7 @@ in {
         };
       };
 
-      default = {};
+      default = { };
 
       example = {
         APP_SECRET_FILE = "/run/secrets/umamiAppSecret";
@@ -214,14 +221,16 @@ in {
         message = "One (and only one) of services.umami.settings.DATABASE_URL_FILE and services.umami.settings.DATABASE_URL must be set.";
       }
       {
-        assertion = cfg.createPostgresqlDatabase -> cfg.settings.DATABASE_URL == "postgresql://umami@localhost/umami?host=/run/postgresql";
+        assertion =
+          cfg.createPostgresqlDatabase
+          -> cfg.settings.DATABASE_URL == "postgresql://umami@localhost/umami?host=/run/postgresql";
         message = "The option config.services.umami.createPostgresqlDatabase is enabled, but config.services.umami.settings.DATABASE_URL has been modified.";
       }
     ];
 
     services.postgresql = mkIf cfg.createPostgresqlDatabase {
       enable = true;
-      ensureDatabases = ["umami"];
+      ensureDatabases = [ "umami" ];
       ensureUsers = [
         {
           name = "umami";
@@ -235,17 +244,23 @@ in {
       environment = mapAttrs (_: toString) nonFileSettings;
 
       description = "Umami: a simple, fast, privacy-focused alternative to Google Analytics";
-      after = ["network.target"];
-      wantedBy = ["multi-user.target"];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-      script = let
-        loadCredentials =
-          (optional (cfg.settings.APP_SECRET_FILE != null) ''export APP_SECRET="$(systemd-creds cat appSecret)"'')
-          ++ (optional (cfg.settings.DATABASE_URL_FILE != null) ''export DATABASE_URL="$(systemd-creds cat databaseUrl)"'');
-      in ''
-        ${concatStringsSep "\n" loadCredentials}
-        ${getExe cfg.package}
-      '';
+      script =
+        let
+          loadCredentials =
+            (optional (
+              cfg.settings.APP_SECRET_FILE != null
+            ) ''export APP_SECRET="$(systemd-creds cat appSecret)"'')
+            ++ (optional (
+              cfg.settings.DATABASE_URL_FILE != null
+            ) ''export DATABASE_URL="$(systemd-creds cat databaseUrl)"'');
+        in
+        ''
+          ${concatStringsSep "\n" loadCredentials}
+          ${getExe cfg.package}
+        '';
 
       serviceConfig = {
         Type = "simple";
@@ -255,7 +270,9 @@ in {
 
         LoadCredential =
           (optional (cfg.settings.APP_SECRET_FILE != null) "appSecret:${cfg.settings.APP_SECRET_FILE}")
-          ++ (optional (cfg.settings.DATABASE_URL_FILE != null) "databaseUrl:${cfg.settings.DATABASE_URL_FILE}");
+          ++ (optional (
+            cfg.settings.DATABASE_URL_FILE != null
+          ) "databaseUrl:${cfg.settings.DATABASE_URL_FILE}");
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -271,12 +288,10 @@ in {
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies =
-          (optional cfg.createPostgresqlDatabase "AF_UNIX")
-          ++ [
-            "AF_INET"
-            "AF_INET6"
-          ];
+        RestrictAddressFamilies = (optional cfg.createPostgresqlDatabase "AF_UNIX") ++ [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -284,5 +299,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [diogotcorreia];
+  meta.maintainers = with maintainers; [ diogotcorreia ];
 }

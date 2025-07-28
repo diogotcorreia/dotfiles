@@ -4,10 +4,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.zsh;
-in {
+in
+{
   options.modules.shell.zsh.enable = mkEnableOption "zsh";
 
   # Home manager module
@@ -17,7 +19,11 @@ in {
         enable = true;
         oh-my-zsh = {
           enable = true;
-          plugins = ["git" "docker-compose" "zoxide"];
+          plugins = [
+            "git"
+            "docker-compose"
+            "zoxide"
+          ];
         };
         plugins = [
           {

@@ -5,10 +5,12 @@
   configDir,
   user,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.git;
-in {
+in
+{
   options.modules.shell.git.enable = mkEnableOption "git";
 
   config.hm = mkIf cfg.enable {

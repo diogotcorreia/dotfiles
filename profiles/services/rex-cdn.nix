@@ -1,7 +1,9 @@
 # File serve only
-{config, ...}: let
+{ config, ... }:
+let
   dir = "/var/lib/rex-cdn";
-in {
+in
+{
   services.nginx.virtualHosts = {
     "cdn.rexcantor64.com" = {
       enableACME = true;
@@ -17,5 +19,5 @@ in {
     }
   ];
 
-  modules.services.restic.paths = [dir];
+  modules.services.restic.paths = [ dir ];
 }

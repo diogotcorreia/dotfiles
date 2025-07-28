@@ -3,20 +3,25 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
 
   resticCfg = config.modules.services.restic;
   postgresqlCfg = config.services.postgresql;
-in {
+in
+{
   config = mkIf postgresqlCfg.enable {
     # Handle backup of PostgreSQL databases
     modules.services.restic = {
       stdinFromCommand = [
         {
           fileName = "postgresql_dumpall.sql";
-          tags = ["postgresql"];
-          command = [(lib.getExe' postgresqlCfg.package "pg_dumpall") "--no-role-passwords"];
+          tags = [ "postgresql" ];
+          command = [
+            (lib.getExe' postgresqlCfg.package "pg_dumpall")
+            "--no-role-passwords"
+          ];
         }
       ];
     };
@@ -27,15 +32,13 @@ in {
         name = "restic";
       }
     ];
-    systemd.services.postgresql.serviceConfig.ExecStartPost =
-      mkIf resticCfg.enable
-      [
-        ''
-          ${lib.getExe' postgresqlCfg.package "psql"} -c "GRANT pg_read_all_data TO restic;"
-        ''
-      ];
+    systemd.services.postgresql.serviceConfig.ExecStartPost = mkIf resticCfg.enable [
+      ''
+        ${lib.getExe' postgresqlCfg.package "psql"} -c "GRANT pg_read_all_data TO restic;"
+      ''
+    ];
 
     # Persist databases when using tmpfs
-    modules.impermanence.directories = ["/var/lib/postgresql"];
+    modules.impermanence.directories = [ "/var/lib/postgresql" ];
   };
 }

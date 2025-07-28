@@ -3,7 +3,8 @@
   lib,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.zram
@@ -29,7 +30,7 @@
   # Time zone
   time.timeZone = "Europe/Stockholm";
 
-  networking.bridges.br-wan.interfaces = ["eno1"];
+  networking.bridges.br-wan.interfaces = [ "eno1" ];
   my.networking.wiredInterface = "br-wan";
 
   # Modules
@@ -73,7 +74,9 @@
       restic = {
         enable = true;
 
-        timerConfig = {OnCalendar = "12:20";};
+        timerConfig = {
+          OnCalendar = "12:20";
+        };
       };
     };
     shell = {

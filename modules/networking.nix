@@ -1,7 +1,9 @@
 # Network configuration
-{lib, ...}: let
+{ lib, ... }:
+let
   inherit (lib) mkOption types;
-in {
+in
+{
   options.my.networking = {
     wiredInterface = mkOption {
       type = types.nullOr types.str;

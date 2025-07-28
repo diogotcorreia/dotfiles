@@ -4,7 +4,8 @@
   profiles,
   secrets,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     security.acme.common
   ];

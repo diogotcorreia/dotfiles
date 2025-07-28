@@ -3,14 +3,19 @@
   lib,
   pkgs,
   ...
-}: let
-  mkObsSceneAction = scene: ''{.v = (const char*[]){"${lib.getExe pkgs.obs-cmd}", "scene", "switch", "${scene}", NULL}}'';
-  mkKeybindConfig = {
-    modifier ? "0",
-    key,
-    action ? "spawn",
-    args,
-  }: ''{${modifier},${key},${action},${args}}'';
+}:
+let
+  mkObsSceneAction =
+    scene:
+    ''{.v = (const char*[]){"${lib.getExe pkgs.obs-cmd}", "scene", "switch", "${scene}", NULL}}'';
+  mkKeybindConfig =
+    {
+      modifier ? "0",
+      key,
+      action ? "spawn",
+      args,
+    }:
+    ''{${modifier},${key},${action},${args}}'';
 
   keybinds = [
     {
@@ -34,19 +39,18 @@
       args = mkObsSceneAction "Game";
     }
   ];
-in {
+in
+{
   # Add extra keybinds to DWM
   services.xserver.windowManager.dwm.package = pkgs.dwm.overrideAttrs (oldAttrs: {
-    patches =
-      oldAttrs.patches
-      ++ [
-        (pkgs.substituteAll {
-          src = ./extra-dwm-keybinds.patch;
-          env = {
-            extraDwmKeybinds = lib.concatStringsSep "," (map mkKeybindConfig keybinds);
-          };
-        })
-      ];
+    patches = oldAttrs.patches ++ [
+      (pkgs.substituteAll {
+        src = ./extra-dwm-keybinds.patch;
+        env = {
+          extraDwmKeybinds = lib.concatStringsSep "," (map mkKeybindConfig keybinds);
+        };
+      })
+    ];
   });
 
   # Set light mode on various programs (better visibility on projectors)

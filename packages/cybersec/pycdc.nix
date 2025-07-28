@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     hash = "sha256-c/mfM2I8Rw136aQ3IAQOkkrOEtZ5LC/xKuWXzCItW2w=";
   };
 
-  nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "C++ python bytecode disassembler and decompiler";

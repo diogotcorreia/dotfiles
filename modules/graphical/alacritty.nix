@@ -3,10 +3,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   cfg = config.modules.graphical.programs;
-in {
+in
+{
   # Follow graphical.programs.enabled
   config.hm = mkIf cfg.enable {
     programs.alacritty = {

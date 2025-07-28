@@ -1,5 +1,6 @@
 # Apply patches to DWM
-{...}: _final: prev: {
+{ ... }:
+_final: prev: {
   dwm = prev.dwm.overrideAttrs (_oldAttrs: {
     patches = [
       (prev.fetchpatch {

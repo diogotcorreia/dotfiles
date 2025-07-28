@@ -1,5 +1,6 @@
 # Setup nix-index with pre-built database
-{inputs, ...}: {
+{ inputs, ... }:
+{
   home-manager.sharedModules = [
     inputs.nix-index-database.homeModules.nix-index
   ];

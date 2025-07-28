@@ -1,5 +1,6 @@
 # Apply patches to dmenu
-{...}: _final: prev: {
+{ ... }:
+_final: prev: {
   dmenu = prev.dmenu.overrideAttrs (_oldAttrs: {
     patches = [
       (prev.fetchpatch {

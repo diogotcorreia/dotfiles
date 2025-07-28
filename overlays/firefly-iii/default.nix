@@ -1,5 +1,6 @@
 # Apply patches to firefly-iii
-{...}: _final: prev: {
+{ ... }:
+_final: prev: {
   firefly-iii = prev.firefly-iii.overrideAttrs (_oldAttrs: {
     patches = [
       # Include seconds in the date field when editing transaction

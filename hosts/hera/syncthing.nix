@@ -1,7 +1,9 @@
-{config, ...}: let
+{ config, ... }:
+let
   domain = "syncthing.hera.diogotc.com";
   cfg = config.services.syncthing;
-in {
+in
+{
   services.syncthing = {
     enable = true;
     group = config.services.nginx.group;
@@ -38,6 +40,6 @@ in {
     };
   };
 
-  modules.impermanence.directories = [cfg.dataDir];
-  modules.services.restic.paths = [cfg.configDir];
+  modules.impermanence.directories = [ cfg.dataDir ];
+  modules.services.restic.paths = [ cfg.configDir ];
 }

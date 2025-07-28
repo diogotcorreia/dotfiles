@@ -4,7 +4,8 @@
   pkgs,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     meta.server
     security.acme.cloudflare
@@ -63,7 +64,9 @@
       restic = {
         enable = true;
 
-        timerConfig = {OnCalendar = "03:10";};
+        timerConfig = {
+          OnCalendar = "03:10";
+        };
       };
     };
     shell = {

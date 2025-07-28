@@ -4,8 +4,14 @@
   pkgs,
   lib,
   ...
-}: let
-  inherit (lib) mkEnableOption mkOption types mkIf;
+}:
+let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkIf
+    ;
   cfg = config.modules.graphical.wacom;
 
   xsetwacom = "${pkgs.xf86_input_wacom}/bin/xsetwacom";
@@ -34,7 +40,8 @@
     ${xsetwacom} set "$PAD" Button 3 "key +ctrl +shift g -shift -ctrl"
     ${xsetwacom} set "$PAD" Button 8 "key del"
   '';
-in {
+in
+{
   options.modules.graphical.wacom = {
     enable = mkEnableOption "wacom peripheral drivers and configuration";
     monitor = mkOption {
@@ -58,11 +65,13 @@ in {
     hm.systemd.user.services.wacom = {
       Unit = {
         Description = "Wacom setup script";
-        After = ["graphical-session.target"];
-        PartOf = ["graphical-session.target"];
+        After = [ "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
       };
 
-      Install = {WantedBy = ["graphical-session.target"];};
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
 
       Service = {
         ExecStart = "${setupScript}";

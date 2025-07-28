@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.matrix-continuwuity;
   conduitDir = lib.my.toPrivateStateDirectory cfg.settings.global.database_path;
 
@@ -35,11 +36,11 @@
     default_country_code = "PT";
 
     show_labs_settings = true;
-    features = {};
+    features = { };
     default_federate = true;
     default_theme = "dark";
     room_directory = {
-      servers = ["diogotc.com"];
+      servers = [ "diogotc.com" ];
     };
     setting_defaults = {
       breadcrumbs = true;
@@ -54,7 +55,8 @@
     };
     map_style_url = "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx";
   };
-in {
+in
+{
   services.matrix-continuwuity = {
     enable = true;
     group = config.services.nginx.group;
@@ -67,7 +69,7 @@ in {
         # hardcoded because of infinite recursion...
         database_backup_path = "/var/lib/continuwuity/backups";
         database_backups_to_keep = 1;
-        admin_signal_execute = ["server backup-database"];
+        admin_signal_execute = [ "server backup-database" ];
 
         well_known = {
           client = "https://${domainConduit}";
@@ -90,14 +92,16 @@ in {
         };
       };
     };
-    ${domainElement} = let
-      elementPkg = pkgs.element-web.override {
-        conf = elementConfig;
+    ${domainElement} =
+      let
+        elementPkg = pkgs.element-web.override {
+          conf = elementConfig;
+        };
+      in
+      {
+        enableACME = true;
+        root = elementPkg;
       };
-    in {
-      enableACME = true;
-      root = elementPkg;
-    };
   };
 
   modules.impermanence.directories = [

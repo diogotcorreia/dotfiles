@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   port = lib.my.ports.twin;
   domain = "twin.rexcantor64.com";
 
@@ -12,7 +13,8 @@
 
   dbUsername = "twin";
   dbName = "triton";
-in {
+in
+{
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
@@ -33,18 +35,20 @@ in {
 
   services.postgresql = {
     enable = lib.mkDefault true;
-    ensureUsers = [{name = dbUsername;}];
-    ensureDatabases = [dbName];
+    ensureUsers = [ { name = dbUsername; } ];
+    ensureDatabases = [ dbName ];
   };
-  systemd.services.postgresql.serviceConfig.ExecStartPost = let
-    sqlFile = pkgs.writeText "twin-postgresql-setup.sql" ''
-      GRANT SELECT ON TABLE "twin_tokens" TO "${dbUsername}";
-    '';
-  in [
-    ''
-      ${lib.getExe' config.services.postgresql.package "psql"} -d "${dbName}" -f "${sqlFile}"
-    ''
-  ];
+  systemd.services.postgresql.serviceConfig.ExecStartPost =
+    let
+      sqlFile = pkgs.writeText "twin-postgresql-setup.sql" ''
+        GRANT SELECT ON TABLE "twin_tokens" TO "${dbUsername}";
+      '';
+    in
+    [
+      ''
+        ${lib.getExe' config.services.postgresql.package "psql"} -d "${dbName}" -f "${sqlFile}"
+      ''
+    ];
 
   systemd.services.twin = {
     environment = {
@@ -54,8 +58,8 @@ in {
     };
 
     description = "Triton Web INterface";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = lib.getExe pkgs.my.twin.backend;
 
@@ -92,5 +96,5 @@ in {
     };
   };
 
-  modules.impermanence.directories = [dataDir];
+  modules.impermanence.directories = [ dataDir ];
 }

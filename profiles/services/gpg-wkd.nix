@@ -1,8 +1,9 @@
 # Server GPG WKD static directory
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.nginx.virtualHosts = {
     "gpg.diogotc.com" = {
-      serverAliases = ["openpgpkey.diogotc.com"];
+      serverAliases = [ "openpgpkey.diogotc.com" ];
       enableACME = true;
       enableCloudflareRealIp = true;
       locations."/" = {

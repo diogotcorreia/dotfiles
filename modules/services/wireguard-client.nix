@@ -4,8 +4,14 @@
   lib,
   secrets,
   ...
-}: let
-  inherit (lib) mkEnableOption mkOption types mkIf;
+}:
+let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkIf
+    ;
   cfg = config.modules.services.wireguard-client;
 
   mkServerOptions = description: {
@@ -24,11 +30,13 @@
     };
   };
 
-  mkServerSecrets = serverCfg:
+  mkServerSecrets =
+    serverCfg:
     mkIf serverCfg.enable {
       file = serverCfg.privateKeySecret;
     };
-in {
+in
+{
   options.modules.services.wireguard-client = {
     feb-router = mkServerOptions "wireguard client to the router in feb's network";
     hera = mkServerOptions "wireguard client to hera's wireguard server";
@@ -43,26 +51,34 @@ in {
     networking.wg-quick.interfaces = {
       feb-router = mkIf cfg.feb-router.enable {
         autostart = false;
-        address = ["192.168.98.${toString cfg.feb-router.lastOctect}/24"];
+        address = [ "192.168.98.${toString cfg.feb-router.lastOctect}/24" ];
         privateKeyFile = config.age.secrets.wireguardClientFebRouterPrivateKey.path;
 
         peers = [
           {
             publicKey = "tOAfW4lPiVyyRepRtzBq4SIfQkfKFstwFq9jAGUINF4=";
-            allowedIPs = ["192.168.98.0/24" "192.168.99.0/24" "192.168.0.0/21" "192.168.20.0/22"];
+            allowedIPs = [
+              "192.168.98.0/24"
+              "192.168.99.0/24"
+              "192.168.0.0/21"
+              "192.168.20.0/22"
+            ];
             endpoint = "wireguard.feb.diogotc.com:51820";
           }
         ];
       };
       hera = mkIf cfg.hera.enable {
         autostart = false;
-        address = ["192.168.101.${toString cfg.hera.lastOctect}/24"];
+        address = [ "192.168.101.${toString cfg.hera.lastOctect}/24" ];
         privateKeyFile = config.age.secrets.wireguardClientHeraPrivateKey.path;
 
         peers = [
           {
             publicKey = "XM/VFX/CWunMSiJX0tcv7F/ShDHPlP4RCySvbPkqHHQ=";
-            allowedIPs = ["0.0.0.0/0" "::/0"];
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
             endpoint = "wireguard.hera.diogotc.com:51820";
           }
         ];

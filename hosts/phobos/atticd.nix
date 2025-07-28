@@ -4,11 +4,13 @@
   lib,
   secrets,
   ...
-}: let
+}:
+let
   host = "nix-cache.diogotc.com";
   port = lib.my.ports.atticd;
   dbUser = config.services.atticd.user;
-in {
+in
+{
   age.secrets = {
     phobosAtticdEnvVariables = {
       # Contains the following variables:
@@ -24,7 +26,7 @@ in {
         ensureDBOwnership = true;
       }
     ];
-    ensureDatabases = [dbUser];
+    ensureDatabases = [ dbUser ];
   };
 
   services.atticd = {
@@ -33,7 +35,7 @@ in {
     environmentFile = config.age.secrets.phobosAtticdEnvVariables.path;
     settings = {
       listen = "[::1]:${toString port}";
-      allowed-hosts = [host];
+      allowed-hosts = [ host ];
       api-endpoint = "https://${host}/";
       soft-delete-caches = false;
       require-proof-of-possession = true;
@@ -47,7 +49,9 @@ in {
         max-size = 262144; # 256 KiB
       };
 
-      compression = {type = "zstd";};
+      compression = {
+        type = "zstd";
+      };
 
       garbage-collection = {
         interval = "12 hours";
@@ -58,13 +62,16 @@ in {
 
   # bypass cloudflare for localhost
   networking.hosts = {
-    "127.0.0.1" = [host];
-    "::1" = [host];
+    "127.0.0.1" = [ host ];
+    "::1" = [ host ];
   };
 
   # The service above is supposed to detect this based on the database string,
   # but since we're using the shorthand, it doesn't.
-  systemd.services.atticd.after = ["postgresql.service" "nss-lookup.target"];
+  systemd.services.atticd.after = [
+    "postgresql.service"
+    "nss-lookup.target"
+  ];
 
   services.nginx.virtualHosts.${host} = {
     enableACME = true;

@@ -1,7 +1,9 @@
 # NFS mount of Synology diskstation (NAS)
-{...}: let
+{ ... }:
+let
   diskstationAddress = "192.168.1.4";
-in {
+in
+{
   # For NFS to work correctly, users have to share the same UID/GID in this
   # server and in the NAS.
   # However, Synology's DSM does not have an easy way to create a user with
@@ -15,16 +17,17 @@ in {
   fileSystems."/mnt/diskstation" = {
     device = "${diskstationAddress}:/volume1/hera";
     fsType = "nfs";
-    options = let
-      # Prevents hanging on network split, and only mounts when accessed
-      automount = [
-        "x-systemd.automount"
-        "noauto"
-        "x-systemd.idle-timeout=600"
-        "x-systemd.device-timeout=5s"
-        "x-systemd.mount-timeout=5s"
-      ];
-    in
+    options =
+      let
+        # Prevents hanging on network split, and only mounts when accessed
+        automount = [
+          "x-systemd.automount"
+          "noauto"
+          "x-systemd.idle-timeout=600"
+          "x-systemd.device-timeout=5s"
+          "x-systemd.mount-timeout=5s"
+        ];
+      in
       automount;
   };
 

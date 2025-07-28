@@ -3,7 +3,8 @@
   lib,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     hardware.filesystem.zfs-impermanence
     hardware.zram
@@ -69,7 +70,9 @@
       restic = {
         enable = true;
 
-        timerConfig = {OnCalendar = "03:00";};
+        timerConfig = {
+          OnCalendar = "03:00";
+        };
       };
     };
     shell = {

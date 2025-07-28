@@ -5,7 +5,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   cfg = config.services.immich;
 
   photosLocation = "/persist/immich";
@@ -15,8 +16,13 @@
   port = lib.my.ports.immich;
 
   oauthClientId = "geTzW3w4Q7ifXZTkNRPqk7sb.PL8yd1OD7mpORuqk8wFTM0mvITg-095msLn4_jWcxhRYm8O";
-  oauthScopes = ["openid" "email" "profile"];
-in {
+  oauthScopes = [
+    "openid"
+    "email"
+    "profile"
+  ];
+in
+{
   # Ensure that the NFS server has the same UID/GID
   users.users.${cfg.user}.uid = 15015;
   users.groups.${cfg.group}.gid = 15015;
@@ -69,47 +75,49 @@ in {
   # Since the Immich people don't give us proper env variables for secrets,
   # we'll have to do it ourselves.
   # https://github.com/immich-app/immich/discussions/14815
-  systemd.services.immich-server = let
-    unpatchedConfigFile = config.services.immich.environment.IMMICH_CONFIG_FILE;
-    patchedConfigFile = "/run/immich/config.json";
-  in {
-    environment = {
-      IMMICH_CONFIG_FILE = lib.mkForce patchedConfigFile;
-    };
-    preStart = ''
-      install -m 600 /dev/null ${patchedConfigFile}
-      ${lib.getExe pkgs.jq} -c \
-        --arg oauthClientSecret "$IMMICH_OAUTH_CLIENT_SECRET" \
-        '.oauth.clientSecret += $oauthClientSecret' \
-        ${unpatchedConfigFile} > ${patchedConfigFile}
-    '';
-    # We must set the UMask of the Immich service, so new files can be read by the group as well,
-    # in order for restic backups to work properly across NFS.
-    serviceConfig.UMask = lib.mkForce "0027"; # default is 0077
-  };
-
-  systemd.tmpfiles.rules = ["d ${photosLocation} 0750 ${cfg.user} ${cfg.group}"];
-
-  fileSystems = let
-    mkBindMount = dir:
-      lib.nameValuePair
-      "${photosLocation}/${dir}"
-      {
-        depends = [
-          "/mnt/diskstation"
-          "/persist"
-        ];
-        device = "${photosLocationNfs}/${dir}";
-        fsType = "none";
-        options = [
-          "bind"
-          # since /mnt/diskstation is an automount, this also has to be
-          # otherwise it won't remount when that network share is remounted
-          "x-systemd.automount"
-          "noauto"
-        ];
+  systemd.services.immich-server =
+    let
+      unpatchedConfigFile = config.services.immich.environment.IMMICH_CONFIG_FILE;
+      patchedConfigFile = "/run/immich/config.json";
+    in
+    {
+      environment = {
+        IMMICH_CONFIG_FILE = lib.mkForce patchedConfigFile;
       };
-  in
+      preStart = ''
+        install -m 600 /dev/null ${patchedConfigFile}
+        ${lib.getExe pkgs.jq} -c \
+          --arg oauthClientSecret "$IMMICH_OAUTH_CLIENT_SECRET" \
+          '.oauth.clientSecret += $oauthClientSecret' \
+          ${unpatchedConfigFile} > ${patchedConfigFile}
+      '';
+      # We must set the UMask of the Immich service, so new files can be read by the group as well,
+      # in order for restic backups to work properly across NFS.
+      serviceConfig.UMask = lib.mkForce "0027"; # default is 0077
+    };
+
+  systemd.tmpfiles.rules = [ "d ${photosLocation} 0750 ${cfg.user} ${cfg.group}" ];
+
+  fileSystems =
+    let
+      mkBindMount =
+        dir:
+        lib.nameValuePair "${photosLocation}/${dir}" {
+          depends = [
+            "/mnt/diskstation"
+            "/persist"
+          ];
+          device = "${photosLocationNfs}/${dir}";
+          fsType = "none";
+          options = [
+            "bind"
+            # since /mnt/diskstation is an automount, this also has to be
+            # otherwise it won't remount when that network share is remounted
+            "x-systemd.automount"
+            "noauto"
+          ];
+        };
+    in
     builtins.listToAttrs [
       (mkBindMount "library")
       (mkBindMount "encoded-video")
@@ -159,5 +167,5 @@ in {
   users.users.restic.uid = 15016;
   users.groups.restic.gid = 15016;
   # Additionally, the service must be in the immich group to read files and list directories
-  systemd.services."restic-backups-systemBackup".serviceConfig.SupplementaryGroups = ["immich"];
+  systemd.services."restic-backups-systemBackup".serviceConfig.SupplementaryGroups = [ "immich" ];
 }

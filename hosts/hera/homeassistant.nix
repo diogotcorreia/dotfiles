@@ -3,12 +3,14 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   hassDomain = "hass.diogotc.com";
   hassPort = lib.my.ports.homeAssistant;
   noderedDomain = "nodered.hera.diogotc.com";
   noderedPort = lib.my.ports.nodered;
-in {
+in
+{
   # TODO move docker containers to NixOS services
 
   # https://github.com/esphome/issues/issues/2669
@@ -55,5 +57,5 @@ in {
     };
   };
 
-  modules.services.restic.paths = ["${config.my.homeDirectory}/homeassistant"];
+  modules.services.restic.paths = [ "${config.my.homeDirectory}/homeassistant" ];
 }

@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   discordThemeFile = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.11.7/nordic.theme.css";
     hash = "sha256-PCRfEqaBISe1WDYwMK1q22Cpq6oHKomrQX42/2Z45UQ=";
@@ -38,10 +39,7 @@
   settings = {
     openasar = {
       setup = true;
-      cmdPreset =
-        if config.my.hardware.laptop
-        then "battery"
-        else "perf";
+      cmdPreset = if config.my.hardware.laptop then "battery" else "perf";
       quickstart = true;
     };
     DANGEROUS_ENABLE_DEVTOOLS_ONLY_ENABLE_IF_YOU_KNOW_WHAT_YOURE_DOING = true;
@@ -51,15 +49,18 @@
   };
 
   settingsFile =
-    pkgs.runCommand "settings-override.json" {
-      nativeBuildInputs = with pkgs; [jq];
-    } ''
-      jq --argjson cfg ${lib.escapeShellArg (builtins.toJSON settings)} \
-        --arg css "$(<${discordThemeFile})" \
-        --arg extraCss ${lib.escapeShellArg extraCss} \
-        '$cfg * (.openasar.css = $css + "\n" + $extraCss)' -n > $out
-    '';
-in {
+    pkgs.runCommand "settings-override.json"
+      {
+        nativeBuildInputs = with pkgs; [ jq ];
+      }
+      ''
+        jq --argjson cfg ${lib.escapeShellArg (builtins.toJSON settings)} \
+          --arg css "$(<${discordThemeFile})" \
+          --arg extraCss ${lib.escapeShellArg extraCss} \
+          '$cfg * (.openasar.css = $css + "\n" + $extraCss)' -n > $out
+      '';
+in
+{
   hm.home.packages = with pkgs; [
     # Discord
     discord-openasar

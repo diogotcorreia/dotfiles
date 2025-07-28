@@ -4,10 +4,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.programs;
-in {
+in
+{
   options.modules.graphical.programs.enable = mkEnableOption "programs";
 
   config = mkIf cfg.enable {

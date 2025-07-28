@@ -7,9 +7,11 @@
   inputs,
   lib,
   ...
-}: let
+}:
+let
   inherit (config.my.filesystem) espSize;
-in {
+in
+{
   imports = [
     inputs.disko.nixosModules.disko
   ];
@@ -24,7 +26,7 @@ in {
   ];
 
   # Enable ZFS kernel packages/modules
-  boot.supportedFilesystems = ["zfs"];
+  boot.supportedFilesystems = [ "zfs" ];
 
   # Enable services to maintain the ZFS pool
   services.zfs.autoScrub.enable = true;
@@ -54,7 +56,7 @@ in {
               content = {
                 type = "filesystem";
                 format = "vfat";
-                mountOptions = ["umask=0077"];
+                mountOptions = [ "umask=0077" ];
                 mountpoint = "/boot";
               };
             };
@@ -72,7 +74,9 @@ in {
     zpool = {
       rpool = {
         type = "zpool";
-        options = {ashift = "12";};
+        options = {
+          ashift = "12";
+        };
         rootFsOptions = {
           acltype = "posixacl";
           atime = "off";
@@ -92,7 +96,7 @@ in {
           "local/root" = {
             type = "zfs_fs";
             mountpoint = "/";
-            mountOptions = ["zfsutil"];
+            mountOptions = [ "zfsutil" ];
 
             postCreateHook = ''
               zfs snapshot rpool/local/root@blank
@@ -102,7 +106,7 @@ in {
           "local/nix" = {
             type = "zfs_fs";
             mountpoint = "/nix";
-            mountOptions = ["zfsutil"];
+            mountOptions = [ "zfsutil" ];
           };
           # To be used in emergencies if the disk goes full (i.e., by shrinking it),
           # otherwise it is always empty.
@@ -118,13 +122,13 @@ in {
           "safe/persist" = {
             type = "zfs_fs";
             mountpoint = "/persist";
-            mountOptions = ["zfsutil"];
+            mountOptions = [ "zfsutil" ];
           };
           # Dataset that holds home directories.
           "safe/home" = {
             type = "zfs_fs";
             mountpoint = "/home";
-            mountOptions = ["zfsutil"];
+            mountOptions = [ "zfsutil" ];
           };
         };
       };

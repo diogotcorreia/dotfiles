@@ -5,9 +5,9 @@
   lib,
   secrets,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     mkEnableOption
     mkIf
     mkOption
@@ -20,7 +20,8 @@
     nameValuePair
     ;
   cfg = config.modules.services.healthchecks;
-in {
+in
+{
   options.modules.services.healthchecks = {
     enable = mkEnableOption "healthchecks";
     timerExpression = mkOption {
@@ -32,57 +33,62 @@ in {
 
     systemd-monitoring = mkOption {
       description = "Systemd services to wrap with healthcheck start, failure and finish pings";
-      type = types.attrsOf (types.submodule ({...}: {
-        options = {
-          checkUrlFile = mkOption {
-            type = types.path;
-            default = "/dev/null";
-            example = "config.age.secrets.healthchecksUrl.path";
-            description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
-          };
-        };
-      }));
-      default = {};
+      type = types.attrsOf (
+        types.submodule (
+          { ... }:
+          {
+            options = {
+              checkUrlFile = mkOption {
+                type = types.path;
+                default = "/dev/null";
+                example = "config.age.secrets.healthchecksUrl.path";
+                description = "A file containing the URL to ping. It's recommended to keep this secret to avoid others pinging the URL.";
+              };
+            };
+          }
+        )
+      );
+      default = { };
       example = {
         restic-backups-systemBackup.checkUrlFile = "config.age.secrets.healthchecksUrl.path";
       };
     };
   };
 
-  config = let
-    getHealthchecksCmd = urlFile: type: ignoreErrors: ''
-      ${pkgs.bash}/bin/bash -c '${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 -o /dev/null $(${pkgs.coreutils}/bin/cat ${urlFile})${
-        optionalString (type != null) "/${type}"
-      }${optionalString ignoreErrors " || true"}'
-    '';
-
-    # https://www.freedesktop.org/software/systemd/man/systemd.exec.html#%24EXIT_CODE
-    mkStopScript = url:
-      pkgs.writeShellScript "healthchecks-stop" ''
-        if [[ "$SERVICE_RESULT" == "success" && "$EXIT_STATUS" == "0" ]]; then
-          ${getHealthchecksCmd url null false}
-        elif [[ "$SERVICE_RESULT" != "start-limit-hit" ]]; then
-          ${getHealthchecksCmd url "fail" false}
-        fi
+  config =
+    let
+      getHealthchecksCmd = urlFile: type: ignoreErrors: ''
+        ${pkgs.bash}/bin/bash -c '${pkgs.curl}/bin/curl -fsS -m 10 --retry 5 -o /dev/null $(${pkgs.coreutils}/bin/cat ${urlFile})${
+          optionalString (type != null) "/${type}"
+        }${optionalString ignoreErrors " || true"}'
       '';
 
-    systemd-services = mapAttrs' (name: options:
-      nameValuePair name {
-        preStart =
-          mkBefore (getHealthchecksCmd options.checkUrlFile "start" true);
-        postStop = mkAfter "${mkStopScript options.checkUrlFile}";
-      })
-    cfg.systemd-monitoring;
-  in {
-    age.secrets = mkIf cfg.enable {
-      healthchecksUrl.file = secrets.host.healthchecksUrl;
-    };
+      # https://www.freedesktop.org/software/systemd/man/systemd.exec.html#%24EXIT_CODE
+      mkStopScript =
+        url:
+        pkgs.writeShellScript "healthchecks-stop" ''
+          if [[ "$SERVICE_RESULT" == "success" && "$EXIT_STATUS" == "0" ]]; then
+            ${getHealthchecksCmd url null false}
+          elif [[ "$SERVICE_RESULT" != "start-limit-hit" ]]; then
+            ${getHealthchecksCmd url "fail" false}
+          fi
+        '';
 
-    systemd.services =
-      (
-        optionalAttrs
-        cfg.enable
-        {
+      systemd-services = mapAttrs' (
+        name: options:
+        nameValuePair name {
+          preStart = mkBefore (getHealthchecksCmd options.checkUrlFile "start" true);
+          postStop = mkAfter "${mkStopScript options.checkUrlFile}";
+        }
+      ) cfg.systemd-monitoring;
+    in
+    {
+      age.secrets = mkIf cfg.enable {
+        healthchecksUrl.file = secrets.host.healthchecksUrl;
+      };
+
+      systemd.services =
+        (optionalAttrs cfg.enable {
           ping-healthchecks = {
             restartIfChanged = false;
             serviceConfig = {
@@ -90,18 +96,20 @@ in {
               ExecStart = getHealthchecksCmd config.age.secrets.healthchecksUrl.path null false;
             };
           };
-        }
-      )
-      // systemd-services;
+        })
+        // systemd-services;
 
-    systemd.timers =
-      if cfg.enable
-      then {
-        ping-healthchecks = {
-          wantedBy = ["timers.target"];
-          timerConfig = {OnCalendar = cfg.timerExpression;};
-        };
-      }
-      else {};
-  };
+      systemd.timers =
+        if cfg.enable then
+          {
+            ping-healthchecks = {
+              wantedBy = [ "timers.target" ];
+              timerConfig = {
+                OnCalendar = cfg.timerExpression;
+              };
+            };
+          }
+        else
+          { };
+    };
 }

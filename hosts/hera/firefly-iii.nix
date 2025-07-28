@@ -5,7 +5,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   domainApp = "firefly3.hera.diogotc.com";
   domainDataImporter = "firefly3-csv.hera.diogotc.com";
 
@@ -13,7 +14,8 @@
   configPathAutoDataImporter = "/persist/firefly-auto-import-configs";
 
   dbUser = config.services.firefly-iii.user;
-in {
+in
+{
   age.secrets = {
     fireflyAppKey = {
       owner = config.services.firefly-iii.user;
@@ -60,7 +62,7 @@ in {
         ensureClauses.login = true;
       }
     ];
-    ensureDatabases = [dbUser];
+    ensureDatabases = [ dbUser ];
   };
 
   # The data-importer module does not allow for variables to be passed in bulk, so we do this little hack
@@ -92,13 +94,14 @@ in {
       MAIL_FROM_ADDRESS = lib.my.mkRobotsEmail "firefly-iii";
     };
     # Inherit the config from the data importer
-    serviceConfig = let
-      stateDir = "firefly-iii-auto-importer";
-      dataImporterPackage = pkgs.firefly-iii-data-importer.override (_prev: {
-        dataDir = "/var/lib/${stateDir}";
-      });
-      artisan = "${dataImporterPackage}/artisan";
-    in
+    serviceConfig =
+      let
+        stateDir = "firefly-iii-auto-importer";
+        dataImporterPackage = pkgs.firefly-iii-data-importer.override (_prev: {
+          dataDir = "/var/lib/${stateDir}";
+        });
+        artisan = "${dataImporterPackage}/artisan";
+      in
       config.systemd.services.firefly-iii-data-importer-setup.serviceConfig
       // {
         Type = "oneshot";
@@ -124,36 +127,37 @@ in {
   };
 
   # https://github.com/NixOS/nixpkgs/blob/a3c0b3b21515f74fd2665903d4ce6bc4dc81c77c/nixos/modules/services/web-apps/firefly-iii-data-importer.nix#L254-L287
-  systemd.tmpfiles.settings."10-firefly-iii-auto-importer" = let
-    dataDir = "/var/lib/${config.systemd.services.firefly-iii-auto-importer.serviceConfig.StateDirectory}";
-    inherit (config.services.firefly-iii-data-importer) user group;
-  in
+  systemd.tmpfiles.settings."10-firefly-iii-auto-importer" =
+    let
+      dataDir = "/var/lib/${config.systemd.services.firefly-iii-auto-importer.serviceConfig.StateDirectory}";
+      inherit (config.services.firefly-iii-data-importer) user group;
+    in
     lib.attrsets.genAttrs
-    [
-      "${dataDir}/storage"
-      "${dataDir}/storage/app"
-      "${dataDir}/storage/app/public"
-      "${dataDir}/storage/configurations"
-      "${dataDir}/storage/conversion-routines"
-      "${dataDir}/storage/debugbar"
-      "${dataDir}/storage/framework"
-      "${dataDir}/storage/framework/cache"
-      "${dataDir}/storage/framework/sessions"
-      "${dataDir}/storage/framework/testing"
-      "${dataDir}/storage/framework/views"
-      "${dataDir}/storage/jobs"
-      "${dataDir}/storage/logs"
-      "${dataDir}/storage/submission-routines"
-      "${dataDir}/storage/uploads"
-      "${dataDir}/cache"
-    ]
-    (_n: {
-      d = {
-        group = group;
-        mode = "0710";
-        user = user;
-      };
-    })
+      [
+        "${dataDir}/storage"
+        "${dataDir}/storage/app"
+        "${dataDir}/storage/app/public"
+        "${dataDir}/storage/configurations"
+        "${dataDir}/storage/conversion-routines"
+        "${dataDir}/storage/debugbar"
+        "${dataDir}/storage/framework"
+        "${dataDir}/storage/framework/cache"
+        "${dataDir}/storage/framework/sessions"
+        "${dataDir}/storage/framework/testing"
+        "${dataDir}/storage/framework/views"
+        "${dataDir}/storage/jobs"
+        "${dataDir}/storage/logs"
+        "${dataDir}/storage/submission-routines"
+        "${dataDir}/storage/uploads"
+        "${dataDir}/cache"
+      ]
+      (_n: {
+        d = {
+          group = group;
+          mode = "0710";
+          user = user;
+        };
+      })
     // {
       "${dataDir}".d = {
         group = group;
@@ -164,8 +168,10 @@ in {
 
   # Schedule Firefly Auto Importer
   systemd.timers.firefly-iii-auto-importer = {
-    wantedBy = ["timers.target"];
-    timerConfig = {OnCalendar = cronAutoDataImporter;};
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = cronAutoDataImporter;
+    };
   };
 
   # Healthchecks for Firefly Auto Importer

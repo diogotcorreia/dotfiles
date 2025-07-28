@@ -6,7 +6,8 @@
   configDir,
   user,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf escapeShellArg;
   cfg = config.modules.graphical;
 
@@ -17,13 +18,11 @@
     size = 16;
     defaultCursor = "left_ptr";
 
-    cursorPath = "${package}/share/icons/${escapeShellArg name}/cursors/${
-      escapeShellArg defaultCursor
-    }";
+    cursorPath = "${package}/share/icons/${escapeShellArg name}/cursors/${escapeShellArg defaultCursor}";
   };
-in {
-  options.modules.graphical.enable =
-    mkEnableOption "DWM and graphical environment";
+in
+{
+  options.modules.graphical.enable = mkEnableOption "DWM and graphical environment";
 
   config = mkIf cfg.enable {
     programs.slock.enable = true;
@@ -48,7 +47,10 @@ in {
     # Avoid typing the username on TTY and only prompt for the password
     # https://wiki.archlinux.org/title/Getty#Prompt_only_the_password_for_a_default_user_in_virtual_console_login
     services.getty.loginOptions = "-p -- ${user}";
-    services.getty.extraArgs = ["--noclear" "--skip-login"];
+    services.getty.extraArgs = [
+      "--noclear"
+      "--skip-login"
+    ];
 
     # https://unix.stackexchange.com/questions/344402/how-to-unlock-gnome-keyring-automatically-in-nixos
     services.gnome.gnome-keyring.enable = true;
@@ -63,7 +65,9 @@ in {
       };
       autorun = true;
       displayManager.startx.enable = true;
-      windowManager = {dwm.enable = true;};
+      windowManager = {
+        dwm.enable = true;
+      };
     };
 
     services.libinput = {
@@ -118,9 +122,7 @@ in {
         # Hack to fix DWM overriding the cursor theme.
         # Does the same as hm.home.pointerCursor.x11.defaultCursor, but
         # after a sleep, in order to execute after DWM starting.
-        (${pkgs.coreutils}/bin/sleep 0.2 && ${pkgs.xorg.xsetroot}/bin/xsetroot -xcf ${cursor.cursorPath} ${
-          toString cursor.size
-        }) &
+        (${pkgs.coreutils}/bin/sleep 0.2 && ${pkgs.xorg.xsetroot}/bin/xsetroot -xcf ${cursor.cursorPath} ${toString cursor.size}) &
       '';
     };
 
@@ -132,13 +134,15 @@ in {
     hm.programs.zsh.shellAliases.clip = "${lib.getExe pkgs.xclip} -selection clipboard";
 
     programs.light.enable = true;
-    usr.extraGroups = ["video"];
+    usr.extraGroups = [ "video" ];
 
     hm.services.picom = {
       enable = true;
       backend = "glx";
       vSync = true;
-      settings = {unredir-if-possible = false;};
+      settings = {
+        unredir-if-possible = false;
+      };
     };
 
     hm.services.flameshot = {

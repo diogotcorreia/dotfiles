@@ -5,7 +5,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   httpHost = "http.${host}";
   host = "healthchecks.diogotc.com";
   port = lib.my.ports.healthchecks;
@@ -14,13 +15,12 @@
     owner = config.services.healthchecks.user;
     group = config.services.healthchecks.group;
   };
-in {
+in
+{
   age.secrets = {
-    phobosHealthchecksSecretKey =
-      commonSecretSettings
-      // {
-        file = secrets.host.healthchecksSecretKey;
-      };
+    phobosHealthchecksSecretKey = commonSecretSettings // {
+      file = secrets.host.healthchecksSecretKey;
+    };
     phobosHealthchecksEnvVariables = {
       file = secrets.host.healthchecksEnvVariables;
     };
@@ -33,7 +33,7 @@ in {
         ensureDBOwnership = true;
       }
     ];
-    ensureDatabases = [dbUser];
+    ensureDatabases = [ dbUser ];
   };
 
   services.healthchecks = {
@@ -44,7 +44,10 @@ in {
 
     # Pass non-secret settings
     settings = {
-      ALLOWED_HOSTS = [host httpHost];
+      ALLOWED_HOSTS = [
+        host
+        httpHost
+      ];
       APPRISE_ENABLED = "False";
 
       # Database configuration (using peer authentication; no password needed)
@@ -78,18 +81,20 @@ in {
     };
   };
 
-  systemd.services = let
-    commonConfig = {
-      serviceConfig = {
-        EnvironmentFile = [config.age.secrets.phobosHealthchecksEnvVariables.path];
+  systemd.services =
+    let
+      commonConfig = {
+        serviceConfig = {
+          EnvironmentFile = [ config.age.secrets.phobosHealthchecksEnvVariables.path ];
+        };
       };
+    in
+    {
+      healthchecks-migration = commonConfig;
+      healthchecks = commonConfig;
+      healthchecks-sendalerts = commonConfig;
+      healthchecks-sendreports = commonConfig;
     };
-  in {
-    healthchecks-migration = commonConfig;
-    healthchecks = commonConfig;
-    healthchecks-sendalerts = commonConfig;
-    healthchecks-sendreports = commonConfig;
-  };
 
   services.nginx.virtualHosts = {
     ${host} = {
@@ -103,5 +108,5 @@ in {
     };
   };
 
-  modules.impermanence.directories = [config.services.healthchecks.dataDir];
+  modules.impermanence.directories = [ config.services.healthchecks.dataDir ];
 }

@@ -1,5 +1,6 @@
 # Apply patches to firefly-iii-data-importer
-{...}: _final: prev: {
+{ ... }:
+_final: prev: {
   firefly-iii-data-importer = prev.firefly-iii-data-importer.overrideAttrs (_oldAttrs: {
     patches = [
       # Throw warning instead of error if transactions cannot be found

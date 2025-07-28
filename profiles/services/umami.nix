@@ -7,13 +7,19 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   domain = "analytics.diogotc.com";
   port = lib.my.ports.umami;
 
-  trackerScripts = ["script.js" "umami.js" "hellothere.js"];
+  trackerScripts = [
+    "script.js"
+    "umami.js"
+    "hellothere.js"
+  ];
   collectApiEndpoint = "/api/abc-send";
-in {
+in
+{
   age.secrets = {
     umamiAppSecret.file = secrets.host.umamiAppSecret;
   };
@@ -37,7 +43,7 @@ in {
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
-      serverAliases = ["umami.diogotc.com"];
+      serverAliases = [ "umami.diogotc.com" ];
 
       locations."/".proxyPass = "http://[::1]:${toString port}";
     };

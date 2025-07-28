@@ -5,7 +5,8 @@
   writeShellScriptBin,
   hostName ? null,
   ...
-}: let
+}:
+let
   fetchFromCache = ''
     nix build --refresh --no-link -- "$config_store_path"
   '';
@@ -28,35 +29,33 @@
   '';
 
   defaultBehavior =
-    if hostName == null
-    then ''
-      echo "Usage: $0 <store-path>" >&2
-      exit 1
-    ''
-    else ''
-      config_store_path="$(${lib.getExe curl} --url ${lib.escapeShellArg "https://infra-keyval.diogotc.com/nixos-system-${hostName}"})"
-    '';
-
-  hostnameRegex =
-    if hostName == null
-    then ".+"
-    else hostName;
-in
-  writeShellScriptBin "nixos-switch" ''
-    set -e
-
-    if [ $# -lt 1 ]; then
-      ${defaultBehavior}
+    if hostName == null then
+      ''
+        echo "Usage: $0 <store-path>" >&2
+        exit 1
+      ''
     else
-      config_store_path="$1"
-    fi
+      ''
+        config_store_path="$(${lib.getExe curl} --url ${lib.escapeShellArg "https://infra-keyval.diogotc.com/nixos-system-${hostName}"})"
+      '';
 
-    if [[ ! "$config_store_path" =~ ^\/nix\/store\/[a-z0-9]{32}-nixos-system-${hostnameRegex}-[0-9]{2}\.[0-9]{2}\.[0-9]{8}\.[a-z0-9]{7,}$ ]]; then
-      echo "fetched store path does not match expected format: $config_store_path"
-      exit 1
-    fi
+  hostnameRegex = if hostName == null then ".+" else hostName;
+in
+writeShellScriptBin "nixos-switch" ''
+  set -e
 
-    ${fetchFromCache}
-    ${setProfile}
-    ${switchToConfiguration}
-  ''
+  if [ $# -lt 1 ]; then
+    ${defaultBehavior}
+  else
+    config_store_path="$1"
+  fi
+
+  if [[ ! "$config_store_path" =~ ^\/nix\/store\/[a-z0-9]{32}-nixos-system-${hostnameRegex}-[0-9]{2}\.[0-9]{2}\.[0-9]{8}\.[a-z0-9]{7,}$ ]]; then
+    echo "fetched store path does not match expected format: $config_store_path"
+    exit 1
+  fi
+
+  ${fetchFromCache}
+  ${setProfile}
+  ${switchToConfiguration}
+''

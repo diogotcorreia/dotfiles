@@ -6,43 +6,55 @@
   lib,
   modulesPath,
   ...
-}: {
-  imports = [(modulesPath + "/installer/scan/not-detected.nix")];
+}:
+{
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sdhci_pci"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-intel"];
-  boot.extraModulePackages = [];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ahci"
+    "nvme"
+    "usb_storage"
+    "sd_mod"
+    "sdhci_pci"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-intel" ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "size=2G" "mode=755"];
+    options = [
+      "defaults"
+      "size=2G"
+      "mode=755"
+    ];
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/9B79-E291";
     fsType = "vfat";
-    options = ["umask=0077"];
+    options = [ "umask=0077" ];
   };
 
   fileSystems."/nix" = {
     device = "rpool/local/nix";
     fsType = "zfs";
-    options = ["zfsutil"];
+    options = [ "zfsutil" ];
   };
 
   fileSystems."/home" = {
     device = "rpool/safe/home";
     fsType = "zfs";
-    options = ["zfsutil"];
+    options = [ "zfsutil" ];
     neededForBoot = true;
   };
 
   fileSystems."/persist" = {
     device = "rpool/safe/persist";
     fsType = "zfs";
-    options = ["zfsutil"];
+    options = [ "zfsutil" ];
     neededForBoot = true;
   };
 
@@ -56,6 +68,5 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  hardware.cpu.intel.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

@@ -4,10 +4,19 @@
   config,
   lib,
   ...
-}: let
-  inherit (lib) hasPrefix isString types mkOption mkEnableOption mkIf;
+}:
+let
+  inherit (lib)
+    hasPrefix
+    isString
+    types
+    mkOption
+    mkEnableOption
+    mkIf
+    ;
   cfg = config.modules.impermanence;
-in {
+in
+{
   options.modules.impermanence = {
     enable = mkEnableOption "Enable impermanence module";
 
@@ -19,14 +28,19 @@ in {
 
     files = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Files that should be stored in persistent storage.
       '';
     };
     directories = mkOption {
-      type = types.listOf (types.oneOf [types.str (types.attrsOf types.anything)]);
-      default = [];
+      type = types.listOf (
+        types.oneOf [
+          types.str
+          (types.attrsOf types.anything)
+        ]
+      );
+      default = [ ];
       description = ''
         Directories to bind mount to persistent storage.
       '';
@@ -34,32 +48,32 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.persistence.${cfg.persistDirectory} = let
-      parsedDirectories = map (dir:
-        if isString dir && hasPrefix "/var/lib/private/" dir
-        then {
-          directory = dir;
-          mode = "0700";
-          # ensure parent dir has correct permissions
-          defaultPerms.mode = "0700";
-        }
-        else dir)
-      cfg.directories;
-    in {
-      directories =
-        parsedDirectories
-        ++ [
+    environment.persistence.${cfg.persistDirectory} =
+      let
+        parsedDirectories = map (
+          dir:
+          if isString dir && hasPrefix "/var/lib/private/" dir then
+            {
+              directory = dir;
+              mode = "0700";
+              # ensure parent dir has correct permissions
+              defaultPerms.mode = "0700";
+            }
+          else
+            dir
+        ) cfg.directories;
+      in
+      {
+        directories = parsedDirectories ++ [
           "/var/lib/systemd"
           "/var/lib/nixos" # contains user/group id map
           "/var/log"
         ];
-      files =
-        cfg.files
-        ++ [
+        files = cfg.files ++ [
           "/etc/machine-id"
           "/etc/ssh/ssh_host_ed25519_key"
           "/etc/ssh/ssh_host_ed25519_key.pub"
         ];
-    };
+      };
   };
 }

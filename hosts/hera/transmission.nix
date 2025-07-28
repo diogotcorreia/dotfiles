@@ -5,13 +5,15 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   domain = "transmission.hera.diogotc.com";
   port = lib.my.ports.transmission;
 
   socksSocket = "/run/${socketDirectory}/transmission-socks-proxy";
   socketDirectory = "transmission-proxy";
-in {
+in
+{
   age.secrets = {
     # Contains:
     # Host proxy
@@ -43,33 +45,40 @@ in {
     unitConfig = {
       StopWhenUnneeded = true;
     };
-    serviceConfig = let
-      sshOptions = {
-        ExitOnForwardFailure = "yes";
-        ControlMaster = "no";
-        StreamLocalBindUnlink = "yes";
-        PermitLocalCommand = "yes";
-        LocalCommand = "${lib.getExe' pkgs.systemd "systemd-notify"} --ready";
-        UserKnownHostsFile = "/dev/null"; # don't add to known hosts, have the config provide the public key in the secret file
+    serviceConfig =
+      let
+        sshOptions = {
+          ExitOnForwardFailure = "yes";
+          ControlMaster = "no";
+          StreamLocalBindUnlink = "yes";
+          PermitLocalCommand = "yes";
+          LocalCommand = "${lib.getExe' pkgs.systemd "systemd-notify"} --ready";
+          UserKnownHostsFile = "/dev/null"; # don't add to known hosts, have the config provide the public key in the secret file
+        };
+        finalSshOptions = lib.pipe sshOptions [
+          (lib.mapAttrsToList (
+            key: value: [
+              "-o"
+              "${key}=${value}"
+            ]
+          ))
+          lib.flatten
+          lib.escapeShellArgs
+        ];
+
+        configFile = config.age.secrets.transmissionProxySshConfig.path;
+        passwordFile = config.age.secrets.transmissionProxySshPassword.path;
+
+        sshCommand = "${lib.getExe pkgs.openssh} -D ${socksSocket} -kaxNT ${finalSshOptions} -F ${configFile} proxy";
+      in
+      {
+        Type = "notify";
+        NotifyAccess = "all";
+        ExecStart = "-${lib.getExe pkgs.passh} -p file:${passwordFile} ${sshCommand}";
+
+        RuntimeDirectory = socketDirectory;
+        RuntimeDirectoryMode = "0750";
       };
-      finalSshOptions = lib.pipe sshOptions [
-        (lib.mapAttrsToList (key: value: ["-o" "${key}=${value}"]))
-        lib.flatten
-        lib.escapeShellArgs
-      ];
-
-      configFile = config.age.secrets.transmissionProxySshConfig.path;
-      passwordFile = config.age.secrets.transmissionProxySshPassword.path;
-
-      sshCommand = "${lib.getExe pkgs.openssh} -D ${socksSocket} -kaxNT ${finalSshOptions} -F ${configFile} proxy";
-    in {
-      Type = "notify";
-      NotifyAccess = "all";
-      ExecStart = "-${lib.getExe pkgs.passh} -p file:${passwordFile} ${sshCommand}";
-
-      RuntimeDirectory = socketDirectory;
-      RuntimeDirectoryMode = "0750";
-    };
   };
   systemd.services.transmission-socks-proxy-facade = {
     description = "Socket-activation for transmission's SOCKS5 proxy";
@@ -96,7 +105,7 @@ in {
       "127.0.0.1:9123"
       "[::1]:9123"
     ];
-    wantedBy = ["sockets.target"];
+    wantedBy = [ "sockets.target" ];
   };
 
   services.nginx.virtualHosts = {

@@ -5,7 +5,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   domain = "cloud.diogotc.com";
   collaboraDomain = "office.diogotc.com";
 
@@ -13,7 +14,8 @@
 
   dbUsername = "nextcloud";
   dbDatabaseName = "nextcloud";
-in {
+in
+{
   age.secrets.nextcloudSecrets = {
     file = secrets.host.nextcloudSecrets;
     owner = "nextcloud";
@@ -29,9 +31,7 @@ in {
     configureRedis = true;
     maxUploadSize = "2G";
     config = {
-      adminpassFile =
-        toString (pkgs.writeText "nc-first-install-pwd"
-          "changeMeAfterFirstInstallPlease");
+      adminpassFile = toString (pkgs.writeText "nc-first-install-pwd" "changeMeAfterFirstInstallPlease");
       dbtype = "pgsql";
       dbuser = dbUsername;
       dbname = dbDatabaseName;
@@ -43,7 +43,10 @@ in {
       "opcache.jit_buffer_size" = "128M";
     };
     settings = {
-      trusted_proxies = ["127.0.0.1" "::1"];
+      trusted_proxies = [
+        "127.0.0.1"
+        "::1"
+      ];
       overwriteprotocol = "https";
 
       # NixOS handles updates for us, no need to check for it
@@ -114,43 +117,54 @@ in {
 
       net = {
         listen = "loopback";
-        post_allow.host = ["::1"];
+        post_allow.host = [ "::1" ];
       };
       storage.wopi = {
         "@allow" = true;
-        host = [domain];
+        host = [ domain ];
       };
       server_name = collaboraDomain;
     };
   };
 
-  systemd.services.nextcloud-config-collabora = let
-    inherit (config.services.nextcloud) occ;
+  systemd.services.nextcloud-config-collabora =
+    let
+      inherit (config.services.nextcloud) occ;
 
-    wopi_url = "http://[::1]:${toString collaboraPort}";
-    public_wopi_url = "https://${collaboraDomain}";
-    wopi_allowlist = lib.concatStringsSep "," [
-      "127.0.0.1"
-      "::1"
-    ];
-  in {
-    wantedBy = ["multi-user.target"];
-    after = ["nextcloud-setup.service" "coolwsd.service"];
-    requires = ["coolwsd.service"];
-    script = ''
-      ${occ}/bin/nextcloud-occ config:app:set richdocuments wopi_url --value ${lib.escapeShellArg wopi_url}
-      ${occ}/bin/nextcloud-occ config:app:set richdocuments public_wopi_url --value ${lib.escapeShellArg public_wopi_url}
-      ${occ}/bin/nextcloud-occ config:app:set richdocuments wopi_allowlist --value ${lib.escapeShellArg wopi_allowlist}
-      ${occ}/bin/nextcloud-occ richdocuments:setup
-    '';
-    serviceConfig = {
-      Type = "oneshot";
+      wopi_url = "http://[::1]:${toString collaboraPort}";
+      public_wopi_url = "https://${collaboraDomain}";
+      wopi_allowlist = lib.concatStringsSep "," [
+        "127.0.0.1"
+        "::1"
+      ];
+    in
+    {
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "nextcloud-setup.service"
+        "coolwsd.service"
+      ];
+      requires = [ "coolwsd.service" ];
+      script = ''
+        ${occ}/bin/nextcloud-occ config:app:set richdocuments wopi_url --value ${lib.escapeShellArg wopi_url}
+        ${occ}/bin/nextcloud-occ config:app:set richdocuments public_wopi_url --value ${lib.escapeShellArg public_wopi_url}
+        ${occ}/bin/nextcloud-occ config:app:set richdocuments wopi_allowlist --value ${lib.escapeShellArg wopi_allowlist}
+        ${occ}/bin/nextcloud-occ richdocuments:setup
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+      };
     };
-  };
 
   networking.hosts = {
-    "127.0.0.1" = [domain collaboraDomain];
-    "::1" = [domain collaboraDomain];
+    "127.0.0.1" = [
+      domain
+      collaboraDomain
+    ];
+    "::1" = [
+      domain
+      collaboraDomain
+    ];
   };
 
   services.nginx.virtualHosts = {
@@ -178,9 +192,9 @@ in {
         echo phpfpm-nextcloud.service > /run/nixos/activation-reload-list
       fi
     '';
-    deps = ["agenix"];
+    deps = [ "agenix" ];
   };
 
-  modules.impermanence.directories = [config.services.nextcloud.home];
-  modules.services.restic.paths = [config.services.nextcloud.home];
+  modules.impermanence.directories = [ config.services.nextcloud.home ];
+  modules.services.restic.paths = [ config.services.nextcloud.home ];
 }

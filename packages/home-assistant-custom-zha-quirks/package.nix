@@ -4,19 +4,19 @@
   lib,
   runCommandLocal,
   ...
-}: let
-  mkQuirk = quirkPath:
-    runCommandLocal (builtins.baseNameOf quirkPath) {} ''
+}:
+let
+  mkQuirk =
+    quirkPath:
+    runCommandLocal (builtins.baseNameOf quirkPath) { } ''
       cp ${quirkPath} $out
     '';
 
   customQuirks = builtins.listToAttrs (
-    map
-    (quirkPath:
-      lib.nameValuePair
-      (lib.removeSuffix ".py" (builtins.baseNameOf quirkPath))
-      (mkQuirk quirkPath))
-    (lib.my.listFilesWithSuffixRecursive ".py" ./.)
+    map (
+      quirkPath:
+      lib.nameValuePair (lib.removeSuffix ".py" (builtins.baseNameOf quirkPath)) (mkQuirk quirkPath)
+    ) (lib.my.listFilesWithSuffixRecursive ".py" ./.)
   );
 in
-  customQuirks
+customQuirks

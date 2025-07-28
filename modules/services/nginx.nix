@@ -4,9 +4,9 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     any
     attrValues
     concatLines
@@ -33,7 +33,7 @@
     url = "https://www.cloudflare.com/ips-v6";
     hash = "sha256-np054+g7rQDE3sr9U8Y/piAp89ldto3pN9K+KCNMoKk=";
   };
-  cloudflareRealIpConf = pkgs.runCommand "cloudflare-real-ip.conf" {} ''
+  cloudflareRealIpConf = pkgs.runCommand "cloudflare-real-ip.conf" { } ''
     echo | cat ${cfipv4} - ${cfipv6} > $out
     sed -i -E 's/^(.+)$/set_real_ip_from \1;/' $out
     echo >> $out
@@ -84,100 +84,110 @@
     auth_request_set $redirection_url $upstream_http_location;
     error_page 401 =302 $redirection_url;
   '';
-in {
+in
+{
   options.services.nginx = {
     virtualHosts = mkOption {
-      type = types.attrsOf (types.submodule (
-        {config, ...}: {
-          options = {
-            enableCloudflareRealIp = mkEnableOption "getting IP address from CF-Connecting-IP header";
+      type = types.attrsOf (
+        types.submodule (
+          { config, ... }:
+          {
+            options = {
+              enableCloudflareRealIp = mkEnableOption "getting IP address from CF-Connecting-IP header";
 
-            autheliaHealthchecksPath = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              example = "/api/health";
-              description = ''
-                The path to allow access from the healthchecks server, skipping authentication.
-              '';
+              autheliaHealthchecksPath = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "/api/health";
+                description = ''
+                  The path to allow access from the healthchecks server, skipping authentication.
+                '';
+              };
+              autheliaRules = mkOption {
+                type = types.coercedTo types.str (subject: domain: [ { inherit domain subject; } ]) (
+                  types.functionTo (types.listOf (types.attrsOf types.anything))
+                );
+                default = _: [ ];
+                description = ''
+                  Function that takes a list of domains and returns a list of authelia access rules.
+                '';
+              };
+
+              restrictToNebula = mkEnableOption "only allow connections from the nebula subnet";
+
+              locations = mkOption {
+                type = types.attrsOf (
+                  types.submodule (
+                    { config, ... }:
+                    {
+                      options = {
+                        enableAuthelia = mkEnableOption "authenticating against authelia";
+                      };
+                      config = {
+                        # sane default: enable websockets support if reverse proxy
+                        proxyWebsockets = mkDefault (config.proxyPass != null);
+
+                        extraConfig = mkIf config.enableAuthelia ''
+                          include ${autheliaAuthRequestConfig};
+                        '';
+                      };
+                    }
+                  )
+                );
+              };
             };
-            autheliaRules = mkOption {
-              type =
-                types.coercedTo
-                types.str
-                (subject: domain: [{inherit domain subject;}])
-                (types.functionTo (types.listOf (types.attrsOf types.anything)));
-              default = _: [];
-              description = ''
-                Function that takes a list of domains and returns a list of authelia access rules.
-              '';
-            };
+            config =
+              let
+                hasAuthelia = any (l: l.enableAuthelia) (attrValues config.locations);
+              in
+              {
+                # sane default: redirect to HTTPS automatically
+                forceSSL = mkDefault config.enableACME;
+                # sane default: use DNS-01 challenge instead of HTTP-01
+                acmeRoot = mkDefault null;
 
-            restrictToNebula = mkEnableOption "only allow connections from the nebula subnet";
-
-            locations = mkOption {
-              type = types.attrsOf (types.submodule (
-                {config, ...}: {
-                  options = {
-                    enableAuthelia = mkEnableOption "authenticating against authelia";
-                  };
-                  config = {
-                    # sane default: enable websockets support if reverse proxy
-                    proxyWebsockets = mkDefault (config.proxyPass != null);
-
-                    extraConfig = mkIf config.enableAuthelia ''
-                      include ${autheliaAuthRequestConfig};
-                    '';
-                  };
-                }
-              ));
-            };
-          };
-          config = let
-            hasAuthelia = any (l: l.enableAuthelia) (attrValues config.locations);
-          in {
-            # sane default: redirect to HTTPS automatically
-            forceSSL = mkDefault config.enableACME;
-            # sane default: use DNS-01 challenge instead of HTTP-01
-            acmeRoot = mkDefault null;
-
-            extraConfig = concatLines [
-              (optionalString config.enableCloudflareRealIp ''
-                include ${cloudflareRealIpConf};
-              '')
-              (optionalString config.restrictToNebula ''
-                allow 192.168.100.0/24;
-                deny all;
-              '')
-              (optionalString hasAuthelia ''
-                include ${autheliaLocationBlockConfig};
-              '')
-            ];
-          };
-        }
-      ));
+                extraConfig = concatLines [
+                  (optionalString config.enableCloudflareRealIp ''
+                    include ${cloudflareRealIpConf};
+                  '')
+                  (optionalString config.restrictToNebula ''
+                    allow 192.168.100.0/24;
+                    deny all;
+                  '')
+                  (optionalString hasAuthelia ''
+                    include ${autheliaLocationBlockConfig};
+                  '')
+                ];
+              };
+          }
+        )
+      );
     };
   };
 
   config = mkIf config.services.nginx.enable {
-    my.services.authelia.accessRules = let
-      rulesForVhost = vhostName: vhostConfig: let
-        serverName =
-          if vhostConfig.serverName != null
-          then vhostConfig.serverName
-          else vhostName;
-        domains = [serverName] ++ vhostConfig.serverAliases;
+    my.services.authelia.accessRules =
+      let
+        rulesForVhost =
+          vhostName: vhostConfig:
+          let
+            serverName = if vhostConfig.serverName != null then vhostConfig.serverName else vhostName;
+            domains = [ serverName ] ++ vhostConfig.serverAliases;
 
-        healthchecksBypass = optional (vhostConfig.autheliaHealthchecksPath != null) {
-          domain = domains;
-          policy = "bypass";
-          methods = ["GET"];
-          networks = ["192.168.100.7"]; # phobos
-          resources = ["^${escapeRegex vhostConfig.autheliaHealthchecksPath}$"];
-        };
-        rules = vhostConfig.autheliaRules domains;
+            healthchecksBypass = optional (vhostConfig.autheliaHealthchecksPath != null) {
+              domain = domains;
+              policy = "bypass";
+              methods = [ "GET" ];
+              networks = [ "192.168.100.7" ]; # phobos
+              resources = [ "^${escapeRegex vhostConfig.autheliaHealthchecksPath}$" ];
+            };
+            rules = vhostConfig.autheliaRules domains;
+          in
+          mkMerge [
+            (mkBefore healthchecksBypass)
+            rules
+          ];
       in
-        mkMerge [(mkBefore healthchecksBypass) rules];
-    in
       mkMerge (mapAttrsToList rulesForVhost config.services.nginx.virtualHosts);
   };
 }

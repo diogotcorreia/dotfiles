@@ -5,7 +5,8 @@
   runCommand,
   stdenvNoCC,
   ...
-}: let
+}:
+let
   junixsocket = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "junixsocket";
     version = "2.10.1";
@@ -22,9 +23,11 @@
     '';
   });
 in
-  runCommand "reposilite-junixsocket" {
+runCommand "reposilite-junixsocket"
+  {
     meta.mainProgram = "reposilite";
-  } ''
+  }
+  ''
     mkdir -p "$out/bin"
     cp "${reposilite}/bin/reposilite" "$out/bin/reposilite"
     substituteInPlace "$out/bin/reposilite" \

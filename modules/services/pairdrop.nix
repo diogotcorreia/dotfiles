@@ -5,9 +5,9 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     boolToString
     getExe
     isAttrs
@@ -24,12 +24,13 @@
 
   cfg = config.services.pairdrop;
 
-  json = pkgs.formats.json {};
-in {
+  json = pkgs.formats.json { };
+in
+{
   options.services.pairdrop = {
     enable = mkEnableOption "pairdrop";
 
-    package = mkPackageOption pkgs "pairdrop" {};
+    package = mkPackageOption pkgs "pairdrop" { };
 
     port = mkOption {
       type = types.port;
@@ -46,7 +47,8 @@ in {
       '';
 
       type = types.submodule {
-        freeformType = with types;
+        freeformType =
+          with types;
           attrsOf (oneOf [
             bool
             int
@@ -55,7 +57,10 @@ in {
 
         options = {
           RTC_CONFIG = mkOption {
-            type = types.oneOf [json.type types.path];
+            type = types.oneOf [
+              json.type
+              types.path
+            ];
             default = null;
             example = {
               sdpSemantics = "unified-plan";
@@ -75,7 +80,7 @@ in {
         };
       };
 
-      default = {};
+      default = { };
 
       example = {
         DEBUG_MODE = true;
@@ -95,60 +100,56 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.pairdrop = let
-      rtcConfig = cfg.settings.RTC_CONFIG;
-      primitiveSettings = builtins.removeAttrs cfg.settings ["RTC_CONFIG"];
-      environment =
-        {PORT = toString cfg.port;}
-        // (mapAttrs (_: v:
-          if isBool v
-          then boolToString v
-          else toString v)
-        primitiveSettings)
+    systemd.services.pairdrop =
+      let
+        rtcConfig = cfg.settings.RTC_CONFIG;
+        primitiveSettings = builtins.removeAttrs cfg.settings [ "RTC_CONFIG" ];
+        environment = {
+          PORT = toString cfg.port;
+        }
+        // (mapAttrs (_: v: if isBool v then boolToString v else toString v) primitiveSettings)
         // optionalAttrs (rtcConfig != null) {
-          RTC_CONFIG =
-            if isAttrs rtcConfig
-            then json.generate "rtc-config.json" rtcConfig
-            else rtcConfig;
+          RTC_CONFIG = if isAttrs rtcConfig then json.generate "rtc-config.json" rtcConfig else rtcConfig;
         };
-    in {
-      inherit environment;
+      in
+      {
+        inherit environment;
 
-      description = "PairDrop: Transfer Files Cross-Platform";
-      after = ["network.target"];
-      wantedBy = ["multi-user.target"];
-      serviceConfig = {
-        ExecStart = getExe cfg.package;
+        description = "PairDrop: Transfer Files Cross-Platform";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = getExe cfg.package;
 
-        Type = "simple";
-        Restart = "on-failure";
-        RestartSec = 3;
-        DynamicUser = true;
+          Type = "simple";
+          Restart = "on-failure";
+          RestartSec = 3;
+          DynamicUser = true;
 
-        # Hardening
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        PrivateUsers = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
+          # Hardening
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          PrivateUsers = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+        };
       };
-    };
   };
 
-  meta.maintainers = with maintainers; [diogotcorreia];
+  meta.maintainers = with maintainers; [ diogotcorreia ];
 }

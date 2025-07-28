@@ -3,13 +3,15 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   domain = "calibre.diogotc.com";
   port = lib.my.ports.calibreWeb;
 
   statePath = "/var/lib/${config.services.calibre-web.dataDir}";
   libraryPath = "/persist/calibre-library";
-in {
+in
+{
   services.calibre-web = {
     enable = true;
     listen = {
@@ -36,7 +38,10 @@ in {
     };
   };
 
-  modules.impermanence.directories = [statePath];
+  modules.impermanence.directories = [ statePath ];
 
-  modules.services.restic.paths = [statePath libraryPath];
+  modules.services.restic.paths = [
+    statePath
+    libraryPath
+  ];
 }

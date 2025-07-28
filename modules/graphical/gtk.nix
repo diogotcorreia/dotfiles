@@ -4,10 +4,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.graphical.gtk;
-in {
+in
+{
   options.modules.graphical.gtk.enable = mkEnableOption "gtk";
 
   config = mkIf cfg.enable {

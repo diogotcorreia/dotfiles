@@ -1,7 +1,11 @@
 # Common configuration for nginx reverse proxy
-{lib, ...}: {
+{ lib, ... }:
+{
   # Open firewall ports
-  networking.firewall.allowedTCPPorts = with lib.my.ports; [http https];
+  networking.firewall.allowedTCPPorts = with lib.my.ports; [
+    http
+    https
+  ];
 
   services.nginx = {
     enable = true;

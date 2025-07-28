@@ -3,10 +3,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   port = lib.my.ports.battleships;
   domain = "battleships.diogotc.com";
-in {
+in
+{
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
@@ -28,8 +30,8 @@ in {
     };
 
     description = "A Battleship game made for the web";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = lib.getExe pkgs.my.battleship-js.server;
 

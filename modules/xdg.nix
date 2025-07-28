@@ -3,10 +3,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.xdg;
-in {
+in
+{
   options.modules.xdg.enable = mkEnableOption "xdg";
 
   # Home manager module

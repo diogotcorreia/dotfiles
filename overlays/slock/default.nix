@@ -1,5 +1,6 @@
 # Apply patches to slock
-{...}: _final: prev: {
+{ ... }:
+_final: prev: {
   slock = prev.slock.overrideAttrs (_oldAttrs: {
     patches = [
       (prev.fetchpatch {

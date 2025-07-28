@@ -4,13 +4,14 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   home-manager.sharedModules = [
     inputs.spicetify-nix.homeManagerModules.default
   ];
 
   # Allow mDNS discovery of Google Cast devices
-  networking.firewall.allowedUDPPorts = [lib.my.ports.mdnsGoogleCast];
+  networking.firewall.allowedUDPPorts = [ lib.my.ports.mdnsGoogleCast ];
 
   hm.programs.spicetify = {
     enable = true;
@@ -26,6 +27,6 @@
       hidePodcasts
     ];
 
-    enabledCustomApps = with pkgs.spicetify.apps; [lyricsPlus];
+    enabledCustomApps = with pkgs.spicetify.apps; [ lyricsPlus ];
   };
 }

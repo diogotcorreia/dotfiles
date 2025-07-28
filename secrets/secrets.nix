@@ -8,54 +8,69 @@ let
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPMXN8lpc/JVPwgV9s46o8DbOI0VMd3/x/CbcUdi5XsL";
   zeusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKv9y2DlGhcZRBxiqo3bmTs2U7LX7y/KC3Dwo07Ywugr";
 
-  personalSystems = [apolloSystem bacchusSystem];
-  serverSystems = [athenaSystem broSystem febSystem heraSystem phobosSystem zeusSystem];
+  personalSystems = [
+    apolloSystem
+    bacchusSystem
+  ];
+  serverSystems = [
+    athenaSystem
+    broSystem
+    febSystem
+    heraSystem
+    phobosSystem
+    zeusSystem
+  ];
   allSystems = personalSystems ++ serverSystems;
 
-  mkSystem = dir: publicKeys: files:
-    builtins.foldl' (acc: file: let
-      filePrefix =
-        if dir == null
-        then ""
-        else "${dir}/";
-    in
+  mkSystem =
+    dir: publicKeys: files:
+    builtins.foldl' (
+      acc: file:
+      let
+        filePrefix = if dir == null then "" else "${dir}/";
+      in
       acc
       ++ [
         {
           name = "${filePrefix}${file}.age";
-          value = {inherit publicKeys;};
+          value = { inherit publicKeys; };
         }
-      ]) []
-    files;
+      ]
+    ) [ ] files;
 
-  flatten = list: builtins.foldl' (acc: system: acc ++ system) [] list;
+  flatten = list: builtins.foldl' (acc: system: acc ++ system) [ ] list;
   mkSecrets = systems: builtins.listToAttrs (flatten systems);
 in
-  mkSecrets [
-    (mkSystem null allSystems [
-      "nebulaCA"
-      "nixCacheDiogotcReadTokenNetrc"
-    ])
+mkSecrets [
+  (mkSystem null allSystems [
+    "nebulaCA"
+    "nixCacheDiogotcReadTokenNetrc"
+  ])
 
-    (mkSystem null personalSystems [
-      "caidoCaPrivateKey"
-      "heroisDoMarWireguardPrivateKey"
-    ])
+  (mkSystem null personalSystems [
+    "caidoCaPrivateKey"
+    "heroisDoMarWireguardPrivateKey"
+  ])
 
-    (mkSystem null (personalSystems ++ [broSystem]) [
-      "frpAuthEnv"
-    ])
+  (mkSystem null (personalSystems ++ [ broSystem ]) [
+    "frpAuthEnv"
+  ])
 
-    (mkSystem "apollo" [apolloSystem] [
+  (mkSystem "apollo"
+    [ apolloSystem ]
+    [
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
-    ])
+    ]
+  )
 
-    (mkSystem "athena" [athenaSystem] [
+  (mkSystem "athena"
+    [ athenaSystem ]
+    [
       "autheliaJwtSecret"
       "autheliaLdapPassword"
       "autheliaOidcHmacSecret"
@@ -81,9 +96,12 @@ in
       "tritonBotEnv"
       "umamiAppSecret"
       "wastebinEnv"
-    ])
+    ]
+  )
 
-    (mkSystem "bacchus" [bacchusSystem] [
+  (mkSystem "bacchus"
+    [ bacchusSystem ]
+    [
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"
@@ -91,9 +109,12 @@ in
       "resticSshConfig"
       "resticSshKey"
       "wireguardClientPrivateKey"
-    ])
+    ]
+  )
 
-    (mkSystem "bro" [broSystem] [
+  (mkSystem "bro"
+    [ broSystem ]
+    [
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "hassSecrets"
@@ -104,9 +125,12 @@ in
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
-    ])
+    ]
+  )
 
-    (mkSystem "feb" [febSystem] [
+  (mkSystem "feb"
+    [ febSystem ]
+    [
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "hassSecrets"
@@ -117,9 +141,12 @@ in
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
-    ])
+    ]
+  )
 
-    (mkSystem "hera" [heraSystem] [
+  (mkSystem "hera"
+    [ heraSystem ]
+    [
       "altUrlsDiscordBotEnv"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
@@ -142,9 +169,12 @@ in
       "transmissionProxySshConfig"
       "transmissionProxySshPassword"
       "wireguardPrivateKey"
-    ])
+    ]
+  )
 
-    (mkSystem "phobos" [phobosSystem] [
+  (mkSystem "phobos"
+    [ phobosSystem ]
+    [
       "atticdEnvVariables"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
@@ -158,9 +188,12 @@ in
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
-    ])
+    ]
+  )
 
-    (mkSystem "zeus" [zeusSystem] [
+  (mkSystem "zeus"
+    [ zeusSystem ]
+    [
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "healthchecksUrl"
@@ -170,5 +203,6 @@ in
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
-    ])
-  ]
+    ]
+  )
+]

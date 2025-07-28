@@ -3,8 +3,14 @@
   config,
   lib,
   ...
-}: let
-  inherit (lib) mkEnableOption mkIf mkOption types;
+}:
+let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.modules.services.dnsoverhttps;
 
   # https://dnscrypt.info/stamps/
@@ -22,7 +28,8 @@
     "sdns://AgcAAAAAAAAADVsyNjIwOmZlOjpmZV0ADWRucy5xdWFkOS5uZXQKL2Rucy1xdWVyeQ" # [2620:fe::fe]
     "sdns://AgcAAAAAAAAADFsyNjIwOmZlOjo5XQANZG5zLnF1YWQ5Lm5ldAovZG5zLXF1ZXJ5" # [2620:fe::9]
   ];
-in {
+in
+{
   options.modules.services.dnsoverhttps = {
     enable = mkEnableOption "Cloudflare DNS over HTTPS proxy";
 
@@ -38,7 +45,7 @@ in {
 
   config = mkIf cfg.enable {
     networking = {
-      nameservers = ["127.0.0.53"];
+      nameservers = [ "127.0.0.53" ];
       dhcpcd.extraConfig = "nohook resolv.conf";
     };
 
@@ -47,14 +54,10 @@ in {
       settings = {
         inherit fallback upstream;
         listen-addrs = [
-          (
-            if cfg.all-interfaces
-            then "0.0.0.0"
-            else "127.0.0.53"
-          )
+          (if cfg.all-interfaces then "0.0.0.0" else "127.0.0.53")
         ];
       };
-      flags = ["--cache"];
+      flags = [ "--cache" ];
     };
   };
 }

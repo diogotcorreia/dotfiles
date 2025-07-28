@@ -4,10 +4,12 @@
   lib,
   secrets,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.server;
-in {
+in
+{
   options.modules.server = {
     enable = mkEnableOption "server common configuration";
   };

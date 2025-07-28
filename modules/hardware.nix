@@ -3,11 +3,13 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkOption types;
 
   cfg = config.my.hardware;
-in {
+in
+{
   options.my.hardware = {
     batteryPowered = mkOption {
       type = types.bool;

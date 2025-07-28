@@ -4,7 +4,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   dataDir = "/var/lib/stalwart-mail";
   httpPort = lib.my.ports.stalwartMailHttp;
 
@@ -28,8 +29,9 @@
     "if" = field;
     "then" = data;
   };
-  otherwise = value: {"else" = value;};
-in {
+  otherwise = value: { "else" = value; };
+in
+{
   services.stalwart-mail = {
     enable = true;
     settings = {
@@ -78,40 +80,44 @@ in {
 
       report.analysis = {
         # https://github.com/stalwartlabs/mail-server/discussions/877
-        addresses = ["dmarc-reports@*" "spf-reports@*" "tls-reports@*"];
+        addresses = [
+          "dmarc-reports@*"
+          "spf-reports@*"
+          "tls-reports@*"
+        ];
         forward = false;
       };
 
       server.listener = {
         smtp = {
-          bind = ["[::]:${toString lib.my.ports.smtp}"];
+          bind = [ "[::]:${toString lib.my.ports.smtp}" ];
           protocol = "smtp";
         };
         submission = {
-          bind = ["[::]:${toString lib.my.ports.emailSubmission}"];
+          bind = [ "[::]:${toString lib.my.ports.emailSubmission}" ];
           protocol = "smtp";
         };
         submmissions = {
-          bind = ["[::]:${toString lib.my.ports.emailSubmissionTls}"];
+          bind = [ "[::]:${toString lib.my.ports.emailSubmissionTls}" ];
           protocol = "smtp";
           tls.implicit = true;
         };
         imap = {
-          bind = ["[::]:${toString lib.my.ports.imap}"];
+          bind = [ "[::]:${toString lib.my.ports.imap}" ];
           protocol = "imap";
         };
         imaps = {
-          bind = ["[::]:${toString lib.my.ports.imaps}"];
+          bind = [ "[::]:${toString lib.my.ports.imaps}" ];
           protocol = "imap";
           tls.implicit = true;
         };
         sieve = {
-          bind = ["[::]:${toString lib.my.ports.manageSieve}"];
+          bind = [ "[::]:${toString lib.my.ports.manageSieve}" ];
           protocol = "managesieve";
           tls.implicit = true;
         };
         http = {
-          bind = ["[::]:${toString httpPort}"];
+          bind = [ "[::]:${toString httpPort}" ];
           protocol = "http";
           url = "https://${stalwartDomain}";
           use-x-forwarded = true;
@@ -158,8 +164,8 @@ in {
   ];
 
   systemd.services.stalwart-mail = {
-    wants = ["acme-${stalwartDomain}.service"];
-    after = ["acme-${stalwartDomain}.service"];
+    wants = [ "acme-${stalwartDomain}.service" ];
+    after = [ "acme-${stalwartDomain}.service" ];
     preStart = ''
       mkdir -p ${dataDir}/db
     '';
@@ -195,9 +201,10 @@ in {
     '';
   };
 
-  services.nginx.virtualHosts = let
-    proxy = "http://localhost:${toString httpPort}";
-  in
+  services.nginx.virtualHosts =
+    let
+      proxy = "http://localhost:${toString httpPort}";
+    in
     {
       ${stalwartDomain} = {
         enableACME = true;
@@ -207,32 +214,29 @@ in {
     // lib.listToAttrs (
       map (
         d:
-          lib.nameValuePair
-          "autoconfig.${d}"
-          {
-            serverAliases = [
-              "autodiscovery.${d}"
-            ];
-            enableACME = true;
-            locations = {
-              "= /mail/config-v1.1.xml".proxyPass = proxy;
-              "= /autodiscovery/autodiscovery.xml".proxyPass = proxy;
-              "/.well-known".proxyPass = proxy;
-            };
-          }
-      )
-      mailDomains
+        lib.nameValuePair "autoconfig.${d}" {
+          serverAliases = [
+            "autodiscovery.${d}"
+          ];
+          enableACME = true;
+          locations = {
+            "= /mail/config-v1.1.xml".proxyPass = proxy;
+            "= /autodiscovery/autodiscovery.xml".proxyPass = proxy;
+            "/.well-known".proxyPass = proxy;
+          };
+        }
+      ) mailDomains
     );
 
   security.acme.certs.${stalwartDomain} = {
     # keep a stable private key for TLSA records (DANE)
     # https://community.letsencrypt.org/t/please-avoid-3-0-1-and-3-0-2-dane-tlsa-records-with-le-certificates/7022/14
-    extraLegoRenewFlags = ["--reuse-key"];
+    extraLegoRenewFlags = [ "--reuse-key" ];
     # Restart stalwart to apply new certificates
-    reloadServices = ["stalwart-mail.service"];
+    reloadServices = [ "stalwart-mail.service" ];
   };
 
-  modules.impermanence.directories = [dataDir];
+  modules.impermanence.directories = [ dataDir ];
   modules.services.restic = {
     backupPrepareCommand = ''
       ${pkgs.coreutils}/bin/install -b -m 700 -d /tmp/stalwart-db-secondary /tmp/stalwart-db-backup

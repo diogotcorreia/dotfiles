@@ -1,5 +1,6 @@
 # Thunderbird email client configuration
-{...}: {
+{ ... }:
+{
   hm.programs.thunderbird = {
     enable = true;
     profiles.default = {

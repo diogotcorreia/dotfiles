@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   domain = "book-api.diogotc.com";
   port = lib.my.ports.bookMetadataApi;
 
@@ -11,17 +12,18 @@
   group = "book-metadata-api";
 
   stateDirectory = "/var/lib/book-metadata-api";
-in {
+in
+{
   users.users.${user} = {
     inherit group;
     isSystemUser = true;
   };
-  users.groups.${group} = {};
+  users.groups.${group} = { };
 
   systemd.services.book-metadata-api = {
     description = "Book Metadata API";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
 
     # TODO harden systemd unit
     serviceConfig = rec {
@@ -50,5 +52,5 @@ in {
     };
   };
 
-  modules.impermanence.directories = [stateDirectory];
+  modules.impermanence.directories = [ stateDirectory ];
 }

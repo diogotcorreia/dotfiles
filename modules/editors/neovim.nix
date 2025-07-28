@@ -4,8 +4,14 @@
   config,
   lib,
   ...
-}: let
-  inherit (lib) mkEnableOption mkIf lists strings;
+}:
+let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    lists
+    strings
+    ;
   cfg = config.modules.editors.neovim;
   personal = config.modules.personal.enable;
   git = config.modules.shell.git.enable;
@@ -17,7 +23,8 @@
     nix
     python
   ];
-  personalGrammars = with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars;
+  personalGrammars =
+    with pkgs.unstable.vimPlugins.nvim-treesitter.builtGrammars;
     lists.optionals personal [
       astro
       c
@@ -116,9 +123,7 @@
     }
 
     {
-      plugin =
-        nvim-treesitter.withPlugins
-        (_plugins: commonGrammars ++ personalGrammars);
+      plugin = nvim-treesitter.withPlugins (_plugins: commonGrammars ++ personalGrammars);
       type = "lua";
       config = ''
         -- enable highlighting
@@ -232,7 +237,8 @@
       '';
     }
   ];
-  personalPlugins = with pkgs.unstable.vimPlugins;
+  personalPlugins =
+    with pkgs.unstable.vimPlugins;
     lists.optionals personal [
       {
         plugin = nvim-lspconfig;
@@ -380,7 +386,8 @@
         '';
       }
     ];
-  gitPlugins = with pkgs.unstable.vimPlugins;
+  gitPlugins =
+    with pkgs.unstable.vimPlugins;
     lists.optionals git [
       vim-fugitive
       {
@@ -404,7 +411,8 @@
         '';
       }
     ];
-  personalPackages = with pkgs;
+  personalPackages =
+    with pkgs;
     lists.optionals personal [
       astro-language-server # Astro LSP
       ruff # Python LSP
@@ -415,7 +423,8 @@
       unstable.tinymist # Typst LSP
       typstyle # Typst Formatter
     ];
-in {
+in
+{
   options.modules.editors.neovim.enable = mkEnableOption "neovim";
 
   # Home manager module
@@ -639,6 +648,8 @@ in {
       EDITOR = "nvim";
       MANPAGER = "nvim +Man!";
     };
-    systemd.user.sessionVariables = {EDITOR = "nvim";};
+    systemd.user.sessionVariables = {
+      EDITOR = "nvim";
+    };
   };
 }

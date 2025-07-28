@@ -5,7 +5,8 @@
   pkgs,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     graphical.caido
     graphical.discord

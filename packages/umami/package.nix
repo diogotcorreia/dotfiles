@@ -14,8 +14,9 @@
   # build variables
   databaseType ? "postgresql",
   collectApiEndpoint ? "",
-  trackerScriptNames ? [],
-}: let
+  trackerScriptNames ? [ ],
+}:
+let
   sources = lib.importJSON ./sources.json;
   pnpm = pnpm_10;
 
@@ -56,141 +57,140 @@
     };
   });
 in
-  stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "umami";
-    version = "2.18.1";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "umami";
+  version = "2.18.1";
 
-    nativeBuildInputs = [
-      makeWrapper
-      nodejs
-      pnpm.configHook
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pnpm.configHook
+  ];
 
-    src = fetchFromGitHub {
-      owner = "umami-software";
-      repo = "umami";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-gUcP7Bk62vZfAcYhiHMY8Et8mLBd6dn0dH4frOfzekY=";
-    };
+  src = fetchFromGitHub {
+    owner = "umami-software";
+    repo = "umami";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gUcP7Bk62vZfAcYhiHMY8Et8mLBd6dn0dH4frOfzekY=";
+  };
 
-    # install dev dependencies as well, for rollup
-    pnpmInstallFlags = ["--prod=false"];
+  # install dev dependencies as well, for rollup
+  pnpmInstallFlags = [ "--prod=false" ];
 
-    pnpmDeps = pnpm.fetchDeps {
-      inherit
-        (finalAttrs)
-        pname
-        pnpmInstallFlags
-        version
-        src
-        ;
-      hash = "sha256-WkSMA18QapbpYe2FMabD4yNmbg0WRdnymZHfv1VOjSk=";
-    };
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs)
+      pname
+      pnpmInstallFlags
+      version
+      src
+      ;
+    hash = "sha256-WkSMA18QapbpYe2FMabD4yNmbg0WRdnymZHfv1VOjSk=";
+  };
 
-    env.CYPRESS_INSTALL_BINARY = "0";
-    env.NODE_ENV = "production";
-    env.NEXT_TELEMETRY_DISABLED = "1";
+  env.CYPRESS_INSTALL_BINARY = "0";
+  env.NODE_ENV = "production";
+  env.NEXT_TELEMETRY_DISABLED = "1";
 
-    # copy-db-files uses this variable to decide which Prisma schema to use
-    env.DATABASE_TYPE = databaseType;
+  # copy-db-files uses this variable to decide which Prisma schema to use
+  env.DATABASE_TYPE = databaseType;
 
-    env.COLLECT_API_ENDPOINT = collectApiEndpoint;
-    env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
+  env.COLLECT_API_ENDPOINT = collectApiEndpoint;
+  env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
 
-    # Allow prisma-cli to find prisma-engines without having to download them
-    env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
-    env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
+  # Allow prisma-cli to find prisma-engines without having to download them
+  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
+  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
 
-    buildPhase = ''
-      runHook preBuild
+  buildPhase = ''
+    runHook preBuild
 
-      pnpm copy-db-files
-      pnpm build-db-client # prisma generate
+    pnpm copy-db-files
+    pnpm build-db-client # prisma generate
 
-      pnpm build-tracker
-      pnpm build-app
+    pnpm build-tracker
+    pnpm build-app
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
-    checkPhase = ''
-      runHook preCheck
+  checkPhase = ''
+    runHook preCheck
 
-      pnpm test
+    pnpm test
 
-      runHook postCheck
-    '';
+    runHook postCheck
+  '';
 
-    doCheck = true;
+  doCheck = true;
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mv .next/standalone $out
-      mv .next/static $out/.next/static
+    mv .next/standalone $out
+    mv .next/static $out/.next/static
 
-      # Include prisma cli in next standalone build.
-      # This is preferred to using the prisma in nixpkgs because it guarantees
-      # the version matches.
-      # See https://nextjs-forum.com/post/1280550687998083198
-      # and https://nextjs.org/docs/pages/api-reference/config/next-config-js/output#caveats
-      # Unfortunately, using outputFileTracingIncludes doesn't work because of pnpm's symlink structure,
-      # so we just copy the files manually.
-      mkdir -p $out/node_modules/.bin
-      cp node_modules/.bin/prisma $out/node_modules/.bin
-      cp -a node_modules/prisma $out/node_modules
-      cp -a node_modules/.pnpm/@prisma* $out/node_modules/.pnpm
-      cp -a node_modules/.pnpm/prisma* $out/node_modules/.pnpm
-      # remove broken symlinks (some dependencies that are not relevant for running migrations)
-      find $out/node_modules/.pnpm/@prisma* -xtype l -exec rm {} \;
-      find $out/node_modules/.pnpm/prisma* -xtype l -exec rm {} \;
+    # Include prisma cli in next standalone build.
+    # This is preferred to using the prisma in nixpkgs because it guarantees
+    # the version matches.
+    # See https://nextjs-forum.com/post/1280550687998083198
+    # and https://nextjs.org/docs/pages/api-reference/config/next-config-js/output#caveats
+    # Unfortunately, using outputFileTracingIncludes doesn't work because of pnpm's symlink structure,
+    # so we just copy the files manually.
+    mkdir -p $out/node_modules/.bin
+    cp node_modules/.bin/prisma $out/node_modules/.bin
+    cp -a node_modules/prisma $out/node_modules
+    cp -a node_modules/.pnpm/@prisma* $out/node_modules/.pnpm
+    cp -a node_modules/.pnpm/prisma* $out/node_modules/.pnpm
+    # remove broken symlinks (some dependencies that are not relevant for running migrations)
+    find $out/node_modules/.pnpm/@prisma* -xtype l -exec rm {} \;
+    find $out/node_modules/.pnpm/prisma* -xtype l -exec rm {} \;
 
-      cp -R public $out/public
-      cp -R prisma $out/prisma
+    cp -R public $out/public
+    cp -R prisma $out/prisma
 
-      ln -s ${geocities} $out/geo
+    ln -s ${geocities} $out/geo
 
-      mkdir -p $out/bin
-      # Run database migrations before starting umami.
-      # Add openssl to PATH since it is required for prisma to make SSL connections.
-      # Force working directory to $out because umami assumes many paths are relative to it (e.g., prisma and geolite).
-      makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
-        --set NODE_ENV production \
-        --set NEXT_TELEMETRY_DISABLED 1 \
-        --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines'}/lib/libquery_engine.node" \
-        --set PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines'}/bin/schema-engine" \
-        --prefix PATH : ${
+    mkdir -p $out/bin
+    # Run database migrations before starting umami.
+    # Add openssl to PATH since it is required for prisma to make SSL connections.
+    # Force working directory to $out because umami assumes many paths are relative to it (e.g., prisma and geolite).
+    makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
+      --set NODE_ENV production \
+      --set NEXT_TELEMETRY_DISABLED 1 \
+      --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines'}/lib/libquery_engine.node" \
+      --set PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines'}/bin/schema-engine" \
+      --prefix PATH : ${
         lib.makeBinPath [
           openssl
           nodejs
         ]
       } \
-        --chdir $out \
-        --run "$out/node_modules/.bin/prisma migrate deploy" \
-        --add-flags "$out/server.js"
+      --chdir $out \
+      --run "$out/node_modules/.bin/prisma migrate deploy" \
+      --add-flags "$out/server.js"
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    passthru = {
-      inherit
-        sources
-        geocities
-        ;
-      prisma-engines = prisma-engines';
-      updateScript = ./update.sh;
-    };
+  passthru = {
+    inherit
+      sources
+      geocities
+      ;
+    prisma-engines = prisma-engines';
+    updateScript = ./update.sh;
+  };
 
-    meta = with lib; {
-      changelog = "https://github.com/umami-software/umami/releases/tag/v${finalAttrs.version}";
-      description = "Simple, easy to use, self-hosted web analytics solution";
-      homepage = "https://umami.is/";
-      license = with lib.licenses; [
-        mit
-        cc-by-40 # geocities
-      ];
-      platforms = lib.platforms.linux;
-      mainProgram = "umami-server";
-      maintainers = with maintainers; [diogotcorreia];
-    };
-  })
+  meta = with lib; {
+    changelog = "https://github.com/umami-software/umami/releases/tag/v${finalAttrs.version}";
+    description = "Simple, easy to use, self-hosted web analytics solution";
+    homepage = "https://umami.is/";
+    license = with lib.licenses; [
+      mit
+      cc-by-40 # geocities
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "umami-server";
+    maintainers = with maintainers; [ diogotcorreia ];
+  };
+})

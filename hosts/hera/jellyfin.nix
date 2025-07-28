@@ -5,7 +5,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   domainJellyfin = "jellyfin.diogotc.com";
   portJellyfin = lib.my.ports.jellyfin;
   domainJellyseerr = "jellyseerr.diogotc.com";
@@ -27,12 +28,12 @@
   mediaGroup = "diskstation-media";
 
   transmissionGroup = config.services.transmission.group;
-in {
+in
+{
   # https://nixos.wiki/wiki/Accelerated_Video_Playback
   nixpkgs.overlays = [
     (_final: prev: {
-      intel-vaapi-driver =
-        prev.intel-vaapi-driver.override {enableHybridCodec = true;};
+      intel-vaapi-driver = prev.intel-vaapi-driver.override { enableHybridCodec = true; };
     })
   ];
   hardware.graphics = {
@@ -73,7 +74,7 @@ in {
   # Setup PostgreSQL for Jellyseerr
   # https://docs.jellyseerr.dev/extending-jellyseerr/database-config
   services.postgresql = {
-    ensureDatabases = [jellyseerrDb];
+    ensureDatabases = [ jellyseerrDb ];
     ensureUsers = [
       {
         name = jellyseerrDb;
@@ -97,14 +98,16 @@ in {
   fileSystems."/media/diskstation" = {
     device = "//${diskstationAddress}/video";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      permissions = "uid=root,gid=${mediaGroup},file_mode=0664,dir_mode=0775";
-    in [
-      "${automount_opts},vers=2.0,credentials=${config.age.secrets.diskstationSambaCredentials.path},nobrl,${permissions}"
-    ];
+        permissions = "uid=root,gid=${mediaGroup},file_mode=0664,dir_mode=0775";
+      in
+      [
+        "${automount_opts},vers=2.0,credentials=${config.age.secrets.diskstationSambaCredentials.path},nobrl,${permissions}"
+      ];
   };
 
   # Open Jellyfin local discovery ports
@@ -114,58 +117,60 @@ in {
     jellyfinAutoDiscoveryClients
   ];
 
-  services.nginx.virtualHosts = let
-    autheliaRules = "group:arrs";
-  in {
-    ${domainJellyfin} = {
-      enableACME = true;
-      locations."/".proxyPass = "http://127.0.0.1:${toString portJellyfin}";
-    };
-    ${domainJellyseerr} = {
-      enableACME = true;
-      locations."/".proxyPass = "http://[::1]:${toString portJellyseerr}";
-    };
-    ${domainRadarr} = {
-      enableACME = true;
-      inherit autheliaRules;
-      restrictToNebula = true;
-      autheliaHealthchecksPath = "/api/v3/health";
-      locations."/" = {
-        enableAuthelia = true;
-        proxyPass = "http://[::1]:${toString portRadarr}";
+  services.nginx.virtualHosts =
+    let
+      autheliaRules = "group:arrs";
+    in
+    {
+      ${domainJellyfin} = {
+        enableACME = true;
+        locations."/".proxyPass = "http://127.0.0.1:${toString portJellyfin}";
+      };
+      ${domainJellyseerr} = {
+        enableACME = true;
+        locations."/".proxyPass = "http://[::1]:${toString portJellyseerr}";
+      };
+      ${domainRadarr} = {
+        enableACME = true;
+        inherit autheliaRules;
+        restrictToNebula = true;
+        autheliaHealthchecksPath = "/api/v3/health";
+        locations."/" = {
+          enableAuthelia = true;
+          proxyPass = "http://[::1]:${toString portRadarr}";
+        };
+      };
+      ${domainSonarr} = {
+        enableACME = true;
+        inherit autheliaRules;
+        restrictToNebula = true;
+        autheliaHealthchecksPath = "/api/v3/health";
+        locations."/" = {
+          enableAuthelia = true;
+          proxyPass = "http://[::1]:${toString portSonarr}";
+        };
+      };
+      ${domainJackett} = {
+        enableACME = true;
+        inherit autheliaRules;
+        restrictToNebula = true;
+        autheliaHealthchecksPath = "/health";
+        locations."/" = {
+          enableAuthelia = true;
+          proxyPass = "http://127.0.0.1:${toString portJackett}";
+        };
+      };
+      ${domainBazarr} = {
+        enableACME = true;
+        inherit autheliaRules;
+        restrictToNebula = true;
+        autheliaHealthchecksPath = "/api/system/health";
+        locations."/" = {
+          enableAuthelia = true;
+          proxyPass = "http://127.0.0.1:${toString portBazarr}";
+        };
       };
     };
-    ${domainSonarr} = {
-      enableACME = true;
-      inherit autheliaRules;
-      restrictToNebula = true;
-      autheliaHealthchecksPath = "/api/v3/health";
-      locations."/" = {
-        enableAuthelia = true;
-        proxyPass = "http://[::1]:${toString portSonarr}";
-      };
-    };
-    ${domainJackett} = {
-      enableACME = true;
-      inherit autheliaRules;
-      restrictToNebula = true;
-      autheliaHealthchecksPath = "/health";
-      locations."/" = {
-        enableAuthelia = true;
-        proxyPass = "http://127.0.0.1:${toString portJackett}";
-      };
-    };
-    ${domainBazarr} = {
-      enableACME = true;
-      inherit autheliaRules;
-      restrictToNebula = true;
-      autheliaHealthchecksPath = "/api/system/health";
-      locations."/" = {
-        enableAuthelia = true;
-        proxyPass = "http://127.0.0.1:${toString portBazarr}";
-      };
-    };
-  };
 
   my.services.authelia.oauthClients = [
     # See https://www.authelia.com/integration/openid-connect/jellyfin/ for Jellyfin configuration
@@ -176,7 +181,11 @@ in {
       redirect_uris = [
         "https://${domainJellyfin}/sso/OID/redirect/authelia"
       ];
-      scopes = ["openid" "profile" "groups"];
+      scopes = [
+        "openid"
+        "profile"
+        "groups"
+      ];
       policy = "one_factor";
       subject = "group:jellyfin";
 
@@ -186,11 +195,17 @@ in {
     }
   ];
 
-  users.groups.${mediaGroup} = {};
+  users.groups.${mediaGroup} = { };
   users.users = {
-    ${config.services.radarr.user}.extraGroups = [mediaGroup transmissionGroup];
-    ${config.services.sonarr.user}.extraGroups = [mediaGroup transmissionGroup];
-    ${config.services.bazarr.user}.extraGroups = [mediaGroup];
+    ${config.services.radarr.user}.extraGroups = [
+      mediaGroup
+      transmissionGroup
+    ];
+    ${config.services.sonarr.user}.extraGroups = [
+      mediaGroup
+      transmissionGroup
+    ];
+    ${config.services.bazarr.user}.extraGroups = [ mediaGroup ];
   };
 
   modules.impermanence.directories = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = ./diogo.gpg.asc;
   dontUnpack = true;
 
-  nativeBuildInputs = [sequoia-sq];
+  nativeBuildInputs = [ sequoia-sq ];
   installPhase = ''
     mkdir $out
     export SEQUOIA_CERT_STORE="$(mktemp -d)"

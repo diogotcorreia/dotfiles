@@ -1,5 +1,6 @@
 # Application launcher
-{...}: {
+{ ... }:
+{
   hm.programs.fuzzel = {
     enable = true;
     settings = {

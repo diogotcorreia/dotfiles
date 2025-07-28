@@ -1,5 +1,6 @@
 # global programs and packages
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Non-essential packages (for personal systems)
   environment.systemPackages = with pkgs; [
     # Nix formatter

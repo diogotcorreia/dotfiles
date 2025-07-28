@@ -5,7 +5,8 @@
   lib,
   secrets,
   ...
-}: {
+}:
+{
   # Contains:
   # machine nix-cache.diogotc.com
   # password <token>
@@ -14,12 +15,15 @@
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       # Don't add @wheel here, since it allows for privilege escalation
       # https://github.com/NixOS/nix/issues/9649#issuecomment-1868001568
-      trusted-users = ["root"];
-      substituters = ["https://nix-cache.diogotc.com/dtc"];
-      trusted-public-keys = ["dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U="];
+      trusted-users = [ "root" ];
+      substituters = [ "https://nix-cache.diogotc.com/dtc" ];
+      trusted-public-keys = [ "dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=" ];
       netrc-file = config.age.secrets.nixCacheDiogotcReadTokenNetrc.path;
 
       # https://jackson.dev/post/nix-reasonable-defaults/

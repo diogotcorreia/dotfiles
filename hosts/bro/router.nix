@@ -3,7 +3,8 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   wanInterface = config.my.networking.wiredInterface;
   lanInterface = "enp0s20f0u4";
 
@@ -12,7 +13,8 @@
   iotCloudSubnet = "192.168.2";
   iotLocalSubnet = "192.168.3";
   guestSubnet = "192.168.4";
-in {
+in
+{
   boot = {
     kernel = {
       sysctl = {
@@ -53,7 +55,7 @@ in {
 
   # TODO this needs way better rules
   networking.firewall = {
-    trustedInterfaces = ["vlan-private"];
+    trustedInterfaces = [ "vlan-private" ];
     interfaces = {
       vlan-iot-cloud = {
         allowedUDPPorts = with lib.my.ports; [
@@ -81,7 +83,12 @@ in {
 
   networking.nat = {
     enable = true;
-    internalInterfaces = ["vlan-private" "vlan-iot-cloud" "vlan-iot-local" "vlan-guest"];
+    internalInterfaces = [
+      "vlan-private"
+      "vlan-iot-cloud"
+      "vlan-iot-local"
+      "vlan-guest"
+    ];
     externalInterface = wanInterface;
   };
 
@@ -134,7 +141,12 @@ in {
       bogus-priv = true;
       no-resolv = true;
 
-      interface = ["vlan-private" "vlan-iot-cloud" "vlan-iot-local" "vlan-guest"];
+      interface = [
+        "vlan-private"
+        "vlan-iot-cloud"
+        "vlan-iot-local"
+        "vlan-guest"
+      ];
       dhcp-range = [
         "${privateSubnet}.50,${privateSubnet}.254,24h"
         "${iotCloudSubnet}.50,${iotCloudSubnet}.254,24h"
@@ -150,5 +162,5 @@ in {
   };
   modules.services.dnsoverhttps.all-interfaces = true;
 
-  modules.impermanence.directories = ["/var/lib/dnsmasq"];
+  modules.impermanence.directories = [ "/var/lib/dnsmasq" ];
 }

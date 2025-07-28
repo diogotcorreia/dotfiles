@@ -10,7 +10,8 @@
   yarnConfigHook,
   yarnInstallHook,
   ...
-}: let
+}:
+let
   version = "0-unstable-2025-02-02";
   commonSrc = fetchFromGitHub {
     owner = "diogotcorreia";
@@ -96,12 +97,11 @@
       rm "$OUT_JS_DIR"/{.prettierrc,README.md,default.env}
     '';
 
-    meta =
-      meta'
-      // {
-        mainProgram = finalAttrs.pname;
-      };
+    meta = meta' // {
+      mainProgram = finalAttrs.pname;
+    };
   });
-in {
+in
+{
   inherit client server;
 }

@@ -5,7 +5,8 @@
   secrets,
   pkgs,
   ...
-}: let
+}:
+let
   dataDir = "/var/lib/meilisearch";
   port = lib.my.ports.meilisearch;
 
@@ -13,7 +14,8 @@
 
   user = "meilisearch";
   group = "meilisearch";
-in {
+in
+{
   age.secrets = {
     meilisearchEnv.file = secrets.host.meilisearchEnv;
   };
@@ -38,7 +40,7 @@ in {
   };
 
   users = {
-    groups.${group} = {};
+    groups.${group} = { };
     users.${user} = {
       isSystemUser = true;
       inherit group;
@@ -54,6 +56,6 @@ in {
     };
   };
 
-  modules.impermanence.directories = [dataDir];
-  modules.services.restic.paths = [dataDir];
+  modules.impermanence.directories = [ dataDir ];
+  modules.services.restic.paths = [ dataDir ];
 }

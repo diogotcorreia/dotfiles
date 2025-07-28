@@ -5,13 +5,15 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   port = lib.my.ports.dtcLabs;
   domain = "labs.diogotc.com";
 
   dbUsername = "dtc-labs";
   dbName = "triton";
-in {
+in
+{
   age.secrets = {
     # Contains:
     # PAYPAL_CLIENT_ID
@@ -33,18 +35,20 @@ in {
 
   services.postgresql = {
     enable = lib.mkDefault true;
-    ensureUsers = [{name = dbUsername;}];
-    ensureDatabases = [dbName];
+    ensureUsers = [ { name = dbUsername; } ];
+    ensureDatabases = [ dbName ];
   };
-  systemd.services.postgresql.serviceConfig.ExecStartPost = let
-    sqlFile = pkgs.writeText "dtc-labs-postgresql-setup.sql" ''
-      GRANT INSERT ON TABLE "triton_buyers" TO "${dbUsername}";
-    '';
-  in [
-    ''
-      ${lib.getExe' config.services.postgresql.package "psql"} -d "${dbName}" -f "${sqlFile}"
-    ''
-  ];
+  systemd.services.postgresql.serviceConfig.ExecStartPost =
+    let
+      sqlFile = pkgs.writeText "dtc-labs-postgresql-setup.sql" ''
+        GRANT INSERT ON TABLE "triton_buyers" TO "${dbUsername}";
+      '';
+    in
+    [
+      ''
+        ${lib.getExe' config.services.postgresql.package "psql"} -d "${dbName}" -f "${sqlFile}"
+      ''
+    ];
 
   systemd.services.dtc-labs = {
     environment = {
@@ -60,8 +64,8 @@ in {
     };
 
     description = "Experimental code snippets for dtc";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = lib.getExe pkgs.my.dtc-labs;
 

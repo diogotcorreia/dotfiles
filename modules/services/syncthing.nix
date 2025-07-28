@@ -4,10 +4,12 @@
   lib,
   user,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.services.syncthing;
-in {
+in
+{
   options.modules.services.syncthing.enable = mkEnableOption "syncthing";
 
   config = mkIf cfg.enable {
@@ -18,7 +20,11 @@ in {
       dataDir = "${config.my.homeDirectory}/.syncthing";
       overrideFolders = false;
       overrideDevices = false;
-      settings = {gui = {theme = "dark";};};
+      settings = {
+        gui = {
+          theme = "dark";
+        };
+      };
     };
   };
 }

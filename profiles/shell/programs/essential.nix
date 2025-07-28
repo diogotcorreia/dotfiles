@@ -3,7 +3,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # Essential packages
   environment.systemPackages = with pkgs; [
     # Compressed archives
@@ -22,6 +23,6 @@
     agenix
 
     # switch-to-configuration wrapper
-    (pkgs.my.nixos-switch.override {hostName = config.networking.hostName;})
+    (pkgs.my.nixos-switch.override { hostName = config.networking.hostName; })
   ];
 }

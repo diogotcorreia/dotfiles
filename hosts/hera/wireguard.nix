@@ -5,7 +5,8 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   listenPort = lib.my.ports.wireguard;
 
   outInterface = config.networking.nat.externalInterface;
@@ -14,12 +15,18 @@
 
   mkPeers = builtins.map (peer: {
     inherit (peer) publicKey;
-    allowedIPs = ["${subnet}.${toString peer.lastOctect}/32" "fc00:192:168:101::${toString peer.lastOctect}/128" "224.0.0.0/24" "ff00::/16"];
+    allowedIPs = [
+      "${subnet}.${toString peer.lastOctect}/32"
+      "fc00:192:168:101::${toString peer.lastOctect}/128"
+      "224.0.0.0/24"
+      "ff00::/16"
+    ];
   });
-in {
-  networking.nat.internalInterfaces = ["wg0"];
+in
+{
+  networking.nat.internalInterfaces = [ "wg0" ];
   networking.firewall = {
-    allowedUDPPorts = [listenPort];
+    allowedUDPPorts = [ listenPort ];
   };
 
   age.secrets = {
@@ -31,7 +38,7 @@ in {
       inherit listenPort;
       # corresponding public key: XM/VFX/CWunMSiJX0tcv7F/ShDHPlP4RCySvbPkqHHQ=
       privateKeyFile = config.age.secrets.wireguardPrivateKey.path;
-      ips = ["${subnet}.1/24"];
+      ips = [ "${subnet}.1/24" ];
       postSetup = ''
         ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${subnet}.0/24 -o ${outInterface} -j MASQUERADE
       '';

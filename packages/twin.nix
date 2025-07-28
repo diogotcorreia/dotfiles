@@ -10,7 +10,8 @@
   yarnConfigHook,
   yarnInstallHook,
   ...
-}: let
+}:
+let
   version = "0-unstable-2025-02-03";
   commonSrc = fetchFromGitHub {
     owner = "tritonmc";
@@ -100,12 +101,11 @@
       rm -r "$OUT_JS_DIR"/{config.def.js,migrations,upload,.prettierrc.json}
     '';
 
-    meta =
-      meta'
-      // {
-        mainProgram = "twin-backend";
-      };
+    meta = meta' // {
+      mainProgram = "twin-backend";
+    };
   });
-in {
+in
+{
   inherit backend frontend;
 }

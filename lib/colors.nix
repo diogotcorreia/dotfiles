@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   # Nord color schemes
   # https://www.nordtheme.com/docs/colors-and-palettes
   colors = {

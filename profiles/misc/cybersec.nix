@@ -1,5 +1,6 @@
 # Cybersecurity and CTF related tools.
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.wireshark = {
     enable = true;
     package = pkgs.wireshark; # use Qt version instead of CLI version

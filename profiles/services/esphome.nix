@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   domain = "esphome.${config.networking.hostName}.diogotc.com";
-in {
+in
+{
   services.esphome = {
     enable = true;
     enableUnixSocket = true;
@@ -30,6 +32,6 @@ in {
     group = "esphome";
   };
   users.groups.esphome = lib.mkIf (config.services.nginx.enable) {
-    members = ["nginx"];
+    members = [ "nginx" ];
   };
 }

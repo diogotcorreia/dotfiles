@@ -5,29 +5,33 @@
   pkgs,
   secrets,
   ...
-}: let
+}:
+let
   dbUsername = "triton-bot";
   dbName = "triton";
-in {
+in
+{
   # Contains:
   # DISCORD_TOKEN
   age.secrets.tritonBotEnv.file = secrets.host.tritonBotEnv;
 
   services.postgresql = {
     enable = lib.mkDefault true;
-    ensureUsers = [{name = dbUsername;}];
-    ensureDatabases = [dbName];
+    ensureUsers = [ { name = dbUsername; } ];
+    ensureDatabases = [ dbName ];
   };
-  systemd.services.postgresql.serviceConfig.ExecStartPost = let
-    sqlFile = pkgs.writeText "triton-bot-postgresql-setup.sql" ''
-      GRANT SELECT ON TABLE "triton_buyers" TO "${dbUsername}";
-      GRANT SELECT, INSERT ON TABLE "twin_tokens" TO "${dbUsername}";
-    '';
-  in [
-    ''
-      ${lib.getExe' config.services.postgresql.package "psql"} -d "${dbName}" -f "${sqlFile}"
-    ''
-  ];
+  systemd.services.postgresql.serviceConfig.ExecStartPost =
+    let
+      sqlFile = pkgs.writeText "triton-bot-postgresql-setup.sql" ''
+        GRANT SELECT ON TABLE "triton_buyers" TO "${dbUsername}";
+        GRANT SELECT, INSERT ON TABLE "twin_tokens" TO "${dbUsername}";
+      '';
+    in
+    [
+      ''
+        ${lib.getExe' config.services.postgresql.package "psql"} -d "${dbName}" -f "${sqlFile}"
+      ''
+    ];
 
   systemd.services.triton-bot = {
     environment = {
@@ -38,8 +42,8 @@ in {
     };
 
     description = "A Discord bot to verify purchases of Triton";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       ExecStart = lib.getExe pkgs.my.triton-bot;
 

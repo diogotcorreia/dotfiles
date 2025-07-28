@@ -1,7 +1,9 @@
 # Options for declaring file system structure
-{lib, ...}: let
+{ lib, ... }:
+let
   inherit (lib) mkOption types;
-in {
+in
+{
   options.my.filesystem = {
     espSize = mkOption {
       type = lib.types.strMatching "[0-9]+[KMGTP]?";

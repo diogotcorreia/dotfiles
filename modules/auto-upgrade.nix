@@ -4,9 +4,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.autoUpgrade;
-in {
+in
+{
   options = {
     my.autoUpgrade = {
       enable = lib.mkOption {
@@ -21,7 +23,10 @@ in {
       };
 
       operation = lib.mkOption {
-        type = lib.types.enum ["switch" "boot"];
+        type = lib.types.enum [
+          "switch"
+          "boot"
+        ];
         default = "switch";
         example = "boot";
         description = ''
@@ -42,7 +47,7 @@ in {
 
       flags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         example = [
           "-I"
           "stuff=/home/alice/nixos-stuff"
@@ -114,7 +119,8 @@ in {
           lower = "01:00";
           upper = "05:00";
         };
-        type = with lib.types;
+        type =
+          with lib.types;
           nullOr (submodule {
             options = {
               lower = lib.mkOption {
@@ -160,7 +166,10 @@ in {
       }
     ];
 
-    system.autoUpgrade.flags = ["--refresh" "--no-link"];
+    system.autoUpgrade.flags = [
+      "--refresh"
+      "--no-link"
+    ];
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -188,93 +197,95 @@ in {
         config.programs.ssh.package
       ];
 
-      script = let
-        curl = "${pkgs.curl}/bin/curl";
-        date = "${pkgs.coreutils}/bin/date";
-        readlink = "${pkgs.coreutils}/bin/readlink";
-        shutdown = "${config.systemd.package}/bin/shutdown";
+      script =
+        let
+          curl = "${pkgs.curl}/bin/curl";
+          date = "${pkgs.coreutils}/bin/date";
+          readlink = "${pkgs.coreutils}/bin/readlink";
+          shutdown = "${config.systemd.package}/bin/shutdown";
 
-        fetchFromCache = ''
-          nix build ${lib.escapeShellArgs cfg.flags} -- "$config_store_path"
-        '';
-        setProfile = ''
-          nix-env -p /nix/var/nix/profiles/system --set "$config_store_path"
-        '';
-        switchToConfiguration = action: ''
-          systemd-run \
-            -E LOCALE_ARCHIVE \
-            -E NIXOS_INSTALL_BOOTLOADER= \
-            --collect \
-            --no-ask-password \
-            --pipe \
-            --quiet \
-            --service-type=exec \
-            --unit=nixos-rebuild-switch-to-configuration \
-            --wait \
-            "$config_store_path/bin/switch-to-configuration" \
-            ${lib.escapeShellArg action}
-        '';
-      in
-        if cfg.allowReboot
-        then ''
-          config_store_path="$(${curl} --url ${lib.escapeShellArg cfg.storePathUrl})"
-          if [[ ! "$config_store_path" =~ ^\/nix\/store\/[a-z0-9]{32}-nixos-system-${config.networking.hostName}-[0-9]{2}\.[0-9]{2}\.[0-9]{8}\.[a-z0-9]{7,}$ ]]; then
-            echo "fetched store path does not match expected format: $config_store_path"
-            exit 1
-          fi
-
-          ${fetchFromCache}
-          ${setProfile}
-          ${switchToConfiguration "boot"}
-
-          booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
-          built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-
-          ${lib.optionalString (cfg.rebootWindow != null) ''
-            current_time="$(${date} +%H:%M)"
-
-            lower="${cfg.rebootWindow.lower}"
-            upper="${cfg.rebootWindow.upper}"
-
-            if [[ "''${lower}" < "''${upper}" ]]; then
-              if [[ "''${current_time}" > "''${lower}" ]] && \
-                 [[ "''${current_time}" < "''${upper}" ]]; then
-                do_reboot="true"
-              else
-                do_reboot="false"
-              fi
-            else
-              # lower > upper, so we are crossing midnight (e.g. lower=23h, upper=6h)
-              # we want to reboot if cur > 23h or cur < 6h
-              if [[ "''${current_time}" < "''${upper}" ]] || \
-                 [[ "''${current_time}" > "''${lower}" ]]; then
-                do_reboot="true"
-              else
-                do_reboot="false"
-              fi
+          fetchFromCache = ''
+            nix build ${lib.escapeShellArgs cfg.flags} -- "$config_store_path"
+          '';
+          setProfile = ''
+            nix-env -p /nix/var/nix/profiles/system --set "$config_store_path"
+          '';
+          switchToConfiguration = action: ''
+            systemd-run \
+              -E LOCALE_ARCHIVE \
+              -E NIXOS_INSTALL_BOOTLOADER= \
+              --collect \
+              --no-ask-password \
+              --pipe \
+              --quiet \
+              --service-type=exec \
+              --unit=nixos-rebuild-switch-to-configuration \
+              --wait \
+              "$config_store_path/bin/switch-to-configuration" \
+              ${lib.escapeShellArg action}
+          '';
+        in
+        if cfg.allowReboot then
+          ''
+            config_store_path="$(${curl} --url ${lib.escapeShellArg cfg.storePathUrl})"
+            if [[ ! "$config_store_path" =~ ^\/nix\/store\/[a-z0-9]{32}-nixos-system-${config.networking.hostName}-[0-9]{2}\.[0-9]{2}\.[0-9]{8}\.[a-z0-9]{7,}$ ]]; then
+              echo "fetched store path does not match expected format: $config_store_path"
+              exit 1
             fi
-          ''}
 
-          if [ "''${booted}" = "''${built}" ]; then
+            ${fetchFromCache}
+            ${setProfile}
+            ${switchToConfiguration "boot"}
+
+            booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
+            built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+
+            ${lib.optionalString (cfg.rebootWindow != null) ''
+              current_time="$(${date} +%H:%M)"
+
+              lower="${cfg.rebootWindow.lower}"
+              upper="${cfg.rebootWindow.upper}"
+
+              if [[ "''${lower}" < "''${upper}" ]]; then
+                if [[ "''${current_time}" > "''${lower}" ]] && \
+                   [[ "''${current_time}" < "''${upper}" ]]; then
+                  do_reboot="true"
+                else
+                  do_reboot="false"
+                fi
+              else
+                # lower > upper, so we are crossing midnight (e.g. lower=23h, upper=6h)
+                # we want to reboot if cur > 23h or cur < 6h
+                if [[ "''${current_time}" < "''${upper}" ]] || \
+                   [[ "''${current_time}" > "''${lower}" ]]; then
+                  do_reboot="true"
+                else
+                  do_reboot="false"
+                fi
+              fi
+            ''}
+
+            if [ "''${booted}" = "''${built}" ]; then
+              ${switchToConfiguration cfg.operation}
+            ${lib.optionalString (cfg.rebootWindow != null) ''
+              elif [ "''${do_reboot}" != true ]; then
+                echo "Outside of configured reboot window, skipping."
+            ''}
+            else
+              ${shutdown} -r +1
+            fi
+          ''
+        else
+          ''
+            ${fetchFromCache}
+            ${setProfile}
             ${switchToConfiguration cfg.operation}
-          ${lib.optionalString (cfg.rebootWindow != null) ''
-            elif [ "''${do_reboot}" != true ]; then
-              echo "Outside of configured reboot window, skipping."
-          ''}
-          else
-            ${shutdown} -r +1
-          fi
-        ''
-        else ''
-          ${fetchFromCache}
-          ${setProfile}
-          ${switchToConfiguration cfg.operation}
-        '';
+          '';
 
       startAt = cfg.dates;
 
-      after = ["network-online.target"];
-      wants = ["network-online.target"];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
     };
 
     systemd.timers.nixos-upgrade = {

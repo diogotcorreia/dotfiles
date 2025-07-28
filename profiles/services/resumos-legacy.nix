@@ -1,5 +1,6 @@
 # Legacy redirect to resumos.leic.pt
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   unregisterServiceWorker = pkgs.writeTextDir "service-worker.js" ''
     self.addEventListener('install', () => self.skipWaiting());
 
@@ -12,7 +13,8 @@
       });
     });
   '';
-in {
+in
+{
   services.nginx.virtualHosts = {
     "ist.diogotc.com" = {
       enableACME = true;

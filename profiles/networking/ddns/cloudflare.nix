@@ -4,17 +4,19 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   inherit (lib) escapeShellArgs getExe;
 
   records = [
     "world.${config.networking.hostName}.${config.networking.domain}"
   ];
-in {
+in
+{
   systemd.services.cloudflare-ddns = {
     description = "CloudFlare Dynamic DNS Client";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
     startAt = "*:0/5";
     serviceConfig = {
       Type = "simple";

@@ -3,10 +3,12 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkIf;
   cfg = config.modules.graphical.programs;
-in {
+in
+{
   # Follow graphical.programs.enable
   config.hm = mkIf cfg.enable {
     programs.zathura = {
@@ -22,7 +24,7 @@ in {
       enable = true;
       defaultApplications = {
         # Use Zathura as default PDF viewer
-        "application/pdf" = ["org.pwmt.zathura.desktop"];
+        "application/pdf" = [ "org.pwmt.zathura.desktop" ];
       };
     };
   };

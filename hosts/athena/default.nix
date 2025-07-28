@@ -4,7 +4,8 @@
   lib,
   profiles,
   ...
-}: {
+}:
+{
   imports = with profiles; [
     hardware.filesystem.ext4-impermanence
     hardware.zram
@@ -103,7 +104,9 @@
       restic = {
         enable = true;
 
-        timerConfig = {OnCalendar = "04:00";};
+        timerConfig = {
+          OnCalendar = "04:00";
+        };
       };
     };
     shell = {

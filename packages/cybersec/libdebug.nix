@@ -32,7 +32,8 @@ python3Packages.buildPythonPackage rec {
     ninja
   ];
 
-  propagatedBuildInputs = with python3Packages;
+  propagatedBuildInputs =
+    with python3Packages;
     [
       nanobind
       typing-extensions

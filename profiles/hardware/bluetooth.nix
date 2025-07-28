@@ -1,5 +1,6 @@
 # Enables bluetooth and related TUI
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Enable bluetooth stack
   hardware.bluetooth.enable = true;
 

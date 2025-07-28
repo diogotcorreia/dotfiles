@@ -5,11 +5,13 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   hassDomain = "ha.feb.diogotc.com";
 
   mqttPort = lib.my.ports.mqtt;
-in {
+in
+{
   services.home-assistant = {
     enable = true;
 
@@ -39,7 +41,7 @@ in {
     listeners = [
       {
         users.iot = {
-          acl = ["readwrite #"]; # allow read/write access to all topics
+          acl = [ "readwrite #" ]; # allow read/write access to all topics
           hashedPassword = "$7$101$nT82g1HieqPNbN82$7q44zrzOHaT9Clft/Vt6w4G957NW/rft9aX41UHQC4I3m0pqeq3KlGHfKaSzmPnyWV4YKLtqwyDo5pR6pEp3fQ==";
         };
         port = mqttPort;

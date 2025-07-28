@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "Program that converts JSON files to KDL";
     homepage = "https://github.com/AgathaSorceress/json2kdl";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [feathecutie];
+    maintainers = with lib.maintainers; [ feathecutie ];
   };
 }

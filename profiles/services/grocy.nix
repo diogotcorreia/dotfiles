@@ -1,9 +1,11 @@
 # Configuration for Grocy (https://github.com/grocy/grocy).
-{config, ...}: let
+{ config, ... }:
+let
   domain = "grocy.diogotc.com";
 
   dataDir = config.services.grocy.dataDir;
-in {
+in
+{
   services.grocy = {
     enable = true;
 
@@ -20,7 +22,7 @@ in {
     };
   };
 
-  modules.impermanence.directories = [dataDir];
+  modules.impermanence.directories = [ dataDir ];
 
-  modules.services.restic.paths = [dataDir];
+  modules.services.restic.paths = [ dataDir ];
 }

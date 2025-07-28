@@ -4,10 +4,12 @@
   pkgs,
   profiles,
   ...
-}: let
+}:
+let
   socksBindAddr = "localhost";
   socksPort = lib.my.ports.socksFirefox;
-in {
+in
+{
   imports = with profiles; [
     # Requires firefox profile
     graphical.firefox
@@ -15,11 +17,9 @@ in {
 
   # Alias to open profile
   hm.home.packages = [
-    (
-      pkgs.writeScriptBin "firefox-proxied" ''
-        ${lib.getExe pkgs.firefox} -P proxied
-      ''
-    )
+    (pkgs.writeScriptBin "firefox-proxied" ''
+      ${lib.getExe pkgs.firefox} -P proxied
+    '')
   ];
 
   hm.programs.firefox.profiles.proxied = {

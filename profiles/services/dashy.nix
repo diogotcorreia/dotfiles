@@ -1,5 +1,6 @@
 # Dashy dashboard configuration
-{...}: let
+{ ... }:
+let
   domain = "dash.diogotc.com";
 
   mkUrl = subdomain: "https://${subdomain}.diogotc.com";
@@ -187,7 +188,8 @@
       url = mkUrl "bin";
     };
   };
-in {
+in
+{
   services.dashy = {
     enable = true;
 

@@ -4,10 +4,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   domain = "location.diogotc.com";
   port = lib.my.ports.dawarich;
-in {
+in
+{
   # TODO move docker containers to NixOS services
 
   services.nginx.virtualHosts.${domain} = {
@@ -15,30 +17,32 @@ in {
     autheliaRules = "group:location";
     # Require auth for everything except upload and health endpoints
     # App is in development mode, so better not trust it
-    locations = let
-      proxyPass = "http://127.0.0.1:${toString port}";
-    in {
-      "/" = {
-        enableAuthelia = true;
-        inherit proxyPass;
+    locations =
+      let
+        proxyPass = "http://127.0.0.1:${toString port}";
+      in
+      {
+        "/" = {
+          enableAuthelia = true;
+          inherit proxyPass;
+        };
+        "= /api/v1/owntracks/points" = {
+          inherit proxyPass;
+          extraConfig = ''
+            limit_except POST {
+              deny all;
+            }
+          '';
+        };
+        "= /api/v1/health" = {
+          inherit proxyPass;
+          extraConfig = ''
+            limit_except GET {
+              deny all;
+            }
+          '';
+        };
       };
-      "= /api/v1/owntracks/points" = {
-        inherit proxyPass;
-        extraConfig = ''
-          limit_except POST {
-            deny all;
-          }
-        '';
-      };
-      "= /api/v1/health" = {
-        inherit proxyPass;
-        extraConfig = ''
-          limit_except GET {
-            deny all;
-          }
-        '';
-      };
-    };
   };
 
   modules.services.restic = {
@@ -58,5 +62,5 @@ in {
 
   # TODO: remove when dawarich is migrated to a NixOS module.
   # Required for dumping the database inside the docker container
-  systemd.services."restic-backups-systemBackup".serviceConfig.SupplementaryGroups = ["docker"];
+  systemd.services."restic-backups-systemBackup".serviceConfig.SupplementaryGroups = [ "docker" ];
 }

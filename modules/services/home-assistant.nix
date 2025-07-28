@@ -5,9 +5,9 @@
   pkgs,
   secrets,
   ...
-}: let
-  inherit
-    (lib)
+}:
+let
+  inherit (lib)
     escapeShellArg
     escapeShellArgs
     mdDoc
@@ -22,7 +22,8 @@
   cfg = config.services.home-assistant;
 
   quirksDir = "${cfg.configDir}/zha-quirks";
-in {
+in
+{
   # Extend home-assistant module with extra options
   options.services.home-assistant = {
     useSensibleDefaults = mkOption {
@@ -58,7 +59,7 @@ in {
     };
     customZhaQuirks = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       description = mdDoc ''
         List of custom ZHA (Zigbee) quirks to load.
 
@@ -76,25 +77,26 @@ in {
   ];
 
   config = mkIf cfg.enable {
-    systemd.services.home-assistant.preStart = let
-      copyZhaQuirks = ''
-        mkdir -p ${escapeShellArg quirksDir}
+    systemd.services.home-assistant.preStart =
+      let
+        copyZhaQuirks = ''
+          mkdir -p ${escapeShellArg quirksDir}
 
-        # remove quirks symlinked in from below the /nix/store
-        readarray -d "" quirks < <(find ${escapeShellArg quirksDir} -maxdepth 1 -type l -print0)
-        for quirk in "''${quirks[@]}"; do
-          if [[ "$(readlink "$quirk")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
-            rm "$quirk"
-          fi
-        done
+          # remove quirks symlinked in from below the /nix/store
+          readarray -d "" quirks < <(find ${escapeShellArg quirksDir} -maxdepth 1 -type l -print0)
+          for quirk in "''${quirks[@]}"; do
+            if [[ "$(readlink "$quirk")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
+              rm "$quirk"
+            fi
+          done
 
-        # recreate symlinks for desired quirks
-        declare -a quirks=(${escapeShellArgs cfg.customZhaQuirks})
-        for quirk in "''${quirks[@]}"; do
-          ln -fs "$quirk" ${escapeShellArg quirksDir}
-        done
-      '';
-    in
+          # recreate symlinks for desired quirks
+          declare -a quirks=(${escapeShellArgs cfg.customZhaQuirks})
+          for quirk in "''${quirks[@]}"; do
+            ln -fs "$quirk" ${escapeShellArg quirksDir}
+          done
+        '';
+      in
       mkAfter copyZhaQuirks;
 
     age.secrets = mkIf cfg.useSensibleDefaults {
@@ -109,56 +111,59 @@ in {
 
     services.home-assistant = {
       # Use package from nixos-unstable
-      package = pkgs.unstable.home-assistant.overrideAttrs (_old: {doInstallCheck = false;});
+      package = pkgs.unstable.home-assistant.overrideAttrs (_old: {
+        doInstallCheck = false;
+      });
 
-      config =
-        {
-          zha = mkIf (cfg.customZhaQuirks != []) {
-            enable_quirks = true;
-            custom_quirks_path = quirksDir;
-          };
-        }
-        // (optionalAttrs cfg.useSensibleDefaults {
-          default_config = {};
-          frontend = {};
+      config = {
+        zha = mkIf (cfg.customZhaQuirks != [ ]) {
+          enable_quirks = true;
+          custom_quirks_path = quirksDir;
+        };
+      }
+      // (optionalAttrs cfg.useSensibleDefaults {
+        default_config = { };
+        frontend = { };
 
-          # https://github.com/NixOS/nixpkgs/issues/330377
-          isal = {};
+        # https://github.com/NixOS/nixpkgs/issues/330377
+        isal = { };
 
-          homeassistant = {
-            name = mkDefault "Home";
-            latitude = mkDefault "!secret latitude";
-            longitude = mkDefault "!secret longitude";
-            elevation = mkDefault "!secret elevation";
-            unit_system = mkDefault "metric";
-            time_zone = mkDefault config.time.timeZone;
-          };
+        homeassistant = {
+          name = mkDefault "Home";
+          latitude = mkDefault "!secret latitude";
+          longitude = mkDefault "!secret longitude";
+          elevation = mkDefault "!secret elevation";
+          unit_system = mkDefault "metric";
+          time_zone = mkDefault config.time.timeZone;
+        };
 
-          http = {
-            server_port = lib.my.ports.homeAssistant;
-            ip_ban_enabled = mkDefault true;
-            login_attempts_threshold = mkDefault 3;
-            use_x_forwarded_for = mkDefault true;
-            trusted_proxies = mkDefault ["127.0.0.1" "::1"];
-          };
+        http = {
+          server_port = lib.my.ports.homeAssistant;
+          ip_ban_enabled = mkDefault true;
+          login_attempts_threshold = mkDefault 3;
+          use_x_forwarded_for = mkDefault true;
+          trusted_proxies = mkDefault [
+            "127.0.0.1"
+            "::1"
+          ];
+        };
 
-          "automation manual" = [];
-          "automation ui" = "!include automations.yaml";
-          "scene manual" = [];
-          "scene ui" = "!include scenes.yaml";
-        })
-        // (optionalAttrs cfg.usePostgresql {
-          recorder = {
-            db_url = "postgresql://@/hass";
-            purge_keep_days = 90; # we have a bit more capacity if we are using postgresql
-          };
-        });
+        "automation manual" = [ ];
+        "automation ui" = "!include automations.yaml";
+        "scene manual" = [ ];
+        "scene ui" = "!include scenes.yaml";
+      })
+      // (optionalAttrs cfg.usePostgresql {
+        recorder = {
+          db_url = "postgresql://@/hass";
+          purge_keep_days = 90; # we have a bit more capacity if we are using postgresql
+        };
+      });
 
       extraPackages = mkIf cfg.usePostgresql (
-        python3Packages:
-          with python3Packages; [
-            psycopg2
-          ]
+        python3Packages: with python3Packages; [
+          psycopg2
+        ]
       );
     };
 
@@ -177,15 +182,15 @@ in {
           ensureClauses.login = true;
         }
       ];
-      ensureDatabases = ["hass"];
+      ensureDatabases = [ "hass" ];
     };
 
     modules.impermanence.directories = mkIf cfg.useSensibleDefaults [
       config.services.home-assistant.configDir
     ];
     modules.services.restic = mkIf cfg.useSensibleDefaults {
-      paths = [config.services.home-assistant.configDir];
-      exclude = ["${config.services.home-assistant.configDir}/secrets.yaml"];
+      paths = [ config.services.home-assistant.configDir ];
+      exclude = [ "${config.services.home-assistant.configDir}/secrets.yaml" ];
     };
 
     # Configure Nginx

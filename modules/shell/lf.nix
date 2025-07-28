@@ -4,19 +4,27 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.modules.shell.lf;
-in {
+in
+{
   options.modules.shell.lf.enable = mkEnableOption "lf";
 
   # Home manager modules
   config.hm = mkIf cfg.enable {
-    home.packages = with pkgs; [file highlight python311Packages.pdftotext];
+    home.packages = with pkgs; [
+      file
+      highlight
+      python311Packages.pdftotext
+    ];
 
     programs.lf = {
       enable = true;
-      settings = {icons = true;};
+      settings = {
+        icons = true;
+      };
       previewer = {
         keybinding = "i";
         source = pkgs.writeShellScript "previewer.sh" ''
@@ -77,7 +85,9 @@ in {
           }}
         '';
       };
-      keybindings = {gs = ":fzf_search";};
+      keybindings = {
+        gs = ":fzf_search";
+      };
     };
 
     # LFCD is a wrapper around LF that sets the CWD to the
