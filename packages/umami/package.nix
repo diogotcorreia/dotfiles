@@ -15,6 +15,7 @@
   databaseType ? "postgresql",
   collectApiEndpoint ? "",
   trackerScriptNames ? [ ],
+  basePath ? "",
 }:
 let
   sources = lib.importJSON ./sources.json;
@@ -59,7 +60,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umami";
-  version = "2.18.1";
+  version = "2.19.0";
 
   nativeBuildInputs = [
     makeWrapper
@@ -71,7 +72,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "umami-software";
     repo = "umami";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gUcP7Bk62vZfAcYhiHMY8Et8mLBd6dn0dH4frOfzekY=";
+    hash = "sha256-luiwGmCujbFGWANSCOiHIov56gsMQ6M+Bj0stcz9he8=";
   };
 
   # install dev dependencies as well, for rollup
@@ -84,7 +85,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-WkSMA18QapbpYe2FMabD4yNmbg0WRdnymZHfv1VOjSk=";
+    fetcherVersion = 2;
+    hash = "sha256-2GiCeCt/mU5Dm5YHQgJF3127WPHq5QLX8JRcUv6B6lE=";
   };
 
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -96,6 +98,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   env.COLLECT_API_ENDPOINT = collectApiEndpoint;
   env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
+  env.BASE_PATH = basePath;
 
   # Allow prisma-cli to find prisma-engines without having to download them
   env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
