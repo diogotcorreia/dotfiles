@@ -79,4 +79,5 @@ in
   modules.impermanence.directories = [ dataDir ];
 
   modules.services.restic.paths = [ dataDir ];
+  modules.services.restic.exclude = [ "${dataDir}/log" ];
 }

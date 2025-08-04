@@ -228,4 +228,15 @@ in
     config.services.jackett.dataDir
     bazarrDirectory
   ];
+  modules.services.restic.exclude = [
+    "${config.services.jellyfin.dataDir}/log"
+    "${config.services.jellyfin.dataDir}/metadata/livetv"
+    "${config.services.jellyfin.dataDir}/transcode"
+    "${lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir}/cache"
+    "${lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir}/logs"
+    "${config.services.radarr.dataDir}/logs"
+    "${config.services.sonarr.dataDir}/logs"
+    "${config.services.jackett.dataDir}/log.txt"
+    "${bazarrDirectory}/log"
+  ];
 }
