@@ -12,8 +12,18 @@
     settings = {
       theme = "nord";
       show_startup_tips = false;
+      default_layout = "compact";
       # Avoid keeping dead sessions around
       session_serialization = false;
+
+      plugins = {
+        compact-bar = {
+          _props = {
+            location = "zellij:compact-bar";
+          };
+          tooltip = "F1";
+        };
+      };
     };
   };
 
