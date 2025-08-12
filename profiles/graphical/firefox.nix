@@ -53,8 +53,10 @@
         # disable pocket
         "extensions.pocket.enabled" = false;
 
-        # disable AI chat bot
+        # disable AI features
+        "browser.ml.enabled" = false;
         "browser.ml.chat.enabled" = false;
+        "browser.ml.linkPreview.enabled" = false;
       };
     };
   };
