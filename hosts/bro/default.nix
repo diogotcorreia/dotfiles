@@ -13,6 +13,7 @@
     security.acme.cloudflare
     security.fail2ban
     server.minimal
+    services.frp.client
     services.frp.server
     services.nginx.common
     services.grocy
