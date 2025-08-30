@@ -42,7 +42,6 @@ in
   services.nginx.virtualHosts = {
     ${hassDomain} = {
       enableACME = true;
-      enableCloudflareRealIp = true;
       locations."/".proxyPass = "http://[::1]:${toString hassPort}";
     };
     ${noderedDomain} = {
