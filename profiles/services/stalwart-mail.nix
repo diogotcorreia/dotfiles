@@ -54,11 +54,13 @@ in
         "lookup.default.domain"
         "lookup.default.hostname"
         "report.analysis.*"
+        "resolver.*"
         "server.*"
         "!server.blocked-ip.*"
         "session.mta-sts.*"
-        "session.rcpt.rewrite"
         "session.rcpt.catch-all"
+        "session.rcpt.rewrite.*"
+        "spam-filter.resource"
         "storage.blob"
         "storage.data"
         "storage.directory"
@@ -66,6 +68,7 @@ in
         "storage.lookup"
         "store.*"
         "tracer.*"
+        "webadmin.*"
       ];
 
       # Store blobs in the file system for easier backups.
