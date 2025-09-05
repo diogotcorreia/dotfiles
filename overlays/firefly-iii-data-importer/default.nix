@@ -9,6 +9,12 @@ _final: prev: {
       # This is helpful when the Nordigen/GoCardless EUA expires,
       # otherwise it is not possible to know which account expired
       ./0002-send-file-name-in-email.diff
+      # When the transaction ID starts with "FOBA", use GoCardless
+      # internal transaction ID instead.
+      # This is because this specific bank does not have a stable
+      # transaction ID (i.e., it changes every time data is fetched),
+      # resulting in duplicate transactions.
+      ./0003-use-internal-transaction-id-foba.diff
     ];
   });
 }
