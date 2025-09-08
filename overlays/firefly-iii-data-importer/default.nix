@@ -15,6 +15,8 @@ _final: prev: {
       # transaction ID (i.e., it changes every time data is fetched),
       # resulting in duplicate transactions.
       ./0003-use-internal-transaction-id-foba.diff
+      # Show GoCardless max access date for each bank during setup
+      ./0004-show-gocardless-max-access-days.diff
     ];
   });
 }
