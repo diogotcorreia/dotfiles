@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "alt-urls-discord-bot";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "alt-urls-discord-bot";
     rev = "v${version}";
-    hash = "sha256-+SX4mLW8Dl0m5PPsWRETHziqgvNDvKzbOHEskK2ja7w=";
+    hash = "sha256-4TCELsFRY5EuewQq+jGKAFput7GpXhZQkwCIs/WO0oY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lQtwm6G/hcsw3xgpvJMC00OFaTCX26PE9if+FqbLfuE=";
+  cargoHash = "sha256-MvvYUHfwTcwzY2Qpc3wU/RcA15uavZ1vDS6k1KxqcPc=";
 
   meta = with lib; {
     description = "Discord bot that provides alternative links to various social media services ";
