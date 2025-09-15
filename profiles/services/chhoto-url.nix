@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  pkgs,
   secrets,
   ...
 }:
@@ -15,50 +14,25 @@ in
 {
   age.secrets.chhotoUrlEnv.file = secrets.host.chhotoUrlEnv;
 
+  services.chhoto-url = {
+    enable = true;
+    environmentFiles = [
+      # contains "password=<password>"
+      config.age.secrets.chhotoUrlEnv.path
+    ];
+    settings = {
+      inherit port;
+      site_url = "https://${domain}";
+
+      allow_capital_letters = true;
+    };
+  };
+
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
       enableCloudflareRealIp = true;
       locations."/".proxyPass = "http://[::1]:${toString port}";
-    };
-  };
-
-  systemd.services.chhoto-url = {
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-    environment = {
-      port = toString port;
-      site_url = "https://${domain}";
-    };
-    serviceConfig = {
-      DevicePolicy = "closed";
-      DynamicUser = true;
-      ExecStart = "${lib.getExe pkgs.my.chhoto-url}";
-      LockPersonality = true;
-      MemoryDenyWriteExecute = true;
-      PrivateDevices = true;
-      PrivateUsers = true;
-      ProtectClock = true;
-      ProtectControlGroups = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
-      ProtectProc = "invisible";
-      RestrictAddressFamilies = [
-        "AF_INET"
-        "AF_INET6"
-      ];
-      RestrictNamespaces = true;
-      RestrictRealtime = true;
-      SystemCallArchitectures = [ "native" ];
-      SystemCallFilter = [ "@system-service" ];
-      StateDirectory = baseNameOf stateDir;
-      ReadWritePaths = "/var/lib/${baseNameOf stateDir}";
-      WorkingDirectory = "/var/lib/${baseNameOf stateDir}";
-
-      # contains "password=<password>"
-      EnvironmentFile = config.age.secrets.chhotoUrlEnv.path;
     };
   };
 
