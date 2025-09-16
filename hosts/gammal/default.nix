@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  pkgs,
   profiles,
   secrets,
   user,
@@ -34,6 +35,18 @@
     createHome = true;
     hashedPasswordFile = config.age.secrets.titaHashedPassword.path;
   };
+
+  # Specific packages for this host
+  environment.systemPackages = with pkgs; [
+    # Browser
+    firefox
+    # Office Suite
+    libreoffice
+    # Music
+    spotify
+    # Video Conferencing
+    zoom-us
+  ];
 
   # Modules
   modules = {
