@@ -4,6 +4,7 @@
   lib,
   profiles,
   secrets,
+  user,
   ...
 }:
 {
@@ -88,6 +89,9 @@
 
     frequency = "weekly";
   };
+
+  # Hide "dtc" user from display manager
+  services.displayManager.hiddenUsers = [ user ];
 
   modules.impermanence.directories = [ "/home" ];
   # https://github.com/nix-community/impermanence/issues/276
