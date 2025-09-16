@@ -11,6 +11,7 @@
 {
   imports = with profiles; [
     graphical.cinnamon
+    hardware.bluetooth
     hardware.filesystem.ext4-impermanence
     hardware.zram
     laptop.auto-timezone
