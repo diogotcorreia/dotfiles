@@ -8,7 +8,7 @@
 }:
 {
   imports = with profiles; [
-    graphical.xfce
+    graphical.cinnamon
     hardware.filesystem.ext4-impermanence
     hardware.zram
     laptop.auto-timezone
