@@ -4,6 +4,7 @@ let
   bacchusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFuipxCcMp+IAh5TegpQxFqxsUHPHys1QxPwLoky7nCd";
   broSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ4GODzTdoSU1RS/1RU+EDZN1TxDYxqRct2q+OeWgv0f";
   febSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBVtyO4NZ3FNrffEJOGLzkVgtgpkMV1ouRkk34GslroU";
+  gammalSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF5so/RpIJlRm0pzcpBAvBVT8GyPKK8Qm6aR0lZo1g5B";
   heraSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/L7HpMOr7L8qDBJRF19lXR90xrn7tHmjhMnQhGGqvO";
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPMXN8lpc/JVPwgV9s46o8DbOI0VMd3/x/CbcUdi5XsL";
   zeusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKv9y2DlGhcZRBxiqo3bmTs2U7LX7y/KC3Dwo07Ywugr";
@@ -20,7 +21,10 @@ let
     phobosSystem
     zeusSystem
   ];
-  allSystems = personalSystems ++ serverSystems;
+  thirdPartySystems = [
+    gammalSystem
+  ];
+  allSystems = personalSystems ++ serverSystems ++ thirdPartySystems;
 
   mkSystem =
     dir: publicKeys: files:
@@ -141,6 +145,15 @@ mkSecrets [
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
+    ]
+  )
+
+  (mkSystem "gammal"
+    [ gammalSystem ]
+    [
+      "nebulaCert"
+      "nebulaKey"
+      "titaHashedPassword"
     ]
   )
 
