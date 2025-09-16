@@ -16,6 +16,7 @@
     hardware.zram
     laptop.auto-timezone
     meta.common
+    services.printing
   ];
 
   networking.hostId = "b884eaac";
