@@ -48,6 +48,9 @@
     zoom-us
   ];
 
+  # Set computer to Portuguese
+  i18n.defaultLocale = "pt_PT.UTF-8";
+
   # Modules
   modules = {
     services = {
