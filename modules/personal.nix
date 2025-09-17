@@ -96,12 +96,16 @@ in
           hostname = "feb.diogotc.com";
           user = "dtc";
         };
+        gammal = {
+          hostname = "192.168.100.51";
+          user = "dtc";
+        };
         hades = {
           hostname = "hades.pedropirescoaching.com";
           user = "dtc";
         };
         hera = {
-          hostname = "192.168.100.5";
+          hostname = "hera.diogotc.com";
           user = "dtc";
         };
         phobos = {
