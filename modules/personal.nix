@@ -136,6 +136,10 @@ in
           user = "dtc";
         };
       };
+
+      extraConfig = ''
+        VerifyHostKeyDNS yes
+      '';
     };
 
     system.activationScripts.diff = {
