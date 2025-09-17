@@ -68,6 +68,25 @@
           }
         ];
       };
+      restic =
+        let
+          homeDir = "/home/tita";
+        in
+        {
+          enable = true;
+
+          paths = [
+            "${homeDir}"
+          ];
+          exclude = [
+            "${homeDir}/.cache"
+          ];
+
+          timerConfig = {
+            OnCalendar = "07:00";
+            Persistent = true;
+          };
+        };
     };
     # TODO: get rid of this
     shell.zsh.enable = true;

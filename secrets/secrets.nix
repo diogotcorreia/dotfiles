@@ -154,6 +154,10 @@ mkSecrets [
       "nebulaCert"
       "nebulaKey"
       "titaHashedPassword"
+      "resticHealthchecksUrl"
+      "resticPassword"
+      "resticSshConfig"
+      "resticSshKey"
     ]
   )
 
