@@ -50,8 +50,8 @@ in
 
       peers = mkPeers [
         {
-          # xiaomi11tpro
-          publicKey = "YVATyja/uqW4BJMu9z/FXQZXivSb3USK0+e+/lWuUl8=";
+          # bluejay
+          publicKey = "ShErgwnyZkfBodbKJYxfVC9JEsJC5U9dkhAIwrQeOXM=";
           lastOctect = 2;
         }
         {
