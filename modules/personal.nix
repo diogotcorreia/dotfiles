@@ -72,18 +72,14 @@ in
         };
 
         apollo = {
-          hostname = "192.168.100.2";
+          hostname = "apollo.diogotc.com";
           user = "dtc";
         };
         bacchus = {
-          hostname = "192.168.100.3";
+          hostname = "bacchus.diogotc.com";
           user = "dtc";
         };
 
-        artemis = {
-          hostname = "artemis.diogotc.com";
-          user = "dtc";
-        };
         athena = {
           hostname = "world.athena.diogotc.com";
           user = "dtc";
