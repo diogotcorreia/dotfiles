@@ -1,4 +1,9 @@
-{ ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   services.xserver = {
     enable = true;
@@ -10,6 +15,12 @@
   };
   services.displayManager.defaultSession = "cinnamon";
   xdg.portal.enable = true;
+
+  environment.systemPackages =
+    with pkgs;
+    lib.optionals (config.services.printing.enable) [
+      system-config-printer
+    ];
 
   modules.impermanence.directories = [
     "/etc/NetworkManager/system-connections"
