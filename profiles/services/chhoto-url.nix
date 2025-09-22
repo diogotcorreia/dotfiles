@@ -22,6 +22,7 @@ in
     ];
     settings = {
       inherit port;
+      listen_address = "::1";
       site_url = "https://${domain}";
 
       allow_capital_letters = true;
