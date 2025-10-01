@@ -53,13 +53,13 @@ let
       title = "Firefly III";
       icon = "hl-firefly";
       description = "Personal finance manager";
-      url = mkUrl "firefly3";
+      url = mkUrl "firefly3.hera";
     };
     firefly-iii-data-importer = {
       title = "Firefly III Data Importer";
       icon = "hl-firefly";
       description = "Import data from banks and CSV files into Firefly III";
-      url = mkUrl "firefly3-csv";
+      url = mkUrl "firefly3-csv.hera";
     };
     grocy = {
       title = "Grocy";
