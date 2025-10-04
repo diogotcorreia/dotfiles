@@ -50,6 +50,10 @@
       url = "github:diogotcorreia/infra-keyval";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    ist-discord-bot = {
+      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.1";
+      inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO: rever to stable on 25.11
+    };
     flake-compat.url = "github:edolstra/flake-compat";
   };
 
@@ -96,6 +100,7 @@
         { system, ... }:
         {
           agenix = inputs.agenix.packages.${system}.default;
+          ist-discord-bot = inputs.ist-discord-bot.packages.${system}.default;
           lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
           spicetify = inputs.spicetify-nix.legacyPackages.${system};
         };

@@ -16,6 +16,7 @@
     services.authelia
     services.battleship-js
     services.chhoto-url
+    services.discord-bots.ist-discord-bot
     services.discord-bots.triton-bot
     services.dtc-labs
     services.gpg-wkd

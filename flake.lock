@@ -191,6 +191,27 @@
         "type": "github"
       }
     },
+    "ist-discord-bot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1759596570,
+        "narHash": "sha256-z3haDfcVtBdSrQiPoEbPx4/CkFo7JduFhTdR+/6zE3c=",
+        "owner": "ist-bot-team",
+        "repo": "ist-discord-bot",
+        "rev": "1789f9c78353a11cb0ce8c56950b5696d3b914b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ist-bot-team",
+        "ref": "v3.0.1",
+        "repo": "ist-discord-bot",
+        "type": "github"
+      }
+    },
     "lanzaboote": {
       "inputs": {
         "crane": "crane",
@@ -373,6 +394,7 @@
         "home": "home",
         "impermanence": "impermanence",
         "infra-keyval": "infra-keyval",
+        "ist-discord-bot": "ist-discord-bot",
         "lanzaboote": "lanzaboote",
         "lidl-to-grocy": "lidl-to-grocy",
         "nix-index-database": "nix-index-database",
