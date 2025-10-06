@@ -278,6 +278,7 @@ let
           lsp_config.ruff.setup(lsp_setup)
           lsp_config.ts_ls.setup(lsp_setup)
           lsp_config.ccls.setup(lsp_setup)
+          lsp_config.pylsp.setup(lsp_setup)
           lsp_config.nil_ls.setup(with_config({
             settings = {
               ['nil'] = {
@@ -416,6 +417,7 @@ let
     lists.optionals personal [
       astro-language-server # Astro LSP
       ruff # Python LSP
+      python3Packages.python-lsp-server # Python LSP
       ccls # C/C++ LSP
       nodePackages.typescript-language-server # JS/TS LSP
       nodePackages.vscode-langservers-extracted # HTML LSP
