@@ -14,8 +14,6 @@ let
 
   dbUsername = "nextcloud";
   dbDatabaseName = "nextcloud";
-
-  ncApps = config.services.nextcloud.package.packages.apps;
 in
 {
   age.secrets.nextcloudSecrets = {
@@ -81,12 +79,12 @@ in
 
     appstoreEnable = false;
     extraAppsEnable = true;
-    extraApps = with ncApps; {
+    extraApps = with config.services.nextcloud.package.packages.apps; {
       inherit
         calendar
         contacts
         cookbook
-        # cospend (see below)
+        cospend
         deck
         gpoddersync # podcasts sync service
         # nextpod (see below)
@@ -95,15 +93,6 @@ in
         tasks
         twofactor_webauthn
         ;
-
-      cospend = ncApps.cospend.overrideAttrs (old: {
-        patches = (old.patches or [ ]) ++ [
-          (pkgs.fetchpatch {
-            url = "https://github.com/julien-nc/cospend-nc/commit/2682e13e51c34f82dd8d8929973a9413c635d73c.patch";
-            hash = "sha256-//rL7saVY+ZQeSQUgoZk+W/2M8glZYSL0iDHgrnlBgc=";
-          })
-        ];
-      });
 
       # https://apps.nextcloud.com/apps/nextpod
       nextpod = pkgs.fetchNextcloudApp rec {
