@@ -6,18 +6,27 @@
   user,
   ...
 }:
+let
+  ip = "2001:db8::dcdc:1";
+in
 {
   # Redirect all requests meant for api.caido.io to our local server
   networking.hosts = {
-    "2001:db8::dcdc:1" = [ "api.caido.io" ];
+    ${ip} = [ "api.caido.io" ];
   };
 
   networking.interfaces.lo.ipv6.addresses = [
     {
-      address = "2001:db8::dcdc:1";
+      address = ip;
       prefixLength = 112;
     }
   ];
+
+  networking.nat.enable = true;
+  networking.nat.enableIPv6 = true;
+  networking.nat.extraCommands = ''
+    ip6tables -t nat -A nixos-nat-out -p tcp -d ${ip} --dport 443 -j DNAT --to-destination '[${ip}]:8443'
+  '';
 
   # We need to have a custom CA certificate so that HTTPS still works
   security.pki.certificateFiles = [
