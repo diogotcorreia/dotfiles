@@ -111,7 +111,7 @@ in
           bind = [ "[::]:${toString lib.my.ports.emailSubmission}" ];
           protocol = "smtp";
         };
-        submmissions = {
+        submissions = {
           bind = [ "[::]:${toString lib.my.ports.emailSubmissionTls}" ];
           protocol = "smtp";
           tls.implicit = true;
