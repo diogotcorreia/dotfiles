@@ -43,7 +43,7 @@
     # Browser
     firefox
     # Office Suite
-    libreoffice
+    libreoffice-fresh
     # Music
     spotify
     # Video Conferencing
