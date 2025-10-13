@@ -33,7 +33,7 @@ jobs:
             large: false
           - host: hera
             platform: x86-64-linux
-            large: false
+            large: true
           - host: phobos
             platform: x86-64-linux
             large: false
