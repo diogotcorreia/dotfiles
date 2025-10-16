@@ -438,6 +438,15 @@ in
       vimAlias = true;
       vimdiffAlias = true;
       extraLuaConfig = ''
+        -- hide lspconfig deprecation message (we will hopefully move to nixvim before this becomes a problem)
+        vim.deprecate = (function(overridden)
+          return function(a, b, c, d, e)
+            if a ~= 'The `require(\'lspconfig\')` "framework"' then
+              return overridden(a, b, c, d, e)
+            end
+          end
+        end)(vim.deprecate)
+
         -- change leader key to space bar
         vim.g.mapleader = " "
 
