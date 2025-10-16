@@ -89,6 +89,7 @@ in
         gpoddersync # podcasts sync service
         # nextpod (see below)
         notes
+        polls
         richdocuments # Collabora Online for Nextcloud - https://apps.nextcloud.com/apps/richdocuments
         tasks
         twofactor_webauthn
