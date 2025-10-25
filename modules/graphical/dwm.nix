@@ -131,8 +131,6 @@ in
       [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC" &> /dev/null
     '';
 
-    hm.programs.zsh.shellAliases.clip = "${lib.getExe pkgs.xclip} -selection clipboard";
-
     programs.light.enable = true;
     usr.extraGroups = [ "video" ];
 

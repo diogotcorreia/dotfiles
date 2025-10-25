@@ -26,12 +26,19 @@
     # CLI HTTP client
     xh
 
+    # URL Manipulation
+    trurl
+
     # Agenix
     agenix
+
+    # Shell Utils
+    my.shell-utils
   ];
 
   environment.shellAliases = {
     neofetch = "fastfetch";
+    url = "trurl --json";
     wget = "wcurl";
   };
 }
