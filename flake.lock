@@ -296,6 +296,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-dawarich-pr": {
+      "locked": {
+        "lastModified": 1761489004,
+        "narHash": "sha256-U/foXrAQhWEV4GniuopQys9rOwJuMaf4oOrPAXZUe0I=",
+        "owner": "diogotcorreia",
+        "repo": "nixpkgs",
+        "rev": "60964f0705b2379461723c38320be3c1d8c2f83b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "diogotcorreia",
+        "ref": "dawarich-init",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1760878510,
@@ -399,6 +415,7 @@
         "lidl-to-grocy": "lidl-to-grocy",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-dawarich-pr": "nixpkgs-dawarich-pr",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "pwndbg": "pwndbg",
         "spicetify-nix": "spicetify-nix"

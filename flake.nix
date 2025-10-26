@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-dawarich-pr.url = "github:diogotcorreia/nixpkgs/dawarich-init";
     impermanence.url = "github:nix-community/impermanence/master";
     home = {
       url = "github:nix-community/home-manager/release-25.05";
@@ -100,6 +101,7 @@
         { system, ... }:
         {
           agenix = inputs.agenix.packages.${system}.default;
+          dawarich = inputs.nixpkgs-dawarich-pr.legacyPackages.${system}.dawarich;
           ist-discord-bot = inputs.ist-discord-bot.packages.${system}.default;
           lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
           spicetify = inputs.spicetify-nix.legacyPackages.${system};
