@@ -328,6 +328,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-uptime-kuma-pr": {
+      "locked": {
+        "lastModified": 1761496582,
+        "narHash": "sha256-VX8HSgF8py1o2pmb6sTPiAqFM55QPKAxjd7TINHDyC4=",
+        "owner": "diogotcorreia",
+        "repo": "nixpkgs",
+        "rev": "a412a77f4583b646b0b50fd0009d6e954a8dec74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "diogotcorreia",
+        "ref": "uptime-kuma-2",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "pwndbg": {
       "inputs": {
         "nixpkgs": [
@@ -417,6 +433,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-dawarich-pr": "nixpkgs-dawarich-pr",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nixpkgs-uptime-kuma-pr": "nixpkgs-uptime-kuma-pr",
         "pwndbg": "pwndbg",
         "spicetify-nix": "spicetify-nix"
       }
