@@ -1,5 +1,5 @@
 # Reduce closure size of system
-{ inputs, lib, ... }:
+{ inputs, ... }:
 {
   imports = [
     "${inputs.nixpkgs}/nixos/modules/profiles/minimal.nix"
