@@ -47,13 +47,13 @@
     interfaces = {
       ${config.my.networking.wiredInterface}.ipv6.addresses = [
         {
-          address = "2001:41d0:304:200::34e7";
+          address = "2001:41d0:305:2100::b78a";
           prefixLength = 64;
         }
       ];
     };
     defaultGateway6 = {
-      address = "2001:41d0:304:200::1";
+      address = "2001:41d0:305:2100::1";
       interface = config.my.networking.wiredInterface;
     };
   };
