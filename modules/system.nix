@@ -24,6 +24,9 @@
       trusted-users = [ "root" ];
       substituters = [ "https://nix-cache.diogotc.com/dtc" ];
       trusted-public-keys = [ "dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=" ];
+      # File contents:
+      # machine nix-cache.diogotc.com
+      # password <attic token>
       netrc-file = config.age.secrets.nixCacheDiogotcReadTokenNetrc.path;
 
       # https://jackson.dev/post/nix-reasonable-defaults/
