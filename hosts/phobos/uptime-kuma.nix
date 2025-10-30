@@ -25,7 +25,7 @@ in
       HOST = "::1";
       PORT = toString port;
     };
-    package = pkgs.uptime-kuma-2; # TODO 25.11: use stable
+    package = pkgs.uptime-kuma_2; # TODO 25.11: use stable
   };
 
   services.nginx.virtualHosts.${domain} = {
