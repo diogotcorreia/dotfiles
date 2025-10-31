@@ -18,6 +18,12 @@ in
     enable = true;
     webPort = port;
     localDomain = domain;
+    extraConfig = {
+      STORE_GEODATA = "true";
+      PHOTON_API_HOST = "photon.komoot.io";
+      PHOTON_API_USE_HTTPS = "true";
+      ENABLE_TELEMETRY = "false";
+    };
   };
 
   services.nginx.virtualHosts.${domain} = {
