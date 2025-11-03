@@ -86,7 +86,7 @@ in
         cookbook
         cospend
         deck
-        gpoddersync # podcasts sync service
+        # gpoddersync # podcasts sync service
         # nextpod (see below)
         notes
         polls
@@ -95,6 +95,15 @@ in
         twofactor_webauthn
         ;
 
+      # I'll not even comment...
+      # https://github.com/thrillfall/nextcloud-gpodder/pull/211
+      gpoddersync = pkgs.fetchNextcloudApp rec {
+        appName = "gpoddersync";
+        appVersion = "3.13.2r"; # AAAAAAAAAAAAA
+        url = "https://github.com/thrillfall/nextcloud-gpodder/releases/download/${appVersion}/gpoddersync.tar.gz";
+        hash = "sha256-EQVs1fe0ierjqFZ5+KVc1Yj67zrwjLBAzY5A+QsC7AU=";
+        license = "agpl3Only";
+      };
       # https://apps.nextcloud.com/apps/nextpod
       nextpod = pkgs.fetchNextcloudApp rec {
         appName = "nextpod";
