@@ -1,15 +1,26 @@
 {
   config,
+  inputs,
   lib,
+  pkgs,
   ...
 }:
 let
   domain = "esphome.${config.networking.hostName}.diogotc.com";
 in
 {
+  # Use module from nixos-unstable
+  disabledModules = [
+    "services/home-automation/esphome.nix"
+  ];
+  imports = [
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/home-automation/esphome.nix")
+  ];
+
   services.esphome = {
     enable = true;
     enableUnixSocket = true;
+    package = pkgs.unstable.esphome;
   };
 
   services.nginx.virtualHosts = {
