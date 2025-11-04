@@ -3,7 +3,7 @@
     "agenix": {
       "inputs": {
         "darwin": [],
-        "home-manager": "home-manager",
+        "home-manager": [],
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -130,27 +130,6 @@
       "original": {
         "owner": "nix-community",
         "ref": "release-25.05",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
-    "home-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "agenix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1745494811,
-        "narHash": "sha256-YZCh2o9Ua1n9uCvrvi5pRxtuVNml8X2a03qIFfRKpFs=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "abfad3d2958c9e6300a883bd443512c55dfeb1be",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
         "repo": "home-manager",
         "type": "github"
       }
