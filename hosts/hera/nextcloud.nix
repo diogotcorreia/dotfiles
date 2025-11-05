@@ -87,7 +87,7 @@ in
         cospend
         deck
         # gpoddersync # podcasts sync service
-        # nextpod (see below)
+        nextpod
         notes
         polls
         richdocuments # Collabora Online for Nextcloud - https://apps.nextcloud.com/apps/richdocuments
@@ -102,14 +102,6 @@ in
         appVersion = "3.13.2r"; # AAAAAAAAAAAAA
         url = "https://github.com/thrillfall/nextcloud-gpodder/releases/download/${appVersion}/gpoddersync.tar.gz";
         hash = "sha256-EQVs1fe0ierjqFZ5+KVc1Yj67zrwjLBAzY5A+QsC7AU=";
-        license = "agpl3Only";
-      };
-      # https://apps.nextcloud.com/apps/nextpod
-      nextpod = pkgs.fetchNextcloudApp rec {
-        appName = "nextpod";
-        appVersion = "0.7.7";
-        url = "https://github.com/pbek/nextcloud-nextpod/releases/download/v${appVersion}/nextpod-nc.tar.gz";
-        hash = "sha256-yQD4e5R6ZfBQkEsPVpddGMLDVOlV6HSVZjttgUjEdro=";
         license = "agpl3Only";
       };
     };
