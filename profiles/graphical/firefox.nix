@@ -58,6 +58,89 @@
         "browser.ml.chat.enabled" = false;
         "browser.ml.linkPreview.enabled" = false;
       };
+
+      search = {
+        default = "ddg";
+        privateDefault = "ddg";
+        force = true;
+
+        engines = {
+          nix-packages = {
+            name = "Nix Packages";
+            urls = [
+              {
+                template = "https://search.nixos.org/packages";
+                params = [
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+
+            iconMapObj."16" = "https://search.nixos.org/favicon.png";
+            definedAliases = [ "!np" ];
+          };
+
+          nixos-options = {
+            name = "NixOS Options";
+            urls = [
+              {
+                template = "https://search.nixos.org/options";
+                params = [
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+
+            iconMapObj."16" = "https://search.nixos.org/favicon.png";
+            definedAliases = [ "!nopt" ];
+          };
+
+          nixpkgs-gh = {
+            name = "Nixpkgs GitHub Issues/PRs";
+            urls = [
+              {
+                template = "https://github.com/NixOS/nixpkgs/issues";
+                params = [
+                  {
+                    name = "q";
+                    value = "sort%3Aupdated-desc {searchTerms}";
+                  }
+                ];
+              }
+            ];
+
+            iconMapObj."16" = "https://nixos.org/favicon.ico";
+            definedAliases = [ "!nixpkgs" ];
+          };
+
+          nixos-wiki = {
+            name = "NixOS Wiki";
+            urls = [
+              {
+                template = "https://wiki.nixos.org/w/index.php";
+                params = [
+                  {
+                    name = "search";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+            iconMapObj."16" = "https://wiki.nixos.org/favicon.ico";
+            definedAliases = [ "!nw" ];
+          };
+
+          bing.metaData.hidden = true;
+          perplexity.metaData.hidden = true;
+          ecosia.metaData.hidden = true;
+        };
+      };
     };
   };
 
