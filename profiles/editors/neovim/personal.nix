@@ -2,6 +2,7 @@
 {
   imports = with profiles; [
     editors.neovim.base
+    editors.neovim.completion
     editors.neovim.lsp
     editors.neovim.telescope
   ];
