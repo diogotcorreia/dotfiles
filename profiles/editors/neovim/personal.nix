@@ -7,6 +7,19 @@
   ];
 
   hm.programs.nixvim = {
+    plugins.comment = {
+      enable = true;
+      settings = {
+        toggler = {
+          line = "<leader>cc";
+          block = "<leader>C";
+        };
+        mappings = {
+          extra = false;
+        };
+      };
+    };
+
     plugins.gitsigns = {
       enable = true;
       settings = {
