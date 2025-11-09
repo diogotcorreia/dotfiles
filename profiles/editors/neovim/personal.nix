@@ -5,4 +5,26 @@
     editors.neovim.lsp
     editors.neovim.telescope
   ];
+
+  hm.programs.nixvim = {
+    plugins.gitsigns = {
+      enable = true;
+      settings = {
+        # Make the staged and unstaged add signs different
+        signs.add.text = "+";
+        on_attach = # lua
+          ''
+            function(bufnr)
+              local gs = package.loaded.gitsigns
+              local function map(mode, l, r, opts)
+                opts = opts or {}
+                opts.buffer = bufnr
+                vim.keymap.set(mode, l, r, opts)
+              end
+              map('n', '<leader>gb', gs.toggle_current_line_blame)
+            end
+          '';
+      };
+    };
+  };
 }
