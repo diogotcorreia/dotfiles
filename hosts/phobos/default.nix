@@ -7,6 +7,7 @@
 }:
 {
   imports = with profiles; [
+    editors.neovim.base
     meta.server
     security.acme.cloudflare
     security.fail2ban
@@ -47,7 +48,6 @@
 
   # Modules
   modules = {
-    editors.neovim.enable = true;
     server = {
       enable = true;
     };

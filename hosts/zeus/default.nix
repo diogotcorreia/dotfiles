@@ -7,6 +7,7 @@
 }:
 {
   imports = with profiles; [
+    editors.neovim.base
     hardware.filesystem.ext4-impermanence
     hardware.zram
     meta.server
@@ -50,7 +51,6 @@
 
   # Modules
   modules = {
-    editors.neovim.enable = true;
     server.enable = true;
     services = {
       dnsoverhttps.enable = true;

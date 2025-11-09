@@ -6,6 +6,7 @@
 }:
 {
   imports = with profiles; [
+    editors.neovim.base
     hardware.filesystem.zfs-impermanence
     hardware.zram
     meta.server
@@ -31,7 +32,6 @@
 
   # Modules
   modules = {
-    editors.neovim.enable = true;
     server = {
       enable = true;
     };
