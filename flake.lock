@@ -291,6 +291,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-umami-pr": {
+      "locked": {
+        "lastModified": 1762651461,
+        "narHash": "sha256-XCnifwqLAj9eLwbp6V+tBPvv8xywlC4Lwdldxz9RMLk=",
+        "owner": "diogotcorreia",
+        "repo": "nixpkgs",
+        "rev": "729edfdd414d5073e698399e967fe8b04c0ff05a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "diogotcorreia",
+        "ref": "umami-3",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1761907660,
@@ -411,6 +427,7 @@
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs",
         "nixpkgs-dawarich-pr": "nixpkgs-dawarich-pr",
+        "nixpkgs-umami-pr": "nixpkgs-umami-pr",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-uptime-kuma-pr": "nixpkgs-uptime-kuma-pr",
         "pwndbg": "pwndbg",

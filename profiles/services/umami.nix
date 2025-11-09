@@ -1,8 +1,7 @@
 # Module for deploying umami analytics
-# Unfortunately using Docker since there's no nix package (yet)
-# https://github.com/NixOS/nixpkgs/issues/172063
 {
   config,
+  inputs,
   lib,
   pkgs,
   secrets,
@@ -20,13 +19,18 @@ let
   collectApiEndpoint = "/api/abc-send";
 in
 {
+  imports = [
+    # TODO 25.11: use stable
+    (inputs.nixpkgs-umami-pr + "/nixos/modules/services/web-apps/umami.nix")
+  ];
+
   age.secrets = {
     umamiAppSecret.file = secrets.host.umamiAppSecret;
   };
 
   services.umami = {
     enable = true;
-    package = pkgs.my.umami;
+    package = pkgs.umami_3; # TODO 25.11: use stable
     createPostgresqlDatabase = true;
     settings = {
       HOSTNAME = "::1";
