@@ -40,6 +40,17 @@
       };
     };
 
+    plugins.indent-blankline = {
+      enable = true;
+      settings = {
+        indent.char = "¦";
+        scope.include.node_type.nix = [
+          "attrset_expression"
+          "list_expression"
+        ];
+      };
+    };
+
     plugins.nvim-autopairs.enable = true;
   };
 }
