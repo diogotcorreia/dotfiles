@@ -32,11 +32,7 @@ in
         # Python
         pylsp.enable = true;
         ruff.enable = true;
-        # Rust
-        rust_analyzer = {
-          enable = true;
-          package = null; # use version from PATH
-        };
+        # Rust is handled by rustaceanvim
         # Typst
         tinymist = {
           enable = true;
@@ -155,6 +151,8 @@ in
 
     plugins.typst-vim.enable = true;
     dependencies.typst.enable = false; # use typst in path
+    plugins.rustaceanvim.enable = true;
+    dependencies.rust-analyzer.enable = false; # use rust-analyzer in path
   };
 
   hm.home.packages = with pkgs; [
