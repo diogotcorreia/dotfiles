@@ -45,6 +45,20 @@ in
               exportPdf = "never";
               formatterMode = "typstyle";
             };
+
+            # Add keybind to launch typst watch and PDF viewer for current file, and set the current buffer as the main file on tinymist lsp
+            on_attach = lib'.mkRaw /* lua */ ''
+              function(client, bufnr)
+                vim.keymap.set("n", "<leader>tw", function()
+                  vim.fn['typst#TypstWatch']()
+                  client:exec_cmd({
+                    title = "pin",
+                    command = "tinymist.pinMain",
+                    arguments = { vim.api.nvim_buf_get_name(0) },
+                  }, { bufnr = bufnr })
+                end, { desc = "Typst Watch", noremap = true })
+              end
+            '';
           };
         };
       };
@@ -138,6 +152,9 @@ in
         yaml
       ];
     };
+
+    plugins.typst-vim.enable = true;
+    dependencies.typst.enable = false; # use typst in path
   };
 
   hm.home.packages = with pkgs; [
