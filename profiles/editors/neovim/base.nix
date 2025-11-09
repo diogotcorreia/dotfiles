@@ -69,6 +69,9 @@ in
       ignorecase = true;
       smartcase = true;
 
+      # expand sign column if needed
+      signcolumn = "auto:9";
+
       # disable audible bell for sanity reasons
       belloff = "all";
 

@@ -56,6 +56,11 @@
       };
     };
 
+    plugins.marks = {
+      enable = true;
+      signPriority = 1;
+    };
+
     plugins.nvim-autopairs.enable = true;
   };
 }
