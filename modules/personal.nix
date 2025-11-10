@@ -26,7 +26,6 @@ in
       timewarrior
       # typst (markup-based typesetting system)
       unstable.typst
-      unstable.typstfmt
 
       # lidl-to-grocy (custom program to import lidl receipts into grocy)
       lidl-to-grocy
