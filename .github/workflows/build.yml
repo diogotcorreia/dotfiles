@@ -67,6 +67,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@main
         with:
+          determinate: false # use cppnix instead of determinate nix; TODO: change action by 1st January 2026
           # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
           extra-conf: |
             fallback = true
@@ -135,6 +136,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@main
         with:
+          determinate: false # use cppnix instead of determinate nix; TODO: change action by 1st January 2026
           # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
           extra-conf: |
             fallback = true
