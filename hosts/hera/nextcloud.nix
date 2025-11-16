@@ -38,7 +38,7 @@ in
     };
     phpOptions = {
       "opcache.interned_strings_buffer" = "16";
-      "opcache.revalidate_freq" = "5";
+      "opcache.validate_timestamps" = "0"; # disable opcache invalidation; flushed on nixos activation script
       "opcache.jit" = "1255";
       "opcache.jit_buffer_size" = "128M";
     };
@@ -187,6 +187,8 @@ in
   # Nextcloud stops working for a brief moment.
   # This happens because the secrets handled by agenix change their path,
   # and PHP does not follow the new destination of the symlink until the cache expires.
+  # Additionally, we are now disabling OPCache's invalidation, given that files do not change
+  # without a NixOS activation.
   # This reloads php-fpm after agenix has updated secrets, so that it clears the cache.
   system.activationScripts.nextcloud-reload = {
     text = ''
