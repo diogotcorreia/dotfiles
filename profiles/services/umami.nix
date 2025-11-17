@@ -21,7 +21,7 @@ in
 {
   imports = [
     # TODO 25.11: use stable
-    (inputs.nixpkgs-umami-pr + "/nixos/modules/services/web-apps/umami.nix")
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/web-apps/umami.nix")
   ];
 
   age.secrets = {
@@ -30,7 +30,7 @@ in
 
   services.umami = {
     enable = true;
-    package = pkgs.umami_3; # TODO 25.11: use stable
+    package = pkgs.unstable.umami; # TODO 25.11: use stable
     createPostgresqlDatabase = true;
     settings = {
       HOSTNAME = "::1";
