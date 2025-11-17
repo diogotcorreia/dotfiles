@@ -153,6 +153,7 @@
           inherit (pkgs) restic-without-rclone;
           attic = pkgs.attic-client;
           infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
+          ist-discord-bot = inputs.ist-discord-bot.packages.x86_64-linux.default;
           lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
           pwndbg = inputs.pwndbg.packages.x86_64-linux.pwndbg;
         };

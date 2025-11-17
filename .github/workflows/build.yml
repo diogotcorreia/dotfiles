@@ -122,6 +122,7 @@ jobs:
           - cybersec.libdebug
           - cybersec.pycdc
           - infra-keyval
+          - ist-discord-bot
           - lzbt
           - pwndbg
           - restic-without-rclone
