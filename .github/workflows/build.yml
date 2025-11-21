@@ -54,7 +54,7 @@ jobs:
         run: |
           sudo chown root:root /nix
 
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
       # We only run this if we are building an aarch64-linux system
       - if: matrix.machine.platform == 'aarch64-linux'
@@ -128,7 +128,7 @@ jobs:
           - restic-without-rclone
 
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
       # We make our netrc file that is used to make authorized requests to Attic
       - run: |
