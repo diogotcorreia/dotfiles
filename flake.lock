@@ -298,11 +298,11 @@
     },
     "nixpkgs-dawarich-pr": {
       "locked": {
-        "lastModified": 1763481522,
-        "narHash": "sha256-GRJLfPUyiiGYxLBLhkYSm1tTNIFJNPNq8L+wqYzjEIk=",
+        "lastModified": 1764026915,
+        "narHash": "sha256-E0izIGdwiIKu/tFZLnOoOuZIz2Q9lcKKhGKjYMg+6nk=",
         "owner": "diogotcorreia",
         "repo": "nixpkgs",
-        "rev": "85856b481b29c87b034a7ccb93567db70bd60217",
+        "rev": "73012364884535776f5bee54c8922d814c5121b6",
         "type": "github"
       },
       "original": {
