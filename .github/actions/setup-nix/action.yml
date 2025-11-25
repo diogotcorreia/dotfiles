@@ -2,26 +2,25 @@ name: setup-nix
 
 inputs:
   system:
-    type: string
     required: true
   large:
-    type: boolean
-    default: false
+    default: 'false'
   attic-token:
-    type: string
     required: true
 
 runs:
   using: composite
   steps:
     - name: "Create Directory for Nix Store"
-      if: inputs.large != true
+      if: ${{ inputs.large != 'true' }}
       shell: bash
       run: |
         sudo mkdir /nix
     - name: "Maximize Disk Space"
-      if: inputs.large == true
-      uses: wimpysworld/nothing-but-nix@6af122a9403f936ef689e44cc013ae3f3e2f1c3b # v6
+      if: ${{ inputs.large == 'true' }}
+      # using unstable version because stable causes permission failures:
+      # https://github.com/wimpysworld/nothing-but-nix/pull/25
+      uses: wimpysworld/nothing-but-nix@10c936d9e46521bf923f75458e0cbd4fa309300d # main
 
     # We only run this if we are building an aarch64-linux system
     - if: inputs.system == 'aarch64-linux'
@@ -29,9 +28,7 @@ runs:
 
     - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31.8.4
       with:
-        # Putting build-dir in /nix is a workaround for https://github.com/wimpysworld/nothing-but-nix/issues/18
         extra_nix_config: |
-          build-dir = /nix/build
           fallback = true
           http-connections = 128
           max-substitution-jobs = 128
@@ -45,7 +42,3 @@ runs:
       shell: bash
       run: |
         echo "machine nix-cache.diogotc.com password ${{ inputs.attic-token }}" | sudo tee /etc/nix/netrc > /dev/null
-
-    - name: create build-dir
-      shell: bash
-      run: sudo mkdir -p /nix/build
