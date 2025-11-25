@@ -114,7 +114,7 @@
           ist-discord-bot = inputs.ist-discord-bot.packages.${system}.default;
           lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
           spicetify = inputs.spicetify-nix.legacyPackages.${system};
-          uptime-kuma_2 = inputs.nixpkgs-uptime-kuma-pr.legacyPackages.${system}.uptime-kuma_2;
+          uptime-kuma_2 = inputs.nixpkgs-uptime-kuma-pr.legacyPackages.${system}.uptime-kuma;
         };
 
       overlays = (mkOverlays ./overlays) // {

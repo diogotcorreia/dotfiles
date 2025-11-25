@@ -330,11 +330,11 @@
     },
     "nixpkgs-uptime-kuma-pr": {
       "locked": {
-        "lastModified": 1763465363,
-        "narHash": "sha256-0gu/wPdQXYiBaeQMM6y8Rdp/i1A392MD1NoWR6fG11g=",
+        "lastModified": 1764028627,
+        "narHash": "sha256-92Fb70wWFyteI0aAGf5ILiStu2yrH/fNpWkFPZQYeqk=",
         "owner": "diogotcorreia",
         "repo": "nixpkgs",
-        "rev": "5d369489c6ac4779138a61e194ae40867c6781c5",
+        "rev": "a2e2f0b0efd7f3e32bb4a674702971d945a6440e",
         "type": "github"
       },
       "original": {
