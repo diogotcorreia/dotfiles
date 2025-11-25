@@ -16,8 +16,6 @@ in
     hm.home.packages = with pkgs; [
       # dog DNS CLI client (dig alternative)
       dogdns
-      # quick static file server
-      httplz
       # json manipulator
       jq
       # qalc (CLI calculator)
@@ -65,7 +63,9 @@ in
     # ssh client config
     hm.programs.ssh = {
       enable = true;
+      enableDefaultConfig = false;
       matchBlocks = {
+        "*" = { };
         "* !apollo !bacchus".setEnv = {
           TERM = "xterm-256color";
         };

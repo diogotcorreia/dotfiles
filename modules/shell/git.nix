@@ -17,9 +17,9 @@ in
     programs.git = {
       enable = true;
       lfs.enable = true;
-      userName = "Diogo Correia";
-      userEmail = "me@diogotc.com";
-      extraConfig = {
+      settings = {
+        user.name = "Diogo Correia";
+        user.email = "me@diogotc.com";
         diff.tool = "vimdiff";
         init.defaultBranch = "master";
         pull.rebase = true;
@@ -41,14 +41,15 @@ in
           };
         }
       ];
-      delta = {
-        enable = config.modules.personal.enable;
-        options = {
-          features = "decorations";
-          line-numbers = true;
-          # Workaround for https://github.com/dandavison/delta/issues/1663
-          dark = true;
-        };
+    };
+    programs.delta = {
+      enable = config.modules.personal.enable;
+      enableGitIntegration = true;
+      options = {
+        features = "decorations";
+        line-numbers = true;
+        # Workaround for https://github.com/dandavison/delta/issues/1663
+        dark = true;
       };
     };
   };

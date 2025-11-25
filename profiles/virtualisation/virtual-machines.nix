@@ -4,8 +4,6 @@
   virtualisation.libvirtd = {
     enable = true;
     onBoot = "ignore";
-
-    qemu.ovmf.enable = true; # enable UEFI
   };
 
   usr.extraGroups = [ "libvirtd" ];

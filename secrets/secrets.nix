@@ -91,7 +91,7 @@ mkSecrets [
       "healthchecksUrl"
       "istDiscordBotToken"
       "lldapEnv"
-      "meilisearchEnv"
+      "meilisearchMasterKey"
       "nebulaCert"
       "nebulaKey"
       "resticHealthchecksUrl"

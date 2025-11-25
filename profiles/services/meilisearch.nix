@@ -3,7 +3,6 @@
   config,
   lib,
   secrets,
-  pkgs,
   ...
 }:
 let
@@ -17,18 +16,18 @@ let
 in
 {
   age.secrets = {
-    meilisearchEnv.file = secrets.host.meilisearchEnv;
+    meilisearchMasterKey.file = secrets.host.meilisearchMasterKey;
   };
 
   services.meilisearch = {
     enable = true;
-    package = pkgs.meilisearch; # pin due to system.stateVersion
     listenAddress = "[::1]";
     listenPort = port;
-    environment = "production";
-    # Contains:
-    # - MEILI_MASTER_KEY
-    masterKeyEnvironmentFile = config.age.secrets.meilisearchEnv.path;
+    settings = {
+      env = "production";
+      experimental_dumpless_upgrade = true;
+    };
+    masterKeyFile = config.age.secrets.meilisearchMasterKey.path;
   };
 
   services.nginx.virtualHosts = {

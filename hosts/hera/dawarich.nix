@@ -1,6 +1,5 @@
 # Configuration for Dawarich (Location Timeline) on Hera
 {
-  config,
   inputs,
   lib,
   ...
@@ -51,39 +50,6 @@ in
         '';
       };
     };
-  };
-
-  # TODO: remove on 25.11
-  # Compatibility with 25.11 modules due to changes in PostgreSQL module
-  systemd.targets.postgresql = {
-    description = "PostgreSQL";
-    wantedBy = [ "multi-user.target" ];
-    requires = [
-      "postgresql.service"
-      "postgresql-setup.service"
-    ];
-  };
-  systemd.services.postgresql = {
-    wants = [ "postgresql.target" ];
-    partOf = [ "postgresql.target" ];
-  };
-  systemd.services.postgresql-setup = {
-    description = "PostgreSQL Setup Scripts";
-
-    requires = [ "postgresql.service" ];
-    after = [ "postgresql.service" ];
-    serviceConfig = {
-      User = "postgres";
-      Group = "postgres";
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-
-    path = [ config.services.postgresql.finalPackage ];
-    environment.PGPORT = builtins.toString config.services.postgresql.settings.port;
-    script = ''
-      echo dummy
-    '';
   };
 
   modules.services.restic.paths = [

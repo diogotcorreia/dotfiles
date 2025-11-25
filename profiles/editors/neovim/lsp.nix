@@ -25,8 +25,8 @@ in
         # Nix
         nil_ls = {
           enable = true;
-          settings = {
-            settings.nil.formatting.command = [ (lib.getExe pkgs.nixfmt-rfc-style) ];
+          config = {
+            settings.nil.formatting.command = [ (lib.getExe pkgs.nixfmt) ];
           };
         };
         # Python
@@ -36,7 +36,7 @@ in
         # Typst
         tinymist = {
           enable = true;
-          settings = {
+          config = {
             settings = {
               exportPdf = "never";
               formatterMode = "typstyle";

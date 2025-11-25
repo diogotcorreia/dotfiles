@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-6V5R/wTjxYX894Ep/8G2Vz/v8ZpXlCLpxKuhGCs+Xa0=";
   };
 
+  pyproject = true;
+
   nativeBuildInputs = with python3Packages; [
     setuptools
   ];

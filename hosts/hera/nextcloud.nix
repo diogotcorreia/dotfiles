@@ -63,9 +63,9 @@ in
       mail_sendmailmode = "smtp";
       mail_domain = "robots.diogotc.com";
       mail_smtpauthtype = "LOGIN";
-      mail_smtpauth = 1;
+      mail_smtpauth = true;
       mail_smtphost = "mail.diogotc.com";
-      mail_smtpport = "465";
+      mail_smtpport = 465;
       mail_smtpsecure = "ssl";
       mail_smtpname = lib.my.mkRobotsEmail "nextcloud";
       # mail_smtppassword as secret

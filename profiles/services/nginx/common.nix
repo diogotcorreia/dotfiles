@@ -11,7 +11,6 @@
     enable = true;
 
     # enable compression
-    recommendedZstdSettings = true;
     recommendedGzipSettings = true;
     recommendedBrotliSettings = true;
 

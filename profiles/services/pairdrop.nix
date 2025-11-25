@@ -10,15 +10,15 @@ in
 
     inherit port;
 
-    settings = {
-      RTC_CONFIG = {
-        sdpSemantics = "unified-plan";
-        iceServers = [
-          {
-            urls = "stun:stun.l.google.com:19302";
-          }
-        ];
-      };
+    rtcConfig = {
+      sdpSemantics = "unified-plan";
+      iceServers = [
+        {
+          urls = "stun:stun.l.google.com:19302";
+        }
+      ];
+    };
+    environment = {
       RATE_LIMIT = 1;
       IPV6_LOCALIZE = 4;
       WS_FALLBACK = true;

@@ -2,17 +2,17 @@
   description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-dawarich-pr.url = "github:diogotcorreia/nixpkgs/dawarich-init";
     nixpkgs-uptime-kuma-pr.url = "github:diogotcorreia/nixpkgs/uptime-kuma-2";
     impermanence.url = "github:nix-community/impermanence/master";
     home = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/master"; # TODO: change to release-25.11
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.05";
+      url = "github:nix-community/nixvim/main"; # TODO: change to nixos-25.11
       inputs.nixpkgs.follows = "nixpkgs";
       # we don't need to build docs, so we can get rid of it
       inputs.nuschtosSearch.follows = "";
@@ -62,7 +62,7 @@
     };
     ist-discord-bot = {
       url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.1";
-      inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO: rever to stable on 25.11
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-compat.url = "github:edolstra/flake-compat";
   };

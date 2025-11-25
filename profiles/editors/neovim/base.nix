@@ -12,7 +12,7 @@ let
 in
 {
   home-manager.sharedModules = [
-    inputs.nixvim.homeManagerModules.default
+    inputs.nixvim.homeModules.default
   ];
 
   hm.programs.nixvim = {

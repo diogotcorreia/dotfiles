@@ -124,7 +124,7 @@
     automatic = true;
     options = "-d"; # delete old generations
 
-    frequency = "weekly";
+    dates = "weekly";
   };
 
   # Hide "dtc" user from display manager

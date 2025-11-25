@@ -101,12 +101,12 @@
   # Battery saver
   services.tlp.enable = true;
 
-  # Don't shutdown when power button is short-pressed
-  services.logind.extraConfig = ''
-    HandlePowerKey=ignore
-  '';
-  # Suspend even if plugged in to external monitor
-  services.logind.lidSwitchDocked = "suspend";
+  services.logind.settings.Login = {
+    # Don't shutdown when power button is short-pressed
+    HandlePowerKey = "ignore";
+    # Suspend even if plugged in to external monitor
+    HandleLidSwitchDocked = "suspend";
+  };
 
   # Disable Docker on boot
   virtualisation.docker.enableOnBoot = false;

@@ -3,48 +3,53 @@
   lib,
   python3Packages,
   cmake,
-  libiberty,
   elfutils,
   libdwarf,
+  libiberty,
+  pkg-config,
+  zlib,
+  zstd,
   ...
 }:
 python3Packages.buildPythonPackage rec {
   pname = "libdebug";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9InvU/JSIFoAwAkYwKtMVU138Wo7qZmHec7fqCU5LL4=";
+    hash = "sha256-rk2Cq7YpN/z530LAFzWKm1I33j24rsSKbQV7Ezv5E34=";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "/usr/include/libiberty" "${lib.getDev libiberty}/include/libiberty" \
-      --replace-fail "/usr/include/libdwarf-0" "${lib.getDev libdwarf}/include/libdwarf-0"
-  '';
 
   # ensure only scikit-build-core runs CMakeLists.txt
   dontConfigure = true;
 
-  build-system = with python3Packages; [
-    scikit-build-core
-    cmake
-    ninja
-  ];
+  build-system =
+    with python3Packages;
+    [
+      cmake
+      nanobind
+      ninja
+      scikit-build-core
+      typing-extensions
+    ]
+    ++ [
+      pkg-config
+    ];
 
   propagatedBuildInputs =
     with python3Packages;
     [
-      nanobind
-      typing-extensions
-      psutil
-      requests
       prompt-toolkit
+      psutil
+      pyelftools
+      requests
     ]
     ++ [
       libiberty
       elfutils
       libdwarf
+      zlib
+      zstd
     ];
 
   format = "pyproject"; # no setup.py

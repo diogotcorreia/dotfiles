@@ -15,9 +15,9 @@ in
   config = mkIf cfg.enable {
     hm.home.packages = with pkgs; [
       # Anki Flashcards
-      unstable.anki # TODO 25.11: use stable
+      anki
       # Telegram
-      tdesktop
+      telegram-desktop
       # Android screen mirroring (scrcpy)
       scrcpy
       # Signal

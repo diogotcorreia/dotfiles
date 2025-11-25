@@ -20,7 +20,7 @@ in
     ensureUsers = [ { name = dbUsername; } ];
     ensureDatabases = [ dbName ];
   };
-  systemd.services.postgresql.serviceConfig.ExecStartPost =
+  systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
     let
       sqlFile = pkgs.writeText "triton-bot-postgresql-setup.sql" ''
         GRANT SELECT ON TABLE "triton_buyers" TO "${dbUsername}";

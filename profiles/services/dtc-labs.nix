@@ -38,7 +38,7 @@ in
     ensureUsers = [ { name = dbUsername; } ];
     ensureDatabases = [ dbName ];
   };
-  systemd.services.postgresql.serviceConfig.ExecStartPost =
+  systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
     let
       sqlFile = pkgs.writeText "dtc-labs-postgresql-setup.sql" ''
         GRANT INSERT ON TABLE "triton_buyers" TO "${dbUsername}";

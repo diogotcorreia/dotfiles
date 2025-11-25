@@ -1,9 +1,7 @@
 # Module for deploying umami analytics
 {
   config,
-  inputs,
   lib,
-  pkgs,
   secrets,
   ...
 }:
@@ -19,18 +17,12 @@ let
   collectApiEndpoint = "/api/abc-send";
 in
 {
-  imports = [
-    # TODO 25.11: use stable
-    (inputs.nixpkgs-unstable + "/nixos/modules/services/web-apps/umami.nix")
-  ];
-
   age.secrets = {
     umamiAppSecret.file = secrets.host.umamiAppSecret;
   };
 
   services.umami = {
     enable = true;
-    package = pkgs.unstable.umami; # TODO 25.11: use stable
     createPostgresqlDatabase = true;
     settings = {
       HOSTNAME = "::1";

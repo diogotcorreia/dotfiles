@@ -59,7 +59,7 @@
 
     plugins.marks = {
       enable = true;
-      signPriority = 1;
+      settings.sign_priority = 1;
     };
 
     plugins.nvim-autopairs.enable = true;

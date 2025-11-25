@@ -38,7 +38,7 @@ in
     ensureUsers = [ { name = dbUsername; } ];
     ensureDatabases = [ dbName ];
   };
-  systemd.services.postgresql.serviceConfig.ExecStartPost =
+  systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
     let
       sqlFile = pkgs.writeText "twin-postgresql-setup.sql" ''
         GRANT SELECT ON TABLE "twin_tokens" TO "${dbUsername}";

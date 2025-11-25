@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  pkgs,
   secrets,
   ...
 }:
@@ -20,9 +21,12 @@ in
     # - LLDAP_JWT_SECRET
     # - LLDAP_KEY_SEED
     environmentFile = config.age.secrets.lldapEnv.path;
+    silenceForceUserPassResetWarning = true; # TODO: perhaps add a proper admin user
     settings = {
       ldap_user_dn = "dtc";
-      ldap_user_pass = "pleaseChangeMeAfterFirstLogin";
+      ldap_user_pass_file = toString (
+        pkgs.writeText "lldap-default-password" "pleaseChangeMeAfterFirstLogin"
+      );
       force_ldap_user_pass_reset = false; # otherwise the admin user will always have the password above ;/
 
       ldap_base_dn = "dc=diogotc,dc=com";

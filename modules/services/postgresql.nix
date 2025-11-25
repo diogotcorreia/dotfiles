@@ -32,7 +32,7 @@ in
         name = "restic";
       }
     ];
-    systemd.services.postgresql.serviceConfig.ExecStartPost = mkIf resticCfg.enable [
+    systemd.services.postgresql-setup.serviceConfig.ExecStartPost = mkIf resticCfg.enable [
       ''
         ${lib.getExe' postgresqlCfg.package "psql"} -c "GRANT pg_read_all_data TO restic;"
       ''
