@@ -43,7 +43,7 @@
     postStop = ''
       if [[ "$SERVICE_RESULT" == "success" && -h /etc/localtime ]]; then
         # Can't use D-Bus here because it doesn't work on shutdown
-        timezone=$(readlink /etc/localtime | sed 's/\.\.\/etc\/zoneinfo\///')
+        timezone=$(readlink -f /etc/localtime | sed 's/.*\/zoneinfo\///')
         if [[ -n "$timezone" ]]; then
           echo "$timezone" > "$STATE_DIRECTORY/timezone"
         fi
