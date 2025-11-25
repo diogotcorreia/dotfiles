@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  pkgs,
   user,
   ...
 }:
@@ -306,6 +307,7 @@ in
 
       lualine = {
         enable = true;
+        package = pkgs.vimPlugins.lualine-nvim;
         settings = {
           sections = {
             lualine_b = lib.optional git "diff";
