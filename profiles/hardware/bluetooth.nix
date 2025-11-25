@@ -6,13 +6,8 @@
 
   environment.systemPackages = with pkgs; [
     # Enable bluetooth TUI
-    bluetuith
+    bluetui
   ];
-
-  hm.xdg.configFile."bluetuith/bluetuith.conf".source = pkgs.writers.writeJSON "bluetuith.conf" {
-    # Disable OBEX warning on startup
-    no-warning = true;
-  };
 
   # Preserve paired devices across reboots (on root-on-tmpfs systems)
   modules.impermanence.directories = [
