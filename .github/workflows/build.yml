@@ -43,41 +43,14 @@ jobs:
 
     needs: ["build-packages"]
     steps:
-      - name: "Create Directory for Nix Store"
-        if: matrix.machine.large != true
-        run: |
-          sudo mkdir /nix
-      - name: "Maximize Disk Space"
-        if: matrix.machine.large == true
-        uses: wimpysworld/nothing-but-nix@6af122a9403f936ef689e44cc013ae3f3e2f1c3b # v6
-      - name: Assert Correct Ownership on /nix
-        run: |
-          sudo chown root:root /nix
-
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
-      # We only run this if we are building an aarch64-linux system
-      - if: matrix.machine.platform == 'aarch64-linux'
-        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
-
-      # We make our netrc file that is used to make authorized requests to Attic
-      - run: |
-          sudo mkdir -p /etc/nix
-          echo "machine nix-cache.diogotc.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
-
-      - uses: DeterminateSystems/nix-installer-action@main
+      - name: setup nix
+        uses: ./.github/actions/setup-nix
         with:
-          determinate: false # use cppnix instead of determinate nix; TODO: change action by 1st January 2026
-          # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
-          extra-conf: |
-            fallback = true
-            http-connections = 128
-            max-substitution-jobs = 128
-            extra-platforms = i686-linux aarch64-linux
-            substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
-            always-allow-substitutes = true
-            allow-import-from-derivation = false
+          system: ${{ matrix.machine.platform }}
+          large: ${{ matrix.machine.large }}
+          attic-token: ${{ secrets.ATTIC_TOKEN }}
 
       # We check if this system actually has anything to be built or if we're just going
       # to be fetching from cache
@@ -130,24 +103,12 @@ jobs:
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
-      # We make our netrc file that is used to make authorized requests to Attic
-      - run: |
-          sudo mkdir -p /etc/nix
-          echo "machine nix-cache.diogotc.com password ${{ secrets.ATTIC_TOKEN }}" | sudo tee /etc/nix/netrc > /dev/null
-
-      - uses: DeterminateSystems/nix-installer-action@main
+      - name: setup nix
+        uses: ./.github/actions/setup-nix
         with:
-          determinate: false # use cppnix instead of determinate nix; TODO: change action by 1st January 2026
-          # We add all the config for extra platforms, other binary caches and to raise the number of connections that can be made
-          extra-conf: |
-            fallback = true
-            http-connections = 128
-            max-substitution-jobs = 128
-            extra-platforms = i686-linux aarch64-linux
-            substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
-            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
-            always-allow-substitutes = true
-            allow-import-from-derivation = false
+          system: "x86-64-linux"
+          large: false
+          attic-token: ${{ secrets.ATTIC_TOKEN }}
 
       # We check if this package actually has anything to be built or if we're just going
       # to be fetching from cache

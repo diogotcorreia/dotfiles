@@ -1,0 +1,51 @@
+name: setup-nix
+
+inputs:
+  system:
+    type: string
+    required: true
+  large:
+    type: boolean
+    default: false
+  attic-token:
+    type: string
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: "Create Directory for Nix Store"
+      if: inputs.large != true
+      shell: bash
+      run: |
+        sudo mkdir /nix
+    - name: "Maximize Disk Space"
+      if: inputs.large == true
+      uses: wimpysworld/nothing-but-nix@6af122a9403f936ef689e44cc013ae3f3e2f1c3b # v6
+
+    # We only run this if we are building an aarch64-linux system
+    - if: inputs.system == 'aarch64-linux'
+      uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+
+    - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31.8.4
+      with:
+        # Putting build-dir in /nix is a workaround for https://github.com/wimpysworld/nothing-but-nix/issues/18
+        extra_nix_config: |
+          build-dir = /nix/build
+          fallback = true
+          http-connections = 128
+          max-substitution-jobs = 128
+          extra-platforms = i686-linux aarch64-linux
+          substituters = https://nix-cache.diogotc.com/dtc?priority=43 https://cache.nixos.org/
+          trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= dtc:HU5hQrzlNDSFAcA/kvzKx+IhyDYLvR+xUS/1drh3o2U=
+          allow-import-from-derivation = false
+
+    # We make our netrc file that is used to make authorized requests to Attic
+    - name: setup netrc
+      shell: bash
+      run: |
+        echo "machine nix-cache.diogotc.com password ${{ inputs.attic-token }}" | sudo tee /etc/nix/netrc > /dev/null
+
+    - name: create build-dir
+      shell: bash
+      run: sudo mkdir -p /nix/build
