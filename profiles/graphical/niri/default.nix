@@ -75,9 +75,6 @@ in
   # with the graphical session.
   services.gnome.gnome-keyring.enable = true;
   hm.services.gnome-keyring.enable = true;
-  # TODO: probably remove in NixOS 25.11 due to the move to gcr-ssh-agent
-  hm.systemd.user.services.gnome-keyring.Service.ExecStartPost =
-    "-${config.systemd.package}/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/keyring/ssh";
 
   # The HM module is broken: https://github.com/nix-community/home-manager/issues/6770
   xdg.portal = {
