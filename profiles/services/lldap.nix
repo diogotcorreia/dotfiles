@@ -41,6 +41,12 @@ in
     };
   };
 
+  systemd.services.lldap = {
+    # ensure postgresql is ready before turning on lldap
+    requires = [ "postgresql.target" ];
+    after = [ "postgresql.target" ];
+  };
+
   services.postgresql = {
     enable = lib.mkDefault true;
     ensureUsers = [

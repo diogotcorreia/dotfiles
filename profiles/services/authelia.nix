@@ -194,6 +194,10 @@ in
     };
   };
 
+  systemd.services.authelia-dtc = {
+    after = [ "lldap.service" ];
+  };
+
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
