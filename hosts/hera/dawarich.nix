@@ -19,8 +19,8 @@ in
     localDomain = domain;
     extraConfig = {
       STORE_GEODATA = "true";
-      PHOTON_API_HOST = "photon.komoot.io";
-      PHOTON_API_USE_HTTPS = "true";
+      # PHOTON_API_HOST = "photon.komoot.io";
+      # PHOTON_API_USE_HTTPS = "true";
       ENABLE_TELEMETRY = "false";
     };
   };
