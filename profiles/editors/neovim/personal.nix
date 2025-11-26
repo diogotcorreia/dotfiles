@@ -14,6 +14,7 @@
       spelllang = [
         "en"
         "pt"
+        "sv"
       ];
     };
 
