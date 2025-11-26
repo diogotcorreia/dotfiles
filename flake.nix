@@ -57,7 +57,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     infra-keyval = {
-      url = "github:diogotcorreia/infra-keyval";
+      url = "github:diogotcorreia/infra-keyval?ref=v0.1.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ist-discord-bot = {

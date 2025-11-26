@@ -178,15 +178,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1738151318,
-        "narHash": "sha256-voqlz740RnekFq3uoXY/lvpYQN3bBzp21BbjBUxfGWY=",
+        "lastModified": 1764120178,
+        "narHash": "sha256-gHYIGMAKy/PmS/F5RagTaocLrjX9PKUT+z8QeLu+R7w=",
         "owner": "diogotcorreia",
         "repo": "infra-keyval",
-        "rev": "4d86d83459b106108190f437c4d9605827dbb7c7",
+        "rev": "4c2fcf28982f9169fe1fa3e0abbd70eb2eab7bfd",
         "type": "github"
       },
       "original": {
         "owner": "diogotcorreia",
+        "ref": "v0.1.1",
         "repo": "infra-keyval",
         "type": "github"
       }
