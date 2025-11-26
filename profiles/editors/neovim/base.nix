@@ -75,13 +75,6 @@ in
 
       # disable audible bell for sanity reasons
       belloff = "all";
-
-      # enable spell checker
-      spell = true;
-      spelllang = [
-        "en"
-        "pt"
-      ];
     };
 
     keymaps = [

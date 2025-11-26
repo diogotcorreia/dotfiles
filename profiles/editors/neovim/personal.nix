@@ -8,6 +8,15 @@
   ];
 
   hm.programs.nixvim = {
+    opts = {
+      # enable spell checker
+      spell = true;
+      spelllang = [
+        "en"
+        "pt"
+      ];
+    };
+
     plugins.colorizer = {
       enable = true;
       settings.user_default_options.names = false;
