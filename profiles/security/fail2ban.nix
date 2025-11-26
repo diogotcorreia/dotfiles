@@ -7,4 +7,6 @@
       "192.168.100.0/24" # Nebula network
     ];
   };
+
+  modules.impermanence.directories = [ "/var/lib/fail2ban" ];
 }
