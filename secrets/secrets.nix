@@ -175,7 +175,7 @@ mkSecrets [
       "fireflyAutoDataImporterHealthchecksUrl"
       "fireflyDataImporterEnv"
       "healthchecksUrl"
-      "immichEnv"
+      "immichClientSecret"
       "istDelegateElectionFenixSecret"
       "nebulaCert"
       "nebulaKey"

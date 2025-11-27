@@ -27,7 +27,7 @@ in
   users.users.${cfg.user}.uid = 15015;
   users.groups.${cfg.group}.gid = 15015;
 
-  age.secrets.immichEnv.file = secrets.host.immichEnv;
+  age.secrets.immichClientSecret.file = secrets.host.immichClientSecret;
 
   services.immich = {
     inherit port;
@@ -57,7 +57,7 @@ in
         autoRegister = true; # we limit who can register in authelia
         buttonText = "Login with Authelia";
         clientId = oauthClientId;
-        # clientSecret is passed using env variables (see below)
+        clientSecret._secret = config.age.secrets.immichClientSecret.path;
         enabled = true;
         issuerUrl = "https://auth.diogotc.com/.well-known/openid-configuration";
         scope = lib.concatStringsSep " " oauthScopes;
@@ -67,35 +67,13 @@ in
         storageQuotaClaim = "immich_quota";
       };
     };
-
-    # Contains:
-    # - IMMICH_OAUTH_CLIENT_SECRET (custom, see below)
-    secretsFile = config.age.secrets.immichEnv.path;
   };
 
-  # Since the Immich people don't give us proper env variables for secrets,
-  # we'll have to do it ourselves.
-  # https://github.com/immich-app/immich/discussions/14815
-  systemd.services.immich-server =
-    let
-      unpatchedConfigFile = config.services.immich.environment.IMMICH_CONFIG_FILE;
-      patchedConfigFile = "/run/immich/config.json";
-    in
-    {
-      environment = {
-        IMMICH_CONFIG_FILE = lib.mkForce patchedConfigFile;
-      };
-      preStart = ''
-        install -m 600 /dev/null ${patchedConfigFile}
-        ${lib.getExe pkgs.jq} -c \
-          --arg oauthClientSecret "$IMMICH_OAUTH_CLIENT_SECRET" \
-          '.oauth.clientSecret += $oauthClientSecret' \
-          ${unpatchedConfigFile} > ${patchedConfigFile}
-      '';
-      # We must set the UMask of the Immich service, so new files can be read by the group as well,
-      # in order for restic backups to work properly across NFS.
-      serviceConfig.UMask = lib.mkForce "0027"; # default is 0077
-    };
+  systemd.services.immich-server = {
+    # We must set the UMask of the Immich service, so new files can be read by the group as well,
+    # in order for restic backups to work properly across NFS.
+    serviceConfig.UMask = lib.mkForce "0027"; # default is 0077
+  };
 
   systemd.tmpfiles.rules = [ "d ${photosLocation} 0750 ${cfg.user} ${cfg.group}" ];
 
