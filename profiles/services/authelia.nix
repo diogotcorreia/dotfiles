@@ -143,6 +143,8 @@ in
         issuer = domain;
       };
       webauthn = {
+        enable_passkey_login = true;
+        experimental_enable_passkey_uv_two_factors = true;
         disable = false;
         display_name = domain;
       };
