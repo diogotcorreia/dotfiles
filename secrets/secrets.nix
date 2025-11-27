@@ -168,6 +168,7 @@ mkSecrets [
       "altUrlsDiscordBotEnv"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
+      "dawarichEnv"
       "diskstationSambaCredentials"
       "fireflyAppKey"
       "fireflyAutoDataImporterEnv"
