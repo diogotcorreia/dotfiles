@@ -28,6 +28,7 @@ in
   users.groups.${cfg.group}.gid = 15015;
 
   age.secrets.immichClientSecret.file = secrets.host.immichClientSecret;
+  age.secrets.immichSmtpPassword.file = secrets.host.immichSmtpPassword;
 
   services.immich = {
     inherit port;
@@ -51,6 +52,22 @@ in
 
       # disable update checker
       newVersionCheck.enabled = false;
+
+      notifications = {
+        smtp = {
+          enabled = true;
+          from = "Immich <${lib.my.mkRobotsEmail "immich"}>";
+          replyTo = "Immich Admin <${lib.my.mkDtcEmail "immich.admin"}>";
+          transport = {
+            host = "mail.diogotc.com";
+            ignoreCert = false;
+            password._secret = config.age.secrets.immichSmtpPassword.path;
+            username = lib.my.mkRobotsEmail "immich";
+            port = 465;
+            secure = true;
+          };
+        };
+      };
 
       oauth = {
         autoLaunch = true;
