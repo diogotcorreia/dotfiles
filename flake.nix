@@ -8,11 +8,11 @@
     nixpkgs-uptime-kuma-pr.url = "github:diogotcorreia/nixpkgs/uptime-kuma-2";
     impermanence.url = "github:nix-community/impermanence/master";
     home = {
-      url = "github:nix-community/home-manager/master"; # TODO: change to release-25.11
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/main"; # TODO: change to nixos-25.11
+      url = "github:nix-community/nixvim/nixos-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
       # we don't need to build docs, so we can get rid of it
       inputs.nuschtosSearch.follows = "";
