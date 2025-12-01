@@ -1,6 +1,7 @@
 # Configuration for bro (home server)
 {
   lib,
+  pkgs,
   profiles,
   ...
 }:
@@ -25,6 +26,9 @@
   networking.hostId = "29e7efc9";
 
   my.filesystem.mainDisk = "/dev/sda";
+
+  # PostgreSQL
+  services.postgresql.package = pkgs.postgresql_18;
 
   # /tmp configuration
   boot.tmp.cleanOnBoot = true;

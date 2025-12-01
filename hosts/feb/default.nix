@@ -1,6 +1,7 @@
 # Configuration for feb (home server)
 {
   lib,
+  pkgs,
   profiles,
   ...
 }:
@@ -29,6 +30,9 @@
   time.timeZone = "Europe/Lisbon";
 
   my.networking.wiredInterface = "enp0s31f6";
+
+  # PostgreSQL
+  services.postgresql.package = pkgs.postgresql_18;
 
   # Modules
   modules = {

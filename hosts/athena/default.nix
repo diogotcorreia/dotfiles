@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  pkgs,
   profiles,
   ...
 }:
@@ -60,6 +61,9 @@
   };
 
   my.networking.wiredInterface = "ens3";
+
+  # PostgreSQL
+  services.postgresql.package = pkgs.postgresql_18;
 
   # Time zone
   time.timeZone = "UTC";
