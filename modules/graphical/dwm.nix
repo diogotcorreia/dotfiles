@@ -133,18 +133,6 @@ in
     programs.light.enable = true;
     usr.extraGroups = [ "video" ];
 
-    # Disable picom autostart (we're using the module instead)
-    # https://github.com/nix-community/home-manager/issues/7708
-    hm.xdg.autostart = {
-      enable = true;
-      entries = [
-        "${pkgs.writeTextDir "picom.desktop" ''
-          [Desktop Entry]
-          Hidden=true
-        ''}/picom.desktop"
-      ];
-    };
-
     hm.services.picom = {
       enable = true;
       backend = "glx";
