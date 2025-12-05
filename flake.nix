@@ -64,6 +64,10 @@
       url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs-build-failure-notifier = {
+      url = "github:diogotcorreia/nixpkgs-build-failure-notifier?ref=v0.1.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-compat.url = "github:edolstra/flake-compat";
   };
 
@@ -150,10 +154,13 @@
         x86_64-linux = pkgs.my // {
           inherit (pkgs) restic-without-rclone;
           attic = pkgs.attic-client;
-          infra-keyval = inputs.infra-keyval.packages.x86_64-linux.infra-keyval;
-          ist-discord-bot = inputs.ist-discord-bot.packages.x86_64-linux.default;
-          lzbt = inputs.lanzaboote.packages.x86_64-linux.lzbt;
-          pwndbg = inputs.pwndbg.packages.x86_64-linux.pwndbg;
+          inherit (inputs.infra-keyval.packages.x86_64-linux) infra-keyval;
+          inherit (inputs.ist-discord-bot.packages.x86_64-linux) ist-discord-bot;
+          inherit (inputs.lanzaboote.packages.x86_64-linux) lzbt;
+          inherit (inputs.nixpkgs-build-failure-notifier.packages.x86_64-linux)
+            nixpkgs-build-failure-notifier
+            ;
+          inherit (inputs.pwndbg.packages.x86_64-linux) pwndbg;
         };
       };
 

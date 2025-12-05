@@ -25,6 +25,7 @@
     services.lldap
     services.meilisearch
     services.nginx.common
+    services.nixpkgs-build-failure-notifier
     services.pairdrop
     services.reposilite
     services.resumos-legacy

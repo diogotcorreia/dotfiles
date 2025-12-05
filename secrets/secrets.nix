@@ -94,6 +94,8 @@ mkSecrets [
       "meilisearchMasterKey"
       "nebulaCert"
       "nebulaKey"
+      "nixpkgsBuildFailureNotifierEnv"
+      "nixpkgsBuildFailureNotifierHealthchecksUrl"
       "resticHealthchecksUrl"
       "resticPassword"
       "resticSshConfig"
