@@ -97,6 +97,7 @@ jobs:
           - infra-keyval
           - ist-discord-bot
           - lzbt
+          - nixpkgs-build-failure-notifier
           - pwndbg
           - restic-without-rclone
 
