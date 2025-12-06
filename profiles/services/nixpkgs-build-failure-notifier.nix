@@ -13,8 +13,10 @@
 
   age.secrets = {
     nixpkgsBuildFailureNotifierEnv.file = secrets.host.nixpkgsBuildFailureNotifierEnv;
-    nixpkgsBuildFailureNotifierHealthchecksUrl.file =
-      secrets.host.nixpkgsBuildFailureNotifierHealthchecksUrl;
+    nixpkgsBuildFailureNotifierHealthchecksUrl = {
+      file = secrets.host.nixpkgsBuildFailureNotifierHealthchecksUrl;
+      owner = config.services.nixpkgs-build-failure-notifier.user;
+    };
   };
 
   services.nixpkgs-build-failure-notifier = {
