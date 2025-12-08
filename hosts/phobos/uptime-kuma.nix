@@ -16,7 +16,7 @@ in
     "services/monitoring/uptime-kuma.nix"
   ];
   imports = [
-    (inputs.nixpkgs-uptime-kuma-pr + "/nixos/modules/services/monitoring/uptime-kuma.nix")
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/monitoring/uptime-kuma.nix")
   ];
 
   services.uptime-kuma = {
@@ -25,7 +25,7 @@ in
       HOST = "::1";
       PORT = toString port;
     };
-    package = pkgs.uptime-kuma_2; # TODO 25.11: use stable
+    package = pkgs.unstable.uptime-kuma; # TODO 26.05: use stable
   };
 
   services.nginx.virtualHosts.${domain} = {
