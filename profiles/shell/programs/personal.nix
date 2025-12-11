@@ -29,6 +29,9 @@
     # URL Manipulation
     trurl
 
+    # many encoding/decoding utils + ctf utils
+    rsbkb
+
     # Agenix
     agenix
 
