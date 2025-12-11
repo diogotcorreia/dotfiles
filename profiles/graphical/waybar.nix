@@ -16,6 +16,7 @@
         ];
 
         modules-right = [
+          "memory"
           "cpu"
           "pulseaudio"
           "battery"
@@ -29,6 +30,11 @@
         };
 
         "niri/workspaces" = {
+        };
+
+        memory = {
+          format = "󰘚 {used:0.2f}GiB/{total:0.2f}GiB";
+          on-click = lib.my.mkTui "htop";
         };
 
         cpu = {
