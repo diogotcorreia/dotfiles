@@ -14,12 +14,6 @@ let
   dbUser = config.services.paperless.user;
 in
 {
-  age.secrets.heraPaperlessEnvVariables = {
-    file = secrets.host.paperlessEnvVariables;
-    owner = config.services.paperless.user;
-    group = config.services.paperless.user;
-  };
-
   services.paperless = {
     enable = true;
     address = "::1";
@@ -39,24 +33,6 @@ in
       PAPERLESS_URL = "https://${domain}";
     };
   };
-
-  # Seems like there isn't a great way to set the PAPERLESS_SECRET_KEY env variable?
-  # We add it to all services then:
-  systemd.services =
-    let
-      commonConfig = {
-        serviceConfig = {
-          # has PAPERLESS_SECRET_KEY
-          EnvironmentFile = [ config.age.secrets.heraPaperlessEnvVariables.path ];
-        };
-      };
-    in
-    {
-      paperless-scheduler = commonConfig;
-      paperless-task-queue = commonConfig;
-      paperless-consumer = commonConfig;
-      paperless-web = commonConfig;
-    };
 
   services.postgresql = {
     ensureUsers = [

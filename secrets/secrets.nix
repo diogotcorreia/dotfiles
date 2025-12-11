@@ -183,7 +183,6 @@ mkSecrets [
       "nebulaCert"
       "nebulaKey"
       "nextcloudSecrets"
-      "paperlessEnvVariables"
       "resticHealthchecksUrl"
       "resticPassword"
       "resticSshConfig"
