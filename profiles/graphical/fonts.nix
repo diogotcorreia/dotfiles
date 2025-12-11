@@ -5,5 +5,6 @@
     noto-fonts
     noto-fonts-color-emoji
     noto-fonts-cjk-sans
+    material-design-icons
   ];
 }
