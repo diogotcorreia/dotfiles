@@ -7,21 +7,23 @@
 }:
 let
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.11.7/nordic.theme.css";
-    hash = "sha256-PCRfEqaBISe1WDYwMK1q22Cpq6oHKomrQX42/2Z45UQ=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.12.0/nordic.theme.css";
+    hash = "sha256-KExcIUWLit9MQC2KBYioP6EPXW+2ivnjuhZcNfmzd4s=";
   };
   extraCss = ''
-    .visual-refresh.theme-dark {
+    .theme-dark, .theme-darker {
       /* change background color of chat pane */
-      --neutral-69: var(--nord-dark1) !important;
-      /* change background color of left pane */
-      --neutral-83: var(--nord-dark1) !important;
+      --background-base-lower: var(--nord-dark1) !important;
+      /* change background color of text input */
+      --chat-background-default: var(--nord-dark2) !important;
+      /* change background color of "active now" cards */
+      --background-surface-high: var(--nord-dark1) !important;
       /* change background of action buttons */
       --background-secondary: var(--nord-dark2) !important;
       /* change background of "active now" pane */
       --background-base-low: var(--nord-dark1) !important;
     }
-    .visual-refresh .sidebarList_c48ade {
+    .sidebarList__5e434 {
       /* add missing border since background is the same now */
       border-right: 1px solid var(--app-border-frame);
     }
@@ -30,9 +32,9 @@ let
       /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
       overflow: hidden;
     }
-    .visual-refresh {
+    :root {
       /* hide top bar */
-      --custom-app-top-bar-height: 0;
+      --custom-app-top-bar-height: 0px !important;
     }
   '';
 
