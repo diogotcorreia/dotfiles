@@ -45,6 +45,9 @@ let
       (node name null [ value ] { } [ ]);
 
   mkProps = props: { _props = props; };
+  mkArgs = args: { _args = args; };
+  mkSpawn = args: { spawn = mkArgs args; };
+  mkSpawnLocked = args: (mkSpawn args) // (mkProps { allow-when-locked = true; });
 
   generate = settings: format.generate "config.kdl" (flatten (mapAttrsToList toNode settings));
 
@@ -115,6 +118,8 @@ in
       };
       warp-mouse-to-focus = { };
       focus-follows-mouse = { };
+      # allow using the power key as a mic mute button
+      disable-power-key-handling = { };
     };
 
     # Disable client-side decorations
@@ -216,11 +221,92 @@ in
         "move-window-to-monitor-${monitorNext}" = { };
       };
 
+      # Multimedia keys
+      "XF86AudioMute" = mkSpawnLocked [
+        "wpctl"
+        "set-mute"
+        "@DEFAULT_AUDIO_SINK@"
+        "toggle"
+      ];
+      "XF86AudioLowerVolume" = mkSpawnLocked [
+        "wpctl"
+        "set-volume"
+        "@DEFAULT_AUDIO_SINK@"
+        "5%-"
+      ];
+      "XF86AudioRaiseVolume" = mkSpawnLocked [
+        "wpctl"
+        "set-volume"
+        "@DEFAULT_AUDIO_SINK@"
+        "5%+"
+      ];
+      "XF86PowerOff" = mkSpawnLocked [
+        "wpctl"
+        "set-mute"
+        "@DEFAULT_AUDIO_SOURCE@"
+        "toggle"
+      ];
+      "Pause" = mkSpawnLocked [
+        "wpctl"
+        "set-mute"
+        "@DEFAULT_AUDIO_SOURCE@"
+        "toggle"
+      ];
+      "XF86AudioNext" = mkSpawnLocked [
+        "${lib.getExe pkgs.playerctl}"
+        "next"
+      ];
+      "XF86AudioPrev" = mkSpawnLocked [
+        "${lib.getExe pkgs.playerctl}"
+        "previous"
+      ];
+      "XF86AudioPlay" = mkSpawnLocked [
+        "${lib.getExe pkgs.playerctl}"
+        "play-pause"
+      ];
+
+      # Brightness keys
+      "XF86MonBrightnessUp" = mkSpawn [
+        "${lib.getExe pkgs.brightnessctl}"
+        "set"
+        "5%+"
+      ];
+      "XF86MonBrightnessDown" = mkSpawn [
+        "${lib.getExe pkgs.brightnessctl}"
+        "set"
+        "5%-"
+      ];
+
       # Quit niri
       "Mod+Ctrl+Q" = {
         quit = { };
       };
-    };
+    }
+    # Mod + <number> to focus/move window to that workspace
+    // (lib.listToAttrs (
+      flatten (
+        map (i: [
+          {
+            name = "Mod+${toString i}";
+            value = {
+              "focus-workspace" = mkArgs [ i ];
+            };
+          }
+          {
+            name = "Mod+Shift+${toString i}";
+            value = {
+              "move-window-to-workspace" = mkArgs [ i ];
+            };
+          }
+          {
+            name = "Mod+Ctrl+${toString i}";
+            value = {
+              "move-column-to-workspace" = mkArgs [ i ];
+            };
+          }
+        ]) (lib.range 1 9)
+      )
+    ));
 
     environment = {
       DISPLAY = ":0";
