@@ -29,7 +29,7 @@ in
     enable = true;
     webPort = port;
     localDomain = domain;
-    extraConfig = {
+    environment = {
       STORE_GEODATA = "true";
       # PHOTON_API_HOST = "photon.komoot.io";
       # PHOTON_API_USE_HTTPS = "true";
