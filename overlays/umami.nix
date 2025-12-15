@@ -22,7 +22,5 @@
       fetcherVersion = 2;
       hash = "sha256-eXurT8kfVJcJoFunrt7h8LKuhsIhGrYDW6shvGA6GXY=";
     };
-
-    DATABASE_URL = "postgresql://";
   });
 })
