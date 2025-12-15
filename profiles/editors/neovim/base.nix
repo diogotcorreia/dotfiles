@@ -20,6 +20,8 @@ in
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+    enablePrintInit = false;
+    enableMan = false;
 
     colorschemes.base16 = {
       enable = true;
