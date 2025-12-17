@@ -18,11 +18,6 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  # Fixes not being able to boot into TTY
-  # https://github.com/NixOS/nixpkgs/issues/328972
-  hardware.nvidia.modesetting.enable = false;
-  boot.kernelParams = [
-    "nvidia-drm.modeset=1"
-    "nvidia_drm.fbdev=0"
-  ];
+  # Fixes artifacting on TTY due to different resolution monitors
+  boot.loader.systemd-boot.consoleMode = "auto";
 }
