@@ -51,22 +51,19 @@
        --output DP-0 --mode 1920x1080 --rate 60 --pos 3200x0
   '';
 
-  # Network Manager
-  networking = {
-    interfaces.${config.my.networking.wiredInterface} = {
-      ipv4 = {
-        addresses = [
-          {
-            address = "192.168.1.2";
-            prefixLength = 24;
-          }
-        ];
+  networking.useNetworkd = true;
+  systemd.network = {
+    networks."10-wan" = {
+      matchConfig.Name = config.my.networking.wiredInterface;
+      address = [
+        "192.168.1.2/24"
+      ];
+      routes = [
+        { Gateway = "192.168.1.1"; }
+      ];
+      networkConfig = {
+        IPv6AcceptRA = true;
       };
-      wakeOnLan.enable = true;
-    };
-    defaultGateway = {
-      address = "192.168.1.1";
-      interface = config.my.networking.wiredInterface;
     };
   };
 
