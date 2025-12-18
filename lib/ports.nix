@@ -16,7 +16,6 @@
     imaps = 993;
 
     socksCaptivePortalsClient = 1666;
-    nodered = 1880;
     mqtt = 1883;
     jellyfinAutoDiscoveryDlna = 1900;
 

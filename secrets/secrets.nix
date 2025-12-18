@@ -176,6 +176,7 @@ mkSecrets [
       "fireflyAutoDataImporterEnv"
       "fireflyAutoDataImporterHealthchecksUrl"
       "fireflyDataImporterEnv"
+      "hassSecrets"
       "healthchecksUrl"
       "immichClientSecret"
       "immichSmtpPassword"
