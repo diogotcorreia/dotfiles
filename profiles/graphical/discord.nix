@@ -7,8 +7,8 @@
 }:
 let
   discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.12.2/nordic.theme.css";
-    hash = "sha256-672QEvIzWzMJSS0MXDmfmr7UHa8juU/lXbuzTGRq2E0=";
+    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.12.3/nordic.theme.css";
+    hash = "sha256-ETN/eShl6uX0TK6OUjLeNP8RdymVK2BuO7XFUwrQQYI=";
   };
   extraCss = ''
     .theme-dark, .theme-darker {
@@ -23,11 +23,11 @@ let
       /* change background of "active now" pane */
       --background-base-low: var(--nord-dark1) !important;
     }
-    .sidebarList__5e434 {
+    ._5e434347c823b592-sidebarList {
       /* add missing border since background is the same now */
-      border-right: 1px solid var(--app-border-frame);
+      border-right: 1px solid var(--app-frame-border);
     }
-    .bar_c38106 {
+    .c38106a3f0c3ca76-bar {
       /* hide top bar */
       /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
       overflow: hidden;
