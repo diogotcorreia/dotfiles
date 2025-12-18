@@ -45,7 +45,7 @@ in
 
   config = mkIf cfg.enable {
     networking = {
-      nameservers = [ "127.0.0.53" ];
+      nameservers = [ "127.0.0.55" ];
       dhcpcd.extraConfig = "nohook resolv.conf";
     };
 
@@ -54,10 +54,18 @@ in
       settings = {
         inherit fallback upstream;
         listen-addrs = [
-          (if cfg.all-interfaces then "0.0.0.0" else "127.0.0.53")
+          (if cfg.all-interfaces then "0.0.0.0" else "127.0.0.55")
         ];
       };
       flags = [ "--cache" ];
+    };
+
+    services.resolved = {
+      extraConfig = ''
+        Cache=no
+      '';
+      fallbackDns = [ ]; # Do not try other servers
+      domains = [ "~." ]; # Force all queries to use the dnsproxy
     };
   };
 }
