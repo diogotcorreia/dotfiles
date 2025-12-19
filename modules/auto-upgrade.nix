@@ -166,7 +166,7 @@ in
       }
     ];
 
-    system.autoUpgrade.flags = [
+    my.autoUpgrade.flags = [
       "--refresh"
       "--no-link"
     ];
