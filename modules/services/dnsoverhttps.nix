@@ -63,6 +63,7 @@ in
     services.resolved = {
       extraConfig = ''
         Cache=no
+        DNSSEC=yes
       '';
       fallbackDns = [ ]; # Do not try other servers
       domains = [ "~." ]; # Force all queries to use the dnsproxy
