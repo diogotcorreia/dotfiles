@@ -19,5 +19,5 @@
   };
 
   # Fixes artifacting on TTY due to different resolution monitors
-  boot.loader.systemd-boot.consoleMode = "auto";
+  boot.loader.systemd-boot.consoleMode = "max";
 }
