@@ -21,7 +21,6 @@
     services.esphome
     services.nginx.common
     shell.zellij
-    virtualisation.docker
   ];
 
   # Host Id
