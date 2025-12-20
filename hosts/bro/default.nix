@@ -91,15 +91,6 @@
     };
   };
 
-  # Override server.nix module settings
-  system.autoUpgrade = {
-    rebootWindow = {
-      lower = lib.mkForce "12:00";
-      upper = lib.mkForce "14:00";
-    };
-    dates = lib.mkForce "12:00";
-  };
-
   # System state version
   system.stateVersion = "23.05";
 }
