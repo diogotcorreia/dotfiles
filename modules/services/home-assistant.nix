@@ -171,9 +171,9 @@ in
 
     # https://nixos.wiki/wiki/Home_Assistant#Combine_declarative_and_UI_defined_automations
     systemd.tmpfiles.rules = mkIf cfg.useSensibleDefaults [
-      "f ${config.services.home-assistant.configDir}/automations.yaml 0755 hass hass"
-      "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
-      "f ${config.services.home-assistant.configDir}/scripts.yaml 0755 hass hass"
+      "f ${config.services.home-assistant.configDir}/automations.yaml 0644 hass hass"
+      "f ${config.services.home-assistant.configDir}/scenes.yaml 0644 hass hass"
+      "f ${config.services.home-assistant.configDir}/scripts.yaml 0644 hass hass"
     ];
 
     services.postgresql = mkIf cfg.usePostgresql {
