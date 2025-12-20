@@ -173,6 +173,7 @@ in
     systemd.tmpfiles.rules = mkIf cfg.useSensibleDefaults [
       "f ${config.services.home-assistant.configDir}/automations.yaml 0755 hass hass"
       "f ${config.services.home-assistant.configDir}/scenes.yaml 0755 hass hass"
+      "f ${config.services.home-assistant.configDir}/scripts.yaml 0755 hass hass"
     ];
 
     services.postgresql = mkIf cfg.usePostgresql {
