@@ -17,6 +17,7 @@ in
 
     # Custom options
     useSensibleDefaults = true;
+    usePostgresql = true;
     externalDomain = hassDomain;
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/home-assistant/component-packages.nix
