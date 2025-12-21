@@ -50,7 +50,6 @@
     atticd = 8004;
     bookMetadataApi = 8004;
     calibreWeb = 8011;
-    iHateToBudget = 8013;
     grafana = 8032;
     prometheus = 8033;
     immich = 8084;
