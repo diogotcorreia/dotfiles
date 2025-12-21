@@ -53,6 +53,7 @@ let
 in
 {
   imports = with profiles; [
+    graphical.flameshot
     graphical.fonts
     graphical.fuzzel
     graphical.swaylock
@@ -280,6 +281,23 @@ in
         clear-dynamic-cast-target = { };
       };
 
+      # Screenshot
+      "Print" = {
+        screenshot = { };
+      };
+      "Shift+Print" = {
+        screenshot-window = { };
+      };
+      "Ctrl+Print" = {
+        screenshot-screen = { };
+      };
+      # flameshot does not work very well in niri
+      # https://github.com/YaLTeR/niri/issues/2309
+      "Shift+Ctrl+Print" = mkSpawn [
+        "flameshot"
+        "gui"
+      ];
+
       # Misc
       "Mod+W" = {
         toggle-overview = { };
@@ -393,6 +411,14 @@ in
           active-color = "#f38ba8";
           inactive-color = "#7d0d2d";
         };
+      }
+      {
+        match = [
+          (mkProps { title = "flameshot"; })
+        ];
+
+        open-fullscreen = false;
+        open-floating = true;
       }
     ];
 
