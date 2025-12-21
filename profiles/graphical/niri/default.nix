@@ -122,6 +122,10 @@ in
       disable-power-key-handling = { };
     };
 
+    cursor = {
+      xcursor-theme = "Adwaita";
+    };
+
     # Disable client-side decorations
     prefer-no-csd = { };
 
