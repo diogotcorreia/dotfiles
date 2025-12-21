@@ -42,6 +42,7 @@ in
         "directory.*"
         "lookup.default.domain"
         "lookup.default.hostname"
+        "metrics.*"
         "report.analysis.*"
         "resolver.*"
         "server.*"
@@ -149,6 +150,10 @@ in
         };
       };
 
+      metrics.prometheus.enable = true;
+      # not really a setting for stalwart, just for prometheus
+      metrics.prometheus.host = "metrics.${stalwartDomain}";
+
       # Just for initial setup - comment immediately!
       # authentication.fallback-admin = {
       # user = "admin";
@@ -212,6 +217,20 @@ in
       ${stalwartDomain} = {
         enableACME = true;
         locations."/".proxyPass = proxy;
+        locations."/metrics/prometheus".extraConfig = ''
+          deny all;
+        '';
+      };
+      "metrics.${stalwartDomain}" = {
+        enableACME = true;
+        locations."/metrics/prometheus" = {
+          proxyPass = proxy;
+          # only allow connections from phobos
+          extraConfig = ''
+            allow 192.168.100.7;
+            deny all;
+          '';
+        };
       };
     }
     // lib.listToAttrs (
