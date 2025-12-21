@@ -397,7 +397,6 @@ in
     ];
 
     environment = {
-      DISPLAY = ":0";
       # Make Electron apps use Wayland by default
       NIXOS_OZONE_WL = "1";
     };
