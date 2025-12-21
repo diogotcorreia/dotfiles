@@ -375,6 +375,27 @@ in
       )
     ));
 
+    window-rule = [
+      {
+        match = [
+          (mkProps { is-window-cast-target = true; })
+        ];
+
+        focus-ring = {
+          active-color = "#f38ba8";
+          inactive-color = "#7d0d2d";
+        };
+        shadow = {
+          on = { };
+          color = "#7d0d2d70";
+        };
+        tab-indicator = {
+          active-color = "#f38ba8";
+          inactive-color = "#7d0d2d";
+        };
+      }
+    ];
+
     environment = {
       DISPLAY = ":0";
       # Make Electron apps use Wayland by default
