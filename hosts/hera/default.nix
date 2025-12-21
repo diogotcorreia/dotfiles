@@ -71,11 +71,6 @@
         enable = true;
         firewall.inbound = [
           {
-            port = lib.my.ports.ssh;
-            proto = "tcp";
-            group = "dtc";
-          }
-          {
             port = lib.my.ports.http;
             proto = "tcp";
             group = "dtc";

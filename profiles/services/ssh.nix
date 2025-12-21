@@ -18,4 +18,12 @@ in
     ports = [ lib.my.ports.ssh ];
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
+
+  modules.services.nebula.firewall.inbound = [
+    {
+      port = lib.my.ports.ssh;
+      proto = "tcp";
+      group = "dtc";
+    }
+  ];
 }

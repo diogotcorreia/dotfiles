@@ -1,7 +1,6 @@
 # Configuration for gammal (third-party laptop)
 {
   config,
-  lib,
   pkgs,
   profiles,
   secrets,
@@ -58,16 +57,7 @@
     services = {
       dnsoverhttps.enable = true;
       # Nebula (VPN)
-      nebula = {
-        enable = true;
-        firewall.inbound = [
-          {
-            port = lib.my.ports.ssh;
-            proto = "tcp";
-            group = "dtc";
-          }
-        ];
-      };
+      nebula.enable = true;
       restic =
         let
           homeDir = "/home/tita";

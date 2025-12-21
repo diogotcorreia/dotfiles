@@ -153,16 +153,7 @@
     services = {
       dnsoverhttps.enable = true;
       # Nebula (VPN)
-      nebula = {
-        enable = true;
-        firewall.inbound = [
-          {
-            port = lib.my.ports.ssh;
-            proto = "tcp";
-            group = "dtc";
-          }
-        ];
-      };
+      nebula.enable = true;
       restic = {
         enable = true;
 
