@@ -63,6 +63,9 @@ in
   hm.home.packages = with pkgs; [
     niri
     xwayland-satellite
+
+    # TODO: move to another profile once the wayland specialisation becomes the default
+    pulsemixer
   ];
 
   hm.programs.zsh.initContent = ''
