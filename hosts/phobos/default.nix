@@ -11,7 +11,6 @@
     meta.server
     monitoring.grafana
     monitoring.prometheus
-    monitoring.prometheus-exporters.node
     security.acme.cloudflare
     security.fail2ban
     server.minimal
