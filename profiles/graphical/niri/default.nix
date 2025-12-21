@@ -50,10 +50,6 @@ let
   mkSpawnLocked = args: (mkSpawn args) // (mkProps { allow-when-locked = true; });
 
   generate = settings: format.generate "config.kdl" (flatten (mapAttrsToList toNode settings));
-
-  monitorsHorizontally = config.my.graphical.monitorDirection == "horizontally";
-  monitorPrevious = if monitorsHorizontally then "left" else "up";
-  monitorNext = if monitorsHorizontally then "right" else "down";
 in
 {
   imports = with profiles; [
@@ -203,22 +199,87 @@ in
       "Mod+Shift+F" = {
         fullscreen-window = { };
       };
-      "Mod+C" = {
+      "Mod+Ctrl+F" = {
+        maximize-window-to-edges = { };
+      };
+      "Mod+Ctrl+Shift+F" = {
+        toggle-windowed-fullscreen = { };
+      };
+      "Mod+X" = {
         center-column = { };
+      };
+
+      # Focus/move columns/windows
+      "Mod+H" = {
+        focus-column-left-or-last = { };
+      };
+      "Mod+Shift+H" = {
+        move-column-left = { };
+      };
+      "Mod+Ctrl+H" = {
+        consume-or-expel-window-left = { };
+      };
+      "Mod+L" = {
+        focus-column-right-or-first = { };
+      };
+      "Mod+Shift+L" = {
+        move-column-right = { };
+      };
+      "Mod+Ctrl+L" = {
+        consume-or-expel-window-right = { };
+      };
+      "Mod+K" = {
+        focus-window-or-workspace-up = { };
+      };
+      "Mod+Shift+K" = {
+        move-window-up-or-to-workspace-up = { };
+      };
+      "Mod+J" = {
+        focus-window-or-workspace-down = { };
+      };
+      "Mod+Shift+J" = {
+        move-window-down-or-to-workspace-down = { };
+      };
+
+      # Floating
+      "Mod+G" = {
+        toggle-window-floating = { };
+      };
+      "Mod+Shift+G" = {
+        switch-focus-between-floating-and-tiling = { };
       };
 
       # Monitor actions
       "Mod+Comma" = {
-        "focus-monitor-${monitorPrevious}" = { };
+        focus-monitor-next = { };
       };
       "Mod+Shift+Comma" = {
-        "move-window-to-monitor-${monitorPrevious}" = { };
+        move-window-to-monitor-next = { };
       };
       "Mod+Period" = {
-        "focus-monitor-${monitorNext}" = { };
+        focus-monitor-previous = { };
       };
       "Mod+Shift+Period" = {
-        "move-window-to-monitor-${monitorNext}" = { };
+        move-window-to-monitor-previous = { };
+      };
+
+      # Screencasting
+      "Mod+C" = {
+        set-dynamic-cast-window = { };
+      };
+      "Mod+Shift+C" = {
+        set-dynamic-cast-monitor = { };
+      };
+      "Mod+Ctrl+C" = {
+        clear-dynamic-cast-target = { };
+      };
+
+      # Misc
+      "Mod+W" = {
+        toggle-overview = { };
+      };
+      "Mod+T" = {
+        toggle-column-tabbed-display = { };
       };
 
       # Multimedia keys
