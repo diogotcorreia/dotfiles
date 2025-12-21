@@ -12,6 +12,13 @@ let
 in
 {
   config = mkIf postgresqlCfg.enable {
+    # Tweak PostgreSQL performance for SSDs
+    # https://pgtune.leopard.in.ua/?dbVersion=18&osType=linux&dbType=web&cpuNum=&totalMemory=4&totalMemoryUnit=GB&connectionNum=&hdType=ssd
+    services.postgresql.settings = {
+      random_page_cost = 1.1;
+      effective_io_concurrency = 200;
+    };
+
     # Handle backup of PostgreSQL databases
     modules.services.restic = {
       stdinFromCommand = [
