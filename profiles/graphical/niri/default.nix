@@ -122,7 +122,7 @@ in
     prefer-no-csd = { };
 
     layout = {
-      gaps = 8;
+      gaps = 4;
 
       preset-column-widths = {
         proportion = [
@@ -137,7 +137,7 @@ in
       };
 
       focus-ring = {
-        width = 4;
+        width = 2;
 
         # TODO: use theme colors
         active-color = "#7fc8ff";
@@ -147,6 +147,12 @@ in
       # Disable border since we're using focus ring instead
       border = {
         off = { };
+      };
+
+      tab-indicator = {
+        hide-when-single-tab = { };
+        # avoid overlapping the indicator with windows
+        place-within-column = { };
       };
     };
 
