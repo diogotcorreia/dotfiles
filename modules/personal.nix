@@ -104,7 +104,7 @@ in
           user = "dtc";
         };
         phobos = {
-          hostname = "phobos.diogotc.com";
+          hostname = "world.phobos.diogotc.com";
           user = "dtc";
         };
         poseidon = {
