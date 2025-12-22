@@ -253,11 +253,17 @@ in
       "Mod+Shift+K" = {
         move-window-up-or-to-workspace-up = { };
       };
+      "Mod+Ctrl+K" = {
+        move-workspace-up = { };
+      };
       "Mod+J" = {
         focus-window-or-workspace-down = { };
       };
       "Mod+Shift+J" = {
         move-window-down-or-to-workspace-down = { };
+      };
+      "Mod+Ctrl+J" = {
+        move-workspace-down = { };
       };
 
       # Floating
@@ -275,11 +281,17 @@ in
       "Mod+Shift+Comma" = {
         move-window-to-monitor-next = { };
       };
+      "Mod+Ctrl+Comma" = {
+        move-workspace-to-monitor-next = { };
+      };
       "Mod+Period" = {
         focus-monitor-previous = { };
       };
       "Mod+Shift+Period" = {
         move-window-to-monitor-previous = { };
+      };
+      "Mod+Ctrl+Period" = {
+        move-workspace-to-monitor-previous = { };
       };
 
       # Screencasting
