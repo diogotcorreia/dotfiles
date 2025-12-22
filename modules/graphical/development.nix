@@ -16,7 +16,7 @@ in
   config.hm = mkIf cfg.enable {
     home.packages = with pkgs; [
       # IntelliJ IDEA (Ultimate)
-      jetbrains.idea-ultimate
+      jetbrains.idea
       # REST Client
       yaak
     ];
