@@ -57,6 +57,7 @@ in
     graphical.flameshot
     graphical.fonts
     graphical.fuzzel
+    graphical.gammastep
     graphical.swaylock
     graphical.waybar
   ];
