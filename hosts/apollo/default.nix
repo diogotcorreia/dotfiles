@@ -98,6 +98,16 @@
     }
   ];
 
+  location = {
+    latitude = 38.7;
+    longitude = -9.2;
+  };
+  services.geoclue2 = {
+    enableStatic = true;
+    staticAltitude = 30;
+    staticAccuracy = 5000;
+  };
+
   # Audio
   # TODO move to module
   security.rtkit.enable = true;
