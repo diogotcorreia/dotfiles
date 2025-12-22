@@ -79,6 +79,13 @@ in
     [ "$(tty)" = "/dev/tty1" ] && ! pidof -s niri >/dev/null 2>&1 && exec niri-session &> /dev/null
   '';
 
+  hm.dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      # Set dark mode on apps that read dconf
+      "color-scheme" = "prefer-dark";
+    };
+  };
+
   # Unlock keyring on login
   # System-wide option is needed for unlocking with PAM, while the HM option deals with starting the daemon
   # with the graphical session.
