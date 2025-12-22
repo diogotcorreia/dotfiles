@@ -65,10 +65,13 @@ in
   hm.home.packages = with pkgs; [
     niri
     xwayland-satellite
+    wl-clipboard
 
     # TODO: move to another profile once the wayland specialisation becomes the default
     pulsemixer
   ];
+
+  hm.services.cliphist.enable = true;
 
   hm.programs.zsh.initContent = ''
     # Start graphical server on user's current tty if not already running.
@@ -319,6 +322,9 @@ in
         "set-paused"
         "toggle"
       ];
+      "Mod+V" = {
+        spawn-sh = "cliphist list | fuzzel --dmenu --with-nth 2 --width 100 | cliphist decode | wl-copy";
+      };
 
       # Multimedia keys
       "XF86AudioMute" = mkSpawnLocked [
