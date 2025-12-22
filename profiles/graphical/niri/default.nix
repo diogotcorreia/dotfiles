@@ -66,6 +66,7 @@ in
     niri
     xwayland-satellite
     wl-clipboard
+    xdg-utils
 
     # TODO: move to another profile once the wayland specialisation becomes the default
     pulsemixer
