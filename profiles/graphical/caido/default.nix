@@ -75,7 +75,7 @@ in
             $out/share/icons/hicolor/512x512/apps/caido.png
           wrapProgram $out/bin/caido \
             --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+            --set ELECTRON_OZONE_PLATFORM_HINT x11
         '';
       };
 
