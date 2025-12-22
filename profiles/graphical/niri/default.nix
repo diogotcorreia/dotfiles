@@ -53,6 +53,7 @@ let
 in
 {
   imports = with profiles; [
+    graphical.dunst
     graphical.flameshot
     graphical.fonts
     graphical.fuzzel
@@ -312,6 +313,11 @@ in
       "Mod+T" = {
         toggle-column-tabbed-display = { };
       };
+      "Mod+N" = mkSpawn [
+        "dunstctl"
+        "set-paused"
+        "toggle"
+      ];
 
       # Multimedia keys
       "XF86AudioMute" = mkSpawnLocked [
