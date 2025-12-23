@@ -65,6 +65,7 @@
     transmission = 9091;
     prometheus-node-exporter = 9100;
     jackett = 9117;
+    flaresolverr = 9118;
     collabora-online = 9980;
     stalwartMailHttp = 9988;
 

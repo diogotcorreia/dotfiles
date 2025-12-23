@@ -64,6 +64,10 @@ in
     enable = true;
     listenPort = portBazarr;
   };
+  services.flaresolverr = {
+    enable = true;
+    port = lib.my.ports.flaresolverr;
+  };
 
   # Setup PostgreSQL for Jellyseerr
   # https://docs.jellyseerr.dev/extending-jellyseerr/database-config
