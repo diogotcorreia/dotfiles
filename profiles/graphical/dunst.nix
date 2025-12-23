@@ -15,7 +15,7 @@
 
         frame_color = lib.my.colors.green;
         background = lib.my.colors.black;
-        foreground = lib.my.colors.white;
+        foreground = lib.my.colors.lightwhite;
 
         idle_timeout = 30;
 

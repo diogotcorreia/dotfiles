@@ -161,9 +161,8 @@ in
       focus-ring = {
         width = 2;
 
-        # TODO: use theme colors
-        active-color = "#7fc8ff";
-        inactive-color = "#505050";
+        active-color = lib.my.colors.lightblue;
+        inactive-color = lib.my.colors.lightgrey;
       };
 
       # Disable border since we're using focus ring instead
@@ -441,16 +440,16 @@ in
         ];
 
         focus-ring = {
-          active-color = "#f38ba8";
-          inactive-color = "#7d0d2d";
+          active-color = lib.my.colors.red;
+          inactive-color = lib.my.colors.orange;
         };
         shadow = {
           on = { };
-          color = "#7d0d2d70";
+          color = "${lib.my.colors.red}70";
         };
         tab-indicator = {
-          active-color = "#f38ba8";
-          inactive-color = "#7d0d2d";
+          active-color = lib.my.colors.red;
+          inactive-color = lib.my.colors.orange;
         };
       }
       {
