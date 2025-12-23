@@ -28,7 +28,7 @@ in
   services.transmission = {
     enable = true;
     package = pkgs.transmission_4;
-    webHome = pkgs.unstable.flood-for-transmission;
+    webHome = pkgs.flood-for-transmission;
 
     settings = {
       rpc-port = port;

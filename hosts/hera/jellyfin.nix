@@ -54,17 +54,11 @@ in
     # https://github.com/NixOS/nixpkgs/pull/373533
     configDir = "/var/lib/jellyseerr";
   };
-  services.radarr = {
-    enable = true;
-    package = pkgs.unstable.radarr;
-  };
-  services.sonarr = {
-    enable = true;
-    package = pkgs.unstable.sonarr;
-  };
+  services.radarr.enable = true;
+  services.sonarr.enable = true;
   services.jackett = {
     enable = true;
-    package = pkgs.unstable.jackett;
+    package = pkgs.unstable.jackett; # TODO 26.05: move to stable
   };
   services.bazarr = {
     enable = true;

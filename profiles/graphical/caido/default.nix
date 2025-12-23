@@ -35,8 +35,8 @@ in
 
   hm.home.packages =
     let
-      caidoCli = pkgs.unstable.caido.override { appVariants = [ "cli" ]; };
-      caidoDesktop = pkgs.unstable.caido.override { appVariants = [ "desktop" ]; };
+      caidoCli = pkgs.caido.override { appVariants = [ "cli" ]; };
+      caidoDesktop = pkgs.caido.override { appVariants = [ "desktop" ]; };
 
       # Replace cloud-server signing key with our own
       # Original key: bfca3e77d29750f42e1f82745cab8686688c768b8c0418d0716db9018edf0ad3

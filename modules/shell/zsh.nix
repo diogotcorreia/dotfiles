@@ -64,7 +64,6 @@ in
       programs.eza.enable = true;
       programs.eza.enableZshIntegration = true;
       # starship (shell theme)
-      programs.starship.package = pkgs.unstable.starship;
       programs.starship.enable = true;
       # zoxide (jump to directories)
       programs.zoxide.enable = true;

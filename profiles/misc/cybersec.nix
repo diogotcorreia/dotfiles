@@ -18,6 +18,6 @@
     # Java Decompiler
     jadx
     # Binary Decompiler
-    unstable.ghidra
+    ghidra
   ];
 }
