@@ -30,7 +30,10 @@ in
           };
         };
         # Python
-        pylsp.enable = true;
+        ty = {
+          enable = true;
+          package = pkgs.unstable.ty;
+        };
         ruff.enable = true;
         # Rust is handled by rustaceanvim
         # Typst
