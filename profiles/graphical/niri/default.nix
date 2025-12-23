@@ -59,6 +59,7 @@ in
     graphical.fuzzel
     graphical.gammastep
     graphical.swaylock
+    graphical.wallpaper
     graphical.waybar
   ];
 
