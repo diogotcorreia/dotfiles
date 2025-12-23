@@ -64,7 +64,7 @@ in
   ];
 
   hm.home.packages = with pkgs; [
-    niri
+    niri # If ever using unstable, check if package is used somewhere else
     xwayland-satellite
     wl-clipboard
     xdg-utils

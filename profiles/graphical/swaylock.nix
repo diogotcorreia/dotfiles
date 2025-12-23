@@ -1,4 +1,8 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 {
   security.pam.services.swaylock = { };
   hm.programs.swaylock = {
@@ -46,5 +50,21 @@
       text-ver-color = black;
       text-wrong-color = black;
     });
+  };
+
+  # Turn off monitors after inactivity
+  # TODO: Revisit once https://github.com/YaLTeR/niri/issues/108 is implemented
+  hm.services.swayidle = {
+    enable = true;
+    timeouts = [
+      {
+        timeout = 3;
+        command = "${lib.getExe' pkgs.procps "pgrep"} swaylock && ${lib.getExe pkgs.niri} msg action power-off-monitors";
+      }
+      {
+        timeout = 300;
+        command = "${lib.getExe pkgs.niri} msg action power-off-monitors";
+      }
+    ];
   };
 }
