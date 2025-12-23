@@ -1,7 +1,6 @@
 # Configuration for apollo (desktop PC)
 {
   config,
-  lib,
   pkgs,
   profiles,
   ...
@@ -13,6 +12,7 @@
     graphical.discord
     graphical.firefox
     graphical.firefox-proxied
+    graphical.niri
     graphical.spotify
     graphical.thunderbird
     hardware.bluetooth
@@ -157,7 +157,6 @@
   # Modules
   modules = {
     graphical = {
-      enable = true;
       development.enable = true;
       gtk.enable = true;
       programs.enable = true;
@@ -207,20 +206,6 @@
     };
     personal.enable = true;
     xdg.enable = true;
-  };
-
-  # Wayland specialisation
-  # TODO: make default
-  specialisation.wayland.configuration = {
-    imports = with profiles; [
-      graphical.niri
-    ];
-
-    # Disable DWM configuration
-    modules.graphical = {
-      enable = lib.mkForce false;
-      autorandr.laptop.enable = lib.mkForce false;
-    };
   };
 
   # System state version
