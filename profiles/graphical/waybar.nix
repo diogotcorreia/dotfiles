@@ -85,8 +85,8 @@
         };
 
         pulseaudio = {
-          format = "{format_source} {icon} {volume}%";
-          format-bluetooth = "{format_source} {icon} {volume}% 󰂰 {desc}";
+          format = "{format_source}   {icon} {volume}%";
+          format-bluetooth = "{format_source}   {icon} {volume}% 󰂰 {desc}";
           format-muted = "{format_source} 󰝟";
           format-source = "󰍬 {volume}%";
           format-source-muted = "󰍭";
@@ -106,6 +106,8 @@
 
         battery = {
           states = {
+            half = 50;
+            low = 25;
             critical = 10;
           };
           format = "{icon} {capacity}%";
@@ -165,5 +167,152 @@
         };
       };
     };
+
+    style = with lib.my.colors; ''
+      @define-color black ${black};
+      @define-color darkgrey ${darkgrey};
+      @define-color grey ${grey};
+      @define-color lightgrey ${lightgrey};
+      @define-color darkwhite ${darkwhite};
+      @define-color white ${white};
+      @define-color lightwhite ${lightwhite};
+      @define-color teal ${teal};
+      @define-color lightblue ${lightblue};
+      @define-color blue ${blue};
+      @define-color darkblue ${darkblue};
+      @define-color red ${red};
+      @define-color orange ${orange};
+      @define-color yellow ${yellow};
+      @define-color green ${green};
+      @define-color pink ${pink};
+
+      * {
+        font-family: 'Material Design Icons', 'Fira Code', monospace;
+        font-size: 13px;
+      }
+
+      window#waybar {
+        background-color: @black;
+        color: @lightwhite;
+      }
+
+      window#waybar.hidden {
+        opacity: 0.2;
+      }
+
+      button {
+        border: none;
+        border-radius: 0;
+      }
+
+      #workspaces button {
+        padding: 0;
+        margin: 0 5px;
+        background-color: transparent;
+        font-weight: bold;
+      }
+
+      #workspaces button:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      #workspaces button:nth-child(5n+1).focused, #workspaces button:nth-child(5n+1).active {
+        color: @blue;
+        box-shadow: inset 0 -3px @blue;
+      }
+      #workspaces button:nth-child(5n+2).focused, #workspaces button:nth-child(5n+2).active {
+        color: @red;
+        box-shadow: inset 0 -3px @red;
+      }
+      #workspaces button:nth-child(5n+3).focused, #workspaces button:nth-child(5n+3).active {
+        color: @yellow;
+        box-shadow: inset 0 -3px @yellow;
+      }
+      #workspaces button:nth-child(5n+4).focused, #workspaces button:nth-child(5n+4).active {
+        color: @green;
+        box-shadow: inset 0 -3px @green;
+      }
+      #workspaces button:nth-child(5n+5).focused, #workspaces button:nth-child(5n+5).active {
+        color: @pink;
+        box-shadow: inset 0 -3px @pink;
+      }
+
+      #workspaces button.urgent {
+        background-color: @red;
+      }
+
+      #window {
+        padding: 0 10px;
+      }
+
+      #battery,
+      #cpu,
+      #memory,
+      #network,
+      #pulseaudio,
+      #custom-dunst {
+        padding: 0 5px;
+      }
+
+      #clock {
+        color: @black;
+        background-color: @blue;
+        margin: 4px;
+        padding: 1px 5px 0 5px;
+      }
+
+      #network {
+        color: @orange;
+      }
+
+      #battery {
+        color: @green;
+      }
+
+      #battery.charging {
+        color: @blue;
+      }
+
+      #battery.low {
+        color: @orange;
+      }
+
+      #battery.half {
+        color: @yellow;
+      }
+
+      @keyframes blink {
+        to {
+          background-color: @black;
+        }
+      }
+
+      /* Using steps() instead of linear as a timing function to limit cpu usage */
+      #battery.critical:not(.charging) {
+        background-color: @red;
+        color: @white;
+        animation-name: blink;
+        animation-duration: 0.5s;
+        animation-timing-function: steps(12);
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
+
+      #pulseaudio {
+        color: @yellow;
+      }
+
+      #cpu {
+        color: @red;
+      }
+
+      #memory {
+        color: @green;
+      }
+
+      #custom-dunst {
+        color: @yellow;
+      }
+    '';
   };
 }
