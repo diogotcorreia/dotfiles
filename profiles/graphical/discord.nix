@@ -32,6 +32,10 @@ let
       /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
       overflow: hidden;
     }
+    ._1f388bcaa446c0c8-tutorialContainer {
+      /* add padding on guild list after removing top bar */
+      padding-top: 10px;
+    }
     :root {
       /* hide top bar */
       --custom-app-top-bar-height: 0px !important;
