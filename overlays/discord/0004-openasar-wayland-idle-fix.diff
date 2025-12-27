@@ -1,0 +1,55 @@
+diff --git a/src/idle-fix.js b/src/idle-fix.js
+new file mode 100644
+index 0000000..a559310
+--- /dev/null
++++ b/src/idle-fix.js
+@@ -0,0 +1,36 @@
++const { powerMonitor } = require("electron");
++const { spawn } = require("child_process");
++
++module.exports = {
++  setup() {
++    let lastActive = null;
++    // Inspired by https://github.com/AdmiralFrijoles/discord-wayland-idle-fix/blob/main/electron-idlehook.js
++    const swayidle = spawn('swayidle', ['-w', 'timeout', '300', 'echo __IDLE__', 'resume', 'echo __RESUME__'],
++                       { stdio: ['ignore', 'pipe', 'ignore'] });
++    swayidle.stdout.setEncoding('utf8');
++    swayidle.stdout.on('data', (chunk) => {
++      if (chunk.includes('__RESUME__')) {
++        log('Idle', 'system is no longer idle');
++        lastActive = null;
++      } else if (chunk.includes("__IDLE__")) {
++        log('Idle', 'system is now idle');
++        lastActive = Date.now();
++      }
++    });
++    swayidle.on('error', () => { });
++    log('Idle', 'swayidle running');
++
++    powerMonitor.getSystemIdleTime = () => {
++      if (lastActive != null) {
++        return Math.floor((Date.now() - lastActive) / 1000);
++      }
++      return 0;
++    };
++    powerMonitor.getSystemIdleState = (idleThreshold) => {
++      if (lastActive == null || Date.now() - lastActive < idleThreshold * 1000) {
++        return 'active';
++      }
++      return 'idle';
++    };
++  },
++}
+diff --git a/src/index.js b/src/index.js
+index 41fe9bd..e8d482a 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -16,7 +16,7 @@ global.settings = require('./appSettings').getSettings();
+ global.oaConfig = settings.get('openasar', {});
+ 
+ require('./cmdSwitches')();
+-
++require('./idle-fix.js').setup();
+ 
+ // Force u2QuickLoad (pre-"minified" ish)
+ const M = require('module'); // Module
