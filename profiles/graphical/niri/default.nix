@@ -131,7 +131,7 @@ in
         natural-scroll = { };
       };
       warp-mouse-to-focus = { };
-      focus-follows-mouse = { };
+      focus-follows-mouse = mkProps { max-scroll-amount = "0%"; };
       # allow using the power key as a mic mute button
       disable-power-key-handling = { };
     };
