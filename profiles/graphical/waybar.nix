@@ -152,13 +152,12 @@
             mode-mon-col = 3;
             weeks-pos = "right";
             on-scroll = 1;
-            format = {
-              # TODO: use nord colors
-              months = "<span color='#ffead3'><b>{}</b></span>";
-              days = "<span color='#ecc6d9'><b>{}</b></span>";
-              weeks = "<span color='#99ffdd'><b>W{}</b></span>";
-              weekdays = "<span color='#ffcc66'><b>{}</b></span>";
-              today = "<span color='#ff6699'><b><u>{}</u></b></span>";
+            format = with lib.my.colors; {
+              months = "<span color='${yellow}'><b>{}</b></span>";
+              days = "<span color='${pink}'><b>{}</b></span>";
+              weeks = "<span color='${lightblue}'><b>W{}</b></span>";
+              weekdays = "<span color='${orange}'><b>{}</b></span>";
+              today = "<span color='${red}'><b><u>{}</u></b></span>";
             };
           };
           actions = {
