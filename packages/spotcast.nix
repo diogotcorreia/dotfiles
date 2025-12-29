@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "fondberg";
   domain = "spotcast";
-  version = "6.0.0-a15";
+  version = "6.0.0-a16";
 
   src = fetchFromGitHub {
     owner = "fondberg";
     repo = "spotcast";
     rev = "v${version}";
-    hash = "sha256-ROlyRPxhQS5pznj3vSHyfOQ2EE/8XOri0J65EC2ePTg=";
+    hash = "sha256-4E9wyfh3OnP2zkdeWLabwVdMitqECInz7nH5Te8t5B8=";
   };
 
   propagatedBuildInputs = with home-assistant.python.pkgs; [
@@ -21,9 +21,6 @@ buildHomeAssistantComponent rec {
     spotifyaio
     rapidfuzz
   ];
-
-  # https://github.com/joostlek/python-spotify/issues/718
-  ignoreVersionRequirement = [ "spotifyaio" ];
 
   meta = with lib; {
     changelog = "https://github.com/fondberg/spotcast/releases";
