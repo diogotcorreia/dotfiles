@@ -3,10 +3,10 @@
 let
   scripts = {
     copy = pkgs.writeShellScriptBin "copy" ''
-      exec ${lib.getExe pkgs.xclip} -selection clipboard "$@"
+      exec ${lib.getExe' pkgs.wl-clipboard "wl-copy"} "$@"
     '';
     pasta = pkgs.writeShellScriptBin "pasta" ''
-      exec ${lib.getExe pkgs.xclip} -selection clipboard -o "$@"
+      exec ${lib.getExe' pkgs.wl-clipboard "wl-paste"} --no-newline "$@"
     '';
     whereisreal = pkgs.writeShellScriptBin "whereisreal" ''
       readlink -f $(whereis "$@" | cut -d ' ' -f2-)
