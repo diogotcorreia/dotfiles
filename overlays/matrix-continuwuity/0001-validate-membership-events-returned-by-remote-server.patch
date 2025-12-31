@@ -1,0 +1,212 @@
+From 24c8756c1434b17344a536d900889f52529eceec Mon Sep 17 00:00:00 2001
+From: Olivia Lee <olivia@computer.surgery>
+Date: Tue, 30 Dec 2025 02:08:48 -0800
+Subject: [PATCH 1/2] validate membership events returned by remote servers
+
+This fixes a vulnerability where an attacker with a malicious remote
+server and a user on the local server can trick the local server into
+signing arbitrary events. The attacker issue a remote leave as the local
+user to a room on the malicious server. Without any validation of the
+make_leave response, the local server would sign the attacker-controlled
+event and pass it back to the malicious server with send_leave.
+
+The join and knock endpoints are also fixed in this commit, but are less
+useful for exploitation because the local server replaces the "content"
+field returned by the remote server. Remote invites are unaffected
+because we already check that the event returned from /invite has the
+same event ID as the event passed to it.
+
+Co-authored-by: timedout <git@nexy7574.co.uk>
+Co-authored-by: Jade Ellis <jade@ellis.link>
+Co-authored-by: Ginger <ginger@gingershaped.computer>
+---
+ src/api/client/membership/join.rs  |  9 +++-
+ src/api/client/membership/knock.rs |  9 +++-
+ src/api/client/membership/leave.rs |  8 +++
+ src/api/client/membership/mod.rs   | 86 +++++++++++++++++++++++++++++-
+ 4 files changed, 109 insertions(+), 3 deletions(-)
+
+diff --git a/src/api/client/membership/join.rs b/src/api/client/membership/join.rs
+index fd431cc8..313296ed 100644
+--- a/src/api/client/membership/join.rs
++++ b/src/api/client/membership/join.rs
+@@ -47,7 +47,7 @@
+ 	},
+ };
+ 
+-use super::banned_room_check;
++use super::{banned_room_check, validate_remote_member_event_stub};
+ use crate::Ruma;
+ 
+ /// # `POST /_matrix/client/r0/rooms/{roomId}/join`
+@@ -829,6 +829,13 @@ async fn join_room_by_id_helper_local(
+ 			err!(BadServerResponse("Invalid make_join event json received from server: {e:?}"))
+ 		})?;
+ 
++	validate_remote_member_event_stub(
++		&MembershipState::Join,
++		sender_user,
++		room_id,
++		&join_event_stub,
++	)?;
++
+ 	let join_authorized_via_users_server = join_event_stub
+ 		.get("content")
+ 		.map(|s| {
+diff --git a/src/api/client/membership/knock.rs b/src/api/client/membership/knock.rs
+index 4cbc6ec1..e460644b 100644
+--- a/src/api/client/membership/knock.rs
++++ b/src/api/client/membership/knock.rs
+@@ -38,7 +38,7 @@
+ 	},
+ };
+ 
+-use super::{banned_room_check, join::join_room_by_id_helper};
++use super::{banned_room_check, join::join_room_by_id_helper, validate_remote_member_event_stub};
+ use crate::Ruma;
+ 
+ /// # `POST /_matrix/client/*/knock/{roomIdOrAlias}`
+@@ -408,6 +408,13 @@ async fn knock_room_helper_local(
+ 		err!(BadServerResponse("Invalid make_knock event json received from server: {e:?}"))
+ 	})?;
+ 
++	validate_remote_member_event_stub(
++		&MembershipState::Knock,
++		sender_user,
++		room_id,
++		&knock_event_stub,
++	)?;
++
+ 	knock_event_stub.insert(
+ 		"origin".to_owned(),
+ 		CanonicalJsonValue::String(services.globals.server_name().as_str().to_owned()),
+diff --git a/src/api/client/membership/leave.rs b/src/api/client/membership/leave.rs
+index 5af9abc2..fb34fb35 100644
+--- a/src/api/client/membership/leave.rs
++++ b/src/api/client/membership/leave.rs
+@@ -21,6 +21,7 @@
+ };
+ use service::Services;
+ 
++use super::validate_remote_member_event_stub;
+ use crate::Ruma;
+ 
+ /// # `POST /_matrix/client/v3/rooms/{roomId}/leave`
+@@ -323,6 +324,13 @@ pub async fn remote_leave_room(
+ 		)))
+ 	})?;
+ 
++	validate_remote_member_event_stub(
++		&MembershipState::Leave,
++		user_id,
++		room_id,
++		&leave_event_stub,
++	)?;
++
+ 	// TODO: Is origin needed?
+ 	leave_event_stub.insert(
+ 		"origin".to_owned(),
+diff --git a/src/api/client/membership/mod.rs b/src/api/client/membership/mod.rs
+index 5e742a69..9123bac8 100644
+--- a/src/api/client/membership/mod.rs
++++ b/src/api/client/membership/mod.rs
+@@ -13,7 +13,14 @@
+ use axum::extract::State;
+ use conduwuit::{Err, Result, warn};
+ use futures::{FutureExt, StreamExt};
+-use ruma::{OwnedRoomId, RoomId, ServerName, UserId, api::client::membership::joined_rooms};
++use ruma::{
++	CanonicalJsonObject, OwnedRoomId, RoomId, ServerName, UserId,
++	api::client::membership::joined_rooms,
++	events::{
++		StaticEventContent,
++		room::member::{MembershipState, RoomMemberEventContent},
++	},
++};
+ use service::Services;
+ 
+ pub(crate) use self::{
+@@ -153,3 +160,80 @@ pub(crate) async fn banned_room_check(
+ 
+ 	Ok(())
+ }
++
++/// Validates that an event returned from a remote server by `/make_*`
++/// actually is a membership event with the expected fields.
++///
++/// Without checking this, the remote server could use the remote membership
++/// mechanism to trick our server into signing arbitrary malicious events.
++pub(crate) fn validate_remote_member_event_stub(
++	membership: &MembershipState,
++	user_id: &UserId,
++	room_id: &RoomId,
++	event_stub: &CanonicalJsonObject,
++) -> Result<()> {
++	let Some(event_type) = event_stub.get("type") else {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with missing type field"
++		));
++	};
++	if event_type != &RoomMemberEventContent::TYPE {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with invalid event type"
++		));
++	}
++
++	let Some(sender) = event_stub.get("sender") else {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with missing sender field"
++		));
++	};
++	if sender != &user_id.as_str() {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with incorrect sender"
++		));
++	}
++
++	let Some(state_key) = event_stub.get("state_key") else {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with missing state_key field"
++		));
++	};
++	if state_key != &user_id.as_str() {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with incorrect state_key"
++		));
++	}
++
++	let Some(event_room_id) = event_stub.get("room_id") else {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with missing room_id field"
++		));
++	};
++	if event_room_id != &room_id.as_str() {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with incorrect room_id"
++		));
++	}
++
++	let Some(content) = event_stub
++		.get("content")
++		.and_then(|content| content.as_object())
++	else {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with missing content field"
++		));
++	};
++	let Some(event_membership) = content.get("membership") else {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with missing membership field"
++		));
++	};
++	if event_membership != &membership.as_str() {
++		return Err!(BadServerResponse(
++			"Remote server returned member event with incorrect room_id"
++		));
++	}
++
++	Ok(())
++}
+-- 
+2.51.2
+
