@@ -25,6 +25,7 @@
     networking.wireguard.ctf
     security.secureboot
     services.frp.client
+    services.printing
     shell.gpg
     shell.nix-index
     shell.zellij
