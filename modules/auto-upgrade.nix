@@ -214,6 +214,7 @@ in
             systemd-run \
               -E LOCALE_ARCHIVE \
               -E NIXOS_INSTALL_BOOTLOADER= \
+              -E STC_DEBUG=1 \
               --collect \
               --no-ask-password \
               --pipe \

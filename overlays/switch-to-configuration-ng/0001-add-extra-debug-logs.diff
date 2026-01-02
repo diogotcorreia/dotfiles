@@ -1,0 +1,28 @@
+diff --git a/src/main.rs b/src/main.rs
+index 2641aba9f13a1d..0646d79b8a6e7c 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -1167,6 +1168,7 @@ won't take effect until you reboot the system.
+             move |signal: OrgFreedesktopSystemd1ManagerReloading,
+                   _: &LocalConnection,
+                   _msg: &Message| {
++                log::debug!("reload status: {}", &signal.active);
+                 *_systemd_reload_status.borrow_mut() = signal.active;
+ 
+                 true
+@@ -1703,6 +1705,7 @@ won't take effect until you reboot the system.
+         .context("Failed to reset failed units")?;
+ 
+     // Make systemd reload its units.
++    log::debug!("old reload status: {}", &systemd_reload_status.borrow());
+     _ = systemd.reload(); // we don't get a dbus reply here
+     log::debug!("waiting for systemd reload to finish");
+     while !*systemd_reload_status.borrow() {
+@@ -1710,6 +1713,7 @@ won't take effect until you reboot the system.
+             .process(Duration::from_millis(500))
+             .context("Failed to process dbus messages")?;
+     }
++    log::debug!("systemd has reloaded");
+ 
+     dbus_conn
+         .remove_match(reloading_token)
