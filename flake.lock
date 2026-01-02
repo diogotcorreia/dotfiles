@@ -174,20 +174,20 @@
     "ist-discord-bot": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-unstable"
         ]
       },
       "locked": {
-        "lastModified": 1759596570,
-        "narHash": "sha256-z3haDfcVtBdSrQiPoEbPx4/CkFo7JduFhTdR+/6zE3c=",
+        "lastModified": 1767364289,
+        "narHash": "sha256-Rj4/DtkQf4OovGIUp/uUhgdHyeXG0fXvgMg/C91pyF4=",
         "owner": "ist-bot-team",
         "repo": "ist-discord-bot",
-        "rev": "1789f9c78353a11cb0ce8c56950b5696d3b914b8",
+        "rev": "7efcc63232ea96aa91d986af5ddda027977f2298",
         "type": "github"
       },
       "original": {
         "owner": "ist-bot-team",
-        "ref": "v3.0.1",
+        "ref": "v3.0.3",
         "repo": "ist-discord-bot",
         "type": "github"
       }
