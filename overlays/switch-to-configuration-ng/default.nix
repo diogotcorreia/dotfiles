@@ -3,7 +3,10 @@
 {...}: final: prev: {
   switch-to-configuration-ng = prev.switch-to-configuration-ng.overrideAttrs (oldAttrs: {
     patches = [
-      ./0001-add-extra-debug-logs.diff
+      # https://github.com/NixOS/nixpkgs/pull/476759
+      ./0001-switch-to-configuration-ng-fix-systemd-reexec-reload.patch
+
+      ./0002-add-extra-debug-logs.diff
     ];
   });
 }
