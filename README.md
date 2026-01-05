@@ -28,8 +28,8 @@ Some highlights of things that exist and/or are configured in this flake are:
 
 - [Home Manager](https://github.com/nix-community/home-manager/)
 - Root on tmpfs
-- dwm, dmenu, dwmblocks and slock
-- neovim
+- niri, waybar, fuzzel and swaylock
+- neovim with nixvim
 - Router with VLANs
 - Agenix
 - Healthchecks.io pinging
