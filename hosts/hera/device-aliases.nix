@@ -32,6 +32,7 @@ mergeAliases [
     extraLocationConfig = ''
       proxy_ssl_verify off;
       proxy_ssl_conf_command Options UnsafeLegacyRenegotiation;
+      proxy_ssl_ciphers DEFAULT@SECLEVEL=0;
     '';
   })
 ]
