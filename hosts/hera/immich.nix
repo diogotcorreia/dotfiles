@@ -149,6 +149,11 @@ in
     }
   ];
 
+  modules.impermanence.directories = [
+    # Persist downloaded models so they don't have to be downloaded every boot
+    config.services.immich.machine-learning.environment.MACHINE_LEARNING_CACHE_FOLDER
+  ];
+
   # https://immich.app/docs/administration/backup-and-restore
   modules.services.restic.paths = [
     "${photosLocationNfs}/library"
