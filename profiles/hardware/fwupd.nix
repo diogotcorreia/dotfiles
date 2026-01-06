@@ -3,4 +3,8 @@
 { ... }:
 {
   services.fwupd.enable = true;
+
+  modules.impermanence.directories = [
+    "/var/lib/fwupd"
+  ];
 }
