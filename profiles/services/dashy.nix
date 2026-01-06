@@ -61,6 +61,12 @@ let
       description = "Import data from banks and CSV files into Firefly III";
       url = mkUrl "firefly3-csv.hera";
     };
+    grafana = {
+      title = "Grafana";
+      icon = "hl-grafana";
+      description = "Charts and alerts";
+      url = mkUrl "grafana";
+    };
     grocy = {
       title = "Grocy";
       icon = "hl-grocy";
@@ -281,6 +287,7 @@ in
           items = with items; [
             healthchecks-io
             uptime-kuma
+            grafana
             umami
           ];
         }
