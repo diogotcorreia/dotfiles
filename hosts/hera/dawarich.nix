@@ -24,11 +24,13 @@ in
   ];
 
   age.secrets.dawarichEnv.file = secrets.host.dawarichEnv;
+  age.secrets.dawarichSecretKeyBase.file = secrets.host.dawarichSecretKeyBase;
 
   services.dawarich = {
     enable = true;
     webPort = port;
     localDomain = domain;
+    secretKeyBaseFile = config.age.secrets.dawarichSecretKeyBase.path;
     environment = {
       STORE_GEODATA = "true";
       # PHOTON_API_HOST = "photon.komoot.io";
@@ -92,9 +94,5 @@ in
       subject = "group:dawarich";
       token_endpoint_auth_method = "client_secret_basic";
     }
-  ];
-
-  modules.services.restic.paths = [
-    "/var/lib/dawarich"
   ];
 }

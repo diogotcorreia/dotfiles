@@ -171,6 +171,7 @@ mkSecrets [
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
       "dawarichEnv"
+      "dawarichSecretKeyBase"
       "diskstationSambaCredentials"
       "fireflyAppKey"
       "fireflyAutoDataImporterEnv"
