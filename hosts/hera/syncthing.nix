@@ -10,6 +10,7 @@ in
     systemService = true;
     overrideFolders = false;
     overrideDevices = false;
+    openDefaultPorts = true;
     settings = {
       gui = {
         theme = "dark";
