@@ -141,7 +141,9 @@ in
 
   # Ensure that the local/root dataset is rolled back to
   # a blank state on every boot.
-  boot.initrd.postDeviceCommands = lib.mkAfter ''
+  # Diff what will be deleted next boot:
+  # sudo zfs diff rpool/local/root@blank -F -t | sort -k 4 | less
+  boot.initrd.postResumeCommands = lib.mkAfter ''
     zfs rollback -r rpool/local/root@blank
   '';
 }
