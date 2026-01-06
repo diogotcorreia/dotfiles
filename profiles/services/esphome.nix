@@ -7,6 +7,8 @@
 }:
 let
   domain = "esphome.${config.networking.hostName}.diogotc.com";
+
+  stateDir = lib.my.toPrivateStateDirectory "/var/lib/esphome";
 in
 {
   # Use module from nixos-unstable
@@ -44,5 +46,19 @@ in
   };
   users.groups.esphome = lib.mkIf (config.services.nginx.enable) {
     members = [ "nginx" ];
+  };
+
+  modules.impermanence.directories = [
+    stateDir
+  ];
+
+  modules.services.restic = {
+    paths = [
+      stateDir
+    ];
+    exclude = [
+      "${stateDir}/.platformio"
+      "${stateDir}/.esphome/build"
+    ];
   };
 }
