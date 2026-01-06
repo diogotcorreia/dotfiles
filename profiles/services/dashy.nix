@@ -163,6 +163,12 @@ let
       description = "Maven repository";
       url = mkUrl "repo";
     };
+    roundcube = {
+      title = "Roundcube";
+      icon = "hl-roundcube";
+      description = "Webmail client";
+      url = mkUrl "webmail";
+    };
     sonarr = {
       title = "Sonarr";
       icon = "hl-sonarr";
@@ -302,6 +308,7 @@ in
           name = "Social";
           icon = ":speech_balloon:";
           items = with items; [
+            roundcube
             element
           ];
         }
