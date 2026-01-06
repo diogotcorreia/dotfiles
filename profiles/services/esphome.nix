@@ -38,6 +38,24 @@ in
     };
   };
 
+  systemd.services.esphome =
+    let
+      cacheDir = "/var/cache/esphome";
+    in
+    {
+      environment = {
+        # Fix UV trying to write to /var/empty
+        UV_CACHE_DIR = "${cacheDir}/uv";
+        # Move build dirs to cache directory instead
+        PLATFORMIO_CACHE_DIR = "${cacheDir}/platformio";
+        ESPHOME_BUILD_PATH = "${cacheDir}/build";
+      };
+      serviceConfig = {
+        CacheDirectory = "esphome";
+        CacheDirectoryMode = "0750";
+      };
+    };
+
   # allow access to socket
   # if user is not created as well, unit will not start, due to DynamicUser
   users.users.esphome = lib.mkIf (config.services.nginx.enable) {
@@ -59,6 +77,7 @@ in
     exclude = [
       "${stateDir}/.platformio"
       "${stateDir}/.esphome/build"
+      "${stateDir}/.esphome/.espressif"
     ];
   };
 }
