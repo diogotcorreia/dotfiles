@@ -38,17 +38,35 @@ let
 in
 {
   options.modules.services.wireguard-client = {
+    bro = mkServerOptions "wireguard client to bro's wireguard server";
     feb-router = mkServerOptions "wireguard client to the router in feb's network";
     hera = mkServerOptions "wireguard client to hera's wireguard server";
   };
 
   config = {
     age.secrets = {
+      wireguardClientBroPrivateKey = mkServerSecrets cfg.hera;
       wireguardClientFebRouterPrivateKey = mkServerSecrets cfg.feb-router;
       wireguardClientHeraPrivateKey = mkServerSecrets cfg.hera;
     };
 
     networking.wg-quick.interfaces = {
+      bro = mkIf cfg.hera.enable {
+        autostart = false;
+        address = [ "192.168.102.${toString cfg.hera.lastOctect}/24" ];
+        privateKeyFile = config.age.secrets.wireguardClientBroPrivateKey.path;
+
+        peers = [
+          {
+            publicKey = lib.my.wireguard-keys.bro;
+            allowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+            endpoint = "wireguard.bro.diogotc.com:51820";
+          }
+        ];
+      };
       feb-router = mkIf cfg.feb-router.enable {
         autostart = false;
         address = [ "192.168.98.${toString cfg.feb-router.lastOctect}/24" ];

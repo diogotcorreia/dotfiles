@@ -132,6 +132,7 @@ mkSecrets [
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
+      "wireguardServerPrivateKey"
     ]
   )
 

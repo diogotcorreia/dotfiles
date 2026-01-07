@@ -176,6 +176,10 @@
       syncthing.enable = true;
       wireguard-client = {
         # public key: HitADKIgPbbk2fhCxd9iuTsT683ayLithrwnQagb4B0=
+        bro = {
+          enable = true;
+          lastOctect = 3;
+        };
         feb-router = {
           enable = true;
           lastOctect = 3;
