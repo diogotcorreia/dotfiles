@@ -192,7 +192,7 @@ mkSecrets [
       "resticSshKey"
       "transmissionProxySshConfig"
       "transmissionProxySshPassword"
-      "wireguardPrivateKey"
+      "wireguardServerPrivateKey"
     ]
   )
 

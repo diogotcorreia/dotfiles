@@ -56,7 +56,7 @@ in
 
         peers = [
           {
-            publicKey = "tOAfW4lPiVyyRepRtzBq4SIfQkfKFstwFq9jAGUINF4=";
+            publicKey = lib.my.wireguard-keys.feb-router;
             allowedIPs = [
               "192.168.98.0/24"
               "192.168.99.0/24"
@@ -74,7 +74,7 @@ in
 
         peers = [
           {
-            publicKey = "XM/VFX/CWunMSiJX0tcv7F/ShDHPlP4RCySvbPkqHHQ=";
+            publicKey = lib.my.wireguard-keys.hera;
             allowedIPs = [
               "0.0.0.0/0"
               "::/0"

@@ -105,6 +105,23 @@
           OnCalendar = "03:05";
         };
       };
+      wireguard-server = {
+        enable = true;
+        subnet = "192.168.101";
+        peers = (
+          with lib.my.wireguard-keys;
+          [
+            {
+              publicKey = bluejay;
+              lastOctect = 2;
+            }
+            {
+              publicKey = bacchus;
+              lastOctect = 3;
+            }
+          ]
+        );
+      };
     };
     shell = {
       git.enable = true;
