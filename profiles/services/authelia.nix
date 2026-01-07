@@ -16,6 +16,12 @@ let
 
   dbUser = cfg.user;
 
+  ldapExtraAttributes = lib.pipe nixosConfigurations [
+    builtins.attrValues
+    (map (cfg: cfg.config.my.services.authelia.ldapExtraAttributes))
+    lib.mergeAttrsList
+  ];
+
   accessControlRules = lib.pipe nixosConfigurations [
     builtins.attrValues
     (map (cfg: cfg.config.my.services.authelia.accessRules))
@@ -28,6 +34,12 @@ let
     builtins.concatLists
   ];
   hasOidcClients = oidcClients != [ ];
+
+  oidcScopes = lib.pipe nixosConfigurations [
+    builtins.attrValues
+    (map (cfg: cfg.config.my.services.authelia.oidcScopes))
+    lib.mergeAttrsList
+  ];
 in
 {
   # https://www.authelia.com/reference/guides/generating-secure-values/
@@ -88,6 +100,8 @@ in
 
             user = "uid=authelia,ou=people,${baseDn}";
             # password is passed as env variable
+
+            attributes.extra = ldapExtraAttributes;
           };
       };
 
@@ -172,12 +186,33 @@ in
               ))
               lib.listToAttrs
             ];
+            findCustomClaims =
+              oidcClient:
+              lib.pipe oidcClient.scopes [
+                (map (scope: oidcScopes.${scope}.claims or [ ]))
+                lib.flatten
+              ];
+            customClaimsPolicies = lib.pipe oidcClients [
+              (map (client: {
+                inherit client;
+                customClaims = findCustomClaims client;
+              }))
+              (lib.filter ({ customClaims, ... }: customClaims != [ ]))
+              (map (
+                { client, customClaims }:
+                lib.nameValuePair (mkPolicyName client.client_id) {
+                  custom_claims = lib.genAttrs customClaims (_: { });
+                }
+              ))
+              lib.listToAttrs
+            ];
             clients = map (
               client:
               {
                 scopes = lib.mkIf (client.scopes != [ ]) client.scopes;
                 authorization_policy =
                   if client.subject == [ ] then client.policy else mkPolicyName client.client_id;
+                claims_policy = lib.mkIf ((findCustomClaims client) != [ ]) (mkPolicyName client.client_id);
                 # save consent for 1 year
                 pre_configured_consent_duration = "1y";
               }
@@ -187,10 +222,12 @@ in
                 "subject"
               ])
             ) oidcClients;
+            scopes = oidcScopes;
           in
           {
             authorization_policies = lib.mkIf (customAuthorizationPolicies != { }) customAuthorizationPolicies;
-            inherit clients;
+            claims_policies = lib.mkIf (customClaimsPolicies != { }) customClaimsPolicies;
+            inherit clients scopes;
           };
       };
     };

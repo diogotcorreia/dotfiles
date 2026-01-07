@@ -6,6 +6,47 @@ let
 in
 {
   options.my.services.authelia = {
+    ldapExtraAttributes = mkOption {
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            freeformType = types.attrsOf types.anything;
+            options = {
+              name = mkOption {
+                type = types.str;
+                default = name;
+                description = ''
+                  The name of the claim in Authelia.
+                '';
+              };
+              value_type = mkOption {
+                type = types.enum [
+                  "string"
+                  "integer"
+                  "boolean"
+                ];
+                example = "string";
+                description = ''
+                  Required. Type of this attribute.
+                '';
+              };
+              multi_valued = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether this attribute can have more than a single value.
+                '';
+              };
+            };
+          }
+        )
+      );
+      default = { };
+      description = ''
+        Extra LDAP attributes to import into Authelia claims.
+      '';
+    };
     accessRules = mkOption {
       type = types.listOf (
         types.submodule (
@@ -187,6 +228,29 @@ in
       default = [ ];
       description = ''
         OAuth Clients to add to authelia.
+      '';
+    };
+    oidcScopes = mkOption {
+      type = types.attrsOf (
+        types.submodule (
+          { ... }:
+          {
+            freeformType = types.attrsOf types.anything;
+            options = {
+              claims = mkOption {
+                type = types.listOf types.str;
+                example = [ "custom_claim" ];
+                description = ''
+                  Required. The claims included in this scope.
+                '';
+              };
+            };
+          }
+        )
+      );
+      default = { };
+      description = ''
+        Extra OIDC claims to create.
       '';
     };
   };
