@@ -14,6 +14,17 @@ let
 
   dbUsername = "nextcloud";
   dbDatabaseName = "nextcloud";
+
+  oauthClientId = "hzQo18_e2tV8HeaikIa-AqAE6iEShOmKDcDpGQxyrxKKXbygH94yOTIm~t3ZpPMEa06OFOOS";
+  oauthScopes = [
+    "openid"
+    "email"
+    "profile"
+    "groups"
+    "nextcloud_userinfo"
+  ];
+
+  inherit (config.services.nextcloud) occ;
 in
 {
   age.secrets.nextcloudSecrets = {
@@ -21,6 +32,7 @@ in
     owner = "nextcloud";
     group = "nextcloud";
   };
+  age.secrets.nextcloudClientSecret.file = secrets.host.nextcloudClientSecret;
 
   services.nextcloud = {
     enable = true;
@@ -69,6 +81,19 @@ in
       mail_smtpsecure = "ssl";
       mail_smtpname = lib.my.mkRobotsEmail "nextcloud";
       # mail_smtppassword as secret
+
+      user_oidc = {
+        enrich_login_id_token_with_userinfo = true;
+        userinfo_bearer_validation = true;
+        auto_provision = true;
+        soft_auto_provision = true; # allow login into existing accounts
+        allow_multiple_user_backends = false; # redirect to authelia immediately
+      };
+
+      hide_login_form = true; # use ?direct=1 to bypass/login as root
+      "auth.webauthn.enabled" = false; # using only oidc, that already uses webauthn
+      allow_user_to_change_display_name = false; # does not work with oidc
+      lost_password_link = "disabled";
     };
     # Has:
     # mail_smtppassword
@@ -93,6 +118,7 @@ in
         richdocuments # Collabora Online for Nextcloud - https://apps.nextcloud.com/apps/richdocuments
         tasks
         twofactor_webauthn
+        user_oidc
         ;
     };
   };
@@ -121,8 +147,6 @@ in
 
   systemd.services.nextcloud-config-collabora =
     let
-      inherit (config.services.nextcloud) occ;
-
       wopi_url = "http://[::1]:${toString collaboraPort}";
       public_wopi_url = "https://${collaboraDomain}";
       wopi_allowlist = lib.concatStringsSep "," [
@@ -172,6 +196,69 @@ in
   # Pin nextcloud user's UID and GID, otherwise files may change owner
   users.users.nextcloud.uid = 900;
   users.groups.nextcloud.gid = 900;
+
+  # OAuth setup
+  my.services.authelia = {
+    ldapExtraAttributes = {
+      # This is needed because Nextcloud does not support renaming users,
+      # and some users on LDAP do not have the same username as in Nextcloud.
+      nextcloudusername = {
+        name = "nextcloud_username";
+        value_type = "string";
+      };
+      nextcloudquota = {
+        name = "nextcloud_quota";
+        value_type = "integer";
+      };
+    };
+    oauthClients = [
+      {
+        client_id = oauthClientId;
+        client_name = "Nextcloud";
+        client_secret = "$pbkdf2-sha512$310000$wfhYdQHkTMX5mTlcCjInYg$cMfbCHLcdD0TKrB23SfPYPrpnGwxcAaRawX8y0.6lx1fjgHoWMWBJE3kxKCJPfYCh.JLMsCv1z.c0SBKZNdtEA";
+        redirect_uris = [
+          "https://${domain}/apps/user_oidc/code"
+        ];
+        scopes = oauthScopes;
+        policy = "two_factor";
+        subject = "group:nextcloud";
+        token_endpoint_auth_method = "client_secret_post";
+      }
+    ];
+    oidcScopes.nextcloud_userinfo = {
+      claims = [
+        config.my.services.authelia.ldapExtraAttributes.nextcloudusername.name
+        config.my.services.authelia.ldapExtraAttributes.nextcloudquota.name
+      ];
+    };
+  };
+
+  systemd.services.nextcloud-config-user-oidc = {
+    enable = true;
+    script = ''
+      ${occ}/bin/nextcloud-occ user_oidc:provider Authelia \
+        --discoveryuri="https://auth.diogotc.com/.well-known/openid-configuration" \
+        --clientid=${lib.escapeShellArg oauthClientId} \
+        --clientsecret=$(systemd-creds cat clientsecret) \
+        --scope=${lib.escapeShellArg (lib.concatStringsSep " " oauthScopes)} \
+        --unique-uid=0 \
+        --resolve-nested-claims=1 \
+        --mapping-uid="nextcloud_username | preferred_username" \
+        --mapping-quota="nextcloud_quota" \
+        --no-interaction
+    '';
+    wantedBy = [ "multi-user.target" ];
+    after = [ "nextcloud-setup.service" ];
+
+    serviceConfig = {
+      LoadCredential = [
+        "clientsecret:${config.age.secrets.nextcloudClientSecret.path}"
+      ]
+      ++ (config.systemd.services.phpfpm-nextcloud.serviceConfig.LoadCredential or [ ]);
+      User = "nextcloud";
+      Type = "oneshot";
+    };
+  };
 
   # Due to PHP's realpath cache, every time the activation scripts run,
   # Nextcloud stops working for a brief moment.

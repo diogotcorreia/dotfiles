@@ -184,6 +184,7 @@ mkSecrets [
       "istDelegateElectionFenixSecret"
       "nebulaCert"
       "nebulaKey"
+      "nextcloudClientSecret"
       "nextcloudSecrets"
       "resticHealthchecksUrl"
       "resticPassword"
