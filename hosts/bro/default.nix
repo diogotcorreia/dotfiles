@@ -92,6 +92,10 @@
               publicKey = bacchus;
               lastOctect = 3;
             }
+            {
+              publicKey = rso-rotterdam;
+              lastOctect = 50;
+            }
           ]
         );
       };

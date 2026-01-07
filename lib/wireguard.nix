@@ -10,5 +10,8 @@
     # clients
     bacchus = "HitADKIgPbbk2fhCxd9iuTsT683ayLithrwnQagb4B0=";
     bluejay = "ShErgwnyZkfBodbKJYxfVC9JEsJC5U9dkhAIwrQeOXM=";
+
+    # third-party clients
+    rso-rotterdam = "C1IDkI663hL2z+yxTdevc4q+dBG6aLXXjKHEmMZQDWA=";
   };
 }
