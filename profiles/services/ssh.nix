@@ -16,6 +16,14 @@ in
       KbdInteractiveAuthentication = false;
     };
     ports = [ lib.my.ports.ssh ];
+
+    # Disable RSA host key
+    hostKeys = [
+      {
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+    ];
   };
   usr.openssh.authorizedKeys.keys = sshKeys;
 
