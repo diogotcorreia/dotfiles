@@ -24,7 +24,6 @@ in
           "x-systemd.automount"
           "noauto"
           "x-systemd.idle-timeout=600"
-          "x-systemd.device-timeout=5s"
           "x-systemd.mount-timeout=5s"
         ];
       in
