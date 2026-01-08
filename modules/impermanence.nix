@@ -7,8 +7,6 @@
 }:
 let
   inherit (lib)
-    hasPrefix
-    isString
     types
     mkOption
     mkEnableOption
@@ -48,32 +46,25 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.persistence.${cfg.persistDirectory} =
-      let
-        parsedDirectories = map (
-          dir:
-          if isString dir && hasPrefix "/var/lib/private/" dir then
-            {
-              directory = dir;
-              mode = "0700";
-              # ensure parent dir has correct permissions
-              defaultPerms.mode = "0700";
-            }
-          else
-            dir
-        ) cfg.directories;
-      in
-      {
-        directories = parsedDirectories ++ [
-          "/var/lib/systemd"
-          "/var/lib/nixos" # contains user/group id map
-          "/var/log"
-        ];
-        files = cfg.files ++ [
-          "/etc/machine-id"
-          "/etc/ssh/ssh_host_ed25519_key"
-          "/etc/ssh/ssh_host_ed25519_key.pub"
-        ];
+    environment.persistence.${cfg.persistDirectory} = {
+      directories = cfg.directories ++ [
+        "/var/lib/systemd"
+        "/var/lib/nixos" # contains user/group id map
+        "/var/log"
+      ];
+      files = cfg.files ++ [
+        "/etc/machine-id"
+        "/etc/ssh/ssh_host_ed25519_key"
+        "/etc/ssh/ssh_host_ed25519_key.pub"
+      ];
+    };
+
+    # Fixes problems with permissions of /var/lib/private
+    # https://github.com/nix-community/impermanence/issues/254#issuecomment-3701296055
+    systemd.services."systemd-tmpfiles-resetup" = {
+      serviceConfig = {
+        RemainAfterExit = lib.mkForce false;
       };
+    };
   };
 }
