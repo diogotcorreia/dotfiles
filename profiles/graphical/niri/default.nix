@@ -104,6 +104,10 @@ in
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
     ];
+    config.niri = {
+      # use gtk file picker instead of nautilus (which is not installed)
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
   };
 
   # Avoid typing the username on TTY and only prompt for the password
