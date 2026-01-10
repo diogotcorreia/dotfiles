@@ -20,8 +20,16 @@ in
       jq
       # qalc (CLI calculator)
       libqalculate
-      # timewarrior (time tracker)
-      timewarrior
+      # timewarrior (time tracker) + hook for updating waybar widget
+      (pkgs.writeShellScriptBin "timew" ''
+        callback() {
+          pkill -SIGRTMIN+1 waybar
+        }
+        trap callback EXIT
+
+        ${lib.getExe pkgs.timewarrior} "$@"
+        exit "$?"
+      '')
       # typst (markup-based typesetting system)
       unstable.typst
 

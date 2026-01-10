@@ -17,6 +17,7 @@
 
         modules-right = [
           "custom/dunst"
+          "custom/timewarrior"
           "memory"
           "cpu"
           "pulseaudio"
@@ -59,6 +60,19 @@
           return-type = "json";
           restart-interval = 5;
           on-click = "dunstctl set-paused toggle";
+        };
+
+        "custom/timewarrior" = {
+          exec = pkgs.writeShellScript "timewarrior-waybar.sh" ''
+            tags=$(${lib.getExe pkgs.timewarrior} get dom.active.tags 2> /dev/null)
+            if [[ "$?" == 0 ]]; then
+              echo "󱦟 $tags"
+            else
+              echo "󰚭"
+            fi
+          '';
+          interval = 60;
+          signal = 1;
         };
 
         memory = {
@@ -307,6 +321,10 @@
 
       #memory {
         color: @green;
+      }
+
+      #custom-timewarrior {
+        color: @blue;
       }
 
       #custom-dunst {
