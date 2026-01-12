@@ -5,7 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-dawarich-pr.url = "github:diogotcorreia/nixpkgs/dawarich-init";
-    impermanence.url = "github:nix-community/impermanence/master";
+    # TODO: track master again once https://github.com/nix-community/impermanence/issues/294 is resolved
+    impermanence.url = "github:nix-community/impermanence/4b3e914cdf97a5b536a889e939fb2fd2b043a170";
     home = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
