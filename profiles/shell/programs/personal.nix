@@ -1,5 +1,10 @@
 # global programs and packages
-{ pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 {
   # Non-essential packages (for personal systems)
   environment.systemPackages = with pkgs; [
@@ -43,5 +48,10 @@
     neofetch = "fastfetch";
     url = "trurl --json";
     wget = "wcurl";
+  };
+
+  programs.nh = {
+    enable = true;
+    flake = "${config.users.users.${user}.home}/.dotfiles";
   };
 }
