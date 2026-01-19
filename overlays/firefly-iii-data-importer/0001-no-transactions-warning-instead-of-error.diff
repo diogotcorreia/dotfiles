@@ -1,8 +1,8 @@
 diff --git a/app/Console/AutoImports.php b/app/Console/AutoImports.php
-index 1ab510d..8e9438a 100644
+index 3788afb8..2f85fd21 100644
 --- a/app/Console/AutoImports.php
 +++ b/app/Console/AutoImports.php
-@@ -304,11 +304,6 @@ trait AutoImports
+@@ -329,11 +329,6 @@ trait AutoImports
  
              return ExitCode::GENERAL_ERROR->value;
          }
@@ -12,13 +12,13 @@ index 1ab510d..8e9438a 100644
 -            return ExitCode::NOTHING_WAS_IMPORTED->value;
 -        }
  
-         app('log')->error(sprintf('Exit code is %s.', ExitCode::SUCCESS->name));
+         Log::error(sprintf('Exit code is %s.', ExitCode::SUCCESS->name));
  
 diff --git a/app/Console/Commands/Import.php b/app/Console/Commands/Import.php
-index b7eddbd..854cf54 100644
+index 770e376a..f52d17b0 100644
 --- a/app/Console/Commands/Import.php
 +++ b/app/Console/Commands/Import.php
-@@ -175,10 +175,6 @@ final class Import extends Command
+@@ -121,10 +121,6 @@ final class Import extends Command
              $exitCode = ExitCode::GENERAL_ERROR->value;
              Log::error(sprintf('Exit code is %s.', ExitCode::GENERAL_ERROR->name));
          }
@@ -30,14 +30,14 @@ index b7eddbd..854cf54 100644
              Log::debug(sprintf('Exit code is %s.', ExitCode::SUCCESS->name));
          }
 diff --git a/app/Services/Nordigen/Conversion/RoutineManager.php b/app/Services/Nordigen/Conversion/RoutineManager.php
-index 4f8069f..d252b5d 100644
+index 3afd5045..10e0fc22 100644
 --- a/app/Services/Nordigen/Conversion/RoutineManager.php
 +++ b/app/Services/Nordigen/Conversion/RoutineManager.php
-@@ -328,7 +328,6 @@ class RoutineManager implements RoutineManagerInterface
+@@ -275,7 +275,6 @@ class RoutineManager implements RoutineManagerInterface
          if (0 === $total) {
-             app('log')->warning('Downloaded nothing, will return nothing.');
+             Log::warning('Downloaded nothing, will return nothing.');
              // add error to current error thing:
--            $this->addError(0, '[a111]: No transactions were downloaded from GoCardless. You may be rate limited or something else went wrong.');
-             $this->mergeMessages(1);
-             $this->mergeWarnings(1);
-             $this->mergeErrors(1);
+-            $this->importJob->conversionStatus->addError(0, '[a111]: No transactions were downloaded from GoCardless. You may be rate limited or something else went wrong.');
+             $this->repository->saveToDisk($this->importJob);
+ 
+             return true;

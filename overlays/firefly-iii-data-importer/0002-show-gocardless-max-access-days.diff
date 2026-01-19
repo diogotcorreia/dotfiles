@@ -1,8 +1,8 @@
 diff --git a/app/Http/Controllers/Import/Nordigen/LinkController.php b/app/Http/Controllers/Import/Nordigen/LinkController.php
-index 7ba89dfb..9510eefc 100644
+index fa984357..3e6bf5ec 100644
 --- a/app/Http/Controllers/Import/Nordigen/LinkController.php
 +++ b/app/Http/Controllers/Import/Nordigen/LinkController.php
-@@ -101,7 +101,7 @@ class LinkController extends Controller
+@@ -103,7 +103,7 @@ class LinkController extends Controller
          $agreementRequest  = new PostNewUserAgreement($url, $accessToken);
          $agreementRequest->setTimeOut(config('importer.connection.timeout'));
          $agreementRequest->setBank($configuration->getNordigenBank());
@@ -12,7 +12,7 @@ index 7ba89dfb..9510eefc 100644
  
          /** @var NewUserAgreementResponse $agreementResponse */
 diff --git a/app/Http/Controllers/Import/Nordigen/SelectionController.php b/app/Http/Controllers/Import/Nordigen/SelectionController.php
-index d61bfd74..ef090a40 100644
+index 0fc8ca3d..a1ebc883 100644
 --- a/app/Http/Controllers/Import/Nordigen/SelectionController.php
 +++ b/app/Http/Controllers/Import/Nordigen/SelectionController.php
 @@ -120,9 +120,11 @@ class SelectionController extends Controller
@@ -26,8 +26,8 @@ index d61bfd74..ef090a40 100644
          $configuration->setNordigenMaxDays($values['days']);
 +        $configuration->setNordigenAccessDays($tmp[1]);
  
-         // save config
-         $json          = '[]';
+         $importJob->setConfiguration($configuration);
+         $this->repository->saveToDisk($importJob);
 diff --git a/app/Services/Nordigen/Model/Bank.php b/app/Services/Nordigen/Model/Bank.php
 index 9419fcd4..0f138e35 100644
 --- a/app/Services/Nordigen/Model/Bank.php
@@ -49,10 +49,10 @@ index 9419fcd4..0f138e35 100644
  
          return $bank;
 diff --git a/app/Services/Shared/Configuration/Configuration.php b/app/Services/Shared/Configuration/Configuration.php
-index df3671fe..d434789a 100644
+index 5dca54cf..1ecc0dd7 100644
 --- a/app/Services/Shared/Configuration/Configuration.php
 +++ b/app/Services/Shared/Configuration/Configuration.php
-@@ -88,6 +88,7 @@ class Configuration
+@@ -89,6 +89,7 @@ class Configuration
      private string $nordigenBank;
      private string $nordigenCountry;
      private string $nordigenMaxDays;
@@ -60,7 +60,7 @@ index df3671fe..d434789a 100644
      private array  $nordigenRequisitions;
  
      private string $lunchFlowApiKey = '';
-@@ -136,6 +137,7 @@ class Configuration
+@@ -140,6 +141,7 @@ class Configuration
          $this->nordigenBank                = '';
          $this->nordigenRequisitions        = [];
          $this->nordigenMaxDays             = '90';
@@ -68,7 +68,7 @@ index df3671fe..d434789a 100644
  
          // lunch flow configuration
          $this->lunchFlowApiKey             = '';
-@@ -238,6 +240,7 @@ class Configuration
+@@ -243,6 +245,7 @@ class Configuration
          $object->nordigenBank                = $data['nordigen_bank'] ?? '';
          $object->nordigenRequisitions        = $data['nordigen_requisitions'] ?? [];
          $object->nordigenMaxDays             = $data['nordigen_max_days'] ?? '90';
@@ -76,7 +76,7 @@ index df3671fe..d434789a 100644
  
          // lunch flow configuration
          $object->lunchFlowApiKey             = $data['lunch_flow_api_key'] ?? '';
-@@ -391,6 +394,7 @@ class Configuration
+@@ -396,6 +399,7 @@ class Configuration
          $object->nordigenBank                = $array['nordigen_bank'] ?? '';
          $object->nordigenRequisitions        = $array['nordigen_requisitions'] ?? [];
          $object->nordigenMaxDays             = $array['nordigen_max_days'] ?? '90';
@@ -84,7 +84,7 @@ index df3671fe..d434789a 100644
  
          // lunch flow configuration
          $object->lunchFlowApiKey             = $array['lunch_flow_api_key'] ?? '';
-@@ -485,6 +489,7 @@ class Configuration
+@@ -494,6 +498,7 @@ class Configuration
          $object->nordigenBank                = $array['nordigen_bank'] ?? '';
          $object->nordigenRequisitions        = $array['nordigen_requisitions'] ?? [];
          $object->nordigenMaxDays             = $array['nordigen_max_days'] ?? '90';
@@ -92,7 +92,7 @@ index df3671fe..d434789a 100644
  
          // lunch flow configuration
          $object->lunchFlowApiKey             = $array['lunch_flow_api_key'] ?? '';
-@@ -741,6 +746,16 @@ class Configuration
+@@ -760,6 +765,16 @@ class Configuration
          $this->nordigenMaxDays = $nordigenMaxDays;
      }
  
@@ -109,16 +109,16 @@ index df3671fe..d434789a 100644
      public function getNordigenRequisitions(): array
      {
          return $this->nordigenRequisitions;
-@@ -912,6 +927,7 @@ class Configuration
-             'nordigen_bank'                 => $this->nordigenBank,
-             'nordigen_requisitions'         => $this->nordigenRequisitions,
-             'nordigen_max_days'             => $this->nordigenMaxDays,
-+            'nordigen_access_days'          => $this->nordigenAccessDays,
-             'lunch_flow_api_key'            => $this->lunchFlowApiKey,
+@@ -985,6 +1000,7 @@ class Configuration
+             'nordigen_bank'                => $this->nordigenBank,
+             'nordigen_requisitions'        => $this->nordigenRequisitions,
+             'nordigen_max_days'            => $this->nordigenMaxDays,
++            'nordigen_access_days'         => $this->nordigenAccessDays,
+             'lunch_flow_api_key'           => $this->lunchFlowApiKey,
  
              // utf8
 diff --git a/resources/views/v2/import/009-selection/index.blade.php b/resources/views/v2/import/009-selection/index.blade.php
-index f13f15c5..b1854fd4 100644
+index e87bc2c5..fca1dc2b 100644
 --- a/resources/views/v2/import/009-selection/index.blade.php
 +++ b/resources/views/v2/import/009-selection/index.blade.php
 @@ -94,7 +94,7 @@
