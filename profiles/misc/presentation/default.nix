@@ -15,7 +15,7 @@ let
       action ? "spawn",
       args,
     }:
-    ''{${modifier},${key},${action},${args}}'';
+    "{${modifier},${key},${action},${args}}";
 
   keybinds = [
     {
