@@ -7,6 +7,8 @@ _final: prev: {
       ./0001-no-transactions-warning-instead-of-error.diff
       # Show GoCardless max access date for each bank during setup
       ./0002-show-gocardless-max-access-days.diff
+      # Ignore non-GoCardless configs
+      ./0003-exit-code-success-on-import-json-file.diff
     ];
   });
 }
