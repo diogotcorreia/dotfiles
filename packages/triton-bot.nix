@@ -1,56 +1,62 @@
 # Bot for Triton's Discord server
 {
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
   lib,
   makeWrapper,
   nodejs,
+  pnpm,
+  pnpmConfigHook,
   stdenv,
-  yarnBuildHook,
-  yarnConfigHook,
-  yarnInstallHook,
   ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-bot";
-  version = "0-unstable-2025-02-03";
+  version = "4.0.0";
   src = fetchFromGitHub {
     owner = "tritonmc";
     repo = "triton-bot";
-    rev = "1b273a1ca80079cb3d1c9d23291b53220d2d49b9";
-    hash = "sha256-J5KMhrQWFoCOCNRr+LJ7VGry5ljGcR7ZkSuzVo6RMDU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H2U/7A3rvKqaCqjOwHEctWN1a8BgNMyqG9FoA5QGxOg=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
-    sha256 = "sha256-zKMsilmfUM9HhweGhXFn0bpAhITA6Tnmovl13uohZ3I=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-kvBJOfjj9GIjJBPbplnh812r0puYYWVe06Lbz7c29Vk=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
+    pnpm
+    pnpmConfigHook
     makeWrapper
     nodejs
   ];
 
-  # generate binary
-  postInstall = ''
-    OUT_JS_DIR="$out/lib/node_modules/${finalAttrs.pname}"
+  installPhase = ''
+    runHook preInstall
 
-    cp -r dist "$OUT_JS_DIR"
+    local -r packageOut="$out/lib/node_modules/$pname"
+
+    pnpm --filter . deploy --prod --no-optional "$packageOut"
+
+    # remove files that bloat the closure
+    rm "$packageOut"/{pnpm-lock.yaml,LICENSE,package.json,README.md}
 
     makeWrapper '${lib.getExe nodejs}' "$out/bin/${finalAttrs.pname}" \
-      --add-flags "$OUT_JS_DIR/dist/index.js"
+      --add-flags "$packageOut/src/index.js"
 
-    # delete unnecessary files
-    rm -r "$OUT_JS_DIR"/{knexfile.js,migrations,package.json,README.md,src,.husky,.prettierrc,.babelrc}
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Bot for TritonMC's Discord server";
     homepage = "https://github.com/tritonmc/triton-bot";
-    license = licenses.free;
+    license = licenses.gpl3Plus;
     mainProgram = "triton-bot";
     platforms = platforms.all;
   };
