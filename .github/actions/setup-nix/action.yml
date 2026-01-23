@@ -20,7 +20,7 @@ runs:
       if: ${{ inputs.large == 'true' }}
       # using unstable version because stable causes permission failures:
       # https://github.com/wimpysworld/nothing-but-nix/pull/25
-      uses: wimpysworld/nothing-but-nix@10c936d9e46521bf923f75458e0cbd4fa309300d # main
+      uses: wimpysworld/nothing-but-nix@dd6ef566962bfa4656301706035da97ebbe90e9b # main
 
     # We only run this if we are building an aarch64-linux system
     - if: inputs.system == 'aarch64-linux'
