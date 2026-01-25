@@ -6,10 +6,7 @@
   ...
 }:
 let
-  discordThemeFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/orblazer/discord-nordic/v4.12.5/nordic.theme.css";
-    hash = "sha256-zLJ7x3JctDh7axD1+4rPAfjrgm3wb94nY/EkBKC69uI=";
-  };
+  discordThemeFile = "${pkgs.my.discord-nordic}/nordic.theme.css";
   extraCss = ''
     .theme-dark, .theme-darker {
       /* change background color of chat pane */
@@ -23,16 +20,16 @@ let
       /* change background of "active now" pane */
       --background-base-low: var(--nord-dark1) !important;
     }
-    ._5e434347c823b592-sidebarList {
+    .sidebarList__5e434 {
       /* add missing border since background is the same now */
       border-right: 1px solid var(--app-frame-border);
     }
-    .c38106a3f0c3ca76-bar {
+    .bar_c38006 {
       /* hide top bar */
       /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
       overflow: hidden;
     }
-    ._1f388bcaa446c0c8-tutorialContainer {
+    .tutorialContainer__1f388 {
       /* add padding on guild list after removing top bar */
       padding-top: 10px;
     }
