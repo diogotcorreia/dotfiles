@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-dawarich-pr.url = "github:diogotcorreia/nixpkgs/dawarich-init";
     # TODO: track master again once https://github.com/nix-community/impermanence/issues/294 is resolved
     impermanence.url = "github:nix-community/impermanence/4b3e914cdf97a5b536a889e939fb2fd2b043a170";
     home = {
@@ -112,7 +111,6 @@
         { system, ... }:
         {
           agenix = inputs.agenix.packages.${system}.default;
-          dawarich = inputs.nixpkgs-dawarich-pr.legacyPackages.${system}.dawarich;
           ist-discord-bot = inputs.ist-discord-bot.packages.${system}.default;
           lidl-to-grocy = inputs.lidl-to-grocy.packages.${system}.default;
           spicetify = inputs.spicetify-nix.legacyPackages.${system};

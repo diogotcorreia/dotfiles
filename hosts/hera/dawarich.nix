@@ -1,7 +1,6 @@
 # Configuration for Dawarich (Location Timeline) on Hera
 {
   config,
-  inputs,
   lib,
   secrets,
   ...
@@ -19,10 +18,6 @@ let
   oauthRedirectUri = "https://${domain}/users/auth/openid_connect/callback";
 in
 {
-  imports = [
-    (inputs.nixpkgs-dawarich-pr + "/nixos/modules/services/web-apps/dawarich.nix")
-  ];
-
   age.secrets.dawarichEnv.file = secrets.host.dawarichEnv;
   age.secrets.dawarichSecretKeyBase.file = secrets.host.dawarichSecretKeyBase;
 
