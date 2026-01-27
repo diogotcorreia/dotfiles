@@ -25,6 +25,12 @@ let
       description = "Subtitle manager for the arr-stack";
       url = mkUrl "bazarr.hera";
     };
+    bentopdf = {
+      title = "BentoPDF";
+      icon = ":page_facing_up:";
+      description = "PDF Utils";
+      url = mkUrl "pdf";
+    };
     calibre-web = {
       title = "Calibre Web";
       icon = "hl-calibre";
@@ -263,6 +269,7 @@ in
           items = with items; [
             nextcloud
             paperless-ngx
+            bentopdf
             firefly-iii
             firefly-iii-data-importer
             dawarich
