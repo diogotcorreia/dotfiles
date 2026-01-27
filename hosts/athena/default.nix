@@ -17,6 +17,7 @@
     server.minimal
     services.authelia
     services.battleship-js
+    services.bentopdf
     services.chhoto-url
     services.discord-bots.ist-discord-bot
     services.discord-bots.triton-bot
