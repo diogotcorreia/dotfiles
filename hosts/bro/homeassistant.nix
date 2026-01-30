@@ -10,6 +10,9 @@ let
   hassDomain = "ha.bro.diogotc.com";
   hassPort = hassCfg.config.http.server_port;
 
+  massDomain = "ma.bro.diogotc.com";
+  massPort = lib.my.ports.musicAssistantWeb;
+
   mqttPort = lib.my.ports.mqtt;
 
   hassCfg = config.services.home-assistant;
@@ -64,12 +67,33 @@ in
     ];
   };
 
+  services.music-assistant = {
+    enable = true;
+    providers = [
+      "builtin"
+      "chromecast"
+      "hass"
+      "hass_players"
+      "sendspin"
+      "spotify"
+      "spotify_connect"
+      "universal_group"
+    ];
+
+    # Custom options
+    useSensibleDefaults = true;
+    externalDomain = massDomain;
+  };
+
   networking.firewall.interfaces = {
     vlan-private = {
       # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
       allowedUDPPorts = [ lib.my.ports.mdnsGoogleCast ];
 
-      allowedTCPPorts = [ hassPort ];
+      allowedTCPPorts = [
+        hassPort
+        massPort
+      ];
     };
     vlan-iot-local = {
       allowedTCPPorts = [ mqttPort ];
