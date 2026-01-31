@@ -1,6 +1,7 @@
 # Configuration for Conduit (Matrix Homeserver) on Hera
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -57,8 +58,17 @@ let
   };
 in
 {
+  # Use module from nixos-unstable
+  disabledModules = [
+    "services/matrix/continuwuity.nix"
+  ];
+  imports = [
+    (inputs.nixpkgs-unstable + "/nixos/modules/services/matrix/continuwuity.nix")
+  ];
+
   services.matrix-continuwuity = {
     enable = true;
+    package = pkgs.unstable.matrix-continuwuity;
     group = config.services.nginx.group;
     settings = {
       global = {
