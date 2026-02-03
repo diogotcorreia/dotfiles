@@ -17,7 +17,7 @@
         background = lib.my.colors.black;
         foreground = lib.my.colors.lightwhite;
 
-        idle_timeout = 30;
+        idle_threshold = 60;
 
         dmenu = "fuzzel --dmenu";
       };
