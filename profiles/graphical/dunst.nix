@@ -1,5 +1,9 @@
 # Configuration for dunst (notification daemon)
-{ lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 {
   hm.services.dunst = {
     enable = true;
@@ -12,6 +16,8 @@
         padding = 6;
         horizontal_padding = 6;
         max_icon_size = 80;
+
+        monitor = config.my.graphical.primaryMonitor;
 
         frame_color = lib.my.colors.green;
         background = lib.my.colors.black;

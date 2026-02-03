@@ -1,5 +1,9 @@
 # Monitor configuration
-{ lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkOption types;
 in
@@ -7,6 +11,7 @@ in
   options.my.graphical = {
     monitors = mkOption {
       description = "A list of monitors present in this device";
+      default = [ ];
       type = types.listOf (
         types.submodule {
           options = {
@@ -51,5 +56,22 @@ in
       ];
       example = "horizontally";
     };
+    primaryMonitor = mkOption {
+      description = "The name of the primary monitor of this device";
+      type = types.nullOr types.str;
+      readOnly = true;
+      default = (lib.findFirst (m: m.primary) { name = null; } config.my.graphical.monitors).name;
+    };
+  };
+
+  config = {
+    assertions = [
+      {
+        assertion =
+          config.my.graphical.monitors != [ ]
+          -> lib.length (lib.filter (m: m.primary) config.my.graphical.monitors) == 1;
+        message = "`my.graphical.monitors` must have exactly one primary monitor.";
+      }
+    ];
   };
 }
