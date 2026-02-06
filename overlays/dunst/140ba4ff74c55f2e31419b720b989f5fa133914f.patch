@@ -1,0 +1,41 @@
+From 140ba4ff74c55f2e31419b720b989f5fa133914f Mon Sep 17 00:00:00 2001
+From: Federico Angelilli <code@fedang.net>
+Date: Fri, 6 Feb 2026 13:07:21 +0100
+Subject: [PATCH] Add NULL check in wayland toplevel events
+
+---
+ src/wayland/foreign_toplevel.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/wayland/foreign_toplevel.c b/src/wayland/foreign_toplevel.c
+index e1272c0d4..1154c26ab 100644
+--- a/src/wayland/foreign_toplevel.c
++++ b/src/wayland/foreign_toplevel.c
+@@ -38,6 +38,11 @@ static void toplevel_handle_output_enter(void *data,
+ {
+         (void)zwlr_toplevel;
+ 
++        if (!wl_output) {
++                //LOG_D("Ignoring NULL toplevel output\n");
++                return;
++        }
++
+         struct toplevel_v1 *toplevel = data;
+         struct toplevel_output *toplevel_output = calloc(1, sizeof(struct toplevel_output));
+         if (!toplevel_output) {
+@@ -57,9 +62,14 @@ static void toplevel_handle_output_leave(void *data,
+ {
+         (void)zwlr_toplevel;
+ 
+-        struct toplevel_v1 *toplevel = data;
++        if (!wl_output) {
++                //LOG_D("Ignoring NULL toplevel output\n");
++                return;
++        }
+ 
++        struct toplevel_v1 *toplevel = data;
+         struct dunst_output *output = wl_output_get_user_data(wl_output);
++
+         struct toplevel_output *pos, *tmp;
+         wl_list_for_each_safe(pos, tmp, &toplevel->output_list, link){
+                 if (pos->dunst_output->name == output->name) {
