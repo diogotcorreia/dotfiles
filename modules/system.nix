@@ -65,6 +65,7 @@
 
     nixPath = [
       "nixpkgs=flake:pkgs"
+      "unstable=flake:unstable"
       "my=flake:my"
     ];
   };
