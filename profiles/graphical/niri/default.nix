@@ -68,6 +68,7 @@ in
     xwayland-satellite
     wl-clipboard
     xdg-utils
+    wdisplays
 
     # TODO: move to another profile once the wayland specialisation becomes the default
     pulsemixer
