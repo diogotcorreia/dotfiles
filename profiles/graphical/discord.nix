@@ -24,7 +24,7 @@ let
       /* add missing border since background is the same now */
       border-right: 1px solid var(--app-frame-border);
     }
-    .bar_c38006 {
+    .bar_c38106 {
       /* hide top bar */
       /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
       overflow: hidden;
