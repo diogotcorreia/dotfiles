@@ -58,7 +58,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ist-discord-bot = {
-      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.3";
+      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.4";
       inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO 26.05: change to stable
     };
     nixpkgs-build-failure-notifier = {
