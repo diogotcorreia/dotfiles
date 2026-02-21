@@ -12,12 +12,12 @@
   ...
 }:
 let
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2026-02-21";
   commonSrc = fetchFromGitHub {
     owner = "tritonmc";
     repo = "twin";
-    rev = "29cdd28c0b329e26bdad0a5682c20df27ed07672";
-    hash = "sha256-gF/xcWIj0VRnsF9hRmlGgU76cd2+IuYCViwYF88WyhY=";
+    rev = "31d882122b24536e58e1bde50899d8572749c751";
+    hash = "sha256-jco+ONY6BYED1lkd8AVy8oZU9mo/+d77yTFj/j8apOI=";
   };
   meta' = with lib; {
     description = "Web interface for TritonMC plugin";
@@ -33,7 +33,7 @@ let
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = "sha256-sp3dbg0M/yWSgce1Sb8Ju6xHz6MUZVuEwLxyGicvDaM=";
+      sha256 = "sha256-rirJ6KjJ4UOVEoHEx9tywx5yKV3KFhva2UiJApnV4ts=";
     };
 
     nativeBuildInputs = [
