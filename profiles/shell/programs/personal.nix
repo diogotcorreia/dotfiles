@@ -42,6 +42,9 @@
 
     # Shell Utils
     my.shell-utils
+
+    # Nix utils
+    nix-output-monitor
   ];
 
   environment.shellAliases = {
