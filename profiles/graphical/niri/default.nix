@@ -477,6 +477,17 @@ in
       }
     ];
 
+    layer-rule = [
+      # Prevent notifications from showing in screen captures/screen share
+      {
+        match = [
+          (mkProps { namespace = "^notifications$"; })
+        ];
+
+        block-out-from = "screen-capture";
+      }
+    ];
+
     environment = {
       # Make Electron apps use Wayland by default
       NIXOS_OZONE_WL = "1";
