@@ -71,6 +71,12 @@ in
       ignorecase = true;
       smartcase = true;
 
+      # set default indentation to 2 spaces
+      shiftwidth = 2;
+      softtabstop = 2;
+      tabstop = 2;
+      expandtab = true;
+
       # expand sign column if needed
       signcolumn = "auto:9";
 
