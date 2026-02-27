@@ -1,0 +1,22 @@
+diff --git a/src/scripts/build.js b/src/scripts/build.js
+index 38fb95a..30a2d68 100644
+--- a/src/scripts/build.js
++++ b/src/scripts/build.js
+@@ -67,7 +67,7 @@ async function compile(entry) {
+         const localFilePath = join(assetsDir, path)
+ 
+         // Use base64 for development
+-        if (dev) {
++        if (true) {
+           const file = await readFile(localFilePath, { encoding: 'base64' })
+           return new sass.SassString(`data:image/svg+xml;base64,${file}`)
+         } else {
+@@ -81,7 +81,7 @@ async function compile(entry) {
+         const localFilePath = join(assetsDir, path)
+ 
+         // Use base64 for development
+-        if (dev) {
++        if (true) {
+           const file = await readFile(localFilePath, { encoding: 'base64' })
+           return new sass.SassString(`data:image/png;base64,${file}`)
+         } else {

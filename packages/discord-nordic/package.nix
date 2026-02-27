@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oAK3MY23U0BUFYTXpeE+VByFwRZiGFk6/K7zZrWwv0o=";
   };
 
+  patches = [
+    ./0001-embed-images.diff
+  ];
+
   # delete already built artifacts
   postPatch = ''
     rm *.css

@@ -58,7 +58,7 @@ let
       }
       ''
         jq --argjson cfg ${lib.escapeShellArg (builtins.toJSON settings)} \
-          --arg css "$(<${discordThemeFile})" \
+          --rawfile css ${lib.escapeShellArg discordThemeFile} \
           --arg extraCss ${lib.escapeShellArg extraCss} \
           '$cfg * (.openasar.css = $css + "\n" + $extraCss)' -n > $out
       '';
