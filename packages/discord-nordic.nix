@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "discord-nordic";
-  version = "4.13.0";
+  version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "orblazer";
     repo = "discord-nordic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jvnp6796fX3pvLJjW+fW1XcwR14F/unonbPTtEaA4+g=";
+    hash = "sha256-oAK3MY23U0BUFYTXpeE+VByFwRZiGFk6/K7zZrWwv0o=";
   };
 
   # delete already built artifacts
