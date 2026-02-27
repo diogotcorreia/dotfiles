@@ -11,14 +11,15 @@
   ];
 
   boot.initrd.availableKernelModules = [
-    "ata_piix"
-    "uhci_hcd"
+    "ahci"
+    "xhci_pci"
     "virtio_pci"
     "virtio_scsi"
     "sd_mod"
+    "sr_mod"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
   # Use GRUB because this system uses legacy BIOS
@@ -26,5 +27,5 @@
   boot.loader.timeout = 3;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
