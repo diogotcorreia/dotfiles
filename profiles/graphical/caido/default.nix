@@ -1,6 +1,7 @@
 # Caido, but without login
 # Due to legal reasons, the local server implementation is private
 {
+  lib,
   pkgs,
   secrets,
   user,
@@ -24,8 +25,10 @@ in
 
   networking.nat.enable = true;
   networking.nat.enableIPv6 = true;
-  networking.nat.extraCommands = ''
-    ip6tables -t nat -A nixos-nat-out -p tcp -d ${ip} --dport 443 -j DNAT --to-destination '[${ip}]:8443'
+  networking.nftables.tables."nixos-nat6".content = lib.mkAfter ''
+    chain out {
+      ip6 daddr ${ip} tcp dport 443 counter dnat to [${ip}]:8443
+    }
   '';
 
   # We need to have a custom CA certificate so that HTTPS still works
