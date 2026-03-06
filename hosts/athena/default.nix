@@ -51,18 +51,18 @@
     interfaces = {
       ${config.my.networking.wiredInterface}.ipv6.addresses = [
         {
-          address = "2a01:4f8:1c19:2c1a::1";
+          address = "2001:41d0:20a:900::7e7";
           prefixLength = 64;
         }
       ];
     };
     defaultGateway6 = {
-      address = "fe80::1";
+      address = "2001:41d0:20a:900::";
       interface = config.my.networking.wiredInterface;
     };
   };
 
-  my.networking.wiredInterface = "enp1s0";
+  my.networking.wiredInterface = "ens3";
 
   # PostgreSQL
   services.postgresql.package = pkgs.postgresql_18;
