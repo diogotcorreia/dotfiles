@@ -16,8 +16,6 @@ in
     hm.home.packages = with pkgs; [
       # Anki Flashcards
       anki
-      # Telegram
-      telegram-desktop
       # Android screen mirroring (scrcpy)
       scrcpy
       # Signal
