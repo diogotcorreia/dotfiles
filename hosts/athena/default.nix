@@ -1,6 +1,5 @@
 # Configuration for athena (VPS)
 {
-  config,
   lib,
   pkgs,
   profiles,
@@ -46,22 +45,6 @@
   boot.tmp.cleanOnBoot = true;
 
   # Network Configuration
-  # Configure static IPv6 address
-  networking = {
-    interfaces = {
-      ${config.my.networking.wiredInterface}.ipv6.addresses = [
-        {
-          address = "2001:41d0:20a:900::7e7";
-          prefixLength = 64;
-        }
-      ];
-    };
-    defaultGateway6 = {
-      address = "2001:41d0:20a:900::";
-      interface = config.my.networking.wiredInterface;
-    };
-  };
-
   my.networking.wiredInterface = "ens3";
 
   # PostgreSQL
