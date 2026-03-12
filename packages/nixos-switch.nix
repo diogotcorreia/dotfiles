@@ -28,7 +28,7 @@ let
       switch
   '';
 
-  defaultBehavior =
+  defaultBehavior = channel:
     if hostName == null then
       ''
         echo "Usage: $0 <store-path>" >&2
@@ -36,7 +36,7 @@ let
       ''
     else
       ''
-        config_store_path="$(${lib.getExe curl} --url ${lib.escapeShellArg "https://infra-keyval.diogotc.com/nixos-system-${hostName}"})"
+        config_store_path="$(${lib.getExe curl} --url ${lib.escapeShellArg "https://infra-keyval.diogotc.com/${channel}nixos-system-${hostName}"})"
       '';
 
   hostnameRegex = if hostName == null then ".+" else hostName;
@@ -45,7 +45,9 @@ writeShellScriptBin "nixos-switch" ''
   set -e
 
   if [ $# -lt 1 ]; then
-    ${defaultBehavior}
+    ${defaultBehavior ""}
+  elif [[ "$1" == "staging" ]]; then
+    ${defaultBehavior "staging-"}
   else
     config_store_path="$1"
   fi
