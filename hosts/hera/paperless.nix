@@ -12,8 +12,6 @@ let
 
   dataDir = config.services.paperless.dataDir;
 
-  dbUser = config.services.paperless.user;
-
   oauthClientId = "fA5VQtlA~j3YJGGF-lsTMoN9bwMkUU5rJbU.iWNgRMF6bFNgl9O5FzBrziGi.rhuU-u40q_L";
   oauthScopes = [
     "openid"
@@ -30,10 +28,10 @@ in
     inherit port domain;
 
     configureNginx = true;
+    database.createLocally = true;
 
     settings = {
       PAPERLESS_OCR_LANGUAGE = "eng+por+swe";
-      PAPERLESS_DBHOST = "/run/postgresql";
       PAPERLESS_OCR_USER_ARGS = {
         optimize = 1;
         pdfa_image_compression = "lossless";
@@ -83,16 +81,6 @@ in
           '.openid_connect.APPS.[0].secret = $oidcSecret'
       )"
     '';
-  };
-
-  services.postgresql = {
-    ensureUsers = [
-      {
-        name = dbUser;
-        ensureDBOwnership = true;
-      }
-    ];
-    ensureDatabases = [ dbUser ];
   };
 
   services.nginx.virtualHosts.${domain}.enableACME = true;
