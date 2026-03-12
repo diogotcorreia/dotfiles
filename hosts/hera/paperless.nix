@@ -26,8 +26,10 @@ in
 
   services.paperless = {
     enable = true;
-    address = "::1";
-    inherit port;
+    address = "[::1]";
+    inherit port domain;
+
+    configureNginx = true;
 
     settings = {
       PAPERLESS_OCR_LANGUAGE = "eng+por+swe";
@@ -62,7 +64,8 @@ in
       PAPERLESS_DISABLE_REGULAR_LOGIN = true;
       PAPERLESS_REDIRECT_LOGIN_TO_SSO = true;
 
-      PAPERLESS_URL = "https://${domain}";
+      # GRANIAN does not support the brackets around IPv6 addresses, but we need it for the nginx config
+      GRANIAN_HOST = lib.removePrefix "[" (lib.removeSuffix "]" config.services.paperless.address);
     };
   };
 
@@ -92,13 +95,7 @@ in
     ensureDatabases = [ dbUser ];
   };
 
-  services.nginx.virtualHosts = {
-    ${domain} = {
-      enableACME = true;
-      enableCloudflareRealIp = true;
-      locations."/".proxyPass = "http://[::1]:${toString port}";
-    };
-  };
+  services.nginx.virtualHosts.${domain}.enableACME = true;
 
   my.services.authelia.oauthClients = [
     {
