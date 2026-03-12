@@ -75,16 +75,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.nat.internalInterfaces = [ cfg.interface ];
+    networking.nat = {
+      enable = lib.mkDefault true;
+      internalInterfaces = [ cfg.interface ];
+    };
     networking.firewall = {
       allowedUDPPorts = [ listenPort ];
+      filterForward = lib.mkDefault true;
     };
-
-    # Disallow connections to local devices
-    networking.nat.extraCommands = ''
-      ip46tables -w -t filter -A nixos-filter-forward \
-          -i '${cfg.interface}' -j REJECT
-    '';
 
     age.secrets = {
       wireguardServerPrivateKey.file = cfg.privateKeySecret;

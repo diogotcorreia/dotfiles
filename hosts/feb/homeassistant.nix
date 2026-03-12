@@ -50,8 +50,8 @@ in
     ];
   };
 
-  networking.firewall.extraCommands = ''
-    iptables -A nixos-fw -s 192.168.20.0/22 -p tcp --dport ${toString mqttPort} -j nixos-fw-accept
+  networking.firewall.extraInputRules = ''
+    ip saddr 192.168.20.0/22 tcp dport ${toString mqttPort} accept comment "MQTT from IoT subnet"
   '';
 
   modules.impermanence.directories = [

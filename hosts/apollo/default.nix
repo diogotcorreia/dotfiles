@@ -22,7 +22,6 @@
     misc.cybersec
     misc.geoclue
     misc.kth
-    networking.nftables
     networking.wireguard.ctf
     security.secureboot
     services.frp.client

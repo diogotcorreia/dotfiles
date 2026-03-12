@@ -6,4 +6,7 @@
     services.ssh
     shell.programs.essential
   ];
+
+  # Modern defaults
+  networking.nftables.enable = true;
 }
