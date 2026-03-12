@@ -188,6 +188,7 @@ mkSecrets [
       "nebulaKey"
       "nextcloudClientSecret"
       "nextcloudSecrets"
+      "paperlessClientSecret"
       "resticHealthchecksUrl"
       "resticPassword"
       "resticSshConfig"
