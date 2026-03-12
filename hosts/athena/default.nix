@@ -76,7 +76,6 @@
       enable = true;
     };
     services = {
-      dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
       };

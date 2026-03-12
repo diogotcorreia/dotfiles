@@ -57,7 +57,6 @@
   modules = {
     server.enable = true;
     services = {
-      dnsoverhttps.enable = true;
       healthchecks.enable = true;
       # Nebula (VPN)
       nebula = {
