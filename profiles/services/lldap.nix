@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  pkgs,
   secrets,
   ...
 }:
@@ -13,6 +12,7 @@ let
   dbUser = "lldap";
 in
 {
+  age.secrets.lldapAdminPassword.file = secrets.host.lldapAdminPassword;
   age.secrets.lldapEnv.file = secrets.host.lldapEnv;
 
   services.lldap = {
@@ -21,13 +21,13 @@ in
     # - LLDAP_JWT_SECRET
     # - LLDAP_KEY_SEED
     environmentFile = config.age.secrets.lldapEnv.path;
-    silenceForceUserPassResetWarning = true; # TODO: perhaps add a proper admin user
+    environment = {
+      LLDAP_LDAP_USER_PASS_FILE = "%d/user_pass";
+    };
     settings = {
-      ldap_user_dn = "dtc";
-      ldap_user_pass_file = toString (
-        pkgs.writeText "lldap-default-password" "pleaseChangeMeAfterFirstLogin"
-      );
-      force_ldap_user_pass_reset = false; # otherwise the admin user will always have the password above ;/
+      ldap_user_dn = "superadmin";
+      ldap_user_email = lib.my.mkDtcEmail "ldap.superadmin";
+      force_ldap_user_pass_reset = "always";
 
       ldap_base_dn = "dc=diogotc,dc=com";
       ldap_host = "::1";
@@ -37,6 +37,7 @@ in
       http_host = "::1";
       http_port = port;
 
+      # TODO 26.05: use services.lldap.database
       database_url = "postgres:///${dbUser}?host=/run/postgresql";
     };
   };
@@ -45,6 +46,10 @@ in
     # ensure postgresql is ready before turning on lldap
     requires = [ "postgresql.target" ];
     after = [ "postgresql.target" ];
+
+    serviceConfig = {
+      LoadCredential = [ "user_pass:${config.age.secrets.lldapAdminPassword.path}" ];
+    };
   };
 
   services.postgresql = {

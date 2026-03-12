@@ -90,6 +90,7 @@ mkSecrets [
       "dtcLabsTokenJson"
       "healthchecksUrl"
       "istDiscordBotToken"
+      "lldapAdminPassword"
       "lldapEnv"
       "meilisearchMasterKey"
       "nebulaCert"
