@@ -281,16 +281,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1772499337,
-        "narHash": "sha256-qVC2W3CKIV+XZuKak+OjdWzcrudIivtjdAxwYkzbGEc=",
+        "lastModified": 1773408685,
+        "narHash": "sha256-A9mGCeOL1LQYBof8tALs5qk4nROQ6qzJRR0qRN4he6w=",
         "owner": "diogotcorreia",
         "repo": "nixpkgs-build-failure-notifier",
-        "rev": "fe86c691c882ac6d9e05bd1c2fe37631c99582d5",
+        "rev": "8b28e3168f7e4b7a366dc0ba130060eabfce7777",
         "type": "github"
       },
       "original": {
         "owner": "diogotcorreia",
-        "ref": "v0.2.1",
+        "ref": "v0.3.0",
         "repo": "nixpkgs-build-failure-notifier",
         "type": "github"
       }
