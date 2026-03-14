@@ -54,8 +54,32 @@ in
     # https://github.com/NixOS/nixpkgs/pull/373533
     configDir = "/var/lib/jellyseerr";
   };
-  services.radarr.enable = true;
-  services.sonarr.enable = true;
+  services.radarr = {
+    enable = true;
+    settings = {
+      server = {
+        port = portRadarr;
+        bindAddress = "[::1]";
+      };
+      auth = {
+        required = "Enabled";
+        method = "External"; # via authelia header
+      };
+    };
+  };
+  services.sonarr = {
+    enable = true;
+    settings = {
+      server = {
+        port = portSonarr;
+        bindAddress = "[::1]";
+      };
+      auth = {
+        required = "Enabled";
+        method = "External"; # via authelia header
+      };
+    };
+  };
   services.jackett = {
     enable = true;
     package = pkgs.unstable.jackett; # TODO 26.05: move to stable
