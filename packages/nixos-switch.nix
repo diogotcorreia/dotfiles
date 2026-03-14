@@ -28,7 +28,8 @@ let
       switch
   '';
 
-  defaultBehavior = channel:
+  defaultBehavior =
+    channel:
     if hostName == null then
       ''
         echo "Usage: $0 <store-path>" >&2
