@@ -21,6 +21,8 @@ let
   portBazarr = lib.my.ports.bazarr;
 
   jellyseerrDb = "jellyseerr";
+  radarrMainDb = "radarr-main";
+  radarrLogDb = "radarr-log";
 
   bazarrDirectory = "/var/lib/bazarr";
 
@@ -65,6 +67,12 @@ in
         required = "Enabled";
         method = "External"; # via authelia header
       };
+      postgres = {
+        host = "/run/postgresql";
+        user = "radarr";
+        maindb = radarrMainDb;
+        logdb = radarrLogDb;
+      };
     };
   };
   services.sonarr = {
@@ -96,11 +104,23 @@ in
   # Setup PostgreSQL for Jellyseerr
   # https://docs.jellyseerr.dev/extending-jellyseerr/database-config
   services.postgresql = {
-    ensureDatabases = [ jellyseerrDb ];
+    ensureDatabases = [
+      jellyseerrDb
+      radarrMainDb
+      radarrLogDb
+    ];
     ensureUsers = [
       {
         name = jellyseerrDb;
         ensureDBOwnership = true;
+        ensureClauses.login = true;
+      }
+      {
+        name = "radarr";
+        ensureDBOwnershipOf = [
+          radarrMainDb
+          radarrLogDb
+        ];
         ensureClauses.login = true;
       }
     ];
