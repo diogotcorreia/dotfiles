@@ -58,6 +58,7 @@ in
     graphical.fonts
     graphical.fuzzel
     graphical.gammastep
+    graphical.ghostty
     graphical.swaylock
     graphical.wallpaper
     graphical.waybar
@@ -215,9 +216,10 @@ in
       };
 
       # Spawn programs
-      "Mod+Return" = {
-        spawn = "alacritty";
-      };
+      "Mod+Return" = mkSpawn [
+        "ghostty"
+        "+new-window"
+      ];
       "Mod+E" = {
         spawn = "fuzzel";
       };

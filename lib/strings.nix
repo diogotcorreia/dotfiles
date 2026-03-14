@@ -4,5 +4,5 @@
   mkDtcEmail = user: "${user}@diogotc.com";
   mkRobotsEmail = user: "${user}@robots.diogotc.com";
 
-  mkTui = cmd: "alacritty -e ${lib.escapeShellArg cmd}";
+  mkTui = cmd: "ghostty +new-window -e ${lib.escapeShellArg cmd}";
 }
