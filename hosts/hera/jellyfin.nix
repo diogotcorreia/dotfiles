@@ -23,6 +23,8 @@ let
   jellyseerrDb = "jellyseerr";
   radarrMainDb = "radarr-main";
   radarrLogDb = "radarr-log";
+  sonarrMainDb = "sonarr-main";
+  sonarrLogDb = "sonarr-log";
 
   bazarrDirectory = "/var/lib/bazarr";
 
@@ -86,6 +88,12 @@ in
         required = "Enabled";
         method = "External"; # via authelia header
       };
+      postgres = {
+        host = "/run/postgresql";
+        user = "sonarr";
+        maindb = sonarrMainDb;
+        logdb = sonarrLogDb;
+      };
     };
   };
   services.jackett = {
@@ -108,6 +116,8 @@ in
       jellyseerrDb
       radarrMainDb
       radarrLogDb
+      sonarrMainDb
+      sonarrLogDb
     ];
     ensureUsers = [
       {
@@ -120,6 +130,14 @@ in
         ensureDBOwnershipOf = [
           radarrMainDb
           radarrLogDb
+        ];
+        ensureClauses.login = true;
+      }
+      {
+        name = "sonarr";
+        ensureDBOwnershipOf = [
+          sonarrMainDb
+          sonarrLogDb
         ];
         ensureClauses.login = true;
       }
