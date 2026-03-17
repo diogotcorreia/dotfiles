@@ -28,8 +28,8 @@ in
     secretKeyBaseFile = config.age.secrets.dawarichSecretKeyBase.path;
     environment = {
       STORE_GEODATA = "true";
-      # PHOTON_API_HOST = "photon.komoot.io";
-      # PHOTON_API_USE_HTTPS = "true";
+      NOMINATIM_API_HOST = "ams.nominatim.grapheneos.org";
+      NOMINATIM_API_USE_HTTPS = "true";
       ENABLE_TELEMETRY = "false";
 
       # oauth
