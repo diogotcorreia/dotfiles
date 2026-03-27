@@ -48,6 +48,12 @@ in
     };
   };
 
+  systemd.services.linkwarden-worker.serviceConfig = {
+    # SIGTERM does not work to terminate the worker, it needs to be SIGINT
+    # https://github.com/linkwarden/linkwarden/blob/v2.14.0/apps/worker/index.ts#L14
+    KillSignal = "SIGINT";
+  };
+
   services.nginx.virtualHosts = {
     ${domain} = {
       enableACME = true;
