@@ -109,7 +109,7 @@ in
     port = lib.my.ports.flaresolverr;
   };
 
-  # Setup PostgreSQL for Jellyseerr
+  # Setup PostgreSQL for Jellyseerr, radarr and sonarr
   # https://docs.jellyseerr.dev/extending-jellyseerr/database-config
   services.postgresql = {
     ensureDatabases = [
@@ -144,12 +144,22 @@ in
     ];
   };
   systemd.services.jellyseerr = {
+    wants = [ "postgresql.target" ];
+    after = [ "postgresql.target" ];
     environment = {
       DB_TYPE = "postgres";
       DB_SOCKET_PATH = "/run/postgresql";
       DB_USER = jellyseerrDb;
       DB_NAME = jellyseerrDb;
     };
+  };
+  systemd.services.radarr = {
+    wants = [ "postgresql.target" ];
+    after = [ "postgresql.target" ];
+  };
+  systemd.services.sonarr = {
+    wants = [ "postgresql.target" ];
+    after = [ "postgresql.target" ];
   };
 
   age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
