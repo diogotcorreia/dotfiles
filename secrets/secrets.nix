@@ -184,6 +184,8 @@ mkSecrets [
       "immichClientSecret"
       "immichSmtpPassword"
       "istDelegateElectionFenixSecret"
+      "linkwardenClientSecret"
+      "linkwardenNextSecret"
       "nebulaCert"
       "nebulaKey"
       "nextcloudClientSecret"

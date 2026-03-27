@@ -43,6 +43,7 @@
     battleships = 7643;
     dtcLabs = 7649;
     twin = 7650;
+    linkwarden = 7660;
     radarr = 7878;
 
     uptimeKuma = 8002;

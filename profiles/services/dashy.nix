@@ -133,6 +133,12 @@ let
       description = "List of songs in my ultrastar-deluxe's collection";
       url = mkUrl "karaoke";
     };
+    linkwarden = {
+      title = "Linkwarden";
+      icon = "hl-linkwarden";
+      description = "Bookmark manager and read-it-later list";
+      url = mkUrl "linkwarden";
+    };
     nextcloud = {
       title = "Nextcloud";
       icon = "hl-nextcloud";
@@ -270,6 +276,7 @@ in
             nextcloud
             paperless-ngx
             bentopdf
+            linkwarden
             firefly-iii
             firefly-iii-data-importer
             dawarich

@@ -19,6 +19,7 @@
     services.dashy
     services.discord-bots.alt-urls-discord-bot
     services.esphome
+    services.linkwarden
     services.nginx.common
     shell.zellij
   ];
