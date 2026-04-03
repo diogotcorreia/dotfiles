@@ -4,14 +4,14 @@
   python3Packages,
   ...
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jwt-tool";
   version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "ticarpi";
     repo = "jwt_tool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-byLw1ppvRdppADufsxcRRxW0uyDT6Y0EDTCrw5hxK0Y=";
   };
 
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
   };
-}
+})

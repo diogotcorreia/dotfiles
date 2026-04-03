@@ -11,12 +11,12 @@
   zstd,
   ...
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "libdebug";
   version = "0.9.0";
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-rk2Cq7YpN/z530LAFzWKm1I33j24rsSKbQV7Ezv5E34=";
   };
 
@@ -59,4 +59,4 @@ python3Packages.buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
-}
+})

@@ -6,14 +6,14 @@
   python3Packages,
   ...
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "netfilterqueue";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "oremanj";
     repo = "python-netfilterqueue";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2/EF+WGy5SjunaMonQmN2TQ8G5awh1Cvn90LRx7QS9k=";
   };
 
@@ -32,4 +32,4 @@ python3Packages.buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
-}
+})

@@ -4,14 +4,14 @@
   python3Packages,
   ...
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyinstxtractor";
   version = "2024.04";
 
   src = fetchFromGitHub {
     owner = "extremecoders-re";
     repo = "pyinstxtractor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Wx/q67mkbAEfraSL/37PICa4zLn5O/2oCiLzwMLU4M8=";
   };
 
@@ -32,4 +32,4 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
   };
-}
+})
