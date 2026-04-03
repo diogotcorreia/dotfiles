@@ -28,30 +28,15 @@ in
         plugins = [
           {
             name = "zsh-autosuggestions";
-            src = pkgs.fetchFromGitHub {
-              owner = "zsh-users";
-              repo = "zsh-autosuggestions";
-              tag = "v0.7.0";
-              sha256 = "1g3pij5qn2j7v7jjac2a63lxd97mcsgw6xq6k5p7835q9fjiid98";
-            };
+            inherit (pkgs.zsh-autosuggestions) src;
           }
           {
             name = "zsh-completions";
-            src = pkgs.fetchFromGitHub {
-              owner = "zsh-users";
-              repo = "zsh-completions";
-              tag = "0.34.0";
-              sha256 = "0jjgvzj3v31yibjmq50s80s3sqi4d91yin45pvn3fpnihcrinam9";
-            };
+            inherit (pkgs.zsh-completions) src;
           }
           {
             name = "zsh-syntax-highlighting";
-            src = pkgs.fetchFromGitHub {
-              owner = "zsh-users";
-              repo = "zsh-syntax-highlighting";
-              tag = "0.7.0";
-              sha256 = "0s1z3whzwli5452h2yzjzzj27pf1hd45g223yv0v6hgrip9f853r";
-            };
+            inherit (pkgs.zsh-syntax-highlighting) src;
           }
         ];
         # FIXME this isn't working correctly on neovim.nix
