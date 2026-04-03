@@ -16,7 +16,7 @@ let
     removeAttrs
     ;
 
-  format = pkgs.my.kdl { };
+  format = pkgs.my.kdl { version = 1; };
   inherit (format.lib) node;
 
   # Recursively convert attrset to KDL node, using _type, _args, and _props attributes

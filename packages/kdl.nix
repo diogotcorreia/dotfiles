@@ -5,7 +5,10 @@
   lib,
   callPackage,
 }:
-{ }:
+{
+  version ? 2,
+}:
+assert version >= 1 && version <= 2;
 {
   type =
     with lib.types;
@@ -159,7 +162,7 @@
           passAsFile = [ "value" ];
         }
         ''
-          json2kdl "$valuePath" "$out"
+          json2kdl --kdl-v${toString version} "$valuePath" "$out"
         ''
     ) { };
 }

@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "json2kdl";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "AgathaSorceress";
     repo = "json2kdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NVpIHbv7vbppe+g7YK9OY2oL7axmqG8Kmuv4kO8Jyjs=";
+    hash = "sha256-+Tp8fNGMFD/hI7begMpNbERVVxRMgCX/fIc6eUOToUg=";
   };
 
-  cargoHash = "sha256-PK/DduEy0BfHt0asEUR41lvUl++w/UTqZ0HFSuO2OVI=";
+  cargoHash = "sha256-bDEoUpQgJWjQryi9UY5pAjMfK3+pVwPs/ZfqlEjE8gE=";
 
   meta = {
     description = "Program that converts JSON files to KDL";
