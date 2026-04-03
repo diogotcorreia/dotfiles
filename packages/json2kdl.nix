@@ -5,14 +5,14 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "json2kdl";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "AgathaSorceress";
-    repo = pname;
-    tag = "v${version}";
+    repo = "json2kdl";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NVpIHbv7vbppe+g7YK9OY2oL7axmqG8Kmuv4kO8Jyjs=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ feathecutie ];
   };
-}
+})
