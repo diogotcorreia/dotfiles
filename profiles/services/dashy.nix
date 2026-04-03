@@ -1,5 +1,5 @@
 # Dashy dashboard configuration
-{ ... }:
+{ pkgs, ... }:
 let
   domain = "dash.diogotc.com";
 
@@ -216,6 +216,11 @@ in
 {
   services.dashy = {
     enable = true;
+
+    # TODO: probably remove in 26.05
+    package = pkgs.dashy-ui.override (prev: {
+      nodejs-slim_20 = prev.nodejs_20;
+    });
 
     virtualHost = {
       enableNginx = true;
