@@ -45,7 +45,7 @@ in
     customComponents = [
       (pkgs.my.hasl3.override {
         inherit (pkgs.unstable) buildHomeAssistantComponent;
-        home-assistant = hassCfg.package;
+        python3Packages = hassCfg.package.python.pkgs;
       })
     ];
 
