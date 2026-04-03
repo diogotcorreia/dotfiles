@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Paradoxis";
     repo = "Flask-Unsign";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6V5R/wTjxYX894Ep/8G2Vz/v8ZpXlCLpxKuhGCs+Xa0=";
   };
 

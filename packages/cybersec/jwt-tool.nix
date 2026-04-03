@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ticarpi";
     repo = "jwt_tool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-byLw1ppvRdppADufsxcRRxW0uyDT6Y0EDTCrw5hxK0Y=";
   };
 

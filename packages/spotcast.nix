@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "fondberg";
     repo = "spotcast";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4E9wyfh3OnP2zkdeWLabwVdMitqECInz7nH5Te8t5B8=";
   };
 

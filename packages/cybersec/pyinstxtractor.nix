@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "extremecoders-re";
     repo = "pyinstxtractor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Wx/q67mkbAEfraSL/37PICa4zLn5O/2oCiLzwMLU4M8=";
   };
 

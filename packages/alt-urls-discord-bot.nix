@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "alt-urls-discord-bot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bqpbAlo9vR0IxKFnRLMliurbPT0aAdZ+2UYWdYt7ZD4=";
   };
 
