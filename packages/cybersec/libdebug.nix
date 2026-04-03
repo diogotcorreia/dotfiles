@@ -36,21 +36,20 @@ python3Packages.buildPythonPackage rec {
       pkg-config
     ];
 
-  propagatedBuildInputs =
-    with python3Packages;
-    [
-      prompt-toolkit
-      psutil
-      pyelftools
-      requests
-    ]
-    ++ [
-      libiberty
-      elfutils
-      libdwarf
-      zlib
-      zstd
-    ];
+  dependencies = with python3Packages; [
+    prompt-toolkit
+    psutil
+    pyelftools
+    requests
+  ];
+
+  propagatedBuildInputs = [
+    libiberty
+    elfutils
+    libdwarf
+    zlib
+    zstd
+  ];
 
   format = "pyproject"; # no setup.py
 

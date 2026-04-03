@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-Pl/z5y2975oe31tABkNXFMoDK01VkpBj9bD8rYqVTj8=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     requests
     pwntools
     pika

@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-2/EF+WGy5SjunaMonQmN2TQ8G5awh1Cvn90LRx7QS9k=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     cython
   ];
 

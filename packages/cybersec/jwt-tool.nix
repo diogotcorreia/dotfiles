@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-byLw1ppvRdppADufsxcRRxW0uyDT6Y0EDTCrw5hxK0Y=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     # cprint
     pycryptodomex
     requests
