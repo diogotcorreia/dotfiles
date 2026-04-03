@@ -5,14 +5,14 @@
   rustPlatform,
   ...
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alt-urls-discord-bot";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "alt-urls-discord-bot";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bqpbAlo9vR0IxKFnRLMliurbPT0aAdZ+2UYWdYt7ZD4=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "alt-urls-discord-bot";
     platforms = platforms.all;
   };
-}
+})
