@@ -33,13 +33,13 @@ in
 buildHomeAssistantComponent rec {
   owner = "hasl-sensor";
   domain = "hasl3";
-  version = "0-unstable-2026-03-29";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "hasl-sensor";
     repo = "integration";
-    rev = "18a2d26918e999b4747a4796461d3bd600f33be1";
-    hash = "sha256-WMJ1NaeMlvHQIUST8jJtHPZNBHGqku2LKZbj/kyDT+k=";
+    tag = version;
+    hash = "sha256-xtNOaPFFlkTrxY1IgpQ7iumPGoivOLn2M5oHdA3vSOY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
