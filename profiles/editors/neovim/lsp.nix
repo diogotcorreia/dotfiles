@@ -131,6 +131,7 @@ in
         c
         comment
         cpp
+        fish
         html
         java
         javascript
