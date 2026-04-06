@@ -92,23 +92,24 @@ in
 
     # LFCD is a wrapper around LF that sets the CWD to the
     # current directory in LF on exit
-    programs.zsh.shellAliases.lf = "lfcd";
+    programs.fish.shellAliases.lf = "lfcd";
 
-    programs.zsh.initContent = ''
-      lfcd() {
-        tmp="$(mktemp)"
+    programs.fish.functions.lfcd = {
+      body = /* fish */ ''
+        set tmp $(mktemp)
         command lf -last-dir-path="$tmp" "$@"
-        if [ -f "$tmp" ]; then
-          dir="$(command cat "$tmp")"
+        if test -f $tmp
+          set dir $(command cat $tmp)
           rm -f "$tmp"
-          if [ -d "$dir" ]; then
-            if [ "$dir" != "$(pwd)" ]; then
+          if test -d $dir
+            if test $dir != $(pwd)
               cd "$dir"
-            fi
-          fi
-        fi
-      }
-    '';
+            end
+          end
+        end
+      '';
+      description = "launch lf and cd to its cwd on exit";
+    };
 
     home.file.".config/lf/icons".text = ''
       tw 

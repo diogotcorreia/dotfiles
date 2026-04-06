@@ -38,7 +38,7 @@ in
     ];
     modules.services.restic.paths = [ "${config.my.homeDirectory}/.timewarrior" ];
 
-    hm.programs.zsh.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
+    hm.programs.fish.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
 
     hm.programs.direnv = {
       enable = true;

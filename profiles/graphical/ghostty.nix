@@ -4,7 +4,7 @@
     enable = true;
     systemd.enable = true;
     enableBashIntegration = true;
-    enableZshIntegration = true;
+    enableFishIntegration = true;
 
     settings = {
       window-decoration = "server";

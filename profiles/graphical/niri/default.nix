@@ -77,9 +77,9 @@ in
 
   hm.services.cliphist.enable = true;
 
-  hm.programs.zsh.initContent = ''
-    # Start graphical server on user's current tty if not already running.
-    [ "$(tty)" = "/dev/tty1" ] && ! pidof -s niri >/dev/null 2>&1 && exec niri-session &> /dev/null
+  # Start niri upon login on tty1
+  hm.programs.fish.loginShellInit = /* fish */ ''
+    test (tty) = "/dev/tty1"; and exec niri-session -l
   '';
 
   hm.dconf.settings = {

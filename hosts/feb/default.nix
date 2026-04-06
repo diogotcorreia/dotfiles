@@ -77,7 +77,6 @@
     shell = {
       git.enable = true;
       lf.enable = true;
-      zsh.enable = true;
     };
   };
 

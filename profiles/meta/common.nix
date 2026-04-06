@@ -4,6 +4,7 @@
   imports = with profiles; [
     security.agenix
     services.ssh
+    shell.fish
     shell.programs.essential
   ];
 

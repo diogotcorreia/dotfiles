@@ -78,8 +78,6 @@
           };
         };
     };
-    # TODO: get rid of this
-    shell.zsh.enable = true;
   };
 
   my.autoUpgrade = {
