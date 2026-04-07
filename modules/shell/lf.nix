@@ -97,7 +97,7 @@ in
     programs.fish.functions.lfcd = {
       body = /* fish */ ''
         set tmp $(mktemp)
-        command lf -last-dir-path="$tmp" "$@"
+        command lf -last-dir-path="$tmp" $argv
         if test -f $tmp
           set dir $(command cat $tmp)
           rm -f "$tmp"
