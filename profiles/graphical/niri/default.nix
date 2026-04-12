@@ -89,6 +89,13 @@ in
     };
   };
 
+  # Setup "IME"
+  # See https://github.com/niri-wm/niri/issues/2476 and https://github.com/ghostty-org/ghostty/discussions/8899
+  environment.variables = {
+    GTK_IM_MODULE = "simple";
+    QT_IM_MODULE = "simple";
+  };
+
   # Unlock keyring on login
   # System-wide option is needed for unlocking with PAM, while the HM option deals with starting the daemon
   # with the graphical session.
