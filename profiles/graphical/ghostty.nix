@@ -10,6 +10,9 @@
       window-decoration = "server";
       background-opacity = 0.75;
       theme = "light:Nord Light,dark:Nord";
+
+      notify-on-command-finish = "unfocused";
+      notify-on-command-finish-action = "bell,notify";
     };
   };
 }
