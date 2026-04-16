@@ -1,6 +1,6 @@
 # Adapted from:
 # https://lgug2z.com/articles/building-and-privately-caching-x86-and-aarch64-nixos-systems-on-github-actions/
-name: "build"
+name: "CI on push"
 
 on:
   - push
@@ -134,3 +134,20 @@ jobs:
         run: |
           nix run .#attic login phobos https://nix-cache.diogotc.com ${{ secrets.ATTIC_TOKEN }}
           nix run .#attic push dtc result -j 2
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: setup nix
+        uses: ./.github/actions/setup-nix
+        with:
+          system: x86_64-linux
+          large: false
+          attic-token: ${{ secrets.ATTIC_TOKEN }}
+
+      - name: Check for dead code and formatting
+        run: |
+          nix fmt -- -c
