@@ -96,6 +96,7 @@ jobs:
           - cybersec.flask-unsign
           - cybersec.libdebug
           - cybersec.pycdc
+          - formatter
           - infra-keyval
           - ist-discord-bot
           - lzbt
