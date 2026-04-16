@@ -1,7 +1,6 @@
 # Home manager configuration and aliases.
 # Inspired by EdSwordmith and luishfonseca.
 {
-  pkgs,
   options,
   config,
   lib,
