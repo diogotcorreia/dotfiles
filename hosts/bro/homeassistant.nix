@@ -48,10 +48,6 @@ in
         python3Packages = hassCfg.package.python.pkgs;
       })
     ];
-
-    customZhaQuirks = with pkgs.my.home-assistant-custom-zha-quirks; [
-      tuya-persence-sensor-ts0225
-    ];
   };
 
   services.mosquitto = {
