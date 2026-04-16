@@ -14,31 +14,31 @@ jobs:
       matrix:
         machine:
           - host: apollo
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: true
           - host: athena
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: false
           - host: bacchus
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: true
           - host: bro
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: false
           - host: feb
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: false
           - host: gammal
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: false
           - host: hera
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: true
           - host: phobos
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: false
           - host: zeus
-            platform: x86-64-linux
+            platform: x86_64-linux
             large: false
 
     needs: ["build-packages"]
@@ -109,7 +109,7 @@ jobs:
       - name: setup nix
         uses: ./.github/actions/setup-nix
         with:
-          system: "x86-64-linux"
+          system: "x86_64-linux"
           large: false
           attic-token: ${{ secrets.ATTIC_TOKEN }}
 
