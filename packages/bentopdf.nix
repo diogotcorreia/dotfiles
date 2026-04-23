@@ -17,16 +17,16 @@ let
   };
 in
 buildNpmPackage' (finalAttrs: {
-  version = "2.7.0";
+  version = "2.8.4";
   pname = "bentopdf";
 
   src = fetchFromGitHub {
     owner = "alam00000";
     repo = "bentopdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mOM3NaXg3JVrNq8f4f7s/EkAitKn+3Gql3T4RzglpF0=";
+    hash = "sha256-kVCzIFINN+Qs4TfLMqon8A9mQQ8kCRqdmu1CrzaRqf0=";
   };
-  npmDepsHash = "sha256-YElNw5wR9+kZpZ2+0QqeedtJQEmlycFTO2Q6qplhv0U=";
+  npmDepsHash = "sha256-TWfCuYRQWDhMhCrUXcSZ54yb6BAAYGiJBhZoCHLYtcs=";
 
   npmBuildScript = "build";
   npmBuildFlags = [
