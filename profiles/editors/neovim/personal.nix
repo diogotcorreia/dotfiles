@@ -30,6 +30,10 @@
           line = "<leader>cc";
           block = "<leader>C";
         };
+        opleader = {
+          line = "<leader>cc";
+          block = "<leader>C";
+        };
         mappings = {
           extra = false;
         };
