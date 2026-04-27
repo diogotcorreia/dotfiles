@@ -35,8 +35,8 @@ index 9419fcd4..0f138e35 100644
 @@ -33,6 +33,7 @@ class Bank
      public string $logo;
      public string $name;
-     public int    $transactionTotalDays;
-+    public int    $maxAccessValidDays;
+     public int $transactionTotalDays;
++    public int $maxAccessValidDays;
  
      /**
       * @return static
@@ -57,7 +57,7 @@ index 5dca54cf..1ecc0dd7 100644
      private string $nordigenCountry;
      private string $nordigenMaxDays;
 +    private string $nordigenAccessDays;
-     private array  $nordigenRequisitions;
+     private array $nordigenRequisitions;
  
      private string $lunchFlowApiKey = '';
 @@ -140,6 +141,7 @@ class Configuration
@@ -122,11 +122,11 @@ index e87bc2c5..fca1dc2b 100644
 --- a/resources/views/v2/import/009-selection/index.blade.php
 +++ b/resources/views/v2/import/009-selection/index.blade.php
 @@ -94,7 +94,7 @@
-                                         <option label="{{ $bank->name }}"
-                                                 @if($bank->id === $configuration->getNordigenBank())selected="selected"@endif
-                                                 data-days="{{ $bank->transactionTotalDays }}"
--                                                value="{{ $bank->id }}">{{ $bank->name }}</option>
-+                                                value="{{ $bank->id }}:{{ $bank->maxAccessValidDays }}">{{ $bank->name }}</option>
-                                         @endforeach
-                                     </select>
-                                 </div>
+                                             <option label="{{ $bank->name }}"
+                                                     @if($bank->id === $configuration->getNordigenBank())selected="selected"@endif
+                                                     data-days="{{ $bank->transactionTotalDays }}"
+-                                                    value="{{ $bank->id }}">{{ $bank->name }}</option>
++                                                    value="{{ $bank->id }}:{{ $bank->maxAccessValidDays }}">{{ $bank->name }}</option>
+                                             @endforeach
+                                         </select>
+                                     </div>

@@ -33,11 +33,14 @@ diff --git a/app/Services/Nordigen/Conversion/RoutineManager.php b/app/Services/
 index 3afd5045..10e0fc22 100644
 --- a/app/Services/Nordigen/Conversion/RoutineManager.php
 +++ b/app/Services/Nordigen/Conversion/RoutineManager.php
-@@ -275,7 +275,6 @@ class RoutineManager implements RoutineManagerInterface
+@@ -275,10 +275,6 @@ class RoutineManager implements RoutineManagerInterface
          if (0 === $total) {
              Log::warning('Downloaded nothing, will return nothing.');
              // add error to current error thing:
--            $this->importJob->conversionStatus->addError(0, '[a111]: No transactions were downloaded from GoCardless. You may be rate limited or something else went wrong.');
+-            $this->importJob->conversionStatus->addError(
+-                0,
+-                '[a111]: No transactions were downloaded from GoCardless. You may be rate limited or something else went wrong.'
+-            );
              $this->repository->saveToDisk($this->importJob);
  
              return true;
