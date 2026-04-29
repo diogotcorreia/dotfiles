@@ -97,6 +97,7 @@ mkSecrets [
       "nebulaKey"
       "nixpkgsBuildFailureNotifierEnv"
       "nixpkgsBuildFailureNotifierHealthchecksUrl"
+      "pocketGrimoireAppSecret"
       "resticHealthchecksUrl"
       "resticPassword"
       "resticSshConfig"

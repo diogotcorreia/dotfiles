@@ -28,6 +28,7 @@
     services.nginx.common
     services.nixpkgs-build-failure-notifier
     services.pairdrop
+    services.pocket-grimoire
     services.reposilite
     services.resumos-legacy
     services.rex-cdn
