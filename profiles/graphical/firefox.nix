@@ -6,8 +6,14 @@
     profiles.default = {
       id = 0;
       isDefault = true;
-      # Privacy settings from: https://github.com/arkenfox/user.js/blob/master/user.js
       settings = {
+        # Show history before search suggestions
+        "browser.urlbar.showSearchSuggestionsFirst" = false;
+
+        ######
+        # Privacy settings from: https://github.com/arkenfox/user.js/blob/master/user.js
+        ######
+
         # disable privacy invasive "private attribution" ad-tracking "feature"
         "dom.private-attribution.submission.enabled" = false;
 
