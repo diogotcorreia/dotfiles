@@ -28,10 +28,15 @@ in
         commit.verbose = true;
         rerere.enabled = true;
       };
-      signing = {
-        key = lib.mkDefault null;
-        signByDefault = lib.mkDefault (config.home-manager.users.${user}.programs.git.signing.key != null);
-      };
+      signing =
+        let
+          hasGpgKey = config.home-manager.users.${user}.programs.git.signing.key != null;
+        in
+        {
+          key = lib.mkDefault null;
+          signByDefault = lib.mkDefault hasGpgKey;
+          format = lib.mkIf hasGpgKey "openpgp";
+        };
       includes = [
         {
           condition = "gitdir:~/documents/dsi/";
