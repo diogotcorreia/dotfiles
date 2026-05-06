@@ -88,7 +88,6 @@ in
         userinfo_bearer_validation = true;
         auto_provision = true;
         soft_auto_provision = true; # allow login into existing accounts
-        allow_multiple_user_backends = false; # redirect to authelia immediately
       };
 
       hide_login_form = true; # use ?direct=1 to bypass/login as root
@@ -249,6 +248,9 @@ in
         --mapping-uid="nextcloud_username | preferred_username" \
         --mapping-quota="nextcloud_quota" \
         --no-interaction
+
+      # redirect to authelia immediately
+      ${occ}/bin/nextcloud-occ config:app:set user_oidc allow_multiple_user_backends --type=string --value=0
     '';
     wantedBy = [ "multi-user.target" ];
     after = [ "nextcloud-setup.service" ];
