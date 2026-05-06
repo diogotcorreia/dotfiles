@@ -91,17 +91,6 @@
       };
       restic = {
         enable = true;
-
-        # TODO each service should define its own paths
-        paths = [
-          "${config.my.homeDirectory}/dailytxt"
-          "${config.my.homeDirectory}/grafana"
-        ];
-        exclude = [
-          "**/node_modules"
-          "**/.npm"
-        ];
-
         timerConfig = {
           OnCalendar = "03:05";
         };
