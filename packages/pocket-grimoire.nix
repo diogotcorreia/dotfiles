@@ -24,18 +24,18 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "pocket-grimoire";
-  version = "2026.04.30";
+  version = "2026.05.07";
 
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "pocket-grimoire";
     tag = finalAttrs.version;
-    hash = "sha256-Pb7NI0KkB3Hl6nnkESnUW6HpNeDhfBFxwfMzGeGs/vg=";
+    hash = "sha256-A4UP0LQ93Tly8KwoPOGg5C2mCf6azeKhSMsiBLJj2W4=";
   };
 
   composerStrictValidation = false;
   composerNoPlugins = false;
-  vendorHash = "sha256-4Ijsjh7EaKBg1eYCkDLHN3imPFOd0/SLFPZtllnqUt0=";
+  vendorHash = "sha256-DeUakUv1y2rvg8kIqQ2MJGEn9uxA+SC7YmpUMhnM9kA=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
