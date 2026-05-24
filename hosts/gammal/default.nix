@@ -119,8 +119,6 @@
   services.displayManager.hiddenUsers = [ user ];
 
   modules.impermanence.directories = [ "/home" ];
-  # https://github.com/nix-community/impermanence/issues/276
-  fileSystems."/home".neededForBoot = true;
 
   # System state version
   system.stateVersion = "25.11";
