@@ -34,7 +34,6 @@ in
 
     enable = true;
     mediaLocation = photosLocation;
-    database.enableVectors = false;
 
     settings = {
       # disable built-in database backup; we already have our own

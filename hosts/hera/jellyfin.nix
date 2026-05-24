@@ -51,7 +51,7 @@ in
   };
 
   services.jellyfin.enable = true;
-  services.jellyseerr = {
+  services.seerr = {
     enable = true;
     port = portJellyseerr;
     # This might change, so pin it to make sure it doesn't break
@@ -121,8 +121,9 @@ in
     ];
     ensureUsers = [
       {
-        name = jellyseerrDb;
-        ensureDBOwnership = true;
+        # TODO: rename DB to match user
+        name = "seerr";
+        ensureDBOwnershipOf = [ jellyseerrDb ];
         ensureClauses.login = true;
       }
       {
@@ -143,7 +144,7 @@ in
       }
     ];
   };
-  systemd.services.jellyseerr = {
+  systemd.services.seerr = {
     wants = [ "postgresql.target" ];
     after = [ "postgresql.target" ];
     environment = {
@@ -283,7 +284,7 @@ in
     # also persist cache so we don't have to fetch metadata on every reboot
     config.services.jellyfin.cacheDir
 
-    (lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir)
+    (lib.my.toPrivateStateDirectory config.services.seerr.configDir)
     config.services.radarr.dataDir
     config.services.sonarr.dataDir
     config.services.jackett.dataDir
@@ -292,7 +293,7 @@ in
 
   modules.services.restic.paths = [
     config.services.jellyfin.dataDir
-    (lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir)
+    (lib.my.toPrivateStateDirectory config.services.seerr.configDir)
     config.services.radarr.dataDir
     config.services.sonarr.dataDir
     config.services.jackett.dataDir
@@ -302,8 +303,8 @@ in
     "${config.services.jellyfin.dataDir}/log"
     "${config.services.jellyfin.dataDir}/metadata/livetv"
     "${config.services.jellyfin.dataDir}/transcode"
-    "${lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir}/cache"
-    "${lib.my.toPrivateStateDirectory config.services.jellyseerr.configDir}/logs"
+    "${lib.my.toPrivateStateDirectory config.services.seerr.configDir}/cache"
+    "${lib.my.toPrivateStateDirectory config.services.seerr.configDir}/logs"
     "${config.services.radarr.dataDir}/logs"
     "${config.services.sonarr.dataDir}/logs"
     "${config.services.jackett.dataDir}/log.txt"

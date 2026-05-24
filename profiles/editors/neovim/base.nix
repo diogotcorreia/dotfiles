@@ -23,6 +23,10 @@ in
     enablePrintInit = false;
     enableMan = false;
 
+    # This ensures unfree packages are allowed (or rather, follow this flake's config).
+    # There is otherwise no difference, as we already override nixvim's nixpkgs input with our own.
+    nixpkgs.useGlobalPackages = true;
+
     colorschemes.base16 = {
       enable = true;
       colorscheme = "nord";

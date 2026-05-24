@@ -33,22 +33,22 @@ let
     '') wallpapers}
 
     if [ -n "$chosen_wallpaper" ]; then
-    ${lib.getExe pkgs.swww} img "$chosen_wallpaper"
+    ${lib.getExe pkgs.awww} img "$chosen_wallpaper"
     fi
   '';
 in
 {
-  hm.services.swww.enable = true;
+  hm.services.awww.enable = true;
 
   hm.systemd.user.services.set-wallpaper = {
     Unit = {
       Description = "Set desktop background";
       After = [
         "graphical-session.target"
-        "swww.service"
+        "awww.service"
       ];
       PartOf = [ "graphical-session.target" ];
-      Requires = [ "swww.service" ];
+      Requires = [ "awww.service" ];
     };
 
     Service = {

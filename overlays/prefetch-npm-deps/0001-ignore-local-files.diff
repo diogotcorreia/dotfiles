@@ -1,23 +1,94 @@
 diff --git a/src/main.rs b/src/main.rs
-index cdac7ef84c0b4d..9494407a33a4db 100644
+index 2882aee9ec206..b65db0492c3ea 100644
 --- a/src/main.rs
 +++ b/src/main.rs
-@@ -67,7 +67,7 @@ fn fixup_lockfile(
-                 if let Some(Value::String(resolved)) = package.get("resolved") {
-                     if let Some(Value::String(integrity)) = package.get("integrity") {
--                        if resolved.starts_with("git+") {
-+                        if resolved.starts_with("git+") || resolved.starts_with("file:") {
-                             fixed = true;
+@@ -238,6 +238,7 @@ fn fixup_lockfile(
+                 .values_mut()
+             {
+                 if let Some(Value::String(resolved)) = package.get("resolved")
++                    && !resolved.starts_with("file:")
+                     && let Some(Value::String(integrity)) = package.get("integrity")
+                 {
+                     if resolved.starts_with("git+") {
+@@ -286,6 +287,7 @@ fn fixup_v1_deps(
+             .as_object()
+             .expect("v1 dep must be object")
+             .get("resolved")
++            && !resolved.starts_with("file:")
+             && let Some(Value::String(integrity)) = dep
+                 .as_object()
+                 .expect("v1 dep must be object")
+@@ -509,6 +511,10 @@ mod tests {
+                     "resolved": "git+ssh://git@github.com/NixOS/nixpkgs.git",
+                     "integrity": "sha512-aaa"
+                 },
++                "baz": {
++                    "resolved": "file:baz.tar.gz",
++                    "integrity": "sha512-bbb"
++                },
+                 "foo-bad": {
+                     "resolved": "foo",
+                     "integrity": "sha1-foo"
+@@ -534,6 +540,10 @@ mod tests {
+                 "bar": {
+                     "resolved": "git+ssh://git@github.com/NixOS/nixpkgs.git",
+                 },
++                "baz": {
++                    "resolved": "file:baz.tar.gz",
++                    "integrity": "sha512-bbb"
++                },
+                 "foo-bad": {
+                     "resolved": "foo",
+                     "integrity": "sha512-foo"
+diff --git a/src/parse/mod.rs b/src/parse/mod.rs
+index 3e6f5019ea335..6f76dd7f59df9 100644
+--- a/src/parse/mod.rs
++++ b/src/parse/mod.rs
+@@ -25,10 +25,10 @@ pub fn lockfile(
+     let mut packages = lock::packages(content)
+         .context("failed to extract packages from lockfile")?
+         .into_par_iter()
+-        .map(|p| {
++        .filter_map(|p| {
+             let n = p.name.clone().unwrap();
  
-                             package
-                                 .as_object_mut()
-@@ -242,6 +242,9 @@ fn main() -> anyhow::Result<()> {
-     cache.init()?;
+-            Package::from_lock(p).with_context(|| format!("failed to parse data for {n}"))
++            Package::from_lock(p).with_context(|| format!("failed to parse data for {n}")).transpose()
+         })
+         .collect::<anyhow::Result<Vec<_>>>()?;
  
-     packages.into_par_iter().try_for_each(|package| {
-+        if package.url.scheme() == "file" {
-+            return Ok::<_, anyhow::Error>(());
+@@ -124,7 +124,7 @@ enum Specifics {
+ }
+ 
+ impl Package {
+-    fn from_lock(pkg: lock::Package) -> anyhow::Result<Package> {
++    fn from_lock(pkg: lock::Package) -> anyhow::Result<Option<Package>> {
+         let mut resolved = match pkg
+             .resolved
+             .expect("at this point, packages should have URLs")
+@@ -133,6 +133,10 @@ impl Package {
+             UrlOrString::String(_) => panic!("at this point, all packages should have URLs"),
+         };
+ 
++        if resolved.scheme() == "file" {
++            return Ok(None);
 +        }
-         let tarball = package
-             .tarball()
-             .map_err(|e| anyhow!("couldn't fetch {} at {}: {e:?}", package.name, package.url))?;
++
+         let specifics = match get_hosted_git_url(&resolved)? {
+             Some(hosted) => {
+                 let body = util::get_url_body_with_retry(&hosted)?;
+@@ -174,12 +178,12 @@ impl Package {
+             },
+         };
+ 
+-        Ok(Package {
++        Ok(Some(Package {
+             name: pkg.name.unwrap(),
+             version: pkg.version,
+             url: resolved,
+             specifics,
+-        })
++        }))
+     }
+ 
+     pub fn tarball(&self) -> anyhow::Result<Vec<u8>> {

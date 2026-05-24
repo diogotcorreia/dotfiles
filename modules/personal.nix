@@ -14,8 +14,10 @@ in
 
   config = mkIf cfg.enable {
     hm.home.packages = with pkgs; [
-      # dog DNS CLI client (dig alternative)
-      dogdns
+      # Android Debug Bridge (adb)
+      android-tools
+      # doggo DNS CLI client (dig alternative)
+      doggo
       # json manipulator
       jq
       # qalc (CLI calculator)
@@ -38,7 +40,7 @@ in
     ];
     modules.services.restic.paths = [ "${config.my.homeDirectory}/.timewarrior" ];
 
-    hm.programs.fish.shellAliases."dig" = "${pkgs.dogdns}/bin/dog";
+    hm.programs.fish.shellAliases."dig" = "${lib.getExe pkgs.doggo}";
 
     hm.programs.direnv = {
       enable = true;
@@ -61,10 +63,6 @@ in
       };
     };
 
-    # Android Debug Bridge
-    usr.extraGroups = [ "adbusers" ];
-    programs.adb.enable = true;
-
     # needed for GSSAPIAuthentication options for ssh
     programs.ssh.package = pkgs.openssh_gssapi;
 
@@ -72,71 +70,69 @@ in
     hm.programs.ssh = {
       enable = true;
       enableDefaultConfig = false;
-      matchBlocks = {
+      settings = {
         "*" = { };
-        "* !apollo !bacchus".setEnv = {
+        "* !apollo !bacchus".SetEnv = {
           TERM = "xterm-256color";
         };
 
         apollo = {
-          hostname = "apollo.diogotc.com";
-          user = "dtc";
+          HostName = "apollo.diogotc.com";
+          User = "dtc";
         };
         bacchus = {
-          hostname = "bacchus.diogotc.com";
-          user = "dtc";
+          HostName = "bacchus.diogotc.com";
+          User = "dtc";
         };
 
         athena = {
-          hostname = "world.athena.diogotc.com";
-          user = "dtc";
+          HostName = "world.athena.diogotc.com";
+          User = "dtc";
         };
         bro = {
-          hostname = "world.bro.diogotc.com";
-          user = "dtc";
+          HostName = "world.bro.diogotc.com";
+          User = "dtc";
         };
         feb = {
-          hostname = "feb.diogotc.com";
-          user = "dtc";
+          HostName = "feb.diogotc.com";
+          User = "dtc";
         };
         gammal = {
-          hostname = "192.168.100.51";
-          user = "dtc";
+          HostName = "192.168.100.51";
+          User = "dtc";
         };
         hades = {
-          hostname = "hades.pedropirescoaching.com";
-          user = "dtc";
+          HostName = "hades.pedropirescoaching.com";
+          User = "dtc";
         };
         hera = {
-          hostname = "hera.diogotc.com";
-          user = "dtc";
+          HostName = "hera.diogotc.com";
+          User = "dtc";
         };
         phobos = {
-          hostname = "world.phobos.diogotc.com";
-          user = "dtc";
+          HostName = "world.phobos.diogotc.com";
+          User = "dtc";
         };
         poseidon = {
-          hostname = "mail.lpespaco.pt";
-          user = "dtc";
+          HostName = "mail.lpespaco.pt";
+          User = "dtc";
         };
         zeus = {
-          hostname = "world.zeus.diogotc.com";
-          user = "dtc";
+          HostName = "world.zeus.diogotc.com";
+          User = "dtc";
         };
 
         sigma = {
           # use a specific server instead of load balancer for kerberos to work
-          hostname = "sigma02.tecnico.ulisboa.pt";
-          user = "ist199211";
+          HostName = "sigma02.tecnico.ulisboa.pt";
+          User = "ist199211";
 
-          extraOptions = {
-            GSSAPIAuthentication = "yes";
-            GSSAPIDelegateCredentials = "yes";
-          };
+          GSSAPIAuthentication = "yes";
+          GSSAPIDelegateCredentials = "yes";
         };
         hs = {
-          hostname = "server.hackerschool.io";
-          user = "dtc";
+          HostName = "server.hackerschool.io";
+          User = "dtc";
         };
       };
 

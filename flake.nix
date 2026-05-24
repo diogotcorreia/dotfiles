@@ -2,7 +2,7 @@
   description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05-small"; # TODO: move to nixos-26.05 when available
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     impermanence = {
       url = "github:nix-community/impermanence";
@@ -10,14 +10,12 @@
       inputs.home-manager.follows = "home";
     };
     home = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/master"; # TODO: move to release-26.05 when available
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.11";
+      url = "github:nix-community/nixvim/main"; # TODO: move to nixos-26.05 when available
       inputs.nixpkgs.follows = "nixpkgs";
-      # we don't need to build docs, so we can get rid of it
-      inputs.nuschtosSearch.follows = "";
     };
     agenix = {
       url = "github:ryantm/agenix/main";
@@ -61,7 +59,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ist-discord-bot = {
-      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.5";
+      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-build-failure-notifier = {

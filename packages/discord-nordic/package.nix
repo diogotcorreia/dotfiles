@@ -3,11 +3,14 @@
   fetchPnpmDeps,
   lib,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   stdenv,
   ...
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "discord-nordic";
   version = "4.13.1";
@@ -29,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pnpmDeps = fetchPnpmDeps {
+    inherit pnpm;
     inherit (finalAttrs)
       pname
       version

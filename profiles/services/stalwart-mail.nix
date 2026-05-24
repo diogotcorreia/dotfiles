@@ -19,10 +19,10 @@ let
 
   mkEmail = name: "${name}@${domain}";
 
-  credPath = "/run/credentials/stalwart-mail.service";
+  credPath = "/run/credentials/stalwart.service";
 
   # Use the same version of rocksdb for backups
-  rocksdb = config.services.stalwart-mail.package.rocksdb;
+  rocksdb = config.services.stalwart.package.rocksdb;
 
   # utils for config
   ifthen = field: data: {
@@ -32,8 +32,9 @@ let
   otherwise = value: { "else" = value; };
 in
 {
-  services.stalwart-mail = {
+  services.stalwart = {
     enable = true;
+    stateVersion = "25.11"; # TODO: bump
     settings = {
       config.local-keys = [
         "authentication.fallback-admin.*"
@@ -160,6 +161,11 @@ in
       # secret = "changemeasap";
       # };
     };
+
+    credentials = {
+      "cert.pem" = "${config.security.acme.certs.${stalwartDomain}.directory}/cert.pem";
+      "key.pem" = "${config.security.acme.certs.${stalwartDomain}.directory}/key.pem";
+    };
   };
 
   networking.firewall.allowedTCPPorts = with lib.my.ports; [
@@ -171,7 +177,7 @@ in
     manageSieve
   ];
 
-  systemd.services.stalwart-mail = {
+  systemd.services.stalwart = {
     wants = [ "acme-${stalwartDomain}.service" ];
     after = [ "acme-${stalwartDomain}.service" ];
     preStart = ''
@@ -179,10 +185,6 @@ in
     '';
     serviceConfig = {
       LogsDirectory = "stalwart-mail";
-      LoadCredential = [
-        "cert.pem:${config.security.acme.certs.${stalwartDomain}.directory}/cert.pem"
-        "key.pem:${config.security.acme.certs.${stalwartDomain}.directory}/key.pem"
-      ];
     };
   };
 
@@ -255,7 +257,7 @@ in
     # https://community.letsencrypt.org/t/please-avoid-3-0-1-and-3-0-2-dane-tlsa-records-with-le-certificates/7022/14
     extraLegoRenewFlags = [ "--reuse-key" ];
     # Restart stalwart to apply new certificates
-    reloadServices = [ "stalwart-mail.service" ];
+    reloadServices = [ "stalwart.service" ];
   };
 
   modules.impermanence.directories = [ dataDir ];

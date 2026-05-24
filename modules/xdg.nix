@@ -25,6 +25,8 @@ in
         publicShare = "${config.my.homeDirectory}/.public";
         templates = "${config.my.homeDirectory}/.templates";
         videos = "${config.my.homeDirectory}/videos";
+
+        setSessionVariables = true;
       };
       configFile."mimeapps.list".force = true;
       configHome = "${config.my.homeDirectory}/.config";

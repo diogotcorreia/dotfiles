@@ -14,10 +14,7 @@ in
 {
   age.secrets.frpAuthEnv.file = secrets.frpAuthEnv;
 
-  systemd.services.frp.serviceConfig.EnvironmentFile = [
-    config.age.secrets.frpAuthEnv.path
-  ];
-  services.frp = {
+  services.frp.instances.dtc = {
     enable = true;
     role = "server";
     settings = {
@@ -36,6 +33,9 @@ in
       ];
       subDomainHost = domain;
     };
+    environmentFiles = [
+      config.age.secrets.frpAuthEnv.path
+    ];
   };
 
   modules.services.nebula.firewall.inbound = [

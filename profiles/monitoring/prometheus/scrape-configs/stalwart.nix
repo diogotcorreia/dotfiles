@@ -6,12 +6,12 @@
 }:
 let
   hosts = lib.my.filterHosts [
-    (cfg: cfg.services.stalwart-mail.enable)
-    (cfg: cfg.services.stalwart-mail.settings.metrics.prometheus.enable or false)
+    (cfg: cfg.services.stalwart.enable)
+    (cfg: cfg.services.stalwart.settings.metrics.prometheus.enable or false)
   ] nixosConfigurations;
 
   targets = [
-    (config: config.services.stalwart-mail.settings.metrics.prometheus.host)
+    (config: config.services.stalwart.settings.metrics.prometheus.host)
   ];
 in
 {

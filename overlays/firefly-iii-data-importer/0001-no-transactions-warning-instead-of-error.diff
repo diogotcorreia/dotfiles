@@ -6,7 +6,7 @@ index 3788afb8..2f85fd21 100644
  
              return ExitCode::GENERAL_ERROR->value;
          }
--        if (0 === count($messages) && 0 === count($warnings) && 0 === count($errors)) {
+-        if (0 === count($messages) && 0 === count($warnings)) {
 -            Log::error(sprintf('Exit code is %s.', ExitCode::NOTHING_WAS_IMPORTED->name));
 -
 -            return ExitCode::NOTHING_WAS_IMPORTED->value;

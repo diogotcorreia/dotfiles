@@ -42,6 +42,7 @@
   # ZFS
   boot.supportedFilesystems = [ "zfs" ];
   boot.kernelParams = [ "nohibernate" ];
+  boot.zfs.forceImportRoot = false; # TODO 26.11: remove after changing stateVersion
   networking.hostId = "239be557";
   services.zfs.autoScrub.enable = true;
   services.zfs.trim.enable = true;

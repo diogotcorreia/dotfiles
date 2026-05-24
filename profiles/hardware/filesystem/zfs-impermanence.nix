@@ -27,6 +27,7 @@ in
 
   # Enable ZFS kernel packages/modules
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.forceImportRoot = false; # TODO 26.11: remove after changing stateVersion
 
   # Enable services to maintain the ZFS pool
   services.zfs.autoScrub.enable = true;
@@ -143,7 +144,29 @@ in
   # a blank state on every boot.
   # Diff what will be deleted next boot:
   # sudo zfs diff rpool/local/root@blank -F -t | sort -k 4 | less
-  boot.initrd.postResumeCommands = lib.mkAfter ''
-    zfs rollback -r rpool/local/root@blank
-  '';
+  boot.initrd.postResumeCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
+    lib.mkAfter ''
+      zfs rollback -r rpool/local/root@blank
+    ''
+  );
+  boot.initrd.systemd.services.rollback = lib.mkIf config.boot.initrd.systemd.enable {
+    description = "Rollback root ZFS dataset to a blank state";
+    wantedBy = [
+      "initrd.target"
+    ];
+    after = [
+      "zfs-import-zroot.service"
+    ];
+    before = [
+      "sysroot.mount"
+    ];
+    path = [
+      config.boot.zfs.package
+    ];
+    unitConfig.DefaultDependencies = "no";
+    serviceConfig.Type = "oneshot";
+    script = ''
+      zfs rollback -r rpool/local/root@blank
+    '';
+  };
 }

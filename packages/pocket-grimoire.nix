@@ -34,8 +34,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerStrictValidation = false;
-  composerNoPlugins = false;
-  vendorHash = "sha256-DeUakUv1y2rvg8kIqQ2MJGEn9uxA+SC7YmpUMhnM9kA=";
+  vendorHash = "sha256-vOOI6dthIRnK9ISjVOSxOxudk0Dg5zuBMYH7Vzbf62E=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";

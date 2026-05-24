@@ -61,12 +61,12 @@ in
     };
 
     services.resolved = {
-      extraConfig = ''
-        Cache=no
-        DNSSEC=yes
-      '';
-      fallbackDns = [ ]; # Do not try other servers
-      domains = [ "~." ]; # Force all queries to use the dnsproxy
+      settings.Resolve = {
+        Cache = false;
+        DNSSEC = true;
+        FallbackDNS = [ ]; # Do not try other servers
+        Domains = [ "~." ]; # Force all queries to use the dnsproxy
+      };
     };
   };
 }

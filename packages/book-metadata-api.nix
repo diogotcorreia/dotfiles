@@ -7,7 +7,7 @@
   node-gyp,
   nodejs,
   pkg-config,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   python3,
   stdenv,
@@ -15,6 +15,7 @@
   ...
 }:
 let
+  pnpm = pnpm_10;
   pin = {
     version = "3.3.1";
     srcHash = "sha256-UL2Pt6AxkcgghKnD4VStxU/09mu0tIuHPGt4RGB7ft0=";
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   pnpmDeps = fetchPnpmDeps {
+    inherit pnpm;
     inherit (finalAttrs)
       pname
       version

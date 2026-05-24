@@ -1,7 +1,7 @@
 # Nginx configuration for device domain aliases (i.e. access local devices from outside the network)
 { lib, ... }:
 let
-  inherit (lib) fold recursiveUpdate;
+  inherit (lib) foldr recursiveUpdate;
   defineAlias =
     domain: target:
     {
@@ -19,7 +19,7 @@ let
       };
     };
 
-  mergeAliases = listOfAttrsets: fold (attrset: acc: recursiveUpdate attrset acc) { } listOfAttrsets;
+  mergeAliases = listOfAttrsets: foldr (attrset: acc: recursiveUpdate attrset acc) { } listOfAttrsets;
 in
 mergeAliases [
   (defineAlias "apollo.diogotc.com" "http://192.168.1.2:8080" { })

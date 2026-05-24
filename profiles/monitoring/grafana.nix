@@ -37,6 +37,10 @@ in
         cookie_secure = true;
         cookie_samesite = "strict";
         allow_embedding = true;
+
+        # See https://nixos.org/manual/nixos/unstable/release-notes#sec-release-26.05-incompatibilities
+        # TODO: In the future it might be reasonable to generate a new secret key
+        secret_key = "SW2YcwTIb9zpOOhoPsMm";
       };
 
       analytics = {

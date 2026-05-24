@@ -5,11 +5,14 @@
   lib,
   makeWrapper,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   stdenv,
   ...
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-bot";
   version = "4.0.0";
@@ -21,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   pnpmDeps = fetchPnpmDeps {
+    inherit pnpm;
     inherit (finalAttrs)
       pname
       version

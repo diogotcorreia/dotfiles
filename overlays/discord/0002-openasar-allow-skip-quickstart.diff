@@ -11,10 +11,3 @@ index 41b2048..81d5f2f 100644
      destroySplash();
  
      launchMain();
-@@ -224,4 +224,4 @@ const fail = (c) => {
-   sendState('fail', { seconds: 10 });
- 
-   setTimeout(c, 10000);
--};
-\ No newline at end of file
-+};
