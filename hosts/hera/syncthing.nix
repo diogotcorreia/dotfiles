@@ -1,4 +1,8 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
   domain = "syncthing.hera.diogotc.com";
   cfg = config.services.syncthing;
@@ -36,7 +40,7 @@ in
       autheliaHealthchecksPath = "/rest/noauth/health";
       locations."/" = {
         enableAuthelia = true;
-        proxyPass = "http://unix:${cfg.guiAddress}";
+        proxyPass = "http://unix:${lib.strings.removePrefix "unix://" cfg.guiAddress}";
       };
     };
   };
