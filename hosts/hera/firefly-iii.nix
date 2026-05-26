@@ -49,7 +49,7 @@ in
     enableNginx = true;
     settings = {
       FIREFLY_III_URL = "https://${domainApp}";
-      FIREFLY_III_CLIENT_ID = 7;
+      FIREFLY_III_CLIENT_ID = "019e645e-8e82-722e-93bd-101e05b5aa6c";
       JSON_CONFIGURATION_DIR = configPathAutoDataImporter;
     };
   };
