@@ -8,7 +8,7 @@
 let
   domain = "esphome.${config.networking.hostName}.diogotc.com";
 
-  stateDir = lib.my.toPrivateStateDirectory "/var/lib/esphome";
+  stateDir = "/var/lib/esphome";
 in
 {
   # Use module from nixos-unstable
