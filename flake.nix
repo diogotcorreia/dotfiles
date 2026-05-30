@@ -2,7 +2,7 @@
   description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05-small"; # TODO: move to nixos-26.05 when available
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     impermanence = {
       url = "github:nix-community/impermanence";
