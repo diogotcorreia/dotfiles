@@ -10,7 +10,7 @@
       inputs.home-manager.follows = "home";
     };
     home = {
-      url = "github:nix-community/home-manager/master"; # TODO: move to release-26.05 when available
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
