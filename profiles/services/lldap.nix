@@ -8,8 +8,6 @@
 let
   domain = "ldap.diogotc.com";
   port = lib.my.ports.lldapHttp;
-
-  dbUser = "lldap";
 in
 {
   age.secrets.lldapAdminPassword.file = secrets.host.lldapAdminPassword;
@@ -36,31 +34,18 @@ in
       http_url = "https://${domain}";
       http_host = "::1";
       http_port = port;
+    };
 
-      # TODO 26.05: use services.lldap.database
-      database_url = "postgres:///${dbUser}?host=/run/postgresql";
+    database = {
+      createLocally = true;
+      type = "postgresql";
     };
   };
 
   systemd.services.lldap = {
-    # ensure postgresql is ready before turning on lldap
-    requires = [ "postgresql.target" ];
-    after = [ "postgresql.target" ];
-
     serviceConfig = {
       LoadCredential = [ "user_pass:${config.age.secrets.lldapAdminPassword.path}" ];
     };
-  };
-
-  services.postgresql = {
-    enable = lib.mkDefault true;
-    ensureUsers = [
-      {
-        name = dbUser;
-        ensureDBOwnership = true;
-      }
-    ];
-    ensureDatabases = [ dbUser ];
   };
 
   services.nginx.virtualHosts = {
