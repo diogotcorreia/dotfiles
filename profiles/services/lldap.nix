@@ -49,39 +49,6 @@ in
 
     serviceConfig = {
       LoadCredential = [ "user_pass:${config.age.secrets.lldapAdminPassword.path}" ];
-
-      # https://github.com/NixOS/nixpkgs/pull/487933
-      RemoveIPC = true;
-      RestrictNamespaces = true;
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
-      RestrictAddressFamilies = lib.mkForce [
-        "AF_UNIX"
-        "AF_INET"
-        "AF_INET6"
-      ];
-      SystemCallFilter = lib.mkForce [
-        "@system-service"
-        "~@privileged"
-        "~@resources"
-      ];
-      SystemCallArchitectures = "native";
-      CapabilityBoundingSet = "";
-      LockPersonality = true;
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      PrivateDevices = true;
-      ProtectClock = true;
-      ProtectControlGroups = true;
-      ProtectHome = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
-      ProtectSystem = "strict";
-      ProtectProc = "invisible";
-      ProcSubset = "pid";
-      MemoryDenyWriteExecute = true;
     };
   };
 
