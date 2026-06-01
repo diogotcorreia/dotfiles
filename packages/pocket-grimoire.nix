@@ -1,4 +1,5 @@
 {
+  applyPatches,
   fetchFromGitHub,
   fetchYarnDeps,
   lib,
@@ -26,15 +27,22 @@ php.buildComposerProject2 (finalAttrs: {
   pname = "pocket-grimoire";
   version = "2026.05.07";
 
-  src = fetchFromGitHub {
-    owner = "diogotcorreia";
-    repo = "pocket-grimoire";
-    tag = finalAttrs.version;
-    hash = "sha256-A4UP0LQ93Tly8KwoPOGg5C2mCf6azeKhSMsiBLJj2W4=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "diogotcorreia";
+      repo = "pocket-grimoire";
+      tag = finalAttrs.version;
+      hash = "sha256-A4UP0LQ93Tly8KwoPOGg5C2mCf6azeKhSMsiBLJj2W4=";
+    };
+    postPatch = ''
+      substituteInPlace ./composer.json \
+        --replace-fail '"symfony/flex": true,' '"symfony/flex": false,'
+    '';
   };
 
   composerStrictValidation = false;
-  vendorHash = "sha256-vOOI6dthIRnK9ISjVOSxOxudk0Dg5zuBMYH7Vzbf62E=";
+  composerNoPlugins = false;
+  vendorHash = "sha256-UZQGCClrNNIlBghNRbkVH7+glFV45Ss5G7VndI+31G0=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
