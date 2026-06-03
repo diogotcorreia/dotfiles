@@ -32,8 +32,7 @@
     xh
 
     # URL Manipulation
-    # TODO: tests are failing, re-enable after https://github.com/NixOS/nixpkgs/pull/523277 is merged
-    (trurl.overrideAttrs { doCheck = false; })
+    trurl
 
     # many encoding/decoding utils + ctf utils
     rsbkb
