@@ -1,6 +1,7 @@
 # Configuration for bacchus (laptop PC)
 {
   config,
+  configDir,
   pkgs,
   profiles,
   ...
@@ -60,6 +61,8 @@
     wifi.macAddress = "stable";
   };
   usr.extraGroups = [ "networkmanager" ];
+  environment.etc."certs/ist.crt".source = "${configDir}/certs/ist.crt";
+  environment.etc."certs/kth.crt".source = "${configDir}/certs/kth.crt";
 
   my.networking.wirelessInterface = "wlo1";
   my.hardware.laptop = true;
