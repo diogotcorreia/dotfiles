@@ -150,7 +150,7 @@ in
     environment = {
       DB_TYPE = "postgres";
       DB_SOCKET_PATH = "/run/postgresql";
-      DB_USER = jellyseerrDb;
+      DB_USER = "seerr";
       DB_NAME = jellyseerrDb;
     };
   };
