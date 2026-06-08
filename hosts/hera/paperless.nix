@@ -53,7 +53,10 @@ in
               client_id = oauthClientId;
               # secret will be added dynamically, see below
               #secret = "";
-              settings.server_url = "https://auth.diogotc.com/.well-known/openid-configuration";
+              settings = {
+                server_url = "https://auth.diogotc.com/.well-known/openid-configuration";
+                token_auth_method = "client_secret_post";
+              };
             }
           ];
         };
@@ -96,7 +99,7 @@ in
       scopes = oauthScopes;
       policy = "two_factor";
       subject = "group:paperless";
-      token_endpoint_auth_method = "client_secret_basic";
+      token_endpoint_auth_method = "client_secret_post";
     }
   ];
 
