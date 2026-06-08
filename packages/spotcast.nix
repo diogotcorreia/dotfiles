@@ -4,7 +4,7 @@
   buildHomeAssistantComponent,
   python3Packages,
 }:
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "fondberg";
   domain = "spotcast";
   version = "6.0.0-a16";
@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "fondberg";
     repo = "spotcast";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4E9wyfh3OnP2zkdeWLabwVdMitqECInz7nH5Te8t5B8=";
   };
 
@@ -22,10 +22,10 @@ buildHomeAssistantComponent rec {
     rapidfuzz
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fondberg/spotcast/releases";
     description = "Home assistant custom component to start Spotify playback on an idle chromecast device as well as control spotify connect devices";
     homepage = "https://github.com/fondberg/spotcast";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

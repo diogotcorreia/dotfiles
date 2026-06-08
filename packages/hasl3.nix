@@ -23,14 +23,14 @@ let
       aiohttp
     ];
 
-    meta = with lib; {
+    meta = {
       description = "Storstockholms Lokaltrafik (SL) data via Trafiklab API";
       homepage = "https://github.com/NecroKote/trafiklab-sl";
-      license = licenses.mit;
+      license = lib.licenses.mit;
     };
   });
 in
-buildHomeAssistantComponent rec {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "hasl-sensor";
   domain = "hasl3";
   version = "4.0.0";
@@ -38,7 +38,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "hasl-sensor";
     repo = "integration";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xtNOaPFFlkTrxY1IgpQ7iumPGoivOLn2M5oHdA3vSOY=";
   };
 
@@ -47,10 +47,10 @@ buildHomeAssistantComponent rec {
     trafiklab-sl
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/hasl-sensor/integration/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/hasl-sensor/integration/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Swedish Public Transport Sensor (HASL)";
     homepage = "https://github.com/hasl-sensor/integration";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})
