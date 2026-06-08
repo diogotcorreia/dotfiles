@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
-  home-assistant,
+  python3Packages,
 }:
 buildHomeAssistantComponent rec {
   owner = "fondberg";
@@ -16,7 +16,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-4E9wyfh3OnP2zkdeWLabwVdMitqECInz7nH5Te8t5B8=";
   };
 
-  propagatedBuildInputs = with home-assistant.python.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     spotipy
     spotifyaio
     rapidfuzz
