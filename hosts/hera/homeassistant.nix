@@ -54,7 +54,7 @@ in
     customComponents = [
       (pkgs.my.spotcast.override {
         inherit (pkgs.unstable) buildHomeAssistantComponent;
-        home-assistant = hassCfg.package;
+        inherit (hassCfg.package) python3Packages;
       })
     ];
 
