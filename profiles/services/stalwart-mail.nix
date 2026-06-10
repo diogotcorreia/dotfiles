@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  secrets,
   ...
 }:
 let
@@ -32,6 +33,8 @@ let
   otherwise = value: { "else" = value; };
 in
 {
+  age.secrets.smtp2goPassword.file = secrets.host.smtp2goPassword;
+
   services.stalwart = {
     enable = true;
     stateVersion = "25.11"; # TODO: bump
@@ -44,6 +47,8 @@ in
         "lookup.default.domain"
         "lookup.default.hostname"
         "metrics.*"
+        "queue.route.*"
+        "queue.strategy.route.*"
         "report.analysis.*"
         "resolver.*"
         "server.*"
@@ -160,11 +165,47 @@ in
       # user = "admin";
       # secret = "changemeasap";
       # };
+
+      # Routing with SMTP2GO configuration
+      queue = {
+        route = {
+          smtp2go = {
+            type = "relay";
+            address = "mail-eu.smtp2go.com";
+            protocol = "smtp";
+            port = 8465;
+            tls.implicit = true;
+            auth = {
+              username = "diogotc.com";
+              secret = "%{file:${credPath}/smtp2goPassword}%";
+            };
+          };
+
+          local.type = "local";
+
+          mx = {
+            type = "mx";
+            ip-lookup = "ipv4_then_ipv6";
+            limits = {
+              mx = 5;
+              multihomed = 2;
+            };
+          };
+        };
+
+        strategy.route = [
+          (ifthen "is_local_domain('', rcpt_domain)" "'local'")
+          # use SMTP2GO only for diogotc.com
+          (ifthen "sender_domain == '${domain}'" "'smtp2go'")
+          (otherwise "'mx'")
+        ];
+      };
     };
 
     credentials = {
       "cert.pem" = "${config.security.acme.certs.${stalwartDomain}.directory}/cert.pem";
       "key.pem" = "${config.security.acme.certs.${stalwartDomain}.directory}/key.pem";
+      smtp2goPassword = config.age.secrets.smtp2goPassword.path;
     };
   };
 

@@ -234,6 +234,7 @@ mkSecrets [
       "resticPassword"
       "resticSshConfig"
       "resticSshKey"
+      "smtp2goPassword"
     ]
   )
 ]
