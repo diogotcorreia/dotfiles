@@ -195,6 +195,8 @@ in
 
         strategy.route = [
           (ifthen "is_local_domain('', rcpt_domain)" "'local'")
+          # sometimes spf reports are sent to mail.<domain> instead, which is not registered as a local domain
+          (ifthen "rcpt_domain == 'mail.${domain}'" "'local'")
           # use SMTP2GO only for diogotc.com
           (ifthen "sender_domain == '${domain}'" "'smtp2go'")
           (otherwise "'mx'")
