@@ -98,7 +98,6 @@ in
   };
   services.jackett = {
     enable = true;
-    package = pkgs.unstable.jackett; # TODO 26.05: move to stable
   };
   services.bazarr = {
     enable = true;
