@@ -26,8 +26,8 @@
     jobsets = [
       "nixpkgs:unstable"
       "nixpkgs:staging-next"
-      "nixpkgs:staging-next-25.11"
-      "nixos:release-25.11:nixpkgs."
+      "nixpkgs:staging-next-26.05"
+      "nixos:release-26.05:nixpkgs."
     ];
 
     maintainers = [
