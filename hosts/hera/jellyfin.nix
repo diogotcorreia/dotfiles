@@ -10,7 +10,8 @@ let
   domainJellyfin = "jellyfin.diogotc.com";
   portJellyfin = lib.my.ports.jellyfin;
   domainJellyseerr = "jellyseerr.diogotc.com";
-  portJellyseerr = lib.my.ports.jellyseerr;
+  domainSeerr = "seerr.diogotc.com";
+  portSeerr = lib.my.ports.seerr;
   domainRadarr = "radarr.hera.diogotc.com";
   portRadarr = lib.my.ports.radarr;
   domainSonarr = "sonarr.hera.diogotc.com";
@@ -20,7 +21,7 @@ let
   domainBazarr = "bazarr.hera.diogotc.com";
   portBazarr = lib.my.ports.bazarr;
 
-  jellyseerrDb = "jellyseerr";
+  seerrDb = "seerr";
   radarrMainDb = "radarr-main";
   radarrLogDb = "radarr-log";
   sonarrMainDb = "sonarr-main";
@@ -53,10 +54,8 @@ in
   services.jellyfin.enable = true;
   services.seerr = {
     enable = true;
-    port = portJellyseerr;
-    # This might change, so pin it to make sure it doesn't break
-    # https://github.com/NixOS/nixpkgs/pull/373533
-    configDir = "/var/lib/jellyseerr";
+    port = portSeerr;
+    configDir = "/var/lib/seerr/"; # TODO: remove when stateVersion is bumped to 26.05
   };
   services.radarr = {
     enable = true;
@@ -108,11 +107,11 @@ in
     port = lib.my.ports.flaresolverr;
   };
 
-  # Setup PostgreSQL for Jellyseerr, radarr and sonarr
-  # https://docs.jellyseerr.dev/extending-jellyseerr/database-config
+  # Setup PostgreSQL for seerr, radarr and sonarr
+  # https://docs.seerr.dev/extending-seerr/database-config/
   services.postgresql = {
     ensureDatabases = [
-      jellyseerrDb
+      seerrDb
       radarrMainDb
       radarrLogDb
       sonarrMainDb
@@ -120,9 +119,8 @@ in
     ];
     ensureUsers = [
       {
-        # TODO: rename DB to match user
-        name = "seerr";
-        ensureDBOwnershipOf = [ jellyseerrDb ];
+        name = seerrDb;
+        ensureDBOwnership = true;
         ensureClauses.login = true;
       }
       {
@@ -149,9 +147,10 @@ in
     environment = {
       DB_TYPE = "postgres";
       DB_SOCKET_PATH = "/run/postgresql";
-      DB_USER = "seerr";
-      DB_NAME = jellyseerrDb;
+      DB_USER = seerrDb;
+      DB_NAME = seerrDb;
     };
+    serviceConfig.StateDirectory = lib.mkForce "seerr"; # TODO: remove when stateVersion is bumped to 26.05
   };
   systemd.services.radarr = {
     wants = [ "postgresql.target" ];
@@ -196,9 +195,13 @@ in
         enableACME = true;
         locations."/".proxyPass = "http://127.0.0.1:${toString portJellyfin}";
       };
+      ${domainSeerr} = {
+        enableACME = true;
+        locations."/".proxyPass = "http://[::1]:${toString portSeerr}";
+      };
       ${domainJellyseerr} = {
         enableACME = true;
-        locations."/".proxyPass = "http://[::1]:${toString portJellyseerr}";
+        globalRedirect = domainSeerr;
       };
       ${domainRadarr} = {
         enableACME = true;
