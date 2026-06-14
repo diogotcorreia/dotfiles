@@ -27,6 +27,7 @@
 
     manageSieve = 4190;
 
+    changedetection-io = 5001;
     reposilite = 5100;
     mdnsGoogleCast = 5353;
     wastebin = 5435;
