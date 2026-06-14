@@ -7,7 +7,7 @@
   ...
 }:
 let
-  dataDir = "/var/lib/stalwart-mail";
+  dataDir = "/var/lib/stalwart";
   httpPort = lib.my.ports.stalwartMailHttp;
 
   domain = "diogotc.com";
@@ -37,7 +37,7 @@ in
 
   services.stalwart = {
     enable = true;
-    stateVersion = "25.11"; # TODO: bump
+    stateVersion = "26.05";
     settings = {
       config.local-keys = [
         "authentication.fallback-admin.*"
@@ -151,7 +151,7 @@ in
           enable = true;
           type = "log";
           path = "%{env:LOGS_DIRECTORY}%";
-          prefix = "stalwart-mail.log";
+          prefix = "stalwart.log";
           level = "info";
         };
       };
@@ -223,11 +223,8 @@ in
   systemd.services.stalwart = {
     wants = [ "acme-${stalwartDomain}.service" ];
     after = [ "acme-${stalwartDomain}.service" ];
-    preStart = ''
-      mkdir -p ${dataDir}/db
-    '';
     serviceConfig = {
-      LogsDirectory = "stalwart-mail";
+      LogsDirectory = "stalwart";
     };
   };
 
