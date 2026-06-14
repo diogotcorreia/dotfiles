@@ -16,7 +16,7 @@
     security.fail2ban
     server.minimal
     services.nginx.common
-    services.stalwart-mail
+    services.stalwart
     shell.zellij
   ];
 
