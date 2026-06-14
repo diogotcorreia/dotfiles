@@ -121,11 +121,11 @@ let
       description = "Movies, TV shows and live TV player";
       url = mkUrl "jellyfin";
     };
-    jellyseerr = {
-      title = "Jellyseerr";
-      icon = "hl-jellyseerr";
+    seerr = {
+      title = "Seerr";
+      icon = "hl-seerr";
       description = "Media request and discovery manager for Jellyfin";
-      url = mkUrl "jellyseerr";
+      url = mkUrl "seerr";
     };
     karaoke = {
       title = "Karaoke Song List";
@@ -249,7 +249,7 @@ in
             immich
             nextcloud
             jellyfin
-            jellyseerr
+            seerr
             calibre-web
             paperless-ngx
           ];
@@ -259,7 +259,7 @@ in
           icon = ":tv:";
           items = with items; [
             jellyfin
-            jellyseerr
+            seerr
             immich
             calibre-web
             radarr
