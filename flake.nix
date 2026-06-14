@@ -63,7 +63,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-build-failure-notifier = {
-      url = "github:diogotcorreia/nixpkgs-build-failure-notifier?ref=v0.3.2";
+      url = "github:diogotcorreia/nixpkgs-build-failure-notifier?ref=v0.3.3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-compat.url = "github:edolstra/flake-compat";
