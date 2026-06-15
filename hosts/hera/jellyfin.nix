@@ -55,7 +55,6 @@ in
   services.seerr = {
     enable = true;
     port = portSeerr;
-    configDir = "/var/lib/seerr/"; # TODO: remove when stateVersion is bumped to 26.05
   };
   services.radarr = {
     enable = true;
@@ -150,7 +149,6 @@ in
       DB_USER = seerrDb;
       DB_NAME = seerrDb;
     };
-    serviceConfig.StateDirectory = lib.mkForce "seerr"; # TODO: remove when stateVersion is bumped to 26.05
   };
   systemd.services.radarr = {
     wants = [ "postgresql.target" ];
