@@ -37,6 +37,12 @@ let
       description = "Manage books and send them to e-readers";
       url = mkUrl "calibre";
     };
+    changedetection = {
+      title = "Change Detection";
+      icon = "hl-changedetection";
+      description = "Monitor web pages for changes";
+      url = mkUrl "changedetection.bro";
+    };
     chhoto-url = {
       title = "Chhoto URL";
       icon = ":link:";
@@ -309,6 +315,7 @@ in
             uptime-kuma
             grafana
             umami
+            changedetection
           ];
         }
         {
