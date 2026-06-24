@@ -30,7 +30,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     lanzaboote = {
-      url = "github:nix-community/lanzaboote?ref=v1.0.0";
+      url = "github:nix-community/lanzaboote?ref=v1.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
       # only used for development, so we can get rid of it
       inputs.pre-commit.follows = "";
