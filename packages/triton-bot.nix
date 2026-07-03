@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-bot";
-  version = "4.0.0";
+  version = "4.0.1";
   src = fetchFromGitHub {
     owner = "tritonmc";
     repo = "triton-bot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H2U/7A3rvKqaCqjOwHEctWN1a8BgNMyqG9FoA5QGxOg=";
+    hash = "sha256-WebnfxVdwknZzWhrXsHWTAjBPUdM9KM5IOdkCbHb/0E=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 3;
-    hash = "sha256-kvBJOfjj9GIjJBPbplnh812r0puYYWVe06Lbz7c29Vk=";
+    hash = "sha256-Xf6sv2f9Id06fdRl1+xxULlaUWJqA0UYJRNwbhB8UxQ=";
   };
 
   nativeBuildInputs = [
