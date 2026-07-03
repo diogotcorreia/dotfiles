@@ -59,7 +59,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     ist-discord-bot = {
-      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.7";
+      url = "github:ist-bot-team/ist-discord-bot?ref=v3.0.8";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs-build-failure-notifier = {
