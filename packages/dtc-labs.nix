@@ -12,17 +12,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc-labs";
-  version = "0-unstable-2026-01-20";
+  version = "0-unstable-2026-07-03";
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "dtc-labs";
-    rev = "bc7d557e772d256ef3036ff96132fe6181bd2a14";
-    hash = "sha256-w8DWAbdlp23mJofVK6ynBsGOFE/o2W86poq3ZtLxGPY=";
+    rev = "f534222cfd9e0d301b2581dddb72fec7a181ba98";
+    hash = "sha256-IGxnFlLeJ+Ls0g2P4Bjr58DRIeerPZTY8khbrzXT/kU=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    sha256 = "sha256-cytlWPIa6sWsJxvu+iOF12spdGEehMuSCR0EFCRscFI=";
+    sha256 = "sha256-EV4npvscp2GF4RYHA+5fl4kmwbCw8Oyc4K4YHs1Bz+U=";
   };
 
   nativeBuildInputs = [
