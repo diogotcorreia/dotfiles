@@ -39,6 +39,7 @@ in
         # Typst
         tinymist = {
           enable = true;
+          package = pkgs.unstable.tinymist;
           config = {
             settings = {
               exportPdf = "never";
