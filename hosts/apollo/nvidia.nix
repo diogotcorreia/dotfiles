@@ -1,5 +1,5 @@
 # Enable (proprietary :/) NVIDIA drivers
-{ config, ... }:
+{ ... }:
 {
   hardware.graphics = {
     enable = true;
@@ -15,7 +15,8 @@
 
     nvidiaSettings = true;
 
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # GTX 1050Ti is no longer supported in the latest drivers
+    branch = "legacy_580";
   };
 
   # Fixes artifacting on TTY due to different resolution monitors
