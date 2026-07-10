@@ -133,6 +133,14 @@
   # GnuPG (GPG)
   hm.programs.git.signing.key = "12B4F3AC9C065D08";
 
+  # Git maintenance
+  hm.programs.git.maintenance = {
+    enable = true;
+    repositories = [
+      "${config.my.homeDirectory}/documents/vcs/nixpkgs"
+    ];
+  };
+
   # Specific packages for this host
   hm.home.packages = with pkgs; [
     # Arrange external displays
