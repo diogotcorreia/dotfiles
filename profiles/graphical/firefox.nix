@@ -3,7 +3,6 @@
 {
   hm.programs.firefox = {
     enable = true;
-    configPath = ".mozilla/firefox"; # TODO: migrate data to new path
     profiles.default = {
       id = 0;
       isDefault = true;
