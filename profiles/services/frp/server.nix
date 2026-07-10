@@ -52,5 +52,8 @@ in
     forceSSL = false;
     addSSL = true;
     locations."/".proxyPass = "http://[::1]:${toString vhostPort}";
+    extraConfig = ''
+      client_max_body_size 10G;
+    '';
   };
 }
