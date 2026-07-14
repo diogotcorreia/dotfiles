@@ -59,6 +59,8 @@ in
 {
   services.matrix-continuwuity = {
     enable = true;
+    # TODO 26.11: use package from stable
+    package = pkgs.unstable.matrix-continuwuity;
     group = config.services.nginx.group;
     settings = {
       global = {
