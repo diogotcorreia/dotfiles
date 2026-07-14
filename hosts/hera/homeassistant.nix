@@ -9,6 +9,8 @@ let
   hassDomain = "hass.diogotc.com";
   hassPort = hassCfg.config.http.server_port;
 
+  massDomain = "ma.hera.diogotc.com";
+
   mqttPort = lib.my.ports.mqtt;
 
   hassCfg = config.services.home-assistant;
@@ -97,6 +99,24 @@ in
         port = mqttPort;
       }
     ];
+  };
+
+  services.music-assistant = {
+    enable = true;
+    providers = [
+      "builtin"
+      "chromecast"
+      "hass"
+      "hass_players"
+      "sendspin"
+      "spotify"
+      "spotify_connect"
+      "universal_group"
+    ];
+
+    # Custom options
+    useSensibleDefaults = true;
+    externalDomain = massDomain;
   };
 
   networking.firewall = {
