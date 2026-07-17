@@ -81,9 +81,7 @@
         };
 
         cpu = {
-          # TODO: scale cpu cores automatically
-          # https://github.com/Alexays/Waybar/issues/4240
-          format = "󰍛 ${lib.concatMapStrings (n: "{icon${toString n}}") (lib.range 0 7)}";
+          format = "󰍛 {icons}";
           format-icons = [
             "▁"
             "▂"

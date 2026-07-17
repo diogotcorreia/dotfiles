@@ -1,0 +1,45 @@
+diff --git a/src/modules/cpu.cpp b/src/modules/cpu.cpp
+index 0703eaf7..f46d3fb5 100644
+--- a/src/modules/cpu.cpp
++++ b/src/modules/cpu.cpp
+@@ -48,13 +48,17 @@ auto waybar::modules::Cpu::update() -> void {
+     store.push_back(fmt::arg("max_frequency", max_frequency));
+     store.push_back(fmt::arg("min_frequency", min_frequency));
+     store.push_back(fmt::arg("avg_frequency", avg_frequency));
++    std::string all_icons;
+     for (size_t i = 1; i < cpu_usage.size(); ++i) {
+       auto core_i = i - 1;
+       auto core_format = fmt::format("usage{}", core_i);
+       store.push_back(fmt::arg(core_format.c_str(), cpu_usage[i]));
++      auto core_icon = getIcon(cpu_usage[i], icons);
++      all_icons += core_icon;
+       auto icon_format = fmt::format("icon{}", core_i);
+-      store.push_back(fmt::arg(icon_format.c_str(), getIcon(cpu_usage[i], icons)));
++      store.push_back(fmt::arg(icon_format.c_str(), core_icon));
+     }
++    store.push_back(fmt::arg("icons", all_icons));
+     label_.set_markup(fmt::vformat(format, store));
+   }
+ 
+diff --git a/src/modules/cpu_usage/common.cpp b/src/modules/cpu_usage/common.cpp
+index e3947967..742887aa 100644
+--- a/src/modules/cpu_usage/common.cpp
++++ b/src/modules/cpu_usage/common.cpp
+@@ -38,13 +38,17 @@ auto waybar::modules::CpuUsage::update() -> void {
+     fmt::dynamic_format_arg_store<fmt::format_context> store;
+     store.push_back(fmt::arg("usage", total_usage));
+     store.push_back(fmt::arg("icon", getIcon(total_usage, icons)));
++    std::string all_icons;
+     for (size_t i = 1; i < cpu_usage.size(); ++i) {
+       auto core_i = i - 1;
+       auto core_format = fmt::format("usage{}", core_i);
+       store.push_back(fmt::arg(core_format.c_str(), cpu_usage[i]));
++      auto core_icon = getIcon(cpu_usage[i], icons);
++      all_icons += core_icon;
+       auto icon_format = fmt::format("icon{}", core_i);
+-      store.push_back(fmt::arg(icon_format.c_str(), getIcon(cpu_usage[i], icons)));
++      store.push_back(fmt::arg(icon_format.c_str(), core_icon));
+     }
++    store.push_back(fmt::arg("icons", all_icons));
+     label_.set_markup(fmt::vformat(format, store));
+   }
