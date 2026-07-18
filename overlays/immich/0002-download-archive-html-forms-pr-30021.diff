@@ -1,0 +1,547 @@
+diff --git a/i18n/en.json b/i18n/en.json
+index 53d1e4a6b2cd6..55534eb5e685c 100644
+--- a/i18n/en.json
++++ b/i18n/en.json
+@@ -890,7 +890,9 @@
+   "download_settings_description": "Manage settings related to asset download",
+   "download_waiting_to_retry": "Waiting to retry",
+   "downloading": "Downloading",
++  "downloading_archive_filename_size": "Downloading archive {filename} (approximately {size})",
+   "downloading_asset_filename": "Downloading asset {filename}",
++  "downloading_filename": "Downloading {filename}",
+   "downloading_from_icloud": "Downloading from iCloud",
+   "downloading_media": "Downloading media",
+   "drag_to_reorder": "Drag to reorder",
+@@ -1651,6 +1653,7 @@
+   "port": "Port",
+   "preferences_settings_subtitle": "Manage the app's preferences",
+   "preferences_settings_title": "Preferences",
++  "prepared_archives": "Prepared Archives",
+   "preparing": "Preparing",
+   "preset": "Preset",
+   "preview": "Preview",
+@@ -1788,6 +1791,7 @@
+   "restored_asset": "Restored asset",
+   "resume": "Resume",
+   "resume_paused_jobs": "Resume {count, plural, one {# paused job} other {# paused jobs}}",
++  "retry": "Retry",
+   "review_duplicates": "Review duplicates",
+   "review_large_files": "Review large files",
+   "role": "Role",
+diff --git a/mobile/openapi/lib/model/download_archive_dto.dart b/mobile/openapi/lib/model/download_archive_dto.dart
+index f89ac8c867c09..d8a885737f009 100644
+--- a/mobile/openapi/lib/model/download_archive_dto.dart
++++ b/mobile/openapi/lib/model/download_archive_dto.dart
+@@ -13,10 +13,20 @@ part of openapi.api;
+ class DownloadArchiveDto {
+   /// Returns a new [DownloadArchiveDto] instance.
+   DownloadArchiveDto({
++    this.archiveName = const Optional.absent(),
+     this.assetIds = const [],
+     this.edited = const Optional.absent(),
+   });
+ 
++  /// The name of the archive to download, without extension
++  ///
++  /// Please note: This property should have been non-nullable! Since the specification file
++  /// does not include a default value (using the "default:" property), however, the generated
++  /// source code must fall back to having a nullable type.
++  /// Consider adding a "default:" property in the specification file to hide this note.
++  ///
++  Optional<String?> archiveName;
++
+   /// Asset IDs
+   List<String> assetIds;
+ 
+@@ -31,20 +41,26 @@ class DownloadArchiveDto {
+ 
+   @override
+   bool operator ==(Object other) => identical(this, other) || other is DownloadArchiveDto &&
++    other.archiveName == archiveName &&
+     _deepEquality.equals(other.assetIds, assetIds) &&
+     other.edited == edited;
+ 
+   @override
+   int get hashCode =>
+     // ignore: unnecessary_parenthesis
++    (archiveName == null ? 0 : archiveName!.hashCode) +
+     (assetIds.hashCode) +
+     (edited == null ? 0 : edited!.hashCode);
+ 
+   @override
+-  String toString() => 'DownloadArchiveDto[assetIds=$assetIds, edited=$edited]';
++  String toString() => 'DownloadArchiveDto[archiveName=$archiveName, assetIds=$assetIds, edited=$edited]';
+ 
+   Map<String, dynamic> toJson() {
+     final json = <String, dynamic>{};
++    if (this.archiveName.isPresent) {
++      final value = this.archiveName.value;
++      json[r'archiveName'] = value;
++    }
+       json[r'assetIds'] = this.assetIds;
+     if (this.edited.isPresent) {
+       final value = this.edited.value;
+@@ -62,6 +78,7 @@ class DownloadArchiveDto {
+       final json = value.cast<String, dynamic>();
+ 
+       return DownloadArchiveDto(
++        archiveName: json.containsKey(r'archiveName') ? Optional.present(mapValueOfType<String>(json, r'archiveName')) : const Optional.absent(),
+         assetIds: json[r'assetIds'] is Iterable
+             ? (json[r'assetIds'] as Iterable).cast<String>().toList(growable: false)
+             : const [],
+diff --git a/open-api/immich-openapi-specs.json b/open-api/immich-openapi-specs.json
+index e73760a3deb00..f812ba7fc6f38 100644
+--- a/open-api/immich-openapi-specs.json
++++ b/open-api/immich-openapi-specs.json
+@@ -18650,6 +18650,10 @@
+       },
+       "DownloadArchiveDto": {
+         "properties": {
++          "archiveName": {
++            "description": "The name of the archive to download, without extension",
++            "type": "string"
++          },
+           "assetIds": {
+             "description": "Asset IDs",
+             "items": {
+diff --git a/packages/sdk/src/fetch-client.ts b/packages/sdk/src/fetch-client.ts
+index 8983de8ef7846..82d2920bb44d2 100644
+--- a/packages/sdk/src/fetch-client.ts
++++ b/packages/sdk/src/fetch-client.ts
+@@ -1114,6 +1114,8 @@ export type ValidateAccessTokenResponseDto = {
+     authStatus: boolean;
+ };
+ export type DownloadArchiveDto = {
++    /** The name of the archive to download, without extension */
++    archiveName?: string;
+     /** Asset IDs */
+     assetIds: string[];
+     /** Download edited asset if available */
+diff --git a/server/src/controllers/download.controller.ts b/server/src/controllers/download.controller.ts
+index e45eeb23f3f42..593f72b241395 100644
+--- a/server/src/controllers/download.controller.ts
++++ b/server/src/controllers/download.controller.ts
+@@ -1,10 +1,12 @@
+-import { Body, Controller, HttpCode, HttpStatus, Post, StreamableFile } from '@nestjs/common';
++import { Body, Controller, HttpCode, HttpStatus, Post, Res, StreamableFile, UseInterceptors } from '@nestjs/common';
+ import { ApiTags } from '@nestjs/swagger';
++import { Response } from 'express';
+ import { Endpoint, HistoryBuilder } from 'src/decorators';
+ import { AuthDto } from 'src/dtos/auth.dto';
+ import { DownloadArchiveDto, DownloadInfoDto, DownloadResponseDto } from 'src/dtos/download.dto';
+ import { ApiTag, Permission } from 'src/enum';
+ import { Auth, Authenticated, FileResponse } from 'src/middleware/auth.guard';
++import { FormsToJsonInterceptor } from 'src/middleware/forms-to-json.interceptor';
+ import { DownloadService } from 'src/services/download.service';
+ import { asStreamableFile } from 'src/utils/file';
+ 
+@@ -29,13 +31,23 @@ export class DownloadController {
+   @Authenticated({ permission: Permission.AssetDownload, sharedLink: true })
+   @FileResponse()
+   @HttpCode(HttpStatus.OK)
++  @UseInterceptors(FormsToJsonInterceptor)
+   @Endpoint({
+     summary: 'Download asset archive',
+     description:
+       'Download a ZIP archive containing the specified assets. The assets must have been previously requested via the "getDownloadInfo" endpoint.',
+     history: new HistoryBuilder().added('v1').beta('v1').stable('v2'),
+   })
+-  downloadArchive(@Auth() auth: AuthDto, @Body() dto: DownloadArchiveDto): Promise<StreamableFile> {
++  downloadArchive(
++    @Res({ passthrough: true }) res: Response,
++    @Auth() auth: AuthDto,
++    @Body() dto: DownloadArchiveDto,
++  ): Promise<StreamableFile> {
++    if (dto.archiveName) {
++      res.set({
++        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(dto.archiveName)}.zip`,
++      });
++    }
+     return this.service.downloadArchive(auth, dto).then(asStreamableFile);
+   }
+ }
+diff --git a/server/src/dtos/download.dto.ts b/server/src/dtos/download.dto.ts
+index c37fa5c113164..5f504449c4d06 100644
+--- a/server/src/dtos/download.dto.ts
++++ b/server/src/dtos/download.dto.ts
+@@ -27,6 +27,7 @@ const DownloadResponseSchema = z
+ 
+ const DownloadArchiveSchema = AssetIdsSchema.extend({
+   edited: z.boolean().optional().describe('Download edited asset if available'),
++  archiveName: z.string().optional().describe('The name of the archive to download, without extension'),
+ }).meta({ id: 'DownloadArchiveDto' });
+ 
+ export class DownloadInfoDto extends createZodDto(DownloadInfoSchema) {}
+diff --git a/server/src/middleware/forms-to-json.interceptor.ts b/server/src/middleware/forms-to-json.interceptor.ts
+new file mode 100644
+index 0000000000000..400e557ad3ac0
+--- /dev/null
++++ b/server/src/middleware/forms-to-json.interceptor.ts
+@@ -0,0 +1,22 @@
++import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
++import { Request } from 'express';
++import { Observable } from 'rxjs';
++
++@Injectable()
++export class FormsToJsonInterceptor implements NestInterceptor {
++  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
++    const req = context.switchToHttp().getRequest<Request>();
++
++    const contentType = req.headers['content-type'];
++    if (contentType?.startsWith('application/x-www-form-urlencoded')) {
++      try {
++        req.body = JSON.parse(req?.body?.json);
++        req.headers['content-type'] = 'application/json';
++      } catch {
++        // ignore if failed to parse
++      }
++    }
++
++    return next.handle();
++  }
++}
+diff --git a/web/src/lib/components/album-page/AlbumViewer.svelte b/web/src/lib/components/album-page/AlbumViewer.svelte
+index 4e7d6bce1a1ed..aab28d110c267 100644
+--- a/web/src/lib/components/album-page/AlbumViewer.svelte
++++ b/web/src/lib/components/album-page/AlbumViewer.svelte
+@@ -99,7 +99,7 @@
+     <AssetSelectControlBar>
+       <SelectAllAssets {timelineManager} assetInteraction={assetMultiSelectManager} />
+       {#if sharedLink.allowDownload}
+-        <DownloadAction filename="{album.albumName}.zip" />
++        <DownloadAction filename={album.albumName} />
+       {/if}
+     </AssetSelectControlBar>
+   {:else}
+diff --git a/web/src/lib/components/share-page/IndividualSharedViewer.svelte b/web/src/lib/components/share-page/IndividualSharedViewer.svelte
+index a3cf76c78e509..476437ebd93e9 100644
+--- a/web/src/lib/components/share-page/IndividualSharedViewer.svelte
++++ b/web/src/lib/components/share-page/IndividualSharedViewer.svelte
+@@ -42,7 +42,7 @@
+   });
+ 
+   const downloadAssets = async () => {
+-    await downloadArchive(`immich-shared.zip`, { assetIds: assets.map((asset) => asset.id) });
++    await downloadArchive(`immich-shared`, { assetIds: assets.map((asset) => asset.id) });
+   };
+ 
+   const handleUploadAssets = async (files: File[] = []) => {
+@@ -91,7 +91,7 @@
+           onclick={handleSelectAll}
+         />
+         {#if sharedLink?.allowDownload}
+-          <DownloadAction filename="immich-shared.zip" />
++          <DownloadAction filename="immich-shared" />
+         {/if}
+         {#if isOwned}
+           <RemoveFromSharedLink bind:sharedLink />
+diff --git a/web/src/lib/components/timeline/actions/DownloadAction.svelte b/web/src/lib/components/timeline/actions/DownloadAction.svelte
+index 43916c2165ce4..b1b683ca28565 100644
+--- a/web/src/lib/components/timeline/actions/DownloadAction.svelte
++++ b/web/src/lib/components/timeline/actions/DownloadAction.svelte
+@@ -16,7 +16,7 @@
+     menuItem?: boolean;
+   }
+ 
+-  let { filename = 'immich.zip', menuItem = false }: Props = $props();
++  let { filename = 'immich', menuItem = false }: Props = $props();
+ 
+   const handleDownloadFiles = async () => {
+     const assets = assetMultiSelectManager.assets;
+diff --git a/web/src/lib/managers/download-manager.svelte.ts b/web/src/lib/managers/download-manager.svelte.ts
+index 107f80b8dc7df..380622e36ae0a 100644
+--- a/web/src/lib/managers/download-manager.svelte.ts
++++ b/web/src/lib/managers/download-manager.svelte.ts
+@@ -1,44 +1,39 @@
+-export interface DownloadProgress {
+-  progress: number;
++export interface DownloadState {
++  url: string;
++  payload: unknown;
+   total: number;
+-  percentage: number;
+-  abort: AbortController | null;
++  downloaded: boolean;
+ }
+ 
+ class DownloadManager {
+-  assets = $state<Record<string, DownloadProgress>>({});
++  assets = $state<Record<string, DownloadState>>({});
+ 
+   isDownloading = $derived(Object.keys(this.assets).length > 0);
+ 
+-  #update(key: string, value: Partial<DownloadProgress> | null) {
++  #update(key: string, value: Partial<DownloadState> | null) {
+     if (value === null) {
+       delete this.assets[key];
+       return;
+     }
+ 
+     if (!this.assets[key]) {
+-      this.assets[key] = { progress: 0, total: 0, percentage: 0, abort: null };
++      this.assets[key] = { url: '', payload: undefined, total: 0, downloaded: false };
+     }
+ 
+     const item = this.assets[key];
+     Object.assign(item, value);
+-    item.percentage = Math.min(Math.floor((item.progress / item.total) * 100), 100);
+   }
+ 
+-  add(key: string, total: number, abort?: AbortController) {
+-    this.#update(key, { total, abort });
++  add(key: string, url: string, payload: unknown, total: number) {
++    this.#update(key, { url, payload, total });
+   }
+ 
+-  clear(key: string) {
+-    this.#update(key, null);
++  clearAll() {
++    this.assets = {};
+   }
+ 
+-  update(key: string, progress: number, total?: number) {
+-    const download: Partial<DownloadProgress> = { progress };
+-    if (total !== undefined) {
+-      download.total = total;
+-    }
+-    this.#update(key, download);
++  markDownloaded(key: string) {
++    this.#update(key, { downloaded: true });
+   }
+ }
+ 
+diff --git a/web/src/lib/services/album.service.ts b/web/src/lib/services/album.service.ts
+index fc09a112155c6..f4b34f9783fc3 100644
+--- a/web/src/lib/services/album.service.ts
++++ b/web/src/lib/services/album.service.ts
+@@ -284,7 +284,7 @@ export const handleDeleteAlbum = async (album: AlbumResponseDto, options?: { pro
+ };
+ 
+ export const handleDownloadAlbum = async (album: AlbumResponseDto) => {
+-  await downloadArchive(`${album.albumName}.zip`, { albumId: album.id });
++  await downloadArchive(album.albumName, { albumId: album.id });
+ };
+ 
+ export const handleConfirmAlbumDelete = async (album: AlbumResponseDto) => {
+diff --git a/web/src/lib/utils.ts b/web/src/lib/utils.ts
+index 0e31782164272..7c4813db8376c 100644
+--- a/web/src/lib/utils.ts
++++ b/web/src/lib/utils.ts
+@@ -24,7 +24,6 @@ import { init, register, t } from 'svelte-i18n';
+ import { derived, get } from 'svelte/store';
+ import { defaultLang, locales } from '$lib/constants';
+ import { authManager } from '$lib/managers/auth-manager.svelte';
+-import { downloadManager } from '$lib/managers/download-manager.svelte';
+ import { alwaysLoadOriginalFile, lang } from '$lib/stores/preferences.store';
+ import { isWebCompatibleImage } from '$lib/utils/asset-utils';
+ import { handleError } from '$lib/utils/handle-error';
+@@ -294,15 +293,32 @@ export const downloadUrl = (url: string, filename: string) => {
+   URL.revokeObjectURL(url);
+ };
+ 
++export const downloadUrlPost = (url: string, data: unknown) => {
++  const form = document.createElement('form');
++  form.method = 'post';
++  form.action = url;
++  form.target = '_blank';
++
++  const inputJson = document.createElement('input');
++  inputJson.type = 'hidden';
++  inputJson.name = 'json';
++  inputJson.value = JSON.stringify(data);
++  form.append(inputJson);
++
++  document.body.append(form);
++  form.submit();
++  form.remove();
++};
++
+ export const downloadBlob = (data: Blob, filename: string) => downloadUrl(URL.createObjectURL(data), filename);
+ 
+ export const downloadJson = (data: unknown, filename: string) => {
+   const blob = new Blob([JSON.stringify(data, jsonReplacer, 2)], { type: 'application/json' });
+   const downloadKey = filename;
+-  downloadManager.add(downloadKey, blob.size);
+-  downloadManager.update(downloadKey, blob.size);
+   downloadBlob(blob, downloadKey);
+-  setTimeout(() => downloadManager.clear(downloadKey), 5000);
++
++  const $t = get(t);
++  toastManager.info($t('downloading_filename', { values: { filename } }));
+ };
+ 
+ export const oauth = {
+diff --git a/web/src/lib/utils/asset-utils.ts b/web/src/lib/utils/asset-utils.ts
+index fdfc15e636b5a..fa20c7e8f09d7 100644
+--- a/web/src/lib/utils/asset-utils.ts
++++ b/web/src/lib/utils/asset-utils.ts
+@@ -27,7 +27,8 @@ import { downloadManager } from '$lib/managers/download-manager.svelte';
+ import { eventManager } from '$lib/managers/event-manager.svelte';
+ import { TimelineManager } from '$lib/managers/timeline-manager/timeline-manager.svelte';
+ import type { TimelineAsset } from '$lib/managers/timeline-manager/types';
+-import { downloadBlob, downloadRequest, withError } from '$lib/utils';
++import { locale } from '$lib/stores/preferences.store';
++import { downloadUrlPost, withError } from '$lib/utils';
+ import { getByteUnitString } from '$lib/utils/byte-units';
+ import { getFormatter } from '$lib/utils/i18n';
+ import { navigate } from '$lib/utils/navigation';
+@@ -92,7 +93,7 @@ export const downloadArchive = async (fileName: string, options: Omit<DownloadIn
+   for (let index = 0; index < downloadInfo.archives.length; index++) {
+     const archive = downloadInfo.archives[index];
+     const suffix = downloadInfo.archives.length > 1 ? `+${index + 1}` : '';
+-    const archiveName = fileName.replace('.zip', `${suffix}-${DateTime.now().toFormat('yyyyLLdd_HHmmss')}.zip`);
++    const archiveName = `${fileName}${suffix}-${DateTime.now().toFormat('yyyyLLdd_HHmmss')}`;
+     const queryParams = asQueryString(authManager.params);
+ 
+     let downloadKey = `${archiveName} `;
+@@ -100,27 +101,27 @@ export const downloadArchive = async (fileName: string, options: Omit<DownloadIn
+       downloadKey = `${archiveName} (${index + 1}/${downloadInfo.archives.length})`;
+     }
+ 
+-    const abort = new AbortController();
+-    downloadManager.add(downloadKey, archive.size, abort);
++    const url = getBaseUrl() + '/download/archive' + (queryParams ? `?${queryParams}` : '');
++    const payload = { assetIds: archive.assetIds, edited: true, archiveName };
+ 
+     try {
+-      // TODO use sdk once it supports progress events
+-      const { data } = await downloadRequest({
+-        method: 'POST',
+-        url: getBaseUrl() + '/download/archive' + (queryParams ? `?${queryParams}` : ''),
+-        data: { assetIds: archive.assetIds, edited: true },
+-        signal: abort.signal,
+-        onDownloadProgress: (event) => downloadManager.update(downloadKey, event.loaded),
+-      });
+-
+-      downloadBlob(data, archiveName);
++      if (downloadInfo.archives.length > 1) {
++        downloadManager.add(downloadKey, url, payload, archive.size);
++      } else {
++        downloadUrlPost(url, payload);
++        const $t = await getFormatter();
++        const $locale = get(locale);
++        toastManager.primary(
++          $t('downloading_archive_filename_size', {
++            values: { size: getByteUnitString(archive.size, $locale), filename: archiveName },
++          }),
++          { timeout: 10_000 },
++        );
++      }
+     } catch (error) {
+       const $t = get(t);
+       handleError(error, $t('errors.unable_to_download_files'));
+-      downloadManager.clear(downloadKey);
+       return;
+-    } finally {
+-      setTimeout(() => downloadManager.clear(downloadKey), 5000);
+     }
+   }
+ };
+diff --git a/web/src/routes/(user)/albums/[albumId=id]/[[photos=photos]]/[[assetId=id]]/+page.svelte b/web/src/routes/(user)/albums/[albumId=id]/[[photos=photos]]/[[assetId=id]]/+page.svelte
+index 42072c122be4b..e2a40233d4739 100644
+--- a/web/src/routes/(user)/albums/[albumId=id]/[[photos=photos]]/[[assetId=id]]/+page.svelte
++++ b/web/src/routes/(user)/albums/[albumId=id]/[[photos=photos]]/[[assetId=id]]/+page.svelte
+@@ -465,7 +465,7 @@
+           ></FavoriteAction>
+         {/if}
+         <ButtonContextMenu icon={mdiDotsVertical} title={$t('menu')} offset={{ x: 175, y: 25 }}>
+-          <DownloadAction menuItem filename="{album.albumName}.zip" />
++          <DownloadAction menuItem filename={album.albumName} />
+           {#if assetMultiSelectManager.isAllUserOwned}
+             <ChangeDate menuItem />
+             <ChangeDescription menuItem />
+diff --git a/web/src/routes/(user)/people/[personId]/[[photos=photos]]/[[assetId=id]]/+page.svelte b/web/src/routes/(user)/people/[personId]/[[photos=photos]]/[[assetId=id]]/+page.svelte
+index 1ef13c8504a3f..383e7141bf917 100644
+--- a/web/src/routes/(user)/people/[personId]/[[photos=photos]]/[[assetId=id]]/+page.svelte
++++ b/web/src/routes/(user)/people/[personId]/[[photos=photos]]/[[assetId=id]]/+page.svelte
+@@ -470,7 +470,7 @@
+         onFavorite={(ids, isFavorite) => timelineManager.update(ids, (asset) => (asset.isFavorite = isFavorite))}
+       />
+       <ButtonContextMenu icon={mdiDotsVertical} title={$t('menu')}>
+-        <DownloadAction menuItem filename="{person.name || 'immich'}.zip" />
++        <DownloadAction menuItem filename={person.name || 'immich'} />
+         <MenuOption
+           icon={mdiAccountMultipleCheckOutline}
+           text={$t('fix_incorrect_match')}
+diff --git a/web/src/routes/DownloadPanel.svelte b/web/src/routes/DownloadPanel.svelte
+index 6931148f30970..1562e2f548b7a 100644
+--- a/web/src/routes/DownloadPanel.svelte
++++ b/web/src/routes/DownloadPanel.svelte
+@@ -1,55 +1,53 @@
+ <script lang="ts">
+-  import { type DownloadProgress, downloadManager } from '$lib/managers/download-manager.svelte';
++  import { type DownloadState, downloadManager } from '$lib/managers/download-manager.svelte';
+   import { locale } from '$lib/stores/preferences.store';
+-  import { Heading, IconButton } from '@immich/ui';
+-  import { mdiClose } from '@mdi/js';
++  import { CloseButton, Heading, IconButton } from '@immich/ui';
++  import { mdiReload, mdiDownload } from '@mdi/js';
+   import { t } from 'svelte-i18n';
+   import { fly, slide } from 'svelte/transition';
+   import { getByteUnitString } from '$lib/utils/byte-units';
++  import { downloadUrlPost } from '$lib/utils';
+ 
+-  const abort = (downloadKey: string, download: DownloadProgress) => {
+-    download.abort?.abort();
+-    downloadManager.clear(downloadKey);
++  const startDownload = (downloadKey: string, download: DownloadState) => {
++    downloadUrlPost(download.url, download.payload);
++    downloadManager.markDownloaded(downloadKey);
++  };
++
++  const closePanel = () => {
++    downloadManager.clearAll();
+   };
+ </script>
+ 
+ {#if downloadManager.isDownloading}
+   <div
+     transition:fly={{ x: -100, duration: 350 }}
+-    class="fixed inset-s-2 bottom-10 z-60 max-h-67.5 w-79 rounded-2xl border bg-subtle p-4 shadow-lg dark:border-white/10"
++    class="fixed inset-s-2 bottom-10 z-60 max-h-67.5 w-89 rounded-2xl border bg-subtle p-4 shadow-lg dark:border-white/10"
+   >
+-    <Heading size="tiny">{$t('downloading')}</Heading>
++    <div class="flex items-center justify-between gap-2">
++      <Heading size="tiny">{$t('prepared_archives')}</Heading>
++      <CloseButton class="w-8" size="small" onclick={closePanel} />
++    </div>
+     <div class="my-2 mb-2 flex max-h-50 flex-col overflow-y-auto text-sm">
+       {#each Object.keys(downloadManager.assets) as downloadKey (downloadKey)}
+         {@const download = downloadManager.assets[downloadKey]}
+-        <div class="mb-2 flex place-items-center" transition:slide>
+-          <div class="w-full pe-10">
++        <div class="mb-2 flex place-items-center gap-2" transition:slide>
++          <div class="min-w-0 grow">
+             <div class="flex place-items-center justify-between gap-2 text-xs font-medium">
+               <p class="truncate">{downloadKey}</p>
+               {#if download.total}
+                 <p class="whitespace-nowrap">{getByteUnitString(download.total, $locale)}</p>
+               {/if}
+             </div>
+-            <div class="flex place-items-center gap-2">
+-              <div class="h-2.5 w-full rounded-full bg-neutral-200 dark:bg-neutral-600">
+-                <div class="h-2.5 rounded-full bg-primary" style={`width: ${download.percentage}%`}></div>
+-              </div>
+-              <p class="min-w-16 text-right whitespace-nowrap">
+-                <span class="text-primary">
+-                  {(download.percentage / 100).toLocaleString($locale, { style: 'percent' })}
+-                </span>
+-              </p>
+-            </div>
+           </div>
+-          <div class="absolute inset-e-4">
++          <div class="w-8">
+             <IconButton
+               color="secondary"
+               variant="outline"
+               shape="round"
+-              aria-label={$t('close')}
+-              onclick={() => abort(downloadKey, download)}
++              aria-label={$t(download.downloaded ? 'retry' : 'download')}
++              onclick={() => startDownload(downloadKey, download)}
+               size="tiny"
+-              icon={mdiClose}
++              icon={download.downloaded ? mdiReload : mdiDownload}
+             />
+           </div>
+         </div>

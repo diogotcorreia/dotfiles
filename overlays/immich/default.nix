@@ -9,6 +9,9 @@ _final: prev: {
         # Add wakelock when uploading via web interface
         # https://github.com/immich-app/immich/pull/29820
         ./0001-wakelock-upload-web.diff
+        # Avoid downloading archives to RAM first
+        # https://github.com/immich-app/immich/pull/30021
+        ./0002-download-archive-html-forms-pr-30021.diff
       ];
     };
   });
