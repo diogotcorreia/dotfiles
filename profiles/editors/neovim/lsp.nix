@@ -22,6 +22,7 @@ in
         html.enable = true;
         # JS/TS
         ts_ls.enable = true;
+        svelte.enable = true;
         # Nix
         nil_ls = {
           enable = true;
@@ -144,6 +145,7 @@ in
         python
         regex
         rust
+        svelte
         toml
         typescript
         typst
