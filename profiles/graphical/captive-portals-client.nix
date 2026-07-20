@@ -23,7 +23,8 @@ in
 
     # Adapt captive-browser to use Firefox:
     # https://github.com/FiloSottile/captive-browser/issues/20
-    browser = "${lib.getExe pkgs.firefox} -P captive-browser --private-window http://detectportal.firefox.com/canonical.html";
+    # Script overrides XDG_CONFIG_HOME, so we need to set it again for the firefox call
+    browser = "XDG_CONFIG_HOME=\"\${PREV_CONFIG_HOME:-$XDG_CONFIG_HOME}\" ${lib.getExe pkgs.firefox} -P captive-browser --private-window http://detectportal.firefox.com/canonical.html";
   };
 
   hm.programs.firefox.profiles.captive-browser = {
