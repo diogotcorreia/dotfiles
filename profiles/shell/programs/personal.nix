@@ -32,7 +32,8 @@
     xh
 
     # URL Manipulation
-    trurl
+    # TODO: 26.11 remove override or when https://github.com/NixOS/nixpkgs/pull/543973 is merged
+    (trurl.overrideAttrs { doCheck = false; })
 
     # many encoding/decoding utils + ctf utils
     rsbkb
