@@ -7,7 +7,7 @@
   node-gyp,
   nodejs,
   pkg-config,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   python3,
   stdenv,
@@ -15,11 +15,11 @@
   ...
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
   pin = {
-    version = "3.3.1";
-    srcHash = "sha256-UL2Pt6AxkcgghKnD4VStxU/09mu0tIuHPGt4RGB7ft0=";
-    pnpmHash = "sha256-isco9zsgbzfG+nHvEXNiGoRaDxeRhIYzmrNsrw9oyec=";
+    version = "3.4.0";
+    srcHash = "sha256-tQ6X+7hU2gAv9gZ7jjQk7AePQBt6gzfufkRZkQ2tE1w=";
+    pnpmHash = "sha256-689pH/8c2vVFUaz1GopP/9bdtdp6z385X+BGcFMMEr8=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = pin.pnpmHash;
   };
 
