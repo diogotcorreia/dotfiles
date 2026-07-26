@@ -17,8 +17,8 @@
 let
   pnpm = pnpm_11;
   pin = {
-    version = "3.4.0";
-    srcHash = "sha256-tQ6X+7hU2gAv9gZ7jjQk7AePQBt6gzfufkRZkQ2tE1w=";
+    version = "3.4.1";
+    srcHash = "sha256-3v3YCtrMKw40k1KDwARZ0QfK9xh9GeTkBKGr8LH1c7I=";
     pnpmHash = "sha256-689pH/8c2vVFUaz1GopP/9bdtdp6z385X+BGcFMMEr8=";
   };
 in
@@ -63,12 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
   # fix for node-gyp, see https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919
   env.npm_config_nodedir = nodejs;
 
+  preBuild = ''
+    # Force build of sharp against native libvips (requires running install scripts).
+    npm explore sharp -- pnpm run build
+  '';
+
   installPhase = ''
     runHook preInstall
 
     local -r packageOut="$out/lib/node_modules/$pname"
 
     pnpm --filter . deploy --prod --no-optional "$packageOut"
+    # pnpm deploy does not copy the built sharp libs, so we copy them manually
+    mv node_modules/sharp/src/build "$packageOut"/node_modules/sharp/src
 
     # remove build artifacts that bloat the closure
     find "$packageOut/node_modules" \( \
