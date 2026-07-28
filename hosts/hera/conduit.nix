@@ -68,6 +68,14 @@ in
         unix_socket_path = "/run/continuwuity/continuwuity.sock";
         new_user_displayname_suffix = "";
 
+        # continuwuity provided vetted servers
+        trusted_servers = [
+          "codestorm.net"
+          "starstruck.systems"
+          "unredacted.org"
+          "matrix.org"
+        ];
+
         # hardcoded because of infinite recursion...
         database_backup_path = "/var/lib/continuwuity/backups";
         database_backups_to_keep = 1;
