@@ -186,25 +186,11 @@ in
               ))
               lib.listToAttrs
             ];
-            findCustomClaims =
-              oidcClient:
-              lib.pipe oidcClient.scopes [
-                (map (scope: oidcScopes.${scope}.claims or [ ]))
-                lib.flatten
-              ];
             customClaimsPolicies = lib.pipe oidcClients [
-              (map (client: {
-                inherit client;
-                customClaims = findCustomClaims client;
-              }))
-              (lib.filter ({ customClaims, ... }: customClaims != [ ]))
-              (map (
-                { client, customClaims }:
-                lib.nameValuePair (mkPolicyName client.client_id) {
-                  custom_claims = lib.genAttrs customClaims (_: { });
-                }
+              (lib.filter (client: client.claims_policy != { }))
+              (lib.flip lib.genAttrs' (
+                client: lib.nameValuePair (mkPolicyName client.client_id) client.claims_policy
               ))
-              lib.listToAttrs
             ];
             clients = map (
               client:
@@ -212,7 +198,7 @@ in
                 scopes = lib.mkIf (client.scopes != [ ]) client.scopes;
                 authorization_policy =
                   if client.subject == [ ] then client.policy else mkPolicyName client.client_id;
-                claims_policy = lib.mkIf ((findCustomClaims client) != [ ]) (mkPolicyName client.client_id);
+                claims_policy = lib.mkIf (client.claims_policy != { }) (mkPolicyName client.client_id);
                 # save consent for 1 year
                 pre_configured_consent_duration = "1y";
               }
@@ -220,6 +206,7 @@ in
                 "scopes"
                 "policy"
                 "subject"
+                "claims_policy"
               ])
             ) oidcClients;
             scopes = oidcScopes;

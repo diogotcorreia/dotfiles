@@ -1,6 +1,10 @@
 # Collect settings from all hosts so that the authelia instance
 # configures itself automatically.
-{ lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkOption types;
 in
@@ -142,7 +146,7 @@ in
     oauthClients = mkOption {
       type = types.listOf (
         types.submodule (
-          { ... }:
+          { ... }@submoduleAttrs:
           {
             freeformType = types.attrsOf types.anything;
             options = {
@@ -221,6 +225,33 @@ in
                   list is AND'ed together.
                 '';
               };
+
+              claims_policy = mkOption {
+                type = types.attrsOf types.anything;
+                default = { };
+                example = {
+                  id_token = [ "preferred_username" ];
+                };
+                description = ''
+                  Create a new policy for this client specifically, and assign the policy to it.
+                  See https://www.authelia.com/configuration/identity-providers/openid-connect/provider/#claims_policies
+                '';
+              };
+            };
+
+            config = {
+              # Automatically create a policy if using a custom scope with custom claims
+              claims_policy =
+                let
+                  custom_claims = lib.pipe submoduleAttrs.config.scopes [
+                    (map (scope: config.my.services.authelia.oidcScopes.${scope}.claims or [ ]))
+                    lib.flatten
+                    (lib.flip lib.genAttrs (_: { }))
+                  ];
+                in
+                lib.mkIf (custom_claims != { }) {
+                  inherit custom_claims;
+                };
             };
           }
         )
