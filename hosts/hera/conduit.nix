@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  secrets,
   ...
 }:
 let
@@ -55,8 +56,17 @@ let
     };
     map_style_url = "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx";
   };
+
+  oauthClientId = "EAQV7ZOTs4lWrnCwfyFzCJUNWquGWkVWPe4GOQjcTu~~St2XlVD7qLULZsSqBEpBBeE8KZOp";
+  oauthScopes = [
+    "openid"
+    "email"
+    "profile"
+  ];
 in
 {
+  age.secrets.continuwuityClientSecret.file = secrets.host.continuwuityClientSecret;
+
   services.matrix-continuwuity = {
     enable = true;
     # TODO 26.11: use package from stable
@@ -85,7 +95,33 @@ in
           client = "https://${domainConduit}";
           server = "${domainConduit}:443";
         };
+
+        oauth = {
+          compatibility_mode = "exclusive";
+          oidc = {
+            discovery_url = "https://auth.diogotc.com";
+            client_id = oauthClientId;
+            client_secret_file = "/run/credentials/continuwuity.service/oidc_client_secret";
+            additional_scopes = oauthScopes;
+
+            prompt_for_localpart = false;
+            preferred_username_claim = "preferred_username";
+            email_claim = "email";
+            profile_key_map = {
+              displayname = "name";
+            };
+            profile_key_import_mode = "on_registration";
+          };
+        };
       };
+    };
+  };
+
+  systemd.services.continuwuity = {
+    serviceConfig = {
+      LoadCredential = [
+        "oidc_client_secret:${config.age.secrets.continuwuityClientSecret.path}"
+      ];
     };
   };
 
@@ -113,6 +149,30 @@ in
         root = elementPkg;
       };
   };
+
+  my.services.authelia.oauthClients = [
+    {
+      client_id = oauthClientId;
+      client_name = "Matrix Continuwuity";
+      client_secret = "$pbkdf2-sha512$310000$HqqdEf7nGa3J2RvVNs/4OQ$gfThmuGsAWtdejQtI4B2GD.vNuu4Jq/eozzjFUMBQ0f/GxpIhzoqxmE0bVSd8vNA1O5wd3/WIYBgmngdz9NAsw";
+      redirect_uris = [
+        "https://${domainConduit}/_continuwuity/oidc/complete"
+      ];
+      scopes = oauthScopes;
+      policy = "two_factor";
+      subject = "group:matrix";
+      token_endpoint_auth_method = "client_secret_basic";
+
+      # Continuwuity does not fetch the userinfo endpoint, so we need to ensure these claims are available in the token
+      claims_policy = {
+        id_token = [
+          "preferred_username"
+          "name"
+          "email"
+        ];
+      };
+    }
+  ];
 
   modules.impermanence.directories = [
     conduitDir

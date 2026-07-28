@@ -173,6 +173,7 @@ mkSecrets [
       "altUrlsDiscordBotEnv"
       "autoUpgradeHealthchecksUrl"
       "cloudflareToken"
+      "continuwuityClientSecret"
       "dawarichEnv"
       "dawarichSecretKeyBase"
       "diskstationSambaCredentials"
