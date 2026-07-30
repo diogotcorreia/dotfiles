@@ -9,12 +9,5 @@
   ],
   "lockFileMaintenance": {
     "enabled": true
-  },
-  "packageRules": [
-    {
-      "matchManagers": ["nix"],
-      "matchUpdateTypes": ["!lockFileMaintenance"],
-      "enabled": false
-    }
-  ]
+  }
 }
