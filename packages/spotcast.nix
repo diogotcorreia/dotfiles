@@ -5,15 +5,15 @@
   python3Packages,
 }:
 buildHomeAssistantComponent (finalAttrs: {
-  owner = "fondberg";
+  owner = "Mincka";
   domain = "spotcast";
-  version = "6.0.0-a16";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
-    owner = "fondberg";
+    owner = "Mincka";
     repo = "spotcast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4E9wyfh3OnP2zkdeWLabwVdMitqECInz7nH5Te8t5B8=";
+    hash = "sha256-NuFV0CIE7i19AVslcRnCaBm03Hc8qyvoP03VfaLR9BM=";
   };
 
   propagatedBuildInputs = with python3Packages; [
