@@ -166,6 +166,44 @@ in
       DOTNET_EnableDiagnostics = "0";
     };
   };
+  systemd.services.bazarr = {
+    serviceConfig = {
+      # Hardening
+      # TODO: remove on NixOS 26.11 if already upstreamed
+      CapabilityBoundingSet = "";
+      NoNewPrivileges = true;
+      ProtectHome = true;
+      ProtectClock = true;
+      ProtectKernelLogs = true;
+      PrivateTmp = true;
+      PrivateDevices = true;
+      PrivateUsers = true;
+      ProtectKernelTunables = true;
+      ProtectKernelModules = true;
+      ProtectControlGroups = true;
+      RestrictSUIDSGID = true;
+      RemoveIPC = true;
+      UMask = "0022";
+      ProtectHostname = true;
+      ProtectProc = "invisible";
+      RestrictAddressFamilies = lib.mkForce [
+        "AF_INET"
+        "AF_INET6"
+        "AF_UNIX"
+      ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      LockPersonality = true;
+      SystemCallArchitectures = "native";
+      SystemCallFilter = lib.mkForce [
+        "@system-service"
+        "~@privileged"
+        "~@debug"
+        "~@mount"
+        "@chown"
+      ];
+    };
+  };
 
   age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
 
