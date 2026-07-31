@@ -153,10 +153,18 @@ in
   systemd.services.radarr = {
     wants = [ "postgresql.target" ];
     after = [ "postgresql.target" ];
+    environment = {
+      # TODO: remove on NixOS 26.11 (https://github.com/NixOS/nixpkgs/pull/547611)
+      DOTNET_EnableDiagnostics = "0";
+    };
   };
   systemd.services.sonarr = {
     wants = [ "postgresql.target" ];
     after = [ "postgresql.target" ];
+    environment = {
+      # TODO: remove on NixOS 26.11 (https://github.com/NixOS/nixpkgs/pull/547611)
+      DOTNET_EnableDiagnostics = "0";
+    };
   };
 
   age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;
