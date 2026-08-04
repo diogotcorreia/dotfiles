@@ -30,6 +30,6 @@ writeShellScriptBin "formatter" ''
     set -- "$prj_root"
   fi
 
-  "${lib.getExe deadnix}" --hidden --edit "''${DEADNIX_ARGS[@]}" -- "$@"
+  "${lib.getExe deadnix}" --edit "''${DEADNIX_ARGS[@]}" -- "$@"
   "${lib.getExe nixfmt-tree}" "''${NIXFMT_ARGS[@]}" -- "$@"
 ''
