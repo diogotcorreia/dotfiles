@@ -5,7 +5,8 @@ in
 {
   services.nginx.virtualHosts."${domain}" = {
     enableACME = true;
-    root = pkgs.my.bentopdf;
+    # TODO 26.11: use package from stable
+    root = pkgs.unstable.bentopdf;
 
     locations."/" = {
       index = "index.html";
