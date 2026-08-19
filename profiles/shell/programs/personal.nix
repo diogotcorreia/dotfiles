@@ -37,9 +37,6 @@
     # many encoding/decoding utils + ctf utils
     rsbkb
 
-    # Agenix
-    agenix
-
     # Shell Utils
     my.shell-utils
 

@@ -19,9 +19,6 @@
     # Find and search files
     ripgrep
 
-    # Agenix
-    agenix
-
     # switch-to-configuration wrapper
     (pkgs.my.nixos-switch.override { hostName = config.networking.hostName; })
   ];

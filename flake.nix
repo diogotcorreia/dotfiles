@@ -163,5 +163,11 @@
       formatter = {
         x86_64-linux = pkgs.my.formatter;
       };
+      devShells.x86_64-linux.default = pkgs.mkShell {
+        packages = with pkgs; [
+          agenix
+          age-plugin-yubikey
+        ];
+      };
     };
 }

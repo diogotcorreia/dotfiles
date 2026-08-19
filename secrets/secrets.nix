@@ -9,6 +9,9 @@ let
   phobosSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPMXN8lpc/JVPwgV9s46o8DbOI0VMd3/x/CbcUdi5XsL";
   zeusSystem = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKv9y2DlGhcZRBxiqo3bmTs2U7LX7y/KC3Dwo07Ywugr";
 
+  yubikeyBalloon = "age1yubikey1qdvytsllgtd9f7t3hth2mkaaqjtkvuz4jg9ge4qj0jzw7wgnhelkuhnn00e";
+  yubikeyMeatball = "age1yubikey1q0w88n3xhx6qtz2kvd970vs473mtlv5gkl7e0wn0hfegptupy9366dh2c3p";
+
   personalSystems = [
     apolloSystem
     bacchusSystem
@@ -24,6 +27,10 @@ let
   thirdPartySystems = [
     gammalSystem
   ];
+  yubikeys = [
+    yubikeyBalloon
+    yubikeyMeatball
+  ];
   allSystems = personalSystems ++ serverSystems ++ thirdPartySystems;
 
   mkSystem =
@@ -37,7 +44,10 @@ let
       ++ [
         {
           name = "${filePrefix}${file}.age";
-          value = { inherit publicKeys; };
+          value = {
+            # always have yubikeys as backup
+            publicKeys = publicKeys ++ yubikeys;
+          };
         }
       ]
     ) [ ] files;

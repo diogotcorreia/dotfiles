@@ -17,5 +17,8 @@ To add a new secret, follow these two steps:
 ## Editing a secret
 
 The process is the same as step 2 of creating a new secret.
-However, since the private key might only be accessible to root,
-we might need to run the command as sudo.
+However, age needs to know the currently connected YubiKey:
+
+```fish
+agenix -e <path/to/.age/file> -i (age-plugin-yubikey -i --slot 1 | psub)
+```
