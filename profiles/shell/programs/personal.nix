@@ -57,4 +57,6 @@
     enable = true;
     flake = "${config.users.users.${user}.home}/.dotfiles";
   };
+
+  programs.yubikey-manager.enable = true;
 }
