@@ -171,21 +171,23 @@ in
       # Hardening
       # TODO: remove on NixOS 26.11 if already upstreamed
       CapabilityBoundingSet = "";
+      LockPersonality = true;
       NoNewPrivileges = true;
-      ProtectHome = true;
-      ProtectClock = true;
-      ProtectKernelLogs = true;
-      PrivateTmp = true;
       PrivateDevices = true;
+      PrivateIPC = true;
+      PrivateTmp = "disconnected";
       PrivateUsers = true;
-      ProtectKernelTunables = true;
-      ProtectKernelModules = true;
-      ProtectControlGroups = true;
-      RestrictSUIDSGID = true;
-      RemoveIPC = true;
-      UMask = "0022";
+      ProcSubset = "pid";
+      ProtectClock = true;
+      ProtectControlGroups = "strict";
+      ProtectHome = true;
       ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
       ProtectProc = "invisible";
+      ProtectSystem = "full";
+      RemoveIPC = true;
       RestrictAddressFamilies = lib.mkForce [
         "AF_INET"
         "AF_INET6"
@@ -193,14 +195,13 @@ in
       ];
       RestrictNamespaces = true;
       RestrictRealtime = true;
-      LockPersonality = true;
+      RestrictSUIDSGID = true;
       SystemCallArchitectures = "native";
+      SystemCallErrorNumber = "EPERM";
       SystemCallFilter = lib.mkForce [
         "@system-service"
         "~@privileged"
-        "~@debug"
-        "~@mount"
-        "@chown"
+        "~@resources"
       ];
     };
   };
