@@ -17,8 +17,8 @@
 let
   pnpm = pnpm_11;
   pin = {
-    version = "3.4.2";
-    srcHash = "sha256-xGsGjVytFFivpyH6Q6KE1wszzroHSNuyIAwgY2+Nv9o=";
+    version = "3.4.3";
+    srcHash = "sha256-Q7yFAYjDplZLGNxwRamQN48byzGeTQfq9j4+l0A+QQU=";
     pnpmHash = "sha256-689pH/8c2vVFUaz1GopP/9bdtdp6z385X+BGcFMMEr8=";
   };
 in
