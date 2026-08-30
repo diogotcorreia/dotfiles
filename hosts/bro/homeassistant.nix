@@ -91,6 +91,15 @@ in
         massPort
       ];
     };
+    vlan-iot-cloud = {
+      # UDP Port 5353 for mDNS discovery of Google Cast devices (Spotify)
+      allowedUDPPorts = [ lib.my.ports.mdnsGoogleCast ];
+
+      allowedTCPPorts = [
+        massPort
+        lib.my.ports.musicAssistantAudioStream
+      ];
+    };
     vlan-iot-local = {
       allowedTCPPorts = [ mqttPort ];
     };
