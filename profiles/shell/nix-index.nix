@@ -32,7 +32,7 @@
           echo "\
     The program '$cmd' is currently not installed. You can run it once
     by typing:
-      nix shell $toplevel#$attrs[0] -c $cmd ...\
+      nix shell $toplevel#$attrs[1] -c $cmd ...\
     " >&2
 
         case '*'
