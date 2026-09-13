@@ -167,6 +167,7 @@
         packages = with pkgs; [
           agenix
           age-plugin-yubikey
+          nix-update
         ];
       };
     };
