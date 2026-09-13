@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "discord-nordic";
-  version = "4.13.1";
+  version = "4.13.2";
 
   src = fetchFromGitHub {
     owner = "orblazer";
     repo = "discord-nordic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oAK3MY23U0BUFYTXpeE+VByFwRZiGFk6/K7zZrWwv0o=";
+    hash = "sha256-bzRRRSbIUAaSX6tHaq8n5MeKi4xSpPdvq1RfBLebqBo=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 3;
-    hash = "sha256-oCdJNX/bft8OFNw+KbizfsDgY03iTcISEjqshJNcZWQ=";
+    hash = "sha256-wfFETcjzpF+ZjAsRqgn3OrS1hJ22a3uTI4f4NQbJlMk=";
   };
 
   nativeBuildInputs = [
