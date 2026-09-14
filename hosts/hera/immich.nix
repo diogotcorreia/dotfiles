@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  pkgs,
   secrets,
   ...
 }:
@@ -31,6 +32,9 @@ in
 
   services.immich = {
     inherit port;
+
+    # TODO 26.11: use package from stable
+    package = pkgs.unstable.immich;
 
     enable = true;
     mediaLocation = photosLocation;
