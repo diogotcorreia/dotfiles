@@ -51,7 +51,11 @@ in
     ];
   };
 
-  services.jellyfin.enable = true;
+  services.jellyfin = {
+    enable = true;
+    # TODO 26.11: move to stable
+    package = pkgs.unstable.jellyfin;
+  };
   services.seerr = {
     enable = true;
     port = portSeerr;
