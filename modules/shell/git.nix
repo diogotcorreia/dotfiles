@@ -3,6 +3,7 @@
   lib,
   config,
   configDir,
+  pkgs,
   user,
   ...
 }:
@@ -55,5 +56,9 @@ in
         line-numbers = true;
       };
     };
+
+    home.packages = with pkgs; [
+      git-extras
+    ];
   };
 }
