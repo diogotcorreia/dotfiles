@@ -17,12 +17,13 @@
       session_serialization = false;
 
       plugins = {
-        compact-bar = {
-          _props = {
-            location = "zellij:compact-bar";
-          };
-          tooltip = "F1";
-        };
+        # TODO FIXME: https://github.com/zellij-org/zellij/issues/5502
+        # compact-bar = {
+        #   _props = {
+        #     location = "zellij:compact-bar";
+        #   };
+        #   tooltip = "F1";
+        # };
       };
     };
   };
