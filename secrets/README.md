@@ -6,7 +6,7 @@ Secrets are managed by [Agenix](https://github.com/ryantm/agenix).
 
 To add a new secret, follow these two steps:
 
-1. Create an entry on `secrets.nix`. This file is only used by the `agenix` executable
+1. Create an entry in `agenix-rules.nix`. This file is only used by the `agenix` executable
    to know which keys to encrypt it with.
 2. Open the editor to add the content to want to encrypt:
 
