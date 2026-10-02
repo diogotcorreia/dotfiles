@@ -182,16 +182,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1783090163,
-        "narHash": "sha256-hP8twR8s3ppL98QPW4plLGRSTdTrdSIppMELRtbC6l0=",
+        "lastModified": 1791118407,
+        "narHash": "sha256-tSvl98DtY5xh+ijlnb93vzHcZLUcm/8Uh87Sc/1ZKH8=",
         "owner": "ist-bot-team",
         "repo": "ist-discord-bot",
-        "rev": "28abdbfacaaf142d114d217064320ed844672bed",
+        "rev": "d33cd321ee88ea50bc11d6fcbe320c0b8f479e6e",
         "type": "github"
       },
       "original": {
         "owner": "ist-bot-team",
-        "ref": "v3.0.8",
+        "ref": "v3.0.10",
         "repo": "ist-discord-bot",
         "type": "github"
       }
