@@ -1,13 +1,13 @@
-diff --git a/resources/assets/v1/src/components/transactions/EditTransaction.vue b/resources/assets/v1/src/components/transactions/EditTransaction.vue
-index 97fbf78f41..20232584f6 100644
---- a/resources/assets/v1/src/components/transactions/EditTransaction.vue
-+++ b/resources/assets/v1/src/components/transactions/EditTransaction.vue
-@@ -470,7 +470,7 @@ export default {
-             let result = {
-                 transaction_journal_id: transaction.transaction_journal_id,
-                 description: transaction.description,
--                date: transaction.date.substring(0, 16),
-+                date: transaction.date.substring(0, 19),
-                 reconciled: transaction.reconciled,
-                 amount: this.roundNumber(this.positiveAmount(transaction.amount), transaction.currency_decimal_places),
-                 category: transaction.category_name,
+diff --git a/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js b/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js
+index 983d5eb872..c1525d990b 100644
+--- a/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js
++++ b/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js
+@@ -70,7 +70,7 @@ export function parseDownloadedSplits(downloads, groupId) {
+             }
+ 
+             // date and description
+-            current.date = format(new Date(download.date), "yyyy-MM-dd HH:mm");
++            current.date = format(new Date(download.date), "yyyy-MM-dd HH:mm:ss");
+             current.description = download.description;
+ 
+             // source and destination
