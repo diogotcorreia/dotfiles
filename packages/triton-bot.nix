@@ -5,13 +5,13 @@
   lib,
   makeWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   stdenv,
   ...
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-bot";
