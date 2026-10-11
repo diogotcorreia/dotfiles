@@ -70,6 +70,16 @@ mkSecrets [
     "frpAuthEnv"
   ])
 
+  (mkSystem null
+    [
+      broSystem
+      heraSystem
+    ]
+    [
+      "musicAssistantAppSecrets"
+    ]
+  )
+
   (mkSystem "apollo"
     [ apolloSystem ]
     [

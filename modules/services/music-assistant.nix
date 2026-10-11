@@ -3,6 +3,7 @@
   inputs,
   lib,
   pkgs,
+  secrets,
   # deadnix: skip
   utils, # needs to be here for the import of unstable music-assistant
   ...
@@ -52,6 +53,9 @@ in
   ];
 
   config = mkIf cfg.enable {
+    # https://github.com/music-assistant/server/blob/5456607e50f70fe7b5d9446d6909121c8487f952/music_assistant/helpers/app_vars.py#L13
+    age.secrets.musicAssistantAppSecrets.file = secrets.musicAssistantAppSecrets;
+
     services.music-assistant = {
       # Use package from nixos-unstable
       package = pkgs.unstable.music-assistant;
@@ -59,6 +63,17 @@ in
         "--config"
         dataDir
       ];
+    };
+
+    systemd.services.music-assistant = {
+      serviceConfig = {
+        LoadCredential = [
+          "app-secrets:${config.age.secrets.musicAssistantAppSecrets.path}"
+        ];
+      };
+      environment = {
+        MASS_APP_VARS_FILE = "%d/app-secrets";
+      };
     };
 
     modules.impermanence.directories = mkIf cfg.useSensibleDefaults [
