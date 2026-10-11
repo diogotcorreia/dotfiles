@@ -60,5 +60,15 @@ in
     home.packages = with pkgs; [
       git-extras
     ];
+
+    programs.difftastic = {
+      enable = config.modules.personal.enable;
+      # TODO 26.11: set to git difftool mode
+    };
+
+    programs.mergiraf = {
+      enable = config.modules.personal.enable;
+      enableGitIntegration = true;
+    };
   };
 }
