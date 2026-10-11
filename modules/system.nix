@@ -18,6 +18,8 @@
       experimental-features = [
         "nix-command"
         "flakes"
+        "auto-allocate-uids"
+        "cgroups"
       ];
       # Don't add @wheel here, since it allows for privilege escalation
       # https://github.com/NixOS/nix/issues/9649#issuecomment-1868001568
@@ -34,6 +36,10 @@
 
       # Use substituters even for trivial derivations
       always-allow-substitutes = true;
+
+      # Allow running NixOS container tests
+      auto-allocate-uids = true;
+      extra-system-features = [ "uid-range" ];
     };
 
     # Lock flake registry to keep it synced with the inputs
