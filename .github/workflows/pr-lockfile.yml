@@ -1,0 +1,88 @@
+name: "Lockfile changes"
+
+on:
+  - pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  comment-lockfile-changes:
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+      - name: Restore flake.lock files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git show "$BASE_SHA:flake.lock" > old-flake.lock
+          git show "$HEAD_SHA:flake.lock" > new-flake.lock
+
+      - name: Find previous comment
+        uses: peter-evans/find-comment@b30e6a3c0ed37e7c023ccd3f1db5c6c0b0c23aad # v4.0.0
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- lockfile-changes-marker -->'
+
+      - name: Check whether files changed
+        id: changed
+        run: |
+          if cmp -s old-flake.lock new-flake.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compare flake.lock before and after
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -o pipefail
+          cat <<EOF > result.md
+          <!-- lockfile-changes-marker -->
+          The following dependencies have changed in \`flake.lock\`[^1]:
+
+          [^1]: Last ran for $HEAD_SHA
+
+          | Input Name | Before | After | Compare |
+          | -- | -- | -- | -- |
+          EOF
+
+          jq -r -n \
+            --slurpfile oldLock old-flake.lock \
+            --slurpfile newLock new-flake.lock '
+            ($oldLock[0].nodes | keys) as $b
+            | ($newLock[0].nodes | keys) as $a
+            | (($b + $a) | unique)[] as $name
+            | ($oldLock[0].nodes[$name].locked // null) as $old
+            | ($newLock[0].nodes[$name].locked // null) as $new
+            | select($old != $new)
+            | ($old.rev // "") as $oldrev
+            | ($new.rev // "") as $newrev
+            | (
+                if $old.type == "github" and $new.type == "github"
+                   and $old.owner and $old.repo and $new.owner and $new.repo
+                   and $old.owner == $new.owner and $old.repo == $new.repo
+                   and $oldrev != "" and $newrev != ""
+                then
+                  "https://github.com/\($new.owner)/\($new.repo)/compare/\($oldrev)...\($newrev)"
+                else ""
+                end
+              ) as $compare
+            | "| `\($name)` | `\($oldrev[:10])` | `\($newrev[:10])` | \($compare) |"
+          ' | tee -a result.md
+
+      - name: Post or update comment with changes
+        if: steps.changed.outputs.changed == 'true' || steps.find-comment.outputs.comment-id != ''
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-path: result.md
+          edit-mode: replace
