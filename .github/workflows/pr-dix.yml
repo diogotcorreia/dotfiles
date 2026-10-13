@@ -1,0 +1,63 @@
+name: "Dix"
+
+on:
+  - pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  compare-system-drvs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base branch (old)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: old
+      - name: Checkout head branch (new)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: new
+
+      - name: Setup nix
+        uses: ./old/.github/actions/setup-nix
+        with:
+          system: "x86_64-linux"
+          large: false
+          attic-token: ${{ secrets.ATTIC_TOKEN }}
+
+      - name: Evaluate nixosConfigurations before and after
+        run: |
+          set -o pipefail
+          drvPaths() {
+            nix eval --json "$1#nixosConfigurations" \
+              --apply '
+                configs:
+                  builtins.mapAttrs
+                    (_: config: config.config.system.build.toplevel.drvPath)
+                    configs
+              '
+          }
+
+          drvPaths "./old" | tee old.json | jq
+          drvPaths "./new" | tee new.json | jq
+
+      - name: Compare nixosConfigurations before and after
+        run: |
+          dix="$(nix build ./old#dix --print-out-paths --no-link)/bin/dix"
+
+          commands="$(
+            jq -rn '
+              (input) as $old |
+              (input) as $new |
+              $old | to_entries[] |
+              (["echo"] | @sh),
+              (["echo", "=====", .key, "====="] | @sh),
+              (["echo"] | @sh),
+              (["'$dix'", "--color=always", .value, $new[.key]] | @sh)
+            ' old.json new.json
+          )"
+
+          eval "$commands"
