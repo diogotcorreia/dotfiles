@@ -37,6 +37,13 @@ let
       /* hide top bar */
       --custom-app-top-bar-height: 0px !important;
     }
+
+    .channel__972a0:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___shop"]),
+    .channel__972a0:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___nitro"]),
+    .channel__972a0:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___quests"]) {
+      /* hide shop, nitro, and quests */
+      display: none;
+    }
   '';
 
   settings = {
