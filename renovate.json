@@ -5,6 +5,8 @@
   },
   "extends": [
     "config:recommended",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)",
     "helpers:pinGitHubActionDigests"
   ],
   "lockFileMaintenance": {
