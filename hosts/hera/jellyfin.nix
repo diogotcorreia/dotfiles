@@ -103,6 +103,8 @@ in
   };
   services.bazarr = {
     enable = true;
+    # TODO 26.11: use package from stable
+    package = pkgs.unstable.bazarr;
     listenPort = portBazarr;
   };
   services.flaresolverr = {
