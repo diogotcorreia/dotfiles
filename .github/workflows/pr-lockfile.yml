@@ -19,6 +19,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          git fetch origin "$BASE_SHA"
           git show "$BASE_SHA:flake.lock" > old-flake.lock
           git show "$HEAD_SHA:flake.lock" > new-flake.lock
 
