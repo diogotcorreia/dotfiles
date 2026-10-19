@@ -1,13 +1,13 @@
 diff --git a/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js b/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js
-index 983d5eb872..c1525d990b 100644
+index a3a0bb48d3..00d304f6c6 100644
 --- a/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js
 +++ b/resources/assets/v3/js/pages/transactions/shared/parse-downloaded-splits.js
-@@ -70,7 +70,7 @@ export function parseDownloadedSplits(downloads, groupId) {
+@@ -73,7 +73,7 @@ export function parseDownloadedSplits(downloads, groupId) {
              }
  
              // date and description
--            current.date = format(new Date(download.date), "yyyy-MM-dd HH:mm");
-+            current.date = format(new Date(download.date), "yyyy-MM-dd HH:mm:ss");
+-            current.date = formatDate(new Date(download.date), "yyyy-MM-dd HH:mm");
++            current.date = formatDate(new Date(download.date), "yyyy-MM-dd HH:mm:ss");
              current.description = download.description;
  
              // source and destination
