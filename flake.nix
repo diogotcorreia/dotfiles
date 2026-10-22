@@ -164,6 +164,7 @@
         packages = with pkgs; [
           agenix
           age-plugin-yubikey
+          attic-client
           nix-update
         ];
       };
