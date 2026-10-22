@@ -22,7 +22,12 @@ in
   services.esphome = {
     enable = true;
     enableUnixSocket = true;
-    package = pkgs.unstable.esphome;
+    package = pkgs.unstable.esphome-device-builder;
+    trustedDomains = [ domain ];
+
+    # Do not expose remote build to the network
+    # TODO: figure out how to disable it
+    remoteBuildAddress = "127.0.0.1";
   };
 
   services.nginx.virtualHosts = {
