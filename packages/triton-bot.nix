@@ -4,13 +4,14 @@
   fetchPnpmDeps,
   lib,
   makeWrapper,
-  nodejs,
+  nodejs_26,
   pnpm_10_latest,
   pnpmConfigHook,
   stdenv,
   ...
 }:
 let
+  nodejs = nodejs_26;
   pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {

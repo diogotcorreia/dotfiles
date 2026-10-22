@@ -4,7 +4,7 @@
   fetchYarnDeps,
   lib,
   makeWrapper,
-  nodejs,
+  nodejs_26,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -12,6 +12,7 @@
   ...
 }:
 let
+  nodejs = nodejs_26;
   version = "0-unstable-2026-02-21";
   commonSrc = fetchFromGitHub {
     owner = "tritonmc";
