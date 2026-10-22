@@ -43,7 +43,7 @@
     # allow it to be cached and re-exported for my ctf flake
     # https://github.com/NixOS/nixpkgs/pull/380600
     pwndbg = {
-      url = "github:pwndbg/pwndbg?ref=2026.09.15";
+      url = "github:pwndbg/pwndbg?ref=2026.10.22";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lidl-to-grocy = {
