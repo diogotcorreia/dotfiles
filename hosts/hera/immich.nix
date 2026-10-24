@@ -34,7 +34,7 @@ in
     inherit port;
 
     # TODO 26.11: use package from stable
-    package = pkgs.unstable.immich.override { nodejs = pkgs.nodejs_26; };
+    package = pkgs.unstable.immich.override { nodejs = pkgs.unstable.nodejs_22; };
 
     enable = true;
     mediaLocation = photosLocation;
