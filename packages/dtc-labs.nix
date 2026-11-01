@@ -15,17 +15,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc-labs";
-  version = "2.0.0";
+  version = "2.0.1";
   src = fetchFromGitHub {
     owner = "diogotcorreia";
     repo = "dtc-labs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ugvsqIJLLeJhu9QqQT1q3Sgi/egM25FK8RvqaSJPiNk=";
+    hash = "sha256-mYrha328sxYwUXDi5tsuMsuxVm3JZfkk1YZ1GfRNzSs=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    sha256 = "sha256-GFckIIE4GSWtbdMASvxU8J04Q4fPimyT1bmRlqQ848k=";
+    sha256 = "sha256-6+PYPUjK9IzhLHksZNoLMYQ8XgzerOWYGZW5hbm3nW8=";
   };
 
   nativeBuildInputs = [
