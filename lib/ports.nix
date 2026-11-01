@@ -60,6 +60,7 @@
     musicAssistantAudioStream = 8097;
     homeAssistant = 8123;
     umami = 8380;
+    musicAssistantSendspin = 8927;
     sonarr = 8989;
 
     socksFirefox = 9000;

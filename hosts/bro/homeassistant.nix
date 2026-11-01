@@ -89,6 +89,7 @@ in
       allowedTCPPorts = [
         hassPort
         massPort
+        lib.my.ports.musicAssistantSendspin
       ];
     };
     vlan-iot-cloud = {
@@ -98,6 +99,7 @@ in
       allowedTCPPorts = [
         massPort
         lib.my.ports.musicAssistantAudioStream
+        lib.my.ports.musicAssistantSendspin
       ];
     };
     vlan-iot-local = {

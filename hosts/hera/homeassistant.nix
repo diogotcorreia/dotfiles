@@ -131,6 +131,7 @@ in
       hassPort
       mqttPort
       musicAssistantAudioStream
+      musicAssistantSendspin
       musicAssistantWeb
     ];
   };
