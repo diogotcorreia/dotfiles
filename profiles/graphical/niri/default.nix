@@ -484,6 +484,16 @@ in
         open-fullscreen = false;
         open-floating = true;
       }
+      # Blur terminal
+      {
+        match = [
+          (mkProps { app-id = "^com.mitchellh.ghostty$"; })
+        ];
+
+        background-effect = {
+          blur = true;
+        };
+      }
     ];
 
     layer-rule = [

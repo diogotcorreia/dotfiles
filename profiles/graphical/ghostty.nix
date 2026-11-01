@@ -8,7 +8,7 @@
 
     settings = {
       window-decoration = "server";
-      background-opacity = 0.75;
+      background-opacity = 0.85;
       theme = "light:Nord Light,dark:Nord";
 
       notify-on-command-finish = "unfocused";
