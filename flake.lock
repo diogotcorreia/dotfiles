@@ -178,7 +178,7 @@
     "ist-discord-bot": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-unstable"
         ]
       },
       "locked": {
