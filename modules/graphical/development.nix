@@ -17,8 +17,6 @@ in
     home.packages = with pkgs; [
       # IntelliJ IDEA (Ultimate)
       jetbrains.idea
-      # REST Client
-      yaak
     ];
 
     programs.chromium = {
