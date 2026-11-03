@@ -4,15 +4,12 @@
   fetchYarnDeps,
   lib,
   makeWrapper,
-  nodejs_26,
+  nodejs,
   stdenv,
   yarnConfigHook,
   yarnInstallHook,
   ...
 }:
-let
-  nodejs = nodejs_26;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc-labs";
   version = "2.0.1";

@@ -5,7 +5,7 @@
   lib,
   makeWrapper,
   node-gyp,
-  nodejs_26,
+  nodejs,
   pkg-config,
   pnpm_11,
   pnpmConfigHook,
@@ -15,7 +15,6 @@
   ...
 }:
 let
-  nodejs = nodejs_26;
   pnpm = pnpm_11;
   pin = {
     version = "3.4.4";

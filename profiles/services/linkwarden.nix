@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   secrets,
   ...
 }:
@@ -34,7 +33,6 @@ in
   services.linkwarden = {
     inherit port;
     enable = true;
-    package = pkgs.linkwarden.override { nodejs = pkgs.nodejs_26; };
 
     secretFiles = {
       NEXTAUTH_SECRET = config.age.secrets.linkwardenNextSecret.path;

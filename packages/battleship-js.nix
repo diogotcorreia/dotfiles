@@ -4,7 +4,7 @@
   fetchYarnDeps,
   lib,
   makeWrapper,
-  nodejs_26,
+  nodejs,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -12,7 +12,6 @@
   ...
 }:
 let
-  nodejs = nodejs_26;
   version = "0-unstable-2025-02-02";
   commonSrc = fetchFromGitHub {
     owner = "diogotcorreia";

@@ -1,5 +1,5 @@
 # Peer-to-peer file transfers web app
-{ lib, pkgs, ... }:
+{ lib, ... }:
 let
   domain = "drop.diogotc.com";
   port = lib.my.ports.pairdrop;
@@ -7,7 +7,6 @@ in
 {
   services.pairdrop = {
     enable = true;
-    package = pkgs.pairdrop.override { nodejs = pkgs.nodejs_26; };
 
     inherit port;
 

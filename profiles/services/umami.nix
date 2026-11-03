@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  pkgs,
   secrets,
   ...
 }:
@@ -24,7 +23,6 @@ in
 
   services.umami = {
     enable = true;
-    package = pkgs.umami.override { nodejs = pkgs.nodejs_22; };
     createPostgresqlDatabase = true;
     settings = {
       HOSTNAME = "::1";

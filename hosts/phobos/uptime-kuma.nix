@@ -1,7 +1,6 @@
 # Configuration for Uptime Kuma on Phobos
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -13,7 +12,6 @@ in
 {
   services.uptime-kuma = {
     enable = true;
-    package = pkgs.uptime-kuma.override { nodejs = pkgs.nodejs_22; };
     settings = {
       HOST = "::1";
       PORT = toString port;
