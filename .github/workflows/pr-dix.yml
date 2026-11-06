@@ -56,7 +56,7 @@ jobs:
               (["echo"] | @sh),
               (["echo", "=====", .key, "====="] | @sh),
               (["echo"] | @sh),
-              (["'$dix'", "--color=always", .value, $new[.key]] | @sh)
+              (["'$dix'", "diff", "--color=always", .value, $new[.key]] | @sh)
             ' old.json new.json
           )"
 
