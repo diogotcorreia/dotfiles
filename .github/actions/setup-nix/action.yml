@@ -18,7 +18,7 @@ runs:
         sudo mkdir /nix
     - name: "Maximize Disk Space"
       if: ${{ inputs.large == 'true' }}
-      uses: wimpysworld/nothing-but-nix@687c797a730352432950c707ab493fcc951818d7 # v10
+      uses: wimpysworld/nothing-but-nix@59a79ef03bc486f0acca5480b7edf426ae7e7b0c # v11
 
     # We only run this if we are building an aarch64-linux system
     - if: inputs.system == 'aarch64-linux'
