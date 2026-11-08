@@ -162,5 +162,9 @@ in
   };
   modules.services.dnsoverhttps.all-interfaces = true;
 
+  # tcpdump for debugging
+  programs.tcpdump.enable = true;
+  usr.extraGroups = [ "pcap" ];
+
   modules.impermanence.directories = [ "/var/lib/dnsmasq" ];
 }
