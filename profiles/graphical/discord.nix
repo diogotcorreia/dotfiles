@@ -20,16 +20,16 @@ let
       /* change background of "active now" pane */
       --background-base-low: var(--nord-dark1) !important;
     }
-    .sidebarList__5e434 {
+    .sidebarList_pog62O {
       /* add missing border since background is the same now */
       border-right: 1px solid var(--app-frame-border);
     }
-    .bar_c38106 {
+    .bar_3zSH5d {
       /* hide top bar */
       /* hide overflow instead of display: none; so that CTRL + I still works for inbox */
       overflow: hidden;
     }
-    .tutorialContainer__1f388 {
+    .tutorialContainer_1IyMuq {
       /* add padding on guild list after removing top bar */
       padding-top: 10px;
     }
@@ -38,9 +38,9 @@ let
       --custom-app-top-bar-height: 0px !important;
     }
 
-    .channel__972a0:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___shop"]),
-    .channel__972a0:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___nitro"]),
-    .channel__972a0:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___quests"]) {
+    .channel_zln_tS:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___shop"]),
+    .channel_zln_tS:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___nitro"]),
+    .channel_zln_tS:has([data-list-item-id^="private-channels-uid"][data-list-item-id$="___quests"]) {
       /* hide shop, nitro, and quests */
       display: none;
     }
