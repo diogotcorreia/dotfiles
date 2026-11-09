@@ -86,7 +86,6 @@ in
     internalInterfaces = [
       "vlan-private"
       "vlan-iot-cloud"
-      "vlan-iot-local"
       "vlan-guest"
     ];
     externalInterface = wanInterface;
