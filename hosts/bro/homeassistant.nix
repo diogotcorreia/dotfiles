@@ -47,6 +47,10 @@ in
         inherit (pkgs.unstable) buildHomeAssistantComponent;
         inherit (hassCfg.package) python3Packages;
       })
+      (pkgs.my.hass-grocy.override {
+        inherit (pkgs.unstable) buildHomeAssistantComponent;
+        inherit (hassCfg.package) python3Packages;
+      })
     ];
   };
 
