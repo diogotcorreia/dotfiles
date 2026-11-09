@@ -42,6 +42,15 @@ in
     };
   };
 
+  # TODO: remove in 26.11
+  # Extend avahi module with new options from unstable, otherwise eval fails.
+  # It's fine this doesn't work since it's only used for airplay, which we don't use.
+  options.services.avahi = {
+    settings = mkOption {
+      type = types.any;
+    };
+  };
+
   # Use module from nixos-unstable
   disabledModules = [
     "services/audio/music-assistant.nix"
