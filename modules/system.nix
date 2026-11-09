@@ -85,6 +85,7 @@
   time.timeZone = lib.mkDefault "Europe/Lisbon";
 
   networking.domain = lib.mkDefault "diogotc.com";
+  networking.search = lib.mkDefault [ config.networking.domain ];
 
   services.journald.extraConfig = ''
     SystemMaxUse=500M
