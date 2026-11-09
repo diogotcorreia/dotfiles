@@ -12,6 +12,7 @@
     hardware.zram
     meta.server
     networking.ddns.cloudflare
+    networking.google-home.mitm
     security.acme.cloudflare
     security.fail2ban
     server.minimal

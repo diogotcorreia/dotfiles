@@ -62,6 +62,7 @@ in
           dns
           dhcpServer
           dhcpClient
+          dnsmasq
         ];
       };
       vlan-iot-local = {
@@ -85,7 +86,6 @@ in
     enable = true;
     internalInterfaces = [
       "vlan-private"
-      "vlan-iot-cloud"
       "vlan-guest"
     ];
     externalInterface = wanInterface;
@@ -135,7 +135,7 @@ in
   services.dnsmasq = {
     enable = true;
     settings = {
-      port = 0; # disable DNS server
+      port = lib.my.ports.dnsmasq; # DNS server port; for vlan-iot-cloud only
       domain-needed = true;
       bogus-priv = true;
       no-resolv = true;
@@ -157,9 +157,22 @@ in
         "option:router,0.0.0.0" # set default gateway
         "option:dns-server,0.0.0.0" # set dns server (to DoH proxy running on this server)
       ];
+
+      # Redirect all queries in the DNS server to ourselves
+      # This is used to MITM IoT devices in vlan-iot-cloud
+      address = [
+        "/#/${iotCloudSubnet}.1"
+      ];
     };
   };
   modules.services.dnsoverhttps.all-interfaces = true;
+
+  # Force DNS queries in vlan-iot-cloud to go through dnsmasq
+  networking.nftables.tables."nixos-nat".content = lib.mkAfter ''
+    chain pre {
+      iifname "vlan-iot-cloud" udp dport 53 redirect to :${toString lib.my.ports.dnsmasq}
+    }
+  '';
 
   # tcpdump for debugging
   programs.tcpdump.enable = true;

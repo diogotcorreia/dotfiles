@@ -30,6 +30,7 @@
     changedetection-io = 5001;
     reposilite = 5100;
     mdnsGoogleCast = 5353;
+    dnsmasq = 5354; # Dummy DNS server for MITM
     wastebin = 5435;
     seerr = 5055;
     coiot = 5683; # CoIoT (Shelly Push)
