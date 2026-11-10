@@ -114,12 +114,23 @@ in
         gpoddersync # podcasts sync service
         nextpod
         notes
-        polls
         richdocuments # Collabora Online for Nextcloud - https://apps.nextcloud.com/apps/richdocuments
         tasks
         twofactor_webauthn
         user_oidc
         ;
+
+      polls = polls.overrideAttrs (
+        finalAttrs:
+        assert finalAttrs.name == "nextcloud-app-polls-9.3.0";
+        {
+          # https://github.com/nextcloud/polls/pull/5054/changes
+          postPatch = finalAttrs.postPatch or "" + ''
+            substituteInPlace lib/Service/ShareService.php \
+              --replace-fail '$user->getEmailAddress() !== ' '$user->getEmailAddress() === '
+          '';
+        }
+      );
     };
   };
 
