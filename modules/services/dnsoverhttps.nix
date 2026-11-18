@@ -47,6 +47,9 @@ in
     networking = {
       nameservers = [ "127.0.0.55" ];
       dhcpcd.extraConfig = "nohook resolv.conf";
+      resolvconf.extraOptions = [
+        "trust-ad" # dnsproxy does DNSSEC validation (via upstream resolver)
+      ];
     };
 
     services.dnsproxy = {

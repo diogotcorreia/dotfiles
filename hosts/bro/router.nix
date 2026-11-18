@@ -134,6 +134,7 @@ in
 
   services.dnsmasq = {
     enable = true;
+    resolveLocalQueries = false;
     settings = {
       port = lib.my.ports.dnsmasq; # DNS server port; for vlan-iot-cloud only
       domain-needed = true;
