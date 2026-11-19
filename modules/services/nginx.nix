@@ -146,6 +146,9 @@ in
                 # sane default: use DNS-01 challenge instead of HTTP-01
                 acmeRoot = mkDefault null;
 
+                # Hotfix for nginx2root (CVE-2026-123007)
+                http2 = lib.mkForce false;
+
                 extraConfig = concatLines [
                   (optionalString config.enableCloudflareRealIp ''
                     include ${cloudflareRealIpConf};
