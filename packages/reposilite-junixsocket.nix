@@ -31,5 +31,5 @@ runCommand "reposilite-junixsocket"
     mkdir -p "$out/bin"
     cp "${reposilite}/bin/reposilite" "$out/bin/reposilite"
     substituteInPlace "$out/bin/reposilite" \
-      --replace-fail "-jar ${reposilite}/lib/reposilite" "-XX:-UseBASE64Intrinsics -cp ${reposilite}/lib/reposilite:${junixsocket}/lib/junixsocket-common.jar:${junixsocket}/lib/junixsocket-native-common.jar com.reposilite.ReposiliteLauncherKt"
+      --replace-fail "-jar ${reposilite}/lib/reposilite" "-cp ${reposilite}/lib/reposilite:${junixsocket}/lib/junixsocket-common.jar:${junixsocket}/lib/junixsocket-native-common.jar com.reposilite.ReposiliteLauncherKt"
   ''
