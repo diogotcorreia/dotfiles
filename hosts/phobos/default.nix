@@ -1,6 +1,5 @@
 # Configuration for phobos (VPS)
 {
-  config,
   pkgs,
   profiles,
   ...
@@ -25,18 +24,6 @@
   boot.tmp.cleanOnBoot = true;
 
   # Network Configuration
-  # Configure static IPv6 address
-  networking = {
-    interfaces = {
-      ${config.my.networking.wiredInterface}.ipv6.addresses = [
-        {
-          address = "2a03:4000:2a:1b3::";
-          prefixLength = 64;
-        }
-      ];
-    };
-  };
-
   my.networking.wiredInterface = "ens3";
 
   # PostgreSQL
@@ -51,7 +38,6 @@
       enable = true;
     };
     services = {
-      dnsoverhttps.enable = true;
       healthchecks = {
         enable = true;
       };

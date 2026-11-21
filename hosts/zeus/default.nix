@@ -1,6 +1,5 @@
 # Configuration for zeus (VPS)
 {
-  config,
   lib,
   pkgs,
   profiles,
@@ -29,22 +28,6 @@
   boot.tmp.cleanOnBoot = true;
 
   # Network Configuration
-  # Configure static IPv6 address
-  networking = {
-    interfaces = {
-      ${config.my.networking.wiredInterface}.ipv6.addresses = [
-        {
-          address = "2001:41d0:304:200::c76d";
-          prefixLength = 64;
-        }
-      ];
-    };
-    defaultGateway6 = {
-      address = "2001:41d0:304:200::1";
-      interface = config.my.networking.wiredInterface;
-    };
-  };
-
   my.networking.wiredInterface = "ens3";
 
   # PostgreSQL
@@ -57,7 +40,6 @@
   modules = {
     server.enable = true;
     services = {
-      dnsoverhttps.enable = true;
       healthchecks.enable = true;
       # Nebula (VPN)
       nebula = {
