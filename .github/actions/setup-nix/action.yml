@@ -24,7 +24,7 @@ runs:
     - if: inputs.system == 'aarch64-linux'
       uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
 
-    - uses: cachix/install-nix-action@bb0495a1086c46893eee56f32fd192dfe4a15bb9 # v32.0.0
+    - uses: cachix/install-nix-action@382a9ed9481c7c1f94f68b72ef105b3417c73877 # v32.1.0
       with:
         extra_nix_config: |
           fallback = true
