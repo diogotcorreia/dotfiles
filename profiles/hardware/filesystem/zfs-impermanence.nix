@@ -5,7 +5,6 @@
 {
   config,
   inputs,
-  lib,
   ...
 }:
 let
@@ -144,12 +143,7 @@ in
   # a blank state on every boot.
   # Diff what will be deleted next boot:
   # sudo zfs diff rpool/local/root@blank -F -t | sort -k 4 | less
-  boot.initrd.postResumeCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-    lib.mkAfter ''
-      zfs rollback -r rpool/local/root@blank
-    ''
-  );
-  boot.initrd.systemd.services.rollback = lib.mkIf config.boot.initrd.systemd.enable {
+  boot.initrd.systemd.services.rollback = {
     description = "Rollback root ZFS dataset to a blank state";
     wantedBy = [
       "initrd.target"

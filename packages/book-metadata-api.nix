@@ -21,18 +21,6 @@ let
     srcHash = "sha256-Y7elvzoRWBxMC1RuMmRoeRVnIHvgoWqvQ0vkqc4cCMc=";
     pnpmHash = "sha256-4p8uz2xR5hF+enaH3y4QLPUZgj6WTVxAm19zboePIHc=";
   };
-
-  # Version of vips required is not available in unstable
-  vips' =
-    lib.warnIfNot (lib.versionOlder vips.version "8.18.7")
-      "vips override is pinning to an older version instead"
-      vips.overrideAttrs
-      (prev: {
-        version = "8.18.7";
-        src = prev.src.overrideAttrs {
-          hash = "sha256-6fTHAWHcOt0qhZO6xN2CEKO/5W3MEekc6rlbWUyZbeM=";
-        };
-      });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "book-metadata-api";
@@ -57,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    vips'
+    vips
   ];
 
   nativeBuildInputs = [

@@ -71,9 +71,9 @@ in
   services.phpfpm.pools.pocket-grimoire = {
     inherit user group;
     phpPackage = package.phpPackage;
-    phpOptions = ''
-      log_errors = on
-    '';
+    phpOptions = {
+      log_errors = "on";
+    };
     settings = {
       "listen.mode" = lib.mkDefault "0660";
       "listen.owner" = lib.mkDefault config.services.nginx.user;
@@ -86,9 +86,7 @@ in
       "pm.max_requests" = lib.mkDefault 500;
     };
     phpEnv = {
-      inherit (env) APP_ENV APP_SECRET_FILE;
-      # FIXME: submit fix upstream to escape phpEnv variables
-      DATABASE_URL = "'${env.DATABASE_URL}'";
+      inherit (env) APP_ENV APP_SECRET_FILE DATABASE_URL;
     };
   };
 

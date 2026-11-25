@@ -122,7 +122,7 @@
     # Heroic Games Launcher (FOSS Epic Games Launcher)
     heroic
     # Office Suite
-    libreoffice-fresh
+    libreoffice
     # Minecraft Launcher
     prismlauncher
     # Steam Run
@@ -130,8 +130,6 @@
     steam-run
     # Karaoke Game
     ultrastardx
-    # Reference Manager
-    zotero
   ];
 
   hardware.flipperzero.enable = true;

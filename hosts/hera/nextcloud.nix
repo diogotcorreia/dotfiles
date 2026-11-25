@@ -43,7 +43,6 @@ in
     configureRedis = true;
     maxUploadSize = "2G";
     config = {
-      adminpassFile = toString (pkgs.writeText "nc-first-install-pwd" "changeMeAfterFirstInstallPlease");
       dbtype = "pgsql";
       dbuser = dbUsername;
       dbname = dbDatabaseName;

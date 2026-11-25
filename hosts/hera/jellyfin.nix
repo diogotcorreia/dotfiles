@@ -105,7 +105,9 @@ in
     enable = true;
     # TODO 26.11: use package from stable
     package = pkgs.unstable.bazarr;
-    listenPort = portBazarr;
+    settings = {
+      general.port = portBazarr;
+    };
   };
   services.flaresolverr = {
     enable = true;

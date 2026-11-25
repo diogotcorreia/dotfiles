@@ -2,7 +2,7 @@
   description = "Diogo Correia's Nix(OS) configuration for PCs and servers";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.11-small"; # TODO: change to nixos-26.11 when available
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     impermanence = {
       url = "github:nix-community/impermanence";
@@ -10,11 +10,11 @@
       inputs.home-manager.follows = "home";
     };
     home = {
-      url = "github:nix-community/home-manager/release-26.05";
+      url = "github:nix-community/home-manager/master"; # TODO: change to release-26.11 when available
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-26.05";
+      url = "github:nix-community/nixvim/main"; # TODO: change to nixos-26.11 when available
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix = {
@@ -43,8 +43,10 @@
     # allow it to be cached and re-exported for my ctf flake
     # https://github.com/NixOS/nixpkgs/pull/380600
     pwndbg = {
-      url = "github:pwndbg/pwndbg?ref=2026.10.28";
+      url = "github:pwndbg/pwndbg?ref=dev"; # TODO: pin to release on next release
       inputs.nixpkgs.follows = "nixpkgs";
+      # we don't want darwin
+      inputs.nixpkgs-x86_64-darwin.follows = "";
     };
     lidl-to-grocy = {
       url = "github:diogotcorreia/lidl-to-grocy?ref=v1.3.0";
@@ -59,7 +61,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable"; # TODO 26.11: move to stable
     };
     nixpkgs-build-failure-notifier = {
-      url = "github:diogotcorreia/nixpkgs-build-failure-notifier?ref=v0.3.7";
+      url = "github:diogotcorreia/nixpkgs-build-failure-notifier?ref=v0.3.8";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-compat.url = "github:edolstra/flake-compat";

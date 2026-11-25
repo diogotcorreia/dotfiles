@@ -2,7 +2,6 @@
 {
   config,
   lib,
-  pkgs,
   secrets,
   ...
 }:
@@ -31,6 +30,7 @@ in
       STORE_GEODATA = "true";
       NOMINATIM_API_HOST = "ams.nominatim.grapheneos.org";
       NOMINATIM_API_USE_HTTPS = "true";
+      REVERSE_GEOCODING_RPS = "1";
       ENABLE_TELEMETRY = "false";
 
       # oauth
@@ -48,13 +48,6 @@ in
       # - OIDC_CLIENT_SECRET
       config.age.secrets.dawarichEnv.path
     ];
-
-    package = pkgs.dawarich.overrideAttrs (prev: {
-      postPatch = prev.postPatch or "" + ''
-        substituteInPlace config/initializers/03_dawarich_settings.rb \
-          --replace-fail "@photon_uses_komoot_io ||= PHOTON_API_HOST == 'photon.komoot.io'" "@photon_uses_komoot_io ||= (PHOTON_API_HOST == 'photon.komoot.io' || nominatim_enabled?)"
-      '';
-    });
   };
 
   services.nginx.virtualHosts.${domain} = {
