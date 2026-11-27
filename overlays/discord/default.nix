@@ -5,8 +5,8 @@ _final: prev: {
   discord-openasar = prev.discord.override {
     withOpenASAR = true;
   };
-  openasar = prev.openasar.overrideAttrs (_oldAttrs: {
-    patches = [
+  openasar = prev.openasar.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or [ ]) ++ [
       ./0001-openasar-override-settings-file.diff
       ./0002-openasar-allow-skip-quickstart.diff
       # ignore quickstart if discord can't start without updating
