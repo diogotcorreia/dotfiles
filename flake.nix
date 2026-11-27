@@ -146,8 +146,7 @@
       # Packages are here so they are built by CI and cached
       packages = {
         x86_64-linux = pkgs.my // {
-          inherit (pkgs) restic-without-rclone;
-          inherit (pkgs.unstable) dix; # TODO 26.11: use stable
+          inherit (pkgs) dix restic-without-rclone;
           attic = pkgs.attic-client;
           inherit (inputs.infra-keyval.packages.x86_64-linux) infra-keyval;
           inherit (inputs.ist-discord-bot.packages.x86_64-linux) ist-discord-bot;
