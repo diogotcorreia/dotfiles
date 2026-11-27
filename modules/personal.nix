@@ -140,12 +140,5 @@ in
         VerifyHostKeyDNS yes
       '';
     };
-
-    system.activationScripts.diff = {
-      supportsDryActivation = true;
-      text = ''
-        ${lib.getExe pkgs.dix} /run/current-system "$systemConfig"
-      '';
-    };
   };
 }
