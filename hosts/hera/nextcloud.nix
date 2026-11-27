@@ -135,7 +135,6 @@ in
 
   services.collabora-online = {
     enable = true;
-    package = pkgs.unstable.collabora-online; # TODO 26.11: move to stable
     port = collaboraPort;
     settings = {
       # Rely on reverse proxy for SSL
