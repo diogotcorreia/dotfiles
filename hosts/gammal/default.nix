@@ -42,7 +42,7 @@
     # Browser
     firefox
     # Office Suite
-    libreoffice-fresh
+    libreoffice
     # Music
     spotify
     # Video Conferencing

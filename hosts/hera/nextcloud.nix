@@ -43,7 +43,6 @@ in
     configureRedis = true;
     maxUploadSize = "2G";
     config = {
-      adminpassFile = toString (pkgs.writeText "nc-first-install-pwd" "changeMeAfterFirstInstallPlease");
       dbtype = "pgsql";
       dbuser = dbUsername;
       dbname = dbDatabaseName;
@@ -136,7 +135,6 @@ in
 
   services.collabora-online = {
     enable = true;
-    package = pkgs.unstable.collabora-online; # TODO 26.11: move to stable
     port = collaboraPort;
     settings = {
       # Rely on reverse proxy for SSL

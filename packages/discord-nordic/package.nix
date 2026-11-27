@@ -3,13 +3,13 @@
   fetchPnpmDeps,
   lib,
   nodejs,
-  pnpm_10_latest,
+  pnpm_10,
   pnpmConfigHook,
   stdenv,
   ...
 }:
 let
-  pnpm = pnpm_10_latest;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "discord-nordic";

@@ -37,6 +37,7 @@ in
 
   services.stalwart = {
     enable = true;
+    package = pkgs.stalwart_0_15;
     stateVersion = "26.05";
     settings = {
       config.local-keys = [

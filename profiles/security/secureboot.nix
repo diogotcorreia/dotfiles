@@ -7,7 +7,6 @@ let
   securebootFolder = "/etc/secureboot/";
 in
 {
-  boot.bootspec.enable = true;
   boot.loader.systemd-boot.enable = lib.mkForce false;
 
   boot.lanzaboote = {

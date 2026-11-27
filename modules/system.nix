@@ -86,9 +86,9 @@
 
   networking.domain = lib.mkDefault "diogotc.com";
 
-  services.journald.extraConfig = ''
-    SystemMaxUse=500M
-  '';
+  services.journald.settings.Journal = {
+    SystemMaxUse = "500M";
+  };
 
   # Avoid running out of space on the boot partition
   boot.loader.grub.configurationLimit = lib.mkDefault 10;

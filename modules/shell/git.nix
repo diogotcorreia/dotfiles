@@ -63,7 +63,7 @@ in
 
     programs.difftastic = {
       enable = config.modules.personal.enable;
-      # TODO 26.11: set to git difftool mode
+      git.mode = "difftool";
     };
 
     programs.mergiraf = {

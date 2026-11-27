@@ -62,7 +62,7 @@ in
 
       # It's not easy to patch an app image, so we are basically copying the derivation and editing it in-place
       caidoDesktop = pkgs.caido-desktop;
-      appImageContents = pkgs.appimageTools.extractType2 {
+      appImageContents = pkgs.appimageTools.extract {
         inherit (caidoDesktop) pname version src;
         postExtract = ''
           ${patchCliBinScript} "$out/resources/bin/caido-cli" '${newKey}'

@@ -53,8 +53,6 @@ in
 
   services.jellyfin = {
     enable = true;
-    # TODO 26.11: move to stable
-    package = pkgs.unstable.jellyfin;
   };
   services.seerr = {
     enable = true;
@@ -103,9 +101,9 @@ in
   };
   services.bazarr = {
     enable = true;
-    # TODO 26.11: use package from stable
-    package = pkgs.unstable.bazarr;
-    listenPort = portBazarr;
+    settings = {
+      general.port = portBazarr;
+    };
   };
   services.flaresolverr = {
     enable = true;
@@ -159,57 +157,10 @@ in
   systemd.services.radarr = {
     wants = [ "postgresql.target" ];
     after = [ "postgresql.target" ];
-    environment = {
-      # TODO: remove on NixOS 26.11 (https://github.com/NixOS/nixpkgs/pull/547611)
-      DOTNET_EnableDiagnostics = "0";
-    };
   };
   systemd.services.sonarr = {
     wants = [ "postgresql.target" ];
     after = [ "postgresql.target" ];
-    environment = {
-      # TODO: remove on NixOS 26.11 (https://github.com/NixOS/nixpkgs/pull/547611)
-      DOTNET_EnableDiagnostics = "0";
-    };
-  };
-  systemd.services.bazarr = {
-    serviceConfig = {
-      # Hardening
-      # TODO: remove on NixOS 26.11 if already upstreamed
-      CapabilityBoundingSet = "";
-      LockPersonality = true;
-      NoNewPrivileges = true;
-      PrivateDevices = true;
-      PrivateIPC = true;
-      PrivateTmp = "disconnected";
-      PrivateUsers = true;
-      ProcSubset = "pid";
-      ProtectClock = true;
-      ProtectControlGroups = "strict";
-      ProtectHome = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
-      ProtectProc = "invisible";
-      ProtectSystem = "full";
-      RemoveIPC = true;
-      RestrictAddressFamilies = lib.mkForce [
-        "AF_INET"
-        "AF_INET6"
-        "AF_UNIX"
-      ];
-      RestrictNamespaces = true;
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
-      SystemCallArchitectures = "native";
-      SystemCallErrorNumber = "EPERM";
-      SystemCallFilter = lib.mkForce [
-        "@system-service"
-        "~@privileged"
-        "~@resources"
-      ];
-    };
   };
 
   age.secrets.diskstationSambaCredentials.file = secrets.host.diskstationSambaCredentials;

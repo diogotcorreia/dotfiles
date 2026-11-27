@@ -150,7 +150,7 @@
     # Heroic Games Launcher (FOSS Epic Games Launcher)
     heroic
     # Office Suite
-    libreoffice-fresh
+    libreoffice
     # Minecraft Launcher
     prismlauncher
     # Steam Run

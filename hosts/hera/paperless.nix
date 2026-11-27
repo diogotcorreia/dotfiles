@@ -72,18 +72,24 @@ in
 
   # Add secret to PAPERLESS_SOCIALACCOUNT_PROVIDERS
   systemd.services.paperless-web = {
-    serviceConfig.LoadCredential = [
-      "oidcSecret:${config.age.secrets.paperlessClientSecret.path}"
-    ];
-    script = lib.mkBefore ''
-      oidcSecret="$(< "$CREDENTIALS_DIRECTORY"/oidcSecret)"
-      export PAPERLESS_SOCIALACCOUNT_PROVIDERS="$(
-        ${lib.getExe pkgs.jq} <<< "$PAPERLESS_SOCIALACCOUNT_PROVIDERS" \
-          --compact-output \
-          --arg oidcSecret "$oidcSecret" \
-          '.openid_connect.APPS.[0].secret = $oidcSecret'
-      )"
-    '';
+    serviceConfig = {
+      LoadCredential = [
+        "oidcSecret:${config.age.secrets.paperlessClientSecret.path}"
+      ];
+      ExecStart = lib.mkForce (
+        pkgs.writeShellScript "paperless-web-start" ''
+          oidcSecret="$(< "$CREDENTIALS_DIRECTORY"/oidcSecret)"
+          export PAPERLESS_SOCIALACCOUNT_PROVIDERS="$(
+            ${lib.getExe pkgs.jq} <<< "$PAPERLESS_SOCIALACCOUNT_PROVIDERS" \
+              --compact-output \
+              --arg oidcSecret "$oidcSecret" \
+              '.openid_connect.APPS.[0].secret = $oidcSecret'
+          )"
+
+          ${lib.getExe config.services.paperless.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application
+        ''
+      );
+    };
   };
 
   services.nginx.virtualHosts.${domain}.enableACME = true;
